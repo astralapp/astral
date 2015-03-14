@@ -34,7 +34,6 @@ var bowerComponents = [
 'public/bower_components/angular-chosen-localytics/chosen.js',
 'public/bower_components/ng-tags-input/build/ng-tags-input.js',
 'public/bower_components/angular-ui-sortable/sortable.min.js',
-'public/bower_components/jquery.payment/lib/jquery.payment.js'
 ];
 
 gulp.task('js', function(){
