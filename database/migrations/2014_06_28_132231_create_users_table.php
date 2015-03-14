@@ -16,10 +16,12 @@ class CreateUsersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('github_id')->unique();
-			$table->string('name');
+			$table->string('name')->nullable();
 			$table->string('username');
 			$table->string('avatar_url');
 			$table->text('remember_token');
+			$table->boolean('autotag')->default(0);
+			$table->boolean('crowdtag')->default(0);
 			$table->timestamps();
 		});
 	}
