@@ -7,11 +7,11 @@ var sass = require('gulp-ruby-sass');
 var phpunit = require('gulp-phpunit');
 
 var paths = {
-  ngServices: 'app/assets/coffee/services/**/*.coffee',
-  ngControllers: 'app/assets/coffee/controllers/**/*.coffee',
-  ngDirectives: 'app/assets/coffee/directives/**/*.coffee',
-  ngApp: 'app/assets/coffee/app.coffee',
-  appStyles: 'app/assets/sass/app.scss',
+  ngServices: 'resources/assets/coffee/services/**/*.coffee',
+  ngControllers: 'resources/assets/coffee/controllers/**/*.coffee',
+  ngDirectives: 'resources/assets/coffee/directives/**/*.coffee',
+  ngApp: 'resources/assets/coffee/app.coffee',
+  appStyles: 'resources/assets/sass/app.scss',
 };
 
 var bowerComponents = [
@@ -26,7 +26,6 @@ var bowerComponents = [
 'public/bower_components/google-code-prettify/src/prettify.js',
 'public/bower_components/moment/min/moment.min.js',
 'public/bower_components/chosen_v1.1.0/chosen.jquery.min.js',
-'public/bower_components/newrelic-timing/newrelic-timing.min.js',
 'public/bower_components/angular/angular.min.js',
 'public/bower_components/angular-classy/angular-classy.min.js',
 'public/bower_components/angular-route/angular-route.min.js',
