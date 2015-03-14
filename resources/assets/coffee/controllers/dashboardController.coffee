@@ -4,7 +4,7 @@ app.classy.controller
     '$rootScope',
     '$scope',
     '$location',
-    '$state',
+    '$routeParams',
     '$sce',
     '$timeout',
     '$http',
@@ -47,9 +47,6 @@ app.classy.controller
 
     @$.untaggedFilter = false
 
-    # State Params
-    @$.tagParam = @$state.params.tag
-
     @$.repoSearchText = ""
     @$.userSettings =
       "active": false
@@ -62,6 +59,7 @@ app.classy.controller
         @$.getStars() # get all users stars from GitHub
         @$.getUserStars() # get all users stars from the DB
         @$.getTags() # get all users tags
+        # @$.buildCrowdTagList()
       , 0
     # Sortable
     @$.sortableOptions =
@@ -173,10 +171,8 @@ app.classy.controller
     @$.untaggedFilter = false
     if tag
       @$.currentTag = tag
-      @$state.transitionTo("tag", {tag: tag.slug}, { location: true, inherit: true, relative: @$state.$current, notify: false })
     else
       @$.currentTag = null
-      @$state.transitionTo("dashboard", {}, { location: true, inherit: true, relative: @$state.$current, notify: false })
 
   updateCurrentTagName: ->
     if @$.currentTag.name
@@ -210,11 +206,8 @@ app.classy.controller
 
   getTags: ->
     @TagService.fetchAll().success (tags) =>
-      if @$.tagParam
-        mappedTag = _.findWhere(tags, {slug: @$.tagParam})
-        if mappedTag
-          @$.setCurrentTag(mappedTag)
       @$.tags = tags
+      window.tagz = @$.tags
 
   getTagsForCurrentStar: ->
     @$.currentStarTags = []
@@ -283,7 +276,7 @@ app.classy.controller
     tagArray = []
     if @$.currentTag
       _.forEach(star.tags, (tag) =>
-        found = true if tag.slug is @$.currentTag.slug
+        found = true if tag.name is @$.currentTag.name
       )
     else
       found = true
