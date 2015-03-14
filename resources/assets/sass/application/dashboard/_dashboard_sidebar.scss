@@ -1,0 +1,186 @@
+.dashboard-sidebar {
+  background: $dark-blue;
+  overflow-y: auto; overflow-x: hidden;
+  position: absolute; top: 60px;; bottom: 0; left: 0;
+  width: $dashboard-sidebar-width;
+  .dashboard-sidebar-header {
+    @include size( $dashboard-sidebar-width 60px );
+    padding: 0 20px;
+    background: $primary;
+    text-align: left;
+    position: fixed; top: 0; left: 0;
+    h3 {
+      color: #fff;
+      font-weight: 600;
+      margin: 0;
+      position: relative; top: 18px;
+    }
+  }
+  .sidebar-header {
+    color: rgba(#fff, 0.3);
+    font-size: 0.7rem;
+    font-weight: bold;
+    height: 42px;
+    overflow: hidden;
+    padding: 15px 20px;
+    position: relative;
+    text-transform: uppercase;
+    &.tags-header {
+      overflow: visible;
+    }
+    .sidebar-header-text {
+      display: inline-block;
+      margin: 0;
+      position: relative; top: -2px;
+    }
+    .tag-sort-dropdown {
+      display: inline-block;
+      .dropdown {
+        width: 120px;
+      }
+      .dropdown-list {
+        line-height: 1;
+        list-style-type: none;
+        margin: 12px 0; padding: 0;
+        li {
+          display: block;
+          font-size: 0.65rem;
+          &:last-of-type {
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+          }
+          a {
+            @include size( 100% );
+            color: $main-text-color;
+            display: block;
+            padding: 8px 10px;
+            text-decoration: none;
+            &:hover {
+              background: $steel-blue;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+    .btn-sort-tags {
+      @include btn_text(rgba(#fff, 0.3));
+      margin: 0 auto;
+      padding: 0 6px;
+      position: relative; top: -2px;
+      pointer-events: none;
+    }
+    .btn-add-tag {
+      @include btn_flat( $primary );
+      float: right;
+      font-size: 0.65rem;
+      position: relative; top: -8px; right: 0;
+    }
+  }
+  .tag-form {
+    background: $dark-blue;
+    font-size: 0;
+    input[type=text] {
+      @include appearance( none );
+      background: rgba(#fff, 0.1);
+      background-clip: padding-box;
+      border-radius: 0;
+      border: none;
+      display: inline-block;
+      outline: none;
+      float: left;
+      font-size: 0.75rem;
+      height: 40px;
+      padding: 0 12px;
+      position: relative; top: 0; left: 0;
+      width: 80%;
+      &:focus {
+        background: #fff;
+        color: $dark-blue;
+      }
+    }
+    button[type=submit] {
+      @include btn_flat( $primary );
+      border-radius: 0;
+      font-size: 0.75rem;
+      height: 40px;
+      margin-bottom: -2px;
+      position: relative; top: -2px; right: 0;
+      width: 20%;
+    }
+  }
+  .dashboard-list {
+    clear: both;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    .dashboard-list-item {
+      @include transition ( all 200ms linear );
+      border-bottom: 1px solid rgba(#fff, 0.08);
+      color: rgba(#fff, 0.65);
+      cursor: pointer;
+      font-size: 0.8rem;
+      height: 42px;
+      line-height: 42px;
+      padding: 0 20px;
+      &:first-child, &:only-child { border-top: 1px solid rgba(#fff, 0.08); }
+      i.fa { margin-right: 5px; pointer-events: none; }
+      &.selected {
+        background: rgba(#fff, 0.05);
+        color: #fff;
+      }
+      &:hover {
+        background: rgba(#fff, 0.03);
+        color: rgba(#fff, 0.85);
+      }
+      &.selected {
+        background: rgba(#fff, 0.05);
+        color: #fff;
+      }
+    }
+    &.sidebar-tags .tag {
+      &.ui-sortable-helper {
+        @include transition ( none );
+        border-top: 1px solid rgba(#fff, 0.08);
+        cursor: -webkit-grabbing; cursor: -moz-grabbing;
+      }
+      &.dragging {
+        background: $primary;
+        color: #fff;
+      }
+      &.ng-enter {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(-100%) );
+        opacity: 0;
+      }
+      &.ng-enter-active {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(0) );
+        opacity: 1;
+      }
+      &.ng-leave {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(0) );
+        opacity: 1;
+      }
+      &.ng-leave-active {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(-100%) );
+        opacity: 0;
+      }
+      .tagged-count {
+        background: rgba(#fff, 0.1);
+        border-radius: 100px;
+        color: #fff;
+        display: inline-block;
+        float: right;
+        font-size: 0.6rem;
+        font-weight: bold;
+        line-height: 1;
+        padding: 0.3rem 0.7rem;
+        position: relative;
+        top: 11px;
+      }
+    }
+  }
+}

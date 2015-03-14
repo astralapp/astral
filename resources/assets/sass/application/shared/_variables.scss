@@ -1,0 +1,23 @@
+// Colors
+$blue: #269bff;
+$body-bg: #f8f8f8;
+$dark-blue: #28343d;
+$dark-steel: #626c70;
+$green: #5fce70;
+$light-grey: #dae0e3;
+$main-text-color: #666;
+$orange: #ee6850;
+$purple: #9455b1;
+$red: #ca2c30;
+$sea-green: #56a07b;
+$steel-blue: lighten($dark-blue, 30%);
+
+$primary: $sea-green;
+$demi: 600;
+// Fonts
+$sans: 'Avenir Next W01', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+
+//Layout Vars
+$dashboard-header-height: 60px;
+$dashboard-sidebar-width: 280px;
+$dashboard-repos-list-width: 420px;

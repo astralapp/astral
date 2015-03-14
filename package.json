@@ -1,0 +1,15 @@
+{
+  "name": "Astral",
+  "version": "1.0.0",
+  "repository": "https://github.com/astralapp/astral",
+  "devDependencies": {
+    "node-bourbon": "~1.0.0",
+  "gulp": "~3.8.7",
+    "gulp-coffee": "~1.4.1",
+    "gulp-concat": "~2.1.7",
+    "gulp-ruby-sass": "~0.3.1",
+    "gulp-util": "~3.0.0",
+    "gulp-phpunit": "~0.6.3",
+    "gulp-notify": "~1.5.0"
+  }
+}
