@@ -39,8 +39,3 @@ Route::group(['prefix' => 'api'], function(){
   Route::post('user/settings/crowdtag', 'UserController@updateCrowdtag');
   Route::get('user/settings/exportData', 'UserController@exportData');
 });
-
-//Catch All
-App::missing(function($exception) {
-  return View::make('index');
-});

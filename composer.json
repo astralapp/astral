@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "5.0.*"
+		"laravel/framework": "5.0.*",
+		"laravel/socialite": "~2.0",
+		"maxhoffmann/parsedown-laravel": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
