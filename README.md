@@ -3,6 +3,11 @@ Organize Your GitHub Stars With Ease
 
 **Please Note:** I am in the process of updating Astral to Laravel 5. Currently, the app cannot be built properly.
 
+## Stack
+
+**Backend**: Nginx, PHP (Laravel), and MySQL
+**Front End**: Angular (1.3), Sass (SCSS) with Bourbon, CoffeeScript, and Gulp.
+
 ## Todo
 
 These are the things that need to happen in order of contribution importance.
