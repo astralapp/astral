@@ -1,0 +1,127 @@
+@mixin btn($color: $primary) {
+  @include appearance( none );
+  @include background-image(linear-gradient($color, darken($color, 8%)));
+  -webkit-font-smoothing: antialiased;
+  border: 1px solid darken($color, 15%);
+  border-bottom: 1px solid darken($color, 19%);
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 0 rgba(#fff, 0.2), 0 1px 2px rgba(#000,0.08);
+  color: #fff;
+  text-shadow: 0 1px 0 darken($color, 15%);
+  outline: none;
+  padding: 4px 12px;
+  text-align: center;
+  text-decoration: none;
+  &:hover {
+    @include background-image(linear-gradient(lighten($color, 4%), darken($color, 8%)));
+    border: 1px solid darken($color, 11%);
+    border-bottom: 1px solid darken($color, 15%);
+    text-shadow: 0 1px 0 darken($color, 11%);
+  }
+  &:active {
+    background: darken($color, 8%);
+    border: 1px solid darken($color, 15%);
+    border-bottom: 1px solid darken($color, 19%);
+    box-shadow: inset 0 1px 3px rgba(#000, 0.2), 0 1px 0 0 rgba(#fff, 0.1);
+  }
+}
+
+@mixin btn_flat($color: $primary) {
+  @include appearance( none );
+  -webkit-font-smoothing: antialiased;
+  background: $color;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 0 rgba(#000, 0.08), inset 0 -1px 0 0 darken($color, 3%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  outline: none;
+  padding: 8px 10px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  &:hover { background: lighten($color, 8%); }
+  &:active {
+    background: darken($color, 8%);
+    box-shadow: inset 0 -1px 0 0 darken($color, 8%);
+  }
+}
+@mixin btn_outline($color: $primary) {
+  @include appearance( none );
+  -webkit-font-smoothing: antialiased;
+  background: rgba($color, 0);
+  border-radius: 3px;
+  border: 2px solid $color;
+  color: $color;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-left: 5px;
+  outline: none;
+  padding: 6px 10px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  &:hover {
+    background: rgba($color, 1);
+    color: #fff;
+  }
+  &:active {
+    background: rgba(darken($color, 5%), 1);
+    border: 2px solid rgba(darken($color, 5%), 1);
+  }
+}
+@mixin btn_text($color: $primary) {
+  @include appearance( none );
+  -webkit-font-smoothing: antialiased;
+  background: rgba($color, 0);
+  border-radius: 3px;
+  border: 2px solid rgba(#000, 0);
+  color: $color;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-left: 5px;
+  outline: none;
+  padding: 6px 10px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  &:hover {
+    color: shade($color, 8%);
+  }
+  &:active {
+    color: shade($color, 12%);
+  }
+}
+
+.btn {
+  @include btn;
+  &.btn-danger {
+    @include btn($red);
+  }
+}
+.btn-flat {
+  @include btn_flat;
+  &.btn-danger {
+    @include btn_flat($red);
+  }
+}
+.btn-outline {
+  @include btn_outline;
+  &.btn-danger {
+    @include btn_outline($red);
+  }
+}
+.btn-text {
+  @include btn_text;
+  &.btn-danger {
+    @include btn_text($red);
+  }
+}
+[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,0 +1,6 @@
+<div class="dashboard-flash-message" ng-show="flash.active" ng-cloak>
+  <div class="flash-message-inner" ng-class="{error: (flash.type == 'error')}">
+    <span>{{flash.message}}</span>
+    <div class="dismiss-flash-message" ng-click="hideFlash()">&times;</div>
+  </div>
+</div>

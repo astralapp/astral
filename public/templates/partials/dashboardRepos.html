@@ -1,0 +1,17 @@
+<div class="dashboard-repos">
+  <!-- <spinner color="#658399" ng-hide="stars[0]"></spinner> -->
+  <ul class="repos">
+    <li class="repo draggable" ng-repeat="star in stars.data">
+      <h3 class="repo-name">{{::star.full_name}}</h3>
+      <div class="repo-description">{{::star.description}}</div>
+      <!-- <ul class="repo-tags" ng-show="star.tags">
+        <li ng-repeat="tag in star.tags track by tag.id" ng-click="setCurrentTag(tag); $event.stopPropagation()">{{tag.name}}</li>
+      </ul> -->
+      <div class="repo-stats">
+        <div class="repo-stat stars"><i class="fa fa-star"></i> {{::star.stargazers_count}}</div>
+        <div class="repo-stat forks"><i class="fa fa-code-fork"></i> {{::star.forks_count}}</div>
+        <div class="repo-stat link"><a ng-href="{{::star.html_url}}" target="_blank">View on GitHub</a></div>
+      </div>
+    </li>
+  </ul>
+</div>

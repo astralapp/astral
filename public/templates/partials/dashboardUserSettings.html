@@ -1,0 +1,44 @@
+<div class="dashboard-modal-overlay ng-hide" ng-show="userSettings.active" ng-cloak closeOnEscape>
+  <div class="dashboard-modal user-settings-modal">
+    <div class="dashboard-modal-header">
+      <h3>Settings</h3>
+      <div class="close-modal" ng-click="hideUserSettings()">&times;</div>
+    </div>
+    <div class="dashboard-modal-body">
+      <div class="dashboard-modal-section">
+        <div class="dashboard-modal-section-label">
+          <h5>
+            Enable Language Auto-Tag
+          </h5>
+        </div>
+        <div class="dashboard-modal-section-ui">
+          <switch id="setting-auto-tag" checked="$root.user.autotag" change="$parent.updateAutotagSetting(!$root.user.autotag)"></switch>
+        </div>
+      </div>
+      <div class="dashboard-modal-section">
+        <div class="dashboard-modal-section-label">
+          <h5>
+            Enable Crowsourced Tagging
+            <span class="info-badge">Beta</span>
+          </h5>
+        </div>
+        <div class="dashboard-modal-section-ui">
+          <switch id="setting-crowdsource-tag" checked="$root.user.crowdtag" change="$parent.updateCrowdtagSetting(!$root.user.crowdtag)"></switch>
+        </div>
+      </div>
+      <div class="dashboard-modal-section">
+          <div class="dashboard-modal-section-label">
+            <h5>
+              Export Data as JSON
+            </h5>
+          </div>
+          <div class="dashboard-modal-section-ui">
+            <button class="btn-flat section-ui-button" ng-disabled="exportingData" ng-click="exportData()">Export</button>
+          </div>
+      </div>
+    </div>
+    <div class="dashboard-modal-footer">
+      <button ng-click="hideUserSettings()">Done</button>
+    </div>
+  </div>
+</div>

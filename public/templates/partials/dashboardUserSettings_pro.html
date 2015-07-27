@@ -1,0 +1,70 @@
+<div class="dashboard-modal-overlay" ng-show="userSettings.active" ng-cloak closeOnEscape>
+  <div class="dashboard-modal user-settings-modal" ng-class="userSettings.upgradeView ? 'show-upgrade' : ''">
+    <div class="dashboard-modal-header">
+      <div ng-if="userSettings.upgradeView" class="payment-header">
+        <h3>Enter Payment Details</h3>
+      </div>
+      <h3 ng-hide="userSettings.upgradeView">Settings</h3>
+      <div class="close-modal" ng-click="hideUserSettings()">&times;</div>
+    </div>
+    <div class="dashboard-modal-body">
+      <div ng-if="userSettings.upgradeView" class="payment-body">
+        <div class="payment-body-header">
+          <h3>Upgrade to Pro for just <strong>$4.95</strong>/month</h3>
+          <p>and enjoy unlimited tags, and auto-tagging stars by language.</p>
+        </div>
+        <div class="cc-errors" ng-show="userSettings.ccErrors.length">
+          {{ userSettings.ccErrors[0] }}
+        </div>
+        <div class="payment-body-inner">
+          <form action="" method="POST" id="payment-form" ccform>
+            <div class="form-row">
+              <label class="label-top">
+                <span>Card Number</span>
+                <input type="text" size="20" data-stripe="number" class="cc-number" placeholder="•••• •••• •••• ••••" />
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                <span>Expires</span>
+                <input type="text" data-stripe="exp-month" placeholder="MM / YYYY" class="cc-exp-date"/>
+              </label>
+              <label>
+                <span>CVC</span>
+                <input type="text" size="4" data-stripe="cvc" placeholder="123" class="cc-cvc" />
+              </label>
+            </div>
+            <br>
+            <button type="submit" class="btn-flat btn-subscribe">Subscribe</button>
+            <button class="btn-text btn-danger btn-cancel-subscribe" ng-click="hideUpgradeView()">Nevermind</button>
+          </form>
+        </div>
+      </div>
+      <div ng-if="!userSettings.upgradeView">
+        <div class="dashboard-modal-section">
+          <div class="dashboard-modal-section-label">
+            <h5>Current Plan</h5>
+          </div>
+          <div class="dashboard-modal-section-ui">
+            <span class="section-ui-label">Free</span>
+            <button ng-click="showUpgradeView()" class="section-ui-button btn-upgrade btn-outline">Upgrade</a>
+          </div>
+        </div>
+        <div class="dashboard-modal-section">
+          <div class="dashboard-modal-section-label">
+            <h5>
+              Enable Language Auto-Tag
+              <span class="pro-badge" ng-hide="$root.user.stripe_active">Pro</span>
+            </h5>
+          </div>
+          <div class="dashboard-modal-section-ui">
+            <switch id="setting-auto-tag" checked="$root.user.autotag" change="$parent.updateAutotagSetting(!$root.user.autotag)"></switch>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-modal-footer" ng-hide="userSettings.upgradeView">
+      <button ng-click="hideUserSettings()">Done</button>
+    </div>
+  </div>
+</div>

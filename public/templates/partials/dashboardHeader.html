@@ -1,0 +1,36 @@
+<div class="dashboard-header">
+  <h2>
+    <!-- <span ng-if="currentTag.name">{{currentTag.name}}</span>
+    <span ng-if="untaggedFilter">Untagged Stars</span>
+    <span ng-if="!untaggedFilter && !currentTag.name">All Stars</span> -->
+    <span>All Stars</span>
+  </h2>
+  <div  class="tag-settings-trigger" ng-show="currentTag" dropdown>
+    <i class="fa fa-cog"></i>
+    <div class="dropdown">
+      <form  class="frm-tagname" ng-submit="updateCurrentTagName()">
+        <input type="text" ng-model="currentTag.name">
+        <button class="btn-flat" type="submit" close-dropdown>Save</button>
+      </form>
+      <button class="btn-flat btn-danger" ng-click="deleteCurrentTag()" close-dropdown>Delete Tag</button>
+    </div>
+  </div>
+  <label for="galileo">
+    <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope" ng-model="$parent.repoSearchText">
+    <i class="fa fa-search"></i>
+  </label>
+  <!-- <span class="loading-status" ng-if="loadingStatus.active">{{ loadingStatus.message }} <spinner color="#658399" ng-if="loadingStatus.active" left="112%" top="48%"></spinner></span> -->
+  <div class="user-dropdown-trigger" dropdown>
+    <img ng-src="{{$root.user.avatar_url}}" alt="{{$root.user.name}}" class="user-avatar"/>
+    <span class="user-username">{{$root.user.username}}</span>
+    <i class="fa fa-chevron-down"></i>
+    <div class="dropdown">
+      <ul class="dropdown-list">
+        <li><a ng-click="$parent.showUserSettings()" close-dropdown>Settings</a></li>
+        <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li>
+        <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li>
+        <li><a ng-href="/logout">Sign Out</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+.dashboard-modal-overlay {
+  @include ng-modal-animation();
+  background: rgba($dark-blue, 0.85);
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  text-align: center;
+  z-index: 99999;
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em; /* Adjusts for spacing */
+  }
+  .dashboard-modal {
+    @include backface-visibility( hidden );
+    @include transform( scale(1, 1) perspective(1px) );
+    background: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(#373570, 0.1);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    display: inline-block;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    vertical-align: middle;
+    &.show-upgrade {
+      min-height: 322px;
+    }
+    .dashboard-modal-header {
+      padding: 12px 20px;
+      position: relative;
+      h3 {
+        display: inline-block;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: 1px;
+      }
+      .close-modal {
+        @include transition ( color 250ms linear );
+        color: #666;
+        cursor: pointer;
+        float: right;
+        font-size: 1.2rem;
+        &:hover { color: #444; }
+      }
+    }
+    .dashboard-modal-body {
+      clear: right;
+      .dashboard-modal-section {
+        background: #f8f8f8;
+        border-top: 1px solid #e0e0e0;
+        &:last-child {
+          border-bottom: 1px solid #e0e0e0;
+          margin-bottom: 20px;
+        }
+        clear: both;
+
+        padding: 20px;
+        .dashboard-modal-section-label {
+          display: inline-block;
+          width: 60%;
+          h5 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            .info-badge {
+              background: rgba(lighten($dark-blue, 30%), 1);
+              border-radius: 3px;
+              color: #fff;
+              display: inline-block;
+              font-size: 10px;
+              font-weight: 600;
+              letter-spacing: 1px;
+              margin-left: 5px;
+              outline: none;
+              padding: 3px 5px;
+              position: relative; top: -1px;
+              text-transform: uppercase;
+            }
+          }
+        }
+        .dashboard-modal-section-ui {
+          display: inline-block;
+          float: right;
+          text-align: right;
+          width: 40%;
+          .switch { float: right; }
+          .section-ui-label { position: relative; top: -2px; }
+          .section-ui-button { position: relative; top: -4px; }
+        }
+      }
+    }
+    .dashboard-modal-footer {
+      clear: both;
+      overflow: hidden;
+      padding: 0 20px 20px 20px;
+      button {
+        @include btn_flat();
+        float: right;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        padding: 8px 15px;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

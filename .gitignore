@@ -1,0 +1,7 @@
+/vendor
+/node_modules
+/public/bower_components
+Homestead.yaml
+.env
+.sass-cache
+.DS_STORE
