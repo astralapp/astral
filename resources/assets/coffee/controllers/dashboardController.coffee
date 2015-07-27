@@ -26,7 +26,6 @@ app.classy.controller
     getStars: ->
       @GitHubService.getStarredRepos().then ((stars) =>
         @stars.data = stars
-        window.starz = @stars.data
       ), ((error) =>
         console.log error
       ), (resStars) =>

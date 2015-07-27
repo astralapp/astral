@@ -9,15 +9,19 @@ app.factory "GitHubService", ($http, $q, $timeout) ->
       @resStars = res.data.stars
       @totalPages = res.data.page_count if res.data.page_count?
       @cachedPages = res.data.cached if res.data.cached?
-      if @cachedPages
-        currentPage += 1
-      else
-        currentPage++
-      if currentPage <= @totalPages
-        $timeout =>
-          @defer.notify(@resStars)
-          @getStarredRepos(currentPage)
-        , 0
-      else
+      if @cachedPages and @cachedPages is @totalPages
         @defer.resolve(@resStars)
-      return @defer.promise
+        return @defer.promise
+      else
+        if @cachedPages
+          currentPage += 1
+        else
+          currentPage++
+        if currentPage <= @totalPages
+          $timeout =>
+            @defer.notify(@resStars)
+            @getStarredRepos(currentPage)
+          , 0
+        else
+          @defer.resolve(@resStars)
+        return @defer.promise

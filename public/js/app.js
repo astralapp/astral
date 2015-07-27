@@ -71,20 +71,25 @@ app.factory("GitHubService", function($http, $q, $timeout) {
           if (res.data.cached != null) {
             _this.cachedPages = res.data.cached;
           }
-          if (_this.cachedPages) {
-            currentPage += 1;
-          } else {
-            currentPage++;
-          }
-          if (currentPage <= _this.totalPages) {
-            $timeout(function() {
-              _this.defer.notify(_this.resStars);
-              return _this.getStarredRepos(currentPage);
-            }, 0);
-          } else {
+          if (_this.cachedPages && _this.cachedPages === _this.totalPages) {
             _this.defer.resolve(_this.resStars);
+            return _this.defer.promise;
+          } else {
+            if (_this.cachedPages) {
+              currentPage += 1;
+            } else {
+              currentPage++;
+            }
+            if (currentPage <= _this.totalPages) {
+              $timeout(function() {
+                _this.defer.notify(_this.resStars);
+                return _this.getStarredRepos(currentPage);
+              }, 0);
+            } else {
+              _this.defer.resolve(_this.resStars);
+            }
+            return _this.defer.promise;
           }
-          return _this.defer.promise;
         };
       })(this));
     }
@@ -161,8 +166,7 @@ app.classy.controller({
     getStars: function() {
       return this.GitHubService.getStarredRepos().then(((function(_this) {
         return function(stars) {
-          _this.stars.data = stars;
-          return window.starz = _this.stars.data;
+          return _this.stars.data = stars;
         };
       })(this)), ((function(_this) {
         return function(error) {
