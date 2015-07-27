@@ -52,6 +52,7 @@ class GithubClient {
       $uniqueStars = array_map("unserialize", array_unique(array_map("serialize", $mergedStars)));
       // Add stars to the stars key
       $mergedStarsArray['stars'] = $uniqueStars;
+      $mergedStarsArray['page_count'] = $cachedStars['page_count'];
       Cache::put($cacheKey, $mergedStarsArray, $cacheExpiry);
       return $mergedStarsArray;
     }

@@ -53,6 +53,7 @@ app.factory("AuthService", function($http) {
 app.factory("GitHubService", function($http, $q, $timeout) {
   return {
     totalPages: 0,
+    cachedPages: 0,
     resStars: [],
     defer: $q.defer(),
     getStarredRepos: function(page) {
@@ -61,32 +62,21 @@ app.factory("GitHubService", function($http, $q, $timeout) {
         page = 1;
       }
       currentPage = page;
-      console.log(page);
       return stars = $http.get("/api/github/stars?page=" + page).then((function(_this) {
         return function(res) {
+          _this.resStars = res.data.stars;
           if (res.data.page_count != null) {
             _this.totalPages = res.data.page_count;
           }
-          if (page === 1) {
-            if (res.data.cached) {
-              _this.resStars = res.data.stars;
-              if (res.data.cached === _this.totalPages) {
-                _this.defer.resolve(_this.resStars);
-              } else {
-                currentPage = res.data.cached + 1;
-                $timeout(function() {
-                  _this.defer.notify(_this.resStars);
-                  return _this.getStarredRepos(currentPage);
-                }, 0);
-              }
-            } else {
-              _this.resStars = res.data.stars;
-            }
-          } else {
-            _this.resStars = res.data.stars;
+          if (res.data.cached != null) {
+            _this.cachedPages = res.data.cached;
           }
-          currentPage++;
-          if (currentPage <= _this.totalPages && _this.totalPages !== 0) {
+          if (_this.cachedPages) {
+            currentPage += 1;
+          } else {
+            currentPage++;
+          }
+          if (currentPage <= _this.totalPages) {
             $timeout(function() {
               _this.defer.notify(_this.resStars);
               return _this.getStarredRepos(currentPage);
