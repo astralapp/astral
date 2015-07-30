@@ -11,10 +11,15 @@ use App\Http\Controllers\Controller;
 class GithubController extends Controller {
 
   public function getStars(Request $request) {
-    $page = (int)$request->input('page', 1);
-    $stars = \GithubClient::getStars($page);
-    // dd($stars);
-    return \Response::json($stars, 200);
+    if( \Auth::check() ){
+      $page = (int)$request->input('page', 1);
+      $stars = \GithubClient::getStars($page);
+      // dd($stars);
+      return \Response::json($stars, 200);
+    }
+    else {
+      return \Response::json("Unauthorized", 401);
+    }
   }
 
   public function getReadme(Request $request, $owner, $repo) {

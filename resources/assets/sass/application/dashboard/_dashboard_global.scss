@@ -75,32 +75,18 @@
     label[for=galileo] {
       position: relative;
       .telescope {
-        @include transition ( all 200ms linear );
-        @include appearance( none );
-        background: rgba(#373570, 0.08);
+        @include textfield();
         border-radius: 15px;
-        border: 2px solid rgba($steel-blue, 0);
-        box-shadow: none;
-        color: $steel-blue;
-        display: inline-block;
         font-size: 0.9rem;
         height: 30px;
-        outline: none;
-        padding: 0 12px 0 34px;
+        padding-left: 34px;
         position: relative; top: -4px; left: 20px;
         width: 300px;
         @include placeholder {
           color: rgba($dark-steel, 0.5);
         }
-        &:focus {
-          background: #fff;
-          border: 2px solid $steel-blue;
-          @include placeholder {
-            color: rgba($steel-blue, 0.5);
-          }
-          + .fa {
-            color: $steel-blue;
-          }
+        &:focus + .fa {
+          color: rgba($dark-steel, 0.8);
         }
       }
       .fa {

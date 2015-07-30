@@ -11,16 +11,11 @@
   </ul>
   <div class="sidebar-header tags-header">
     <h3 class="sidebar-header-text">Tags</h3>
-    <div class="tag-sort-dropdown" dropdown>
-      <button class="btn-sort-tags"><i class="fa fa-sort"></i></button>
-      <div class="dropdown">
-        <ul class="dropdown-list">
-          <li><a ng-click="sortTags('alpha')" close-dropdown><i class="fa fa-sort-alpha-asc"></i> Alphabetical</a></li>
-          <li><a ng-click="sortTags('popular')" close-dropdown><i class="fa fa-star"></i> Star Count</a></li>
-        </ul>
-      </div>
+    <div class="tag-button-group">
+      <button class="tag-button-group-item">Add</button>
+      <button class="tag-button-group-item">Edit</button>
+      <button class="tag-button-group-item">Sort</button>
     </div>
-    <button class="btn-add-tag" ng-click="toggleSidebarTagEditor()"><i ng-class="addingTag ? 'fa fa-times' : 'fa fa-plus'"></i></button>
   </div>
   <form class="tag-form" ng-show="addingTag" ng-submit="addTag()" set-focus-if="addingTag">
     <input type="text" name="name" ng-model="newTag.name" placeholder="Tag name">

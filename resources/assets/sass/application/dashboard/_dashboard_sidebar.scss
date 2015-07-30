@@ -21,60 +21,41 @@
     font-size: 0.7rem;
     font-weight: bold;
     height: 42px;
+    line-height: 44px;
     overflow: hidden;
-    padding: 15px 20px;
+    padding: 0 0 0 20px;
     position: relative;
     text-transform: uppercase;
     &.tags-header {
       overflow: visible;
+      .tag-button-group {
+        float: right;
+        font-size: 0;
+        height: 100%;
+        position: relative;
+        .tag-button-group-item {
+          @include transition ( all 200ms linear );
+          @include appearance(none);
+          background: transparent;
+          border: none;
+          border-left: 1px solid rgba(#fff, 0.08);
+          color: rgba(#fff, 0.65);
+          display: inline-block;
+          font-size: 0.8rem;
+          height: 100%;
+          outline: none;
+          padding: 0 15px;
+          &:hover {
+            background: rgba(#fff, 0.03);
+            color: rgba(#fff, 0.85);
+          }
+        }
+      }
     }
     .sidebar-header-text {
       display: inline-block;
       margin: 0;
       position: relative; top: -2px;
-    }
-    .tag-sort-dropdown {
-      display: inline-block;
-      .dropdown {
-        width: 120px;
-      }
-      .dropdown-list {
-        line-height: 1;
-        list-style-type: none;
-        margin: 12px 0; padding: 0;
-        li {
-          display: block;
-          font-size: 0.65rem;
-          &:last-of-type {
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-          }
-          a {
-            @include size( 100% );
-            color: $main-text-color;
-            display: block;
-            padding: 8px 10px;
-            text-decoration: none;
-            &:hover {
-              background: $steel-blue;
-              color: #fff;
-            }
-          }
-        }
-      }
-    }
-    .btn-sort-tags {
-      @include btn_text(rgba(#fff, 0.3));
-      margin: 0 auto;
-      padding: 0 6px;
-      position: relative; top: -2px;
-      pointer-events: none;
-    }
-    .btn-add-tag {
-      @include btn_flat( $primary );
-      float: right;
-      font-size: 0.65rem;
-      position: relative; top: -8px; right: 0;
     }
   }
   .tag-form {

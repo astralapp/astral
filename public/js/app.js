@@ -150,6 +150,9 @@ app.classy.controller({
   data: {
     stars: {
       data: []
+    },
+    tags: {
+      data: []
     }
   },
   init: function() {

@@ -14,6 +14,8 @@ app.classy.controller
   data:
     stars:
       data: []
+    tags:
+      data: []  
   init: ->
     @AuthService.fetchUser().then (user) =>
       @$rootScope.user = user.data
