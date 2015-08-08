@@ -8,9 +8,11 @@ use GuzzleHttp\ClientInterface;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class GithubController extends Controller {
+class GithubController extends Controller
+{
 
-  public function getStars(Request $request) {
+  public function getStars(Request $request)
+  {
     if( \Auth::check() ){
       $page = (int)$request->input('page', 1);
       $stars = \GithubClient::getStars($page);
@@ -18,11 +20,12 @@ class GithubController extends Controller {
       return \Response::json($stars, 200);
     }
     else {
-      return \Response::json("Unauthorized", 401);
+      return \Response::json('Unauthorized', 401);
     }
   }
 
-  public function getReadme(Request $request, $owner, $repo) {
+  public function getReadme(Request $request, $owner, $repo)
+  {
     $readme = \GithubClient::getReadme($owner, $repo);
     return \Response::json($readme, 200);
   }

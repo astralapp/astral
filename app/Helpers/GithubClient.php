@@ -3,12 +3,14 @@
 use GuzzleHttp\ClientInterface;
 use Cache;
 
-class GithubClient {
+class GithubClient
+{
 
   private static $starsCacheExpiry = 30; //minutes
   private static $starsPerPage = 50;
 
-  public static function getStars($page = 1) {
+  public static function getStars($page = 1)
+  {
     $cacheKey = self::starsCacheKey();
     $cacheExpiry = self::$starsCacheExpiry;
     $starsArray = [];
@@ -59,7 +61,8 @@ class GithubClient {
 
   }
 
-  public static function getReadme($owner, $repo) {
+  public static function getReadme($owner, $repo)
+  {
     $token = self::getAccessToken();
     $readmeUrl = 'https://api.github.com/repos/'.$owner.'/'.$repo.'/readme?access_token='.$token;
     $client = self::getClient();
@@ -72,15 +75,18 @@ class GithubClient {
     return $readme;
   }
 
-  private static function starsCacheKey() {
+  private static function starsCacheKey()
+  {
     return 'user_'.\Auth::user()->id.'.github_stars';
   }
 
-  private static function getAccessToken() {
+  private static function getAccessToken()
+  {
     return session('access_token');
   }
 
-  private static function getTotalPages($link) {
+  private static function getTotalPages($link)
+  {
     try {
       $linkArray = \HTTPHeadersHelper::rels($link);
       $lastRel = $linkArray["last"][0];
@@ -95,7 +101,8 @@ class GithubClient {
     }
   }
 
-  private static function getClient() {
+  private static function getClient()
+  {
     return new \GuzzleHttp\Client;
   }
 }
