@@ -1,7 +1,7 @@
 # Astral
 Organize Your GitHub Stars With Ease
 
-**Please Note:** I've decided to rewrite most of the app from scratch. This is a pretty big undertaking, but there are some core backend things I want to add, and I'd like to rewrite the front-end in RiotJS.
+**Please Note:** I've decided to rewrite most of the app from scratch. This is a pretty big undertaking, but there are some core back-end things I want to add, and I'd like to rewrite the front-end in RiotJS.
 
 ## v1 Stack
 
