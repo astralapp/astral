@@ -1,4 +1,6 @@
 # Astral
+
+[![Join the chat at https://gitter.im/astralapp/astral](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/astralapp/astral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Organize Your GitHub Stars With Ease
 
 **Please Note:** I've decided to rewrite most of the app from scratch. This is a pretty big undertaking, but there are some core back-end things I want to add, and I'd like to rewrite the front-end in RiotJS.
