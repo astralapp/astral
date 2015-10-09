@@ -15131,7 +15131,40 @@ GithubStore = function() {
   var self;
   riot.observable(this);
   self = this;
-  return self.stars = [];
+  self.totalPages = 0;
+  self.cachedPages = 0;
+  self.stars = [];
+  return self.getGithubStars = function(page) {
+    var currentPage;
+    if (page == null) {
+      page = 1;
+    }
+    currentPage = page;
+    return request.get("/api/github/stars?page=" + page).end(function(err, res) {
+      self.stars = res.data.stars;
+      if (res.data.page_count != null) {
+        self.totalPages = res.data.page_count;
+      }
+      if (res.data.cached != null) {
+        self.cachedPages = res.data.cached;
+      }
+      if (self.cachedPages && self.cachedPages === self.totalPages) {
+        return self.trigger("stars_fetched", self.stars);
+      } else {
+        if (self.cachedPages) {
+          currentPage += 1;
+        } else {
+          currentPage++;
+        }
+        if (currentPage <= self.totalPages) {
+          self.trigger("stars_fetched", self.stars);
+          return self.getGithubStars(currentPage);
+        } else {
+          return self.trigger("stars_fetched", self.stars);
+        }
+      }
+    });
+  };
 };
 
 if (typeof module !== "undefined") {
