@@ -10,7 +10,7 @@
         "laravel/socialite": "^2.0",
         "graham-campbell/markdown": "~4.0",
         "illuminate/html": "^5.0",
-        "guzzlehttp/guzzle": "~6.0",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
