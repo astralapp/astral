@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="astral">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Astral</title>
@@ -9,14 +9,11 @@
   <link href='http://fonts.googleapis.com/css?family=Karla:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <!-- <% HTML::style('css/prettify_themes/github.css') %>
-  <% HTML::style('bower_components/chosen_v1.1.0/chosen.min.css') %>
-  <% HTML::style('bower_components/ng-tags-input/build/ng-tags-input.css') %>
-  <% HTML::style('css/app.css') %> -->
+  <% HTML::style('bower_components/chosen_v1.1.0/chosen.min.css') %>-->
   {!! HTML::style('css/app.css') !!}
-  <base href="/">
 </head>
 <body>
-  <div ui-view></div>
-  @include('partials/scripts')
+<app></app>
+@include('partials/scripts')
 </body>
 </html>

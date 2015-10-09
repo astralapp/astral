@@ -1,45 +1,52 @@
 var gulp = require('gulp');
-var gutil = require('gulp-util');
-var notify = require('gulp-notify');
-var coffee = require('gulp-coffee');
-var concat = require('gulp-concat');
-var sass = require('gulp-ruby-sass');
+var browserify = require('browserify');
+var coffeeify = require('coffeeify');
+var riotify = require('riotify');
+var source = require('vinyl-source-stream');
+var Server = require('karma').Server;
 var bourbon = require('node-bourbon');
+var notify = require('gulp-notify');
+var sass = require('gulp-sass');
 
-var paths = {
-  ngServices: 'resources/assets/coffee/services/**/*.coffee',
-  ngControllers: 'resources/assets/coffee/controllers/**/*.coffee',
-  ngDirectives: 'resources/assets/coffee/directives/**/*.coffee',
-  ngApp: 'resources/assets/coffee/app.coffee',
-  appStyles: 'resources/assets/sass/app.scss',
-};
-
-gulp.task('js', function(){
-  //Angular Controllers
-  gulp.src([paths.ngApp, paths.ngServices, paths.ngControllers, paths.ngDirectives])
-    .pipe(coffee({bare: true}))
-    .on('error', notify.onError(function (error) {
-        return "Build Failed: " + error.stack;
-    }))
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest('public/js/'))
+gulp.task('js', function () {
+  return browserify({debug:false, entries: ['resources/assets/js/app.coffee']})
+  .transform(coffeeify)
+  .transform(riotify, {type:'coffeescript'})
+  .bundle().on('error', function(err){
+    console.log(err.message);
+    this.emit('end');
+  })
+  .pipe(source('app.bundle.js'))
+  .pipe(gulp.dest('public/js/'));
 });
 
 gulp.task('sass', function(){
-    sass(paths.appStyles, {
-      loadPath: bourbon.includePaths,
-      style: 'nested',
-      quiet: true
-    })
-    .on('error', notify.onError(function (error) {
-        return "Build Failed: " + error.message;
-    }))
-    .pipe(gulp.dest('public/css/'))
+    gulp.src('resources/assets/sass/app.scss')
+      .pipe(sass({
+        includePaths: require('node-bourbon').includePaths,
+        quiet: true
+      }).on('error', notify.onError(function (error) {
+          return "Build Failed: " + error.message;
+      })))
+      .pipe(gulp.dest('public/css/'))
 });
 
 gulp.task('watch', function(){
-  gulp.watch(['resources/assets/coffee/**/*.coffee'], ['js']);
+  gulp.watch(['resources/assets/js/**/*.coffee', 'resources/assets/js/**/*.tag'], ['js']);
   gulp.watch(['resources/assets/sass/**/*.scss'], ['sass']);
+});
+
+gulp.task('test', ['js'], function (done) {
+  return new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+});
+
+gulp.task('tdd', ['js'], function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+  }, done).start();
 });
 gulp.task('default', [
   'js',
