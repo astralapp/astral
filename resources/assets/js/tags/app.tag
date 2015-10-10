@@ -1,4 +1,5 @@
+loginscreen = require("./loginscreen.tag")
+dashboard = require("./dashboard/dashboard.tag")
 <app>
-  <h2>Hey, {person}</h2>
-  this.person = "Jane Doe"
+  <route />
 </app>

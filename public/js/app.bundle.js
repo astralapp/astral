@@ -12354,6 +12354,9 @@
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
+!function(t,e){if("object"==typeof exports&&"object"==typeof module)module.exports=e(require("riot"));else if("function"==typeof define&&define.amd)define(["riot"],e);else{var r=e("object"==typeof exports?require("riot"):t.riot);for(var o in r)("object"==typeof exports?exports:t)[o]=r[o]}}(this,function(t){return function(t){function e(o){if(r[o])return r[o].exports;var n=r[o]={exports:{},id:o,loaded:!1};return t[o].call(n.exports,n,n.exports,e),n.loaded=!0,n.exports}var r={};return e.m=t,e.c=r,e.p="",e(0)}([function(t,e,r){"use strict";function o(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=function(){function t(t,e){var r=[],o=!0,n=!1,i=void 0;try{for(var s,u=t[Symbol.iterator]();!(o=(s=u.next()).done)&&(r.push(s.value),!e||r.length!==e);o=!0);}catch(a){n=!0,i=a}finally{try{!o&&u["return"]&&u["return"]()}finally{if(n)throw i}}return r}return function(e,r){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,r);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),s=r(1),u=r(2),a=console&&console.error||function(){},c=function(){function t(){n(this,t),s.router=this,s.observable(this),this.interceptors=[this.processRoute.bind(this)],this.handler=new l,this.current=new p("").response,this.process=this.process.bind(this)}return t.prototype.route=function(t){this.handler=t},t.prototype.routes=function(t){this.route((new f).routes(t))},t.prototype.use=function(t){this.interceptors.push(t)},t.prototype.process=function(){var t=Array.prototype.slice.call(arguments),e=new p(t.join("/"));return this.rootContext||(this.rootContext=e),this.processRequest(e),e},t.prototype.processRequest=function(t){return this.processInterceptors(t),this.processResponse(t)},t.prototype.processResponse=function(t){if(this.isRedirect(t))return this.processRedirect(t);var e=(t.request,t.response);return e.redirectTo?void 0:(this.current=e,this.rootContext=null,this.trigger("route:updated",e),t)},t.prototype.isRedirect=function(t){return!!t.response.redirectTo},t.prototype.processRedirect=function(t){var e=t.response.redirectTo;this.rootContext.addRedirect(e),this.navigateTo(e)},t.prototype.navigateTo=function(t){s.route(t)},t.prototype.processInterceptors=function(t,e,r){var o=(e||[]).concat(this.interceptors).concat(r||[]),n=function i(){if(!t.stop){var e=o.shift(),r=t.request,n=t.response;if(e)return e(r,n,i,t)}return t};return n()},t.prototype.processRoute=function(t,e,r,o){return this.handler.process(t,e,o),r()},t.prototype.start=function(){s.route(this.process),s.route.start(),this.exec()},t.prototype.exec=function(){s.route.exec(this.process)},t}(),p=function(){function t(e){n(this,t),this.request="string"==typeof e?new v(e):e,this.response=new b(this.request),this.redirectStack=[]}return t.prototype.addRedirect=function(t){if(this.redirectStack.indexOf(t)>-1)throw new Error("Cyclic redirection to "+t+". Stack = "+this.redirectStack);this.redirectStack.push(t)},t}(),h=function(){function t(){n(this,t)}return t.prototype.matches=function(t){return!1},t.prototype.process=function(t,e){var r=this.matches(t);return r?this.routeMatch(t,e,r):this.routeMiss(t,e)},t.prototype.routeMatch=function(t,e,r){return e.add(r),!0},t.prototype.routeMiss=function(t,e){return!1},t.prototype.processRoutes=function(t,e,r){if(r&&r.length){for(var o=r.length,n=0;o>n;n++){var i=r[n];if(i.process(t,e))return!0}return!1}},t.prototype.createRequest=function(t,e){return new d(t,e)},t}(),f=function(t){function e(r){n(this,e),t.call(this,r),r=r||{},this.tag=r.tag,this.api=r.api,this.path=r.path,this.name=r.name,this.updatable=r.updatable,this.pathParameterNames=[];var o=this.getPath().replace(/^\//,"");this.pattern="^/?"+o.replace(/:([^\/]+)/g,function(t,e){return this.pathParameterNames.push(e),"([^/]+)"}.bind(this))+"(:?/|$)",this.regex=new RegExp(this.pattern)}return o(e,t),e.prototype.routes=function(t){var e=t.filter(function(t){return t instanceof g}),r=t.filter(function(t){return t instanceof m}),o=t.filter(function(t){return t instanceof y}),n=t.filter(function(t){return-1===e.indexOf(t)&&-1===r.indexOf(t)&&-1===o.indexOf(t)});return o.length>1&&a("Can't use more than one NotFoundRoute per route. --> "+this.getPath()),r.length>1&&a("Can't use more than one DefaultRoute per route. --> "+this.getPath()),this._routes=[].concat(e).concat(n).concat(r).concat(o),this},e.prototype.matches=function(t){var e=this.regex.exec(t.uri);if(e){var r={};for(var o in this.pathParameterNames){var n=this.pathParameterNames[o];r[n]=decodeURIComponent(e[parseInt(o,10)+1])}return{route:this,tag:this.tag,api:this.api,found:e[0],params:r}}return!1},e.prototype.routeMatch=function(e,r,o){var n=t.prototype.routeMatch.call(this,e,r,o);return this.processRoutes(e,r,o),n},e.prototype.processRoutes=function(e,r,o){return t.prototype.processRoutes.call(this,t.prototype.createRequest.call(this,e,o),r,this._routes)},e.prototype.getPath=function(){return this.name||this.path||("string"==typeof this.tag?this.tag:"")},e}(h),l=function(t){function e(){n(this,e),t.apply(this,arguments)}return o(e,t),e.prototype.routeMatch=function(){return!0},e.prototype.processRoutes=function(e,r,o){return t.prototype.processRoutes.call(this,e,r,this._routes)},e}(f),d=function x(t,e){n(this,x),this.request=t,this.matcher=e,this.uri=this.request.uri.substring(e.found.length),this.parentUri=this.request.uri.substring(0,e.found.length)},y=function(t){function e(r){n(this,e),t.call(this,r),r=r||{},this.tag=r.tag,this.api=r.api}return o(e,t),e.prototype.matches=function(t){return{route:this,tag:this.tag,api:this.api,found:t.uri}},e}(h),g=function(t){function e(r){n(this,e),t.call(this,r),r=r||{},this.from=r.from,this.to=r.to,this.pattern="(^/?)"+this.from+"(/|$)",this.regex=new RegExp(this.pattern)}return o(e,t),e.prototype.process=function(t,e){var r=t.uri.replace(this.regex,"$1"+this.to+"$2");if(r!==t.uri){var o=t.parentUri||"";return e.redirectTo=o+r,!0}},e}(h),m=function(t){function e(r){n(this,e),t.call(this,r),r=r||{},this.tag=r.tag,this.api=r.api}return o(e,t),e.prototype.matches=function(t){var e=t.uri.trim();return"/"===e||""===e?{route:this,tag:this.tag,api:this.api,found:e}:void 0},e}(h),v=function _(t){n(this,_),this.uri=t},b=function(){function t(e){n(this,t),this.uri=e.uri,this.matches=[],this.params={}}return t.prototype.add=function(t){this.matches.push(t);var e=t.params;if(e)for(var r in e)e.hasOwnProperty(r)&&(this.params[r]=e[r])},t.prototype.get=function(t){return this.matches[t]},t.prototype.size=function(){return this.matches.length},t.prototype.isEmpty=function(){return this.matches.length},t}();s.tag("route","<router-content></router-content>",function(t){this.calculateLevel=function(t){var e=0;return t.parent&&(e+=this.calculateLevel(t.parent)),t.opts.__router_level&&(e+=t.opts.__router_level),t.__router_tag&&(e+=1),e}.bind(this),this.normalizeTag=function(t,e,r){var o=t(e,r);return"string"==typeof o?t=o:(t=o.tag||t,e=o.api||e),[t,e,r]},this.unmountTag=function(){this.instance&&this.instance.unmount(!0)},this.mountTag=function(t,e,r){if("function"==typeof t){var o=this.normalizeTag(t,e,r),n=i(o,3);t=n[0],e=n[1],r=n[2]}this.canUpdate(t,e,r)?this.instance.update(e):(this.unmountTag(),t&&(this.root.replaceChild(document.createElement(t),this.root.children[0]),this.instance=s.mount(this.root.children[0],t,e)[0],this.instanceTag=t))},this.canUpdate=function(e,r,o){return(s.router.config.updatable||t.updatable||o.updatable)&&this.instance&&this.instance.isMounted&&this.instanceTag===e?!0:!1},this.updateRoute=function(){var t={tag:null};if(s.router&&s.router.current){var e=s.router.current;if(this.level<=e.size()){var r=e.get(this.level);if(r){var o=r.params||{},n=u(!0,{},r.api,o,{__router_level:this.level});t={tag:r.tag,api:n,updatable:r.route.updatable}}}}this.mountTag(t.tag,t.api,t)}.bind(this),this.__router_tag="route",this.level=this.calculateLevel(this),s.router.on("route:updated",this.updateRoute),this.on("unmount",function(){s.router.off("route:updated",this.updateRoute),this.unmountTag()}.bind(this))});var R=new c;R.Route=f,R.DefaultRoute=m,R.RedirectRoute=g,R.NotFoundRoute=y,R._={Response:b,Request:v},R.config={updatable:!1},s.router=R,t.exports=R},function(e,r){e.exports=t},function(t,e){"use strict";var r=Object.prototype.hasOwnProperty,o=Object.prototype.toString,n=function(t){return"function"==typeof Array.isArray?Array.isArray(t):"[object Array]"===o.call(t)},i=function(t){if(!t||"[object Object]"!==o.call(t))return!1;var e=r.call(t,"constructor"),n=t.constructor&&t.constructor.prototype&&r.call(t.constructor.prototype,"isPrototypeOf");if(t.constructor&&!e&&!n)return!1;var i;for(i in t);return"undefined"==typeof i||r.call(t,i)};t.exports=function s(){var t,e,r,o,u,a,c=arguments[0],p=1,h=arguments.length,f=!1;for("boolean"==typeof c?(f=c,c=arguments[1]||{},p=2):("object"!=typeof c&&"function"!=typeof c||null==c)&&(c={});h>p;++p)if(t=arguments[p],null!=t)for(e in t)r=c[e],o=t[e],c!==o&&(f&&o&&(i(o)||(u=n(o)))?(u?(u=!1,a=r&&n(r)?r:[]):a=r&&i(r)?r:{},c[e]=s(f,a,o)):"undefined"!=typeof o&&(c[e]=o));return c}}])});
+
+},{"riot":3}],3:[function(require,module,exports){
 /* Riot v2.2.4, @license MIT, (c) 2015 Muut Inc. + contributors */
 
 ;(function(window, undefined) {
@@ -13725,7 +13728,7 @@ riot.mountTo = riot.mount
 
 })(typeof window != 'undefined' ? window : void 0);
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var RiotControl = {
   _stores: [],
   addStore: function(store) {
@@ -13744,7 +13747,7 @@ var RiotControl = {
 
 if (typeof(module) !== 'undefined') module.exports = RiotControl;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -14903,7 +14906,7 @@ request.put = function(url, data, fn){
 
 module.exports = request;
 
-},{"emitter":5,"reduce":6}],5:[function(require,module,exports){
+},{"emitter":6,"reduce":7}],6:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -15069,7 +15072,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
 /**
  * Reduce `arr` with `fn`.
@@ -15094,10 +15097,12 @@ module.exports = function(arr, fn, initial){
   
   return curr;
 };
-},{}],7:[function(require,module,exports){
-var GithubStore, RiotControl, UserStore, app, githubStore, riot, userStore;
+},{}],8:[function(require,module,exports){
+var DefaultRoute, GithubStore, NotFoundRoute, RedirectRoute, RiotControl, RiotRouter, Route, UserStore, app, githubStore, riot, userStore;
 
-riot = require("riot");
+riot = window.riot = require("riot");
+
+RiotRouter = require("riot-router");
 
 RiotControl = require("riotcontrol");
 
@@ -15115,10 +15120,32 @@ RiotControl.addStore(userStore);
 
 RiotControl.addStore(githubStore);
 
+Route = riot.router.Route;
+
+DefaultRoute = riot.router.DefaultRoute;
+
+NotFoundRoute = riot.router.NotFoundRoute;
+
+RedirectRoute = riot.router.RedirectRoute;
+
+riot.router.routes([
+  new DefaultRoute({
+    tag: "login-screen"
+  }), new Route({
+    path: '/',
+    tag: "login-screen"
+  }), new Route({
+    path: '/dashboard',
+    tag: "dashboard"
+  })
+]);
+
 riot.mount("app");
 
+riot.router.start();
 
-},{"./stores/githubStore.coffee":8,"./stores/userStore.coffee":9,"./tags/app.tag":10,"riot":2,"riotcontrol":3}],8:[function(require,module,exports){
+
+},{"./stores/githubStore.coffee":9,"./stores/userStore.coffee":10,"./tags/app.tag":11,"riot":3,"riot-router":2,"riotcontrol":4}],9:[function(require,module,exports){
 var GithubStore, _, request, riot;
 
 riot = require("riot");
@@ -15172,7 +15199,7 @@ if (typeof module !== "undefined") {
 }
 
 
-},{"lodash":1,"riot":2,"superagent":4}],9:[function(require,module,exports){
+},{"lodash":1,"riot":3,"superagent":5}],10:[function(require,module,exports){
 var UserStore, _, request, riot;
 
 riot = require("riot");
@@ -15193,10 +15220,24 @@ if (typeof module !== "undefined") {
 }
 
 
-},{"lodash":1,"riot":2,"superagent":4}],10:[function(require,module,exports){
+},{"lodash":1,"riot":3,"superagent":5}],11:[function(require,module,exports){
 var riot = require('riot');
-module.exports = riot.tag('app', '<h2>Hey, {person}</h2>', function(opts) {this.person = "Jane Doe";
+module.exports = loginscreen = require("./loginscreen.tag")
+dashboard = require("./dashboard/dashboard.tag")
+riot.tag('app', '<route ></route>', function(opts) {
 
 });
 
-},{"riot":2}]},{},[7]);
+},{"./dashboard/dashboard.tag":12,"./loginscreen.tag":13,"riot":3}],12:[function(require,module,exports){
+var riot = require('riot');
+module.exports = riot.tag('dashboard', '<div class="dashboard"> <div class="dashboard-header"> <h2> <span>All Stars</span> </h2> <div class="tag-settings-trigger"> <i class="fa fa-cog"></i> <div class="dropdown" hide="{true}"> <form class="frm-tagname"> <input type="text"> <button class="btn-flat" type="submit">Save</button> </form> <button class="btn-flat btn-danger">Delete Tag</button> </div> </div> <label for="galileo"> <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope"> <i class="fa fa-search"></i> </label> <div class="user-dropdown-trigger"> <img src="/images/avatar-sample.jpg" alt="Collin Henderson" class="user-avatar"> <span class="user-username">syropian</span> <i class="fa fa-chevron-down"></i> <div class="dropdown" hide="{true}"> <ul class="dropdown-list"> <li><a >Settings</a></li> <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li> <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li> <li><a ng-href="/logout">Sign Out</a></li> </ul> </div> </div> </div> <div class="dashboard-main"> <div class="dashboard-sidebar"> <div class="dashboard-sidebar-header"> <h3>Astral</h3> </div> <div class="sidebar-header"> <h3 class="sidebar-header-text">Stars</h3> </div> <ul class="dashboard-list sidebar-stars"> <li class="all-stars dashboard-list-item"><i class="fa fa-inbox"></i> All Stars</li> <li class="untagged-stars dashboard-list-item"><i class="fa fa-star-o"></i> Untagged Stars</li> </ul> <div class="sidebar-header tags-header"> <h3 class="sidebar-header-text">Tags</h3> <div class="tag-button-group"> <button class="tag-button-group-item">Add</button> <button class="tag-button-group-item">Edit</button> <button class="tag-button-group-item">Sort</button> </div> </div> <form class="tag-form" ng-show="addingTag" hide="{true}"> <input type="text" name="name" placeholder="Tag name"> <button type="submit">Save</button> </form> <ul class="dashboard-list sidebar-tags"> <li class="dashboard-list-item tag droppable">JavaScript</li> </ul> </div> </div> </div>', function(opts) {
+
+});
+
+},{"riot":3}],13:[function(require,module,exports){
+var riot = require('riot');
+module.exports = riot.tag('login-screen', '<div class="login-status"> <div class="login-status-wrap" hide="{true}"> <div class="login-status-text"> Signing In </div> <div class="pulser"></div> </div> <div class="login-container"> <img src="images/logo.svg" alt="Astral"> <a class="btn-auth" href="/#/dashboard">Sign In</a> </div> </div>', function(opts) {
+
+});
+
+},{"riot":3}]},{},[8]);

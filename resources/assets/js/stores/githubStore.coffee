@@ -30,8 +30,4 @@ GithubStore = ->
         else
           self.trigger "stars_fetched", self.stars
 
-
-
-
-
 module.exports = GithubStore if typeof(module) isnt "undefined"
