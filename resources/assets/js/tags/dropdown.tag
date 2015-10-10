@@ -1,3 +1,4 @@
+$ = require("jquery")
 <dropdown>
   <div class="dropdown" hide={true}>
     <ul class="dropdown-list">
@@ -10,7 +11,7 @@
 
   self = @
   self.on "mount", ->
-    $("#{opts.trigger}").on "click", (e) ->
-      $("#{self.root}").children(".dropdown").show()
+    $(opts.trigger).on "click", (e) ->
+      $(self.root).children(".dropdown").toggle()
 
 </dropdown>
