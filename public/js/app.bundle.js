@@ -24358,13 +24358,11 @@ riot.router.start();
 
 
 },{"./stores/githubStore.coffee":10,"./stores/userStore.coffee":11,"./tags/app.tag":12,"riot":4,"riot-router":3,"riotcontrol":5}],10:[function(require,module,exports){
-var GithubStore, _, request, riot;
+var GithubStore, request, riot;
 
 riot = require("riot");
 
 request = require("superagent");
-
-_ = require("lodash");
 
 GithubStore = function() {
   var self;
@@ -24411,7 +24409,7 @@ if (typeof module !== "undefined") {
 }
 
 
-},{"lodash":2,"riot":4,"superagent":6}],11:[function(require,module,exports){
+},{"riot":4,"superagent":6}],11:[function(require,module,exports){
 var UserStore, _, request, riot;
 
 riot = require("riot");
@@ -24444,11 +24442,12 @@ riot.tag('app', '<route ></route>', function(opts) {
 var riot = require('riot');
 module.exports = dashboardHeader = require("./dashboardHeader.tag")
 dashboardSidebar = require("./dashboardSidebar.tag")
-riot.tag('dashboard', '<div class="dashboard"> <dashboard-header ></dashboard-header> <div class="dashboard-main"> <dashboard-sidebar ></dashboard-sidebar> </div> </div>', function(opts) {
+starList = require("../stars/starList.tag")
+riot.tag('dashboard', '<div class="dashboard"> <dashboard-header ></dashboard-header> <div class="dashboard-main"> <dashboard-sidebar ></dashboard-sidebar> <star-list ></star-list> </div> </div>', function(opts) {
 
 });
 
-},{"./dashboardHeader.tag":14,"./dashboardSidebar.tag":15,"riot":4}],14:[function(require,module,exports){
+},{"../stars/starList.tag":18,"./dashboardHeader.tag":14,"./dashboardSidebar.tag":15,"riot":4}],14:[function(require,module,exports){
 var riot = require('riot');
 module.exports = dropdown = require("../dropdown.tag")
 riot.tag('dashboard-header', '<div class="dashboard-header"> <h2> <span>All Stars</span> </h2> <div class="tag-settings-trigger"> <i class="fa fa-cog"></i> <div class="dropdown" hide="{true}"> <form class="frm-tagname"> <input type="text"> <button class="btn-flat" type="submit">Save</button> </form> <button class="btn-flat btn-danger">Delete Tag</button> </div> </div> <label for="galileo"> <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope"> <i class="fa fa-search"></i> </label> <div class="user-dropdown-trigger dropdown-trigger"> <img src="/images/avatar-sample.jpg" alt="Collin Henderson" class="user-avatar"> <span class="user-username">syropian</span> <i class="fa fa-chevron-down"></i> <dropdown trigger=".user-dropdown-trigger"> <li><a >Settings</a></li> <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li> <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li> <li><a href="/#">Sign Out</a></li> </dropdown> </div> </div>', function(opts) {
@@ -24483,6 +24482,19 @@ self.on("mount", function() {
 },{"jquery":1,"riot":4}],17:[function(require,module,exports){
 var riot = require('riot');
 module.exports = riot.tag('login-screen', '<div class="login-status"> <div class="login-status-wrap" hide="{true}"> <div class="login-status-text"> Signing In </div> <div class="pulser"></div> </div> <div class="login-container"> <img src="images/logo.svg" alt="Astral"> <a class="btn-auth" href="/#/dashboard">Sign In</a> </div> </div>', function(opts) {
+
+});
+
+},{"riot":4}],18:[function(require,module,exports){
+var riot = require('riot');
+module.exports = starListItem = require("./starListItem.tag")
+riot.tag('star-list', '<div class="dashboard-repos"> <ul class="repos"> <star-list-item ></star-list-item> </ul> </div>', function(opts) {
+
+});
+
+},{"./starListItem.tag":19,"riot":4}],19:[function(require,module,exports){
+var riot = require('riot');
+module.exports = riot.tag('star-list-item', '<li class="repo draggable" each="{new Array(10)}"> <h3 class="repo-name">astralapp/astral</h3> <div class="repo-description">Organize your GitHub stars with ease</div>  <div class="repo-stats"> <div class="repo-stat stars"><i class="fa fa-star"></i> 1337</div> <div class="repo-stat forks"><i class="fa fa-code-fork"></i> 1337</div> <div class="repo-stat link"><a href="http://github.com/astralapp/astral" target="_blank">View on GitHub</a></div> </div> </li>', function(opts) {
 
 });
 
