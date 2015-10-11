@@ -24438,29 +24438,36 @@ riot.tag('app', '<route ></route>', function(opts) {
 
 });
 
-},{"./dashboard/dashboard.tag":13,"./loginscreen.tag":17,"riot":4}],13:[function(require,module,exports){
+},{"./dashboard/dashboard.tag":13,"./loginscreen.tag":18,"riot":4}],13:[function(require,module,exports){
 var riot = require('riot');
 module.exports = dashboardHeader = require("./dashboardHeader.tag")
 dashboardSidebar = require("./dashboardSidebar.tag")
 starList = require("../stars/starList.tag")
-riot.tag('dashboard', '<div class="dashboard"> <dashboard-header ></dashboard-header> <div class="dashboard-main"> <dashboard-sidebar ></dashboard-sidebar> <star-list ></star-list> </div> </div>', function(opts) {
+dashboardRepoDetails = require("./dashboardRepoDetails.tag")
+riot.tag('dashboard', '<div class="dashboard"> <dashboard-header ></dashboard-header> <div class="dashboard-main"> <dashboard-sidebar ></dashboard-sidebar> <star-list ></star-list> <dashboard-repo-details ></dashboard-repo-details> </div> </div>', function(opts) {
 
 });
 
-},{"../stars/starList.tag":18,"./dashboardHeader.tag":14,"./dashboardSidebar.tag":15,"riot":4}],14:[function(require,module,exports){
+},{"../stars/starList.tag":19,"./dashboardHeader.tag":14,"./dashboardRepoDetails.tag":15,"./dashboardSidebar.tag":16,"riot":4}],14:[function(require,module,exports){
 var riot = require('riot');
 module.exports = dropdown = require("../dropdown.tag")
 riot.tag('dashboard-header', '<div class="dashboard-header"> <h2> <span>All Stars</span> </h2> <div class="tag-settings-trigger"> <i class="fa fa-cog"></i> <div class="dropdown" hide="{true}"> <form class="frm-tagname"> <input type="text"> <button class="btn-flat" type="submit">Save</button> </form> <button class="btn-flat btn-danger">Delete Tag</button> </div> </div> <label for="galileo"> <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope"> <i class="fa fa-search"></i> </label> <div class="user-dropdown-trigger dropdown-trigger"> <img src="/images/avatar-sample.jpg" alt="Collin Henderson" class="user-avatar"> <span class="user-username">syropian</span> <i class="fa fa-chevron-down"></i> <dropdown trigger=".user-dropdown-trigger"> <li><a >Settings</a></li> <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li> <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li> <li><a href="/#">Sign Out</a></li> </dropdown> </div> </div>', function(opts) {
 
 });
 
-},{"../dropdown.tag":16,"riot":4}],15:[function(require,module,exports){
+},{"../dropdown.tag":17,"riot":4}],15:[function(require,module,exports){
+var riot = require('riot');
+module.exports = riot.tag('dashboard-repo-details', '<div class="dashboard-repo-details"> <div class="empty-placeholder">No Repo Selected</div> <div class="empty-placeholder" hide="{true}">No Readme For astralapp/astral</div> <div class="manage-star" hide="{false}"> <div class="edit-star-tags"> <button class="toggle-tag-editor"><i class="fa fa-tag"></i> Edit Tags</button> <div class="tags-dropdown" hide="{true}"> <input type="text" value="" placeholder="Tags"> <button class="save-tags btn-flat">Save Tags</button> </div> </div> <button class="unstar-repo"><i class="fa fa-star-o"></i> Unstar</button> <div class="clone-url"> <label for="txtGitHubCloneURL">Clone:</label> <input type="text" id="txtGitHubCloneURL" value="http://github.com/astralapp/astral" readonly> </div> </div> <div class="readme-loading-overlay" hide="{true}"> <spinner color="#658399"></spinner> </div> <div class="repo-readme syntax"> </div> </div>', function(opts) {
+
+});
+
+},{"riot":4}],16:[function(require,module,exports){
 var riot = require('riot');
 module.exports = riot.tag('dashboard-sidebar', '<div class="dashboard-sidebar"> <div class="dashboard-sidebar-header"> <h3>Astral</h3> </div> <div class="sidebar-header"> <h3 class="sidebar-header-text">Stars</h3> </div> <ul class="dashboard-list sidebar-stars"> <li class="all-stars dashboard-list-item"><i class="fa fa-inbox"></i> All Stars</li> <li class="untagged-stars dashboard-list-item"><i class="fa fa-star-o"></i> Untagged Stars</li> </ul> <div class="sidebar-header tags-header"> <h3 class="sidebar-header-text">Tags</h3> <div class="tag-button-group"> <button class="tag-button-group-item">Add</button> <button class="tag-button-group-item">Edit</button> <button class="tag-button-group-item">Sort</button> </div> </div> <form class="tag-form" ng-show="addingTag" hide="{true}"> <input type="text" name="name" placeholder="Tag name"> <button type="submit">Save</button> </form> <ul class="dashboard-list sidebar-tags"> <li class="dashboard-list-item tag droppable">JavaScript</li> </ul> </div>', function(opts) {
 
 });
 
-},{"riot":4}],16:[function(require,module,exports){
+},{"riot":4}],17:[function(require,module,exports){
 var riot = require('riot');
 module.exports = $ = require("jquery")
 riot.tag('dropdown', '<div class="dropdown"> <ul class="dropdown-list"> <yield ></yield> </ul> </div>', function(opts) {var self;
@@ -24479,20 +24486,20 @@ self.on("mount", function() {
 
 });
 
-},{"jquery":1,"riot":4}],17:[function(require,module,exports){
+},{"jquery":1,"riot":4}],18:[function(require,module,exports){
 var riot = require('riot');
 module.exports = riot.tag('login-screen', '<div class="login-status"> <div class="login-status-wrap" hide="{true}"> <div class="login-status-text"> Signing In </div> <div class="pulser"></div> </div> <div class="login-container"> <img src="images/logo.svg" alt="Astral"> <a class="btn-auth" href="/#/dashboard">Sign In</a> </div> </div>', function(opts) {
 
 });
 
-},{"riot":4}],18:[function(require,module,exports){
+},{"riot":4}],19:[function(require,module,exports){
 var riot = require('riot');
 module.exports = starListItem = require("./starListItem.tag")
 riot.tag('star-list', '<div class="dashboard-repos"> <ul class="repos"> <star-list-item ></star-list-item> </ul> </div>', function(opts) {
 
 });
 
-},{"./starListItem.tag":19,"riot":4}],19:[function(require,module,exports){
+},{"./starListItem.tag":20,"riot":4}],20:[function(require,module,exports){
 var riot = require('riot');
 module.exports = riot.tag('star-list-item', '<li class="repo draggable" each="{new Array(10)}"> <h3 class="repo-name">astralapp/astral</h3> <div class="repo-description">Organize your GitHub stars with ease</div> <ul class="repo-tags" ng-show="star.tags"> <li each="{new Array(3)}">Foo</li> </ul> <div class="repo-stats"> <div class="repo-stat stars"><i class="fa fa-star"></i> 1337</div> <div class="repo-stat forks"><i class="fa fa-code-fork"></i> 1337</div> <div class="repo-stat link"><a href="http://github.com/astralapp/astral" target="_blank">View on GitHub</a></div> </div> </li>', function(opts) {
 

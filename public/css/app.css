@@ -598,7 +598,7 @@ th {
     border: 1px solid rgba(55, 53, 112, 0.1);
     border-radius: 3px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
-    margin-top: 10px;
+    margin-top: 5px;
     opacity: 0;
     pointer-events: none;
     position: absolute;
@@ -1806,7 +1806,7 @@ tags-input .tags {
       outline: none;
       padding: 0.58rem;
       position: relative;
-      top: -1px; }
+      top: -3px; }
       .dashboard-repo-details .manage-star button:not(.btn-flat) .fa {
         margin-right: 2px; }
       .dashboard-repo-details .manage-star button:not(.btn-flat):hover {
