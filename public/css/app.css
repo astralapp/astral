@@ -578,21 +578,21 @@ th {
   opacity: 0.5;
   pointer-events: none; }
 
-[dropdown] {
+.dropdown-trigger {
   cursor: pointer;
   position: relative;
   text-decoration: none; }
-  [dropdown] > i.fa {
+  .dropdown-trigger > i.fa {
     pointer-events: none; }
-  [dropdown] .dropdown {
+  .dropdown-trigger dropdown {
     -webkit-transition: all 250ms ease;
     -moz-transition: all 250ms ease;
     transition: all 250ms ease;
-    -webkit-transform: translate(-50%, -10px);
-    -moz-transform: translate(-50%, -10px);
-    -ms-transform: translate(-50%, -10px);
-    -o-transform: translate(-50%, -10px);
-    transform: translate(-50%, -10px);
+    -webkit-transform: translate(-50%, -10px) scale(0.95);
+    -moz-transform: translate(-50%, -10px) scale(0.95);
+    -ms-transform: translate(-50%, -10px) scale(0.95);
+    -o-transform: translate(-50%, -10px) scale(0.95);
+    transform: translate(-50%, -10px) scale(0.95);
     background: #fff;
     background-clip: padding-box;
     border: 1px solid rgba(55, 53, 112, 0.1);
@@ -605,7 +605,7 @@ th {
     top: 100%;
     left: 50%;
     z-index: 999; }
-    [dropdown] .dropdown::before {
+    .dropdown-trigger dropdown::before {
       -webkit-transform: translateX(-50%) rotate(45deg);
       -moz-transform: translateX(-50%) rotate(45deg);
       -ms-transform: translateX(-50%) rotate(45deg);
@@ -622,14 +622,14 @@ th {
       top: -6px;
       left: 50%;
       z-index: 99; }
-  [dropdown].dropdown-active .dropdown {
-    -webkit-transform: translate(-50%, 0);
-    -moz-transform: translate(-50%, 0);
-    -ms-transform: translate(-50%, 0);
-    -o-transform: translate(-50%, 0);
-    transform: translate(-50%, 0);
-    opacity: 1;
-    pointer-events: auto; }
+    .dropdown-trigger dropdown.active {
+      -webkit-transform: translate(-50%, 0) scale(1);
+      -moz-transform: translate(-50%, 0) scale(1);
+      -ms-transform: translate(-50%, 0) scale(1);
+      -o-transform: translate(-50%, 0) scale(1);
+      transform: translate(-50%, 0) scale(1);
+      opacity: 1;
+      pointer-events: auto; }
 
 .switch label {
   -webkit-transition: all 400ms cubic-bezier(0.51, 0.92, 0.24, 1.15);

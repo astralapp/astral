@@ -18,11 +18,16 @@ dropdown = require("../dropdown.tag")
       <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope">
       <i class="fa fa-search"></i>
     </label>
-    <div class="user-dropdown-trigger">
+    <div class="user-dropdown-trigger dropdown-trigger">
       <img src="/images/avatar-sample.jpg" alt="Collin Henderson" class="user-avatar"/>
       <span class="user-username">syropian</span>
       <i class="fa fa-chevron-down"></i>
       <dropdown trigger=".user-dropdown-trigger">
+        <li><a >Settings</a></li>
+        <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li>
+        <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li>
+        <li><a href="/#">Sign Out</a></li>
+      </dropdown>
     </div>
   </div>
 </dashboard-header>

@@ -24451,7 +24451,7 @@ riot.tag('dashboard', '<div class="dashboard"> <dashboard-header ></dashboard-he
 },{"./dashboardHeader.tag":14,"./dashboardSidebar.tag":15,"riot":4}],14:[function(require,module,exports){
 var riot = require('riot');
 module.exports = dropdown = require("../dropdown.tag")
-riot.tag('dashboard-header', '<div class="dashboard-header"> <h2> <span>All Stars</span> </h2> <div class="tag-settings-trigger"> <i class="fa fa-cog"></i> <div class="dropdown" hide="{true}"> <form class="frm-tagname"> <input type="text"> <button class="btn-flat" type="submit">Save</button> </form> <button class="btn-flat btn-danger">Delete Tag</button> </div> </div> <label for="galileo"> <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope"> <i class="fa fa-search"></i> </label> <div class="user-dropdown-trigger"> <img src="/images/avatar-sample.jpg" alt="Collin Henderson" class="user-avatar"> <span class="user-username">syropian</span> <i class="fa fa-chevron-down"></i> <dropdown trigger=".user-dropdown-trigger"> </div> </div>', function(opts) {
+riot.tag('dashboard-header', '<div class="dashboard-header"> <h2> <span>All Stars</span> </h2> <div class="tag-settings-trigger"> <i class="fa fa-cog"></i> <div class="dropdown" hide="{true}"> <form class="frm-tagname"> <input type="text"> <button class="btn-flat" type="submit">Save</button> </form> <button class="btn-flat btn-danger">Delete Tag</button> </div> </div> <label for="galileo"> <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope"> <i class="fa fa-search"></i> </label> <div class="user-dropdown-trigger dropdown-trigger"> <img src="/images/avatar-sample.jpg" alt="Collin Henderson" class="user-avatar"> <span class="user-username">syropian</span> <i class="fa fa-chevron-down"></i> <dropdown trigger=".user-dropdown-trigger"> <li><a >Settings</a></li> <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li> <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li> <li><a href="/#">Sign Out</a></li> </dropdown> </div> </div>', function(opts) {
 
 });
 
@@ -24464,13 +24464,17 @@ module.exports = riot.tag('dashboard-sidebar', '<div class="dashboard-sidebar"> 
 },{"riot":4}],16:[function(require,module,exports){
 var riot = require('riot');
 module.exports = $ = require("jquery")
-riot.tag('dropdown', '<div class="dropdown" hide="{true}"> <ul class="dropdown-list"> <li><a >Settings</a></li> <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li> <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li> <li><a ng-href="/logout">Sign Out</a></li> </ul> </div>', function(opts) {var self;
+riot.tag('dropdown', '<div class="dropdown"> <ul class="dropdown-list"> <yield ></yield> </ul> </div>', function(opts) {var self;
 
 self = this;
 
 self.on("mount", function() {
+  $("html").on("click", function(e) {
+    return $("dropdown").removeClass("active");
+  });
   return $(opts.trigger).on("click", function(e) {
-    return $(self.root).children(".dropdown").toggle();
+    e.stopPropagation();
+    return $(self.root).toggleClass("active");
   });
 });
 

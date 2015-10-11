@@ -1,17 +1,17 @@
 $ = require("jquery")
 <dropdown>
-  <div class="dropdown" hide={true}>
+  <div class="dropdown">
     <ul class="dropdown-list">
-      <li><a >Settings</a></li>
-      <li><a href="mailto:hello@astralapp.com">Support &amp; Feedback</a></li>
-      <li><a href="https://gratipay.com/syropian/" target="_blank"><i class="fa fa-heart"></i> Gratipay</a></li>
-      <li><a ng-href="/logout">Sign Out</a></li>
+      <yield />
     </ul>
   </div>
 
   self = @
   self.on "mount", ->
+    $("html").on "click", (e) ->
+      $("dropdown").removeClass("active")
     $(opts.trigger).on "click", (e) ->
-      $(self.root).children(".dropdown").toggle()
+      e.stopPropagation()
+      $(self.root).toggleClass("active")
 
 </dropdown>
