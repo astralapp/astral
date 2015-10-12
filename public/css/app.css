@@ -1806,7 +1806,7 @@ tags-input .tags {
       outline: none;
       padding: 0.58rem;
       position: relative;
-      top: -3px; }
+      top: -1px; }
       .dashboard-repo-details .manage-star button:not(.btn-flat) .fa {
         margin-right: 2px; }
       .dashboard-repo-details .manage-star button:not(.btn-flat):hover {
