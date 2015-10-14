@@ -4,8 +4,6 @@
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
     "browserify": "^11.1.0",
-    "coffee-script": "^1.10.0",
-    "coffeeify": "^1.1.0",
     "gulp": "^3.9.0",
     "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.0.4",
