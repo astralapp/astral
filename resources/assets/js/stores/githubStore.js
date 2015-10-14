@@ -1,16 +1,14 @@
-const riot = require("riot");
-const request = require("superagent");
+import riot from "riot";
+import {superagent as request} from "superagent";
 
-const GithubStore = () =>
+function GithubStore() {
   riot.observable(this);
-
-  self = this;
 
   self.totalPages = 0;
   self.cachedPages = 0;
   self.stars = [];
 
-  self.getGithubStars = (page = 1) => {
+  self.getGithubStars = (page=1) => {
     let currentPage = page;
     request.get("/api/github/stars?page=#{page}").end((err, res) => {
       self.stars = res.data.stars
@@ -31,5 +29,6 @@ const GithubStore = () =>
       }
     });
   }
+}
 
 if(typeof(module) !== "undefined") { module.exports = GithubStore; }

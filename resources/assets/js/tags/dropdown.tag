@@ -1,4 +1,4 @@
-const $ = require("jquery")
+$ = require("jquery");
 <dropdown>
   <div class="dropdown">
     <ul class="dropdown-list">
@@ -6,14 +6,14 @@ const $ = require("jquery")
     </ul>
   </div>
 
-  self = this
-  self.on("mount", => {
-    $("html").on("click", => {
-      $("dropdown").removeClass("active")
+  this.on("mount", () => {
+    $("html").on("click", () => {
+      $("dropdown").removeClass("active");
     });
     $(opts.trigger).on("click", (e) => {
       e.stopPropagation();
-      $(self.root).toggleClass("active");
+      $(this.root).toggleClass("active");
     });
   });
+
 </dropdown>

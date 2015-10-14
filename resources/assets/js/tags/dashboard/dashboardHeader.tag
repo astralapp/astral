@@ -1,4 +1,4 @@
-const dropdown = require("../dropdown.tag")
+dropdown = require("../dropdown.tag");
 <dashboard-header>
   <div class="dashboard-header">
     <h2>
