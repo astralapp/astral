@@ -1,4 +1,4 @@
-dropdown = require("../dropdown.tag");
+require("../dropdown.tag");
 <dashboard-header>
   <div class="dashboard-header">
     <h2>

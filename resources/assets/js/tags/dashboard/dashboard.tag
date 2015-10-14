@@ -1,7 +1,7 @@
-dashboardHeader = require("./dashboardHeader.tag");
-dashboardSidebar = require("./dashboardSidebar.tag");
-starList = require("../stars/starList.tag");
-dashboardRepoDetails = require("./dashboardRepoDetails.tag");
+require("./dashboardHeader.tag");
+require("./dashboardSidebar.tag");
+require("../stars/starList.tag");
+require("./dashboardRepoDetails.tag");
 <dashboard>
   <div class="dashboard">
     <dashboard-header />

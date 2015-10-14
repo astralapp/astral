@@ -1,5 +1,5 @@
-loginscreen = require("./loginscreen.tag");
-dashboard = require("./dashboard/dashboard.tag");
+require("./loginscreen.tag");
+require("./dashboard/dashboard.tag");
 <app>
   <route />
 </app>

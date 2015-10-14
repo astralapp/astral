@@ -1,4 +1,4 @@
-starListItem = require("./starListItem.tag");
+require("./starListItem.tag");
 <star-list>
   <div class="dashboard-repos">
     <ul class="repos">
