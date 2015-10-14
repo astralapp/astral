@@ -1,10 +1,9 @@
-const riot = require("riot");
-const request = require("superagent");
-const _ = require("lodash");
+import riot from "riot";
+import {superagent as request} from "superagent";
+import {lodash as _} from "lodash";
 
-const UserStore = () => {
+function UserStore() {
   riot.observable(this);
-  const self = this;
-  self.user = {};
+  this.user = {};
 }
 if(typeof(module) !== "undefined"){ module.exports = UserStore; }
