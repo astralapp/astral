@@ -9,7 +9,7 @@ var notify = require("gulp-notify");
 var sass = require("gulp-sass");
 
 gulp.task("js", function () {
-  return browserify({debug: true, entries: ["resources/assets/js/app.js"]})
+  return browserify({debug: false, entries: ["resources/assets/js/app.js"]})
   .transform(babelify.configure({
     extensions: [".js"]
   }))
