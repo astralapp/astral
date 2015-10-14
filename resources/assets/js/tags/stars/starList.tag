@@ -1,4 +1,4 @@
-starListItem = require("./starListItem.tag")
+const starListItem = require("./starListItem.tag")
 <star-list>
   <div class="dashboard-repos">
     <ul class="repos">
