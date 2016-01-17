@@ -1,0 +1,24 @@
+@import 'bourbon';
+@import 'application/shared/normalize';
+@import 'application/shared/variables';
+@import 'application/shared/modules/ng_animations';
+@import 'application/shared/modules/btn';
+@import 'application/shared/modules/input';
+@import 'application/shared/modules/dropdown';
+@import 'application/shared/modules/toggle_switch';
+@import 'application/shared/modules/modal';
+@import 'application/shared/modules/flash_message';
+@import 'application/shared/modules/tags_input';
+@import 'application/dashboard/dashboard_global';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+html, body {
+  overflow-x: hidden;
+}
+body {
+  font-family: $sans;
+  font-size: 16px;
+  min-height: 100%;
+}

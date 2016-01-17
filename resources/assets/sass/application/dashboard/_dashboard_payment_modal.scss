@@ -1,0 +1,78 @@
+.user-settings-modal {
+  .payment-header {
+    display: inline-block;
+  }
+  .payment-body {
+    .payment-body-header {
+      background: $primary;
+      color: rgba(#fff, 0.75);
+      padding: 30px 20px;
+      text-align: center;
+      h3 {
+        margin: 0;
+        strong { color: #fff; }
+      }
+      p {
+        font-size: 0.9rem;
+        margin: 5px 0;
+      }
+    }
+    .cc-errors {
+      background: $red;
+      color: #fff;
+      font-size: 12px;
+      font-weight: $demi;
+      letter-spacing: 2px;
+      padding: 12px 20px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .payment-body-inner {
+      padding: 20px;
+    }
+    #payment-form {
+      width: 298px;
+      margin: 0 auto;
+    }
+    .form-row {
+      margin-bottom: 15px;
+      label {
+        > span {
+          text-transform: uppercase;
+          font-size: 12px;
+          letter-spacing: 2px;
+          font-weight: $demi;
+          margin-bottom: 8px;
+        }
+        &.label-top > span {
+          display: block;
+        }
+
+      }
+      #{$all-text-inputs} {
+        @include textfield();
+        font-size: 0.9rem;
+        height: 36px;
+      }
+      .cc-number {
+        width: 289px;
+      }
+      .cc-exp-date {
+        margin-right: 10px;
+        width: 110px;
+        text-align: center;
+      }
+      .cc-cvc {
+        text-align: center;
+      }
+    }
+    .btn-subscribe {
+      width: 100%;
+      padding: 11px 10px;
+      margin-bottom: 5px;
+    }
+    .btn-cancel-subscribe {
+      width: 100%;
+    }
+  }
+}

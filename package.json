@@ -1,0 +1,32 @@
+{
+  "name": "Astral",
+  "private": true,
+  "scripts": {
+    "test": "npm test"
+  },
+  "dependencies": {
+    "local-storage": "^1.4.2",
+    "vue": "^1.0.14",
+    "vue-resource": "^0.6.1",
+    "vue-router": "^0.7.8",
+    "vuex": "^0.2.0"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babelify": "^6.3.0",
+    "browserify": "^13.0.0",
+    "gulp": "^3.9.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-sass": "^2.1.1",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.19",
+    "karma-browserify": "^4.4.2",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "karma-spec-reporter": "0.0.23",
+    "node-bourbon": "^4.2.3",
+    "phantomjs": "^1.9.19",
+    "vinyl-source-stream": "^1.1.0",
+    "vueify": "^8.3.2"
+  }
+}
