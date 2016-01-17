@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class GithubClient
 {
 
-  private static $starsCacheExpiry = 99999; //minutes
+  private static $starsCacheExpiry = 120; //minutes
   private static $starsPerPage = 50;
 
   public static function getStars($page = 1, $token)
