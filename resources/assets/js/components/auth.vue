@@ -15,6 +15,7 @@
 <script>
   import ls from "local-storage";
   export default {
+    name: "Auth",
     data() {
       return {
         authenticated: false

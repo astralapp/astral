@@ -1,61 +1,67 @@
-import riot from "riot";
-import request from "superagent";
+import Vue from "vue";
+import VueResource from "vue-resource";
+import Vuex from "vuex";
+import ls from "local-storage";
 
-function GithubStore() {
 
-  this.totalPages = 0;
-  this.cachedPages = 0;
-  this.stars = [];
+Vue.use(VueResource);
+Vue.use(Vuex);
 
-  this.on("request:stars", () => {
-    this.getGithubStars();
-  });
+const state = {
+  stars: [],
+  totalPages: 0,
+  cachedPages: 0
+};
 
-  this.on("request:readme", (repo) => {
-    this.getRepoReadme(repo);
-  });
+const mutations = {
+  SET_STARS(state, stars) {
+    state.stars = stars;
+  },
+  SET_TOTAL_PAGES(state, count){
+    state.totalPages = count;
+  },
+  SET_CACHED_PAGES(state, count){
+    state.cachedPages = count;
+  }
+};
 
-  this.getGithubStars = (page=1) => {
+const actions = {
+  fetchStars: function(store, page = 1) {
     let currentPage = page;
-    request.get("/api/github/stars?page=" + page).end((err, res) => {
-      if(res.error) {
-        if(err.status === 401) {
-          window.location("/");
-        }
+    let data = {};
+    Vue.http.get(`/api/github/stars?page=${page}`, null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`,
+        "Access-Token": ls("access_token")
       }
-      res = JSON.parse(res.text);
-      this.stars = res.stars
-      if(res.page_count) {this.totalPages = res.page_count;}
-      if(res.cached) {this.cachedPages = res.cached;}
-      if(this.cachedPages && this.cachedPages === this.totalPages) {
-        this.trigger("stars_fetched", this.stars);
-        return false;
-      }
-      else {
-        if(this.cachedPages){
-          currentPage += 1;
-        }
-        else {
-          currentPage++;
-        }
-      }
-      if(currentPage <= this.totalPages) {
-        this.trigger("stars_fetched", this.stars);
-        this.getGithubStars(currentPage);
+    }).then( (response) => {
+      data = response.data.stars
+      if(data.page_count) { store.dispatch("SET_TOTAL_PAGES", data.page_count); }
+      if(data.cached) { store.dispatch("SET_CACHED_PAGES", data.cached); }
+      if( store.state.cachedPages && store.state.cachedPages === store.state.totalPages ) {
+        store.dispatch("SET_STARS", data.stars);
+        return false
       }
       else {
-        this.trigger("stars_fetched", this.stars);
+        if(store.state.cachedPages){
+          currentPage+= 1;
+        } else {
+          store.state.cachedPages++;
+        }
+      }
+      if(currentPage <= store.state.totalPages) {
+        store.dispatch("SET_STARS", data.stars);
+        store.actions.fetchStars(currentPage);
+      }
+      else {
+        store.dispatch("SET_STARS", data.stars);
       }
     });
   }
+};
 
-  this.getRepoReadme = (repo) => {
-    request.get(`/api/github/repo/${repo.owner.login}/${repo.name}/readme`).end( (err, res) => {
-      let readme = JSON.parse(res.text).readme;
-      this.trigger("readme_fetched", readme);
-    });
-  }
-
-}
-
-export default GithubStore;
+export default new Vuex.Store({
+  state,
+  mutations,
+  actions
+});

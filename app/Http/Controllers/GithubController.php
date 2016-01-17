@@ -8,19 +8,24 @@ use GuzzleHttp\ClientInterface;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Helpers\GithubClient;
+
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
+
 class GithubController extends Controller
 {
+  public function __construct() {
+    return $this->middleware('jwt.auth');
+  }
 
   public function getStars(Request $request)
   {
-    if( \Auth::check() ){
       $page = (int)$request->input('page', 1);
-      $stars = \GithubClient::getStars($page);
-      return \Response::json($stars, 200);
-    }
-    else {
-      return \Response::json('Unauthorized', 401);
-    }
+      $access_token = $request->header('Access-Token');
+      $stars = GithubClient::getStars($page, $access_token);
+      return response()->json(compact('stars'), 200);
   }
 
   public function getReadme(Request $request, $owner, $repo)

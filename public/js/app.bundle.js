@@ -14535,12 +14535,21 @@ router.redirect({
 router.start(_componentsAppVue2["default"], '#app');
 
 },{"./components/app.vue":36,"./components/auth.vue":37,"./components/dashboard.vue":38,"vue":30,"vue-router":29}],36:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  name: "App"
+};
+if (module.exports.__esModule) module.exports = module.exports.default
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n  <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/app.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/app.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14561,6 +14570,7 @@ var _localStorage2 = _interopRequireDefault(_localStorage);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+  name: "Auth",
   data: function data() {
     return {
       authenticated: false
@@ -14591,7 +14601,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/auth.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/auth.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14605,40 +14615,49 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _store = require("./../stores/store.js");
+var _userStore = require("./../stores/userStore.js");
 
-var _store2 = _interopRequireDefault(_store);
+var _userStore2 = _interopRequireDefault(_userStore);
+
+var _githubStore = require("./../stores/githubStore.js");
+
+var _githubStore2 = _interopRequireDefault(_githubStore);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+  name: "Dashboard",
   data: function data() {
     return {};
   },
 
   computed: {
     user: function user() {
-      return _store2.default.state.user;
+      return _userStore2.default.state.user;
+    },
+    stars: function stars() {
+      return _githubStore2.default.state.stars;
     }
   },
   ready: function ready() {
-    _store2.default.actions.fetchUser();
+    _userStore2.default.actions.fetchUser();
+    _githubStore2.default.actions.fetchStars();
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<h1>This is the dashboard!</h1>\n<h3>Sup {{ user.name }}</h3>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<h1>This is the dashboard!</h1>\n<h3>Sup {{ user.name }}</h3>\n<hr>\n<ul>\n  <li v-for=\"star in stars\">\n    {{ star.full_name }}\n  </li>\n</ul>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/store.js":39,"vue":30,"vue-hot-reload-api":4}],39:[function(require,module,exports){
+},{"./../stores/githubStore.js":39,"./../stores/userStore.js":40,"vue":30,"vue-hot-reload-api":4}],39:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14665,7 +14684,98 @@ var _localStorage2 = _interopRequireDefault(_localStorage);
 
 _vue2["default"].use(_vueResource2["default"]);
 _vue2["default"].use(_vuex2["default"]);
-_vue2["default"].config.debug = true;
+
+var state = {
+  stars: [],
+  totalPages: 0,
+  cachedPages: 0
+};
+
+var mutations = {
+  SET_STARS: function SET_STARS(state, stars) {
+    state.stars = stars;
+  },
+  SET_TOTAL_PAGES: function SET_TOTAL_PAGES(state, count) {
+    state.totalPages = count;
+  },
+  SET_CACHED_PAGES: function SET_CACHED_PAGES(state, count) {
+    state.cachedPages = count;
+  }
+};
+
+var actions = {
+  fetchStars: function fetchStars(store) {
+    var page = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+
+    var currentPage = page;
+    var data = {};
+    _vue2["default"].http.get("/api/github/stars?page=" + page, null, {
+      headers: {
+        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt"),
+        "Access-Token": (0, _localStorage2["default"])("access_token")
+      }
+    }).then(function (response) {
+      data = response.data.stars;
+      if (data.page_count) {
+        store.dispatch("SET_TOTAL_PAGES", data.page_count);
+      }
+      if (data.cached) {
+        store.dispatch("SET_CACHED_PAGES", data.cached);
+      }
+      if (store.state.cachedPages && store.state.cachedPages === store.state.totalPages) {
+        store.dispatch("SET_STARS", data.stars);
+        return false;
+      } else {
+        if (store.state.cachedPages) {
+          currentPage += 1;
+        } else {
+          store.state.cachedPages++;
+        }
+      }
+      if (currentPage <= store.state.totalPages) {
+        store.dispatch("SET_STARS", data.stars);
+        store.actions.fetchStars(currentPage);
+      } else {
+        store.dispatch("SET_STARS", data.stars);
+      }
+    });
+  }
+};
+
+exports["default"] = new _vuex2["default"].Store({
+  state: state,
+  mutations: mutations,
+  actions: actions
+});
+module.exports = exports["default"];
+
+},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],40:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vueResource = require("vue-resource");
+
+var _vueResource2 = _interopRequireDefault(_vueResource);
+
+var _vuex = require("vuex");
+
+var _vuex2 = _interopRequireDefault(_vuex);
+
+var _localStorage = require("local-storage");
+
+var _localStorage2 = _interopRequireDefault(_localStorage);
+
+_vue2["default"].use(_vueResource2["default"]);
+_vue2["default"].use(_vuex2["default"]);
 
 var state = {
   user: {}

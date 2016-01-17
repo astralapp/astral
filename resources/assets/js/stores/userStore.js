@@ -1,33 +1,36 @@
-import riot from "riot";
-import request from "superagent";
+import Vue from "vue";
+import VueResource from "vue-resource";
+import Vuex from "vuex";
 import ls from "local-storage";
 
-function UserStore() {
 
-  this.user = {};
+Vue.use(VueResource);
+Vue.use(Vuex);
 
-  this.on("user_updated", (user) => {
-    this.user = user;
-  });
+const state = {
+  user: {},
+};
 
-  this.on("fetch_user", () => {
-    this.fetchUser();
-  });
+const mutations = {
+  SET_USER(state, user) {
+    state.user = user;
+  }
+};
 
-  this.on("user_signed_out", () => {
-    request.get("/api/auth/logout").end( (err, res) => {
-      this.user = {};
-      ls.remove("user");
-    });
-  });
-
-  this.fetchUser = () => {
-    request.get("/api/auth/user").end( (err, res) => {
-      this.user = JSON.parse(res.text);
-      ls("user", this.user);
-      this.trigger("user_fetched", this.user);
+const actions = {
+  fetchUser: function(store) {
+    Vue.http.get("/api/auth/user", null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      store.dispatch('SET_USER', response.data.user);
     });
   }
-}
+};
 
-export default UserStore;
+export default new Vuex.Store({
+  state,
+  mutations,
+  actions
+});
