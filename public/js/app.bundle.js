@@ -14534,7 +14534,7 @@ router.redirect({
 
 router.start(_componentsAppVue2["default"], '#app');
 
-},{"./components/app.vue":36,"./components/auth.vue":37,"./components/dashboard.vue":38,"vue":30,"vue-router":29}],36:[function(require,module,exports){
+},{"./components/app.vue":36,"./components/auth.vue":37,"./components/dashboard.vue":41,"vue":30,"vue-router":29}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14614,14 +14614,99 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = {
+  name: "DashboardHeader",
+  props: ["user"]
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-header\">\n  <h2>\n    <span>All Stars</span>\n  </h2>\n  <div class=\"tag-settings-trigger\">\n    <i class=\"fa fa-cog\"></i>\n    <!-- <div class=\"dropdown\" hide={true}>\n      <form  class=\"frm-tagname\">\n        <input type=\"text\">\n        <button class=\"btn-flat\" type=\"submit\">Save</button>\n      </form>\n      <button class=\"btn-flat btn-danger\">Delete Tag</button>\n    </div> -->\n  </div>\n  <label for=\"galileo\">\n    <input type=\"text\" id=\"galileo\" class=\"telescope\" placeholder=\"Gaze through your telescope\">\n    <i class=\"fa fa-search\"></i>\n  </label>\n  <div class=\"user-dropdown-trigger dropdown-trigger\">\n    <img :src=\"user.avatar_url\" alt=\"{{ user.name }}\" class=\"user-avatar\">\n    <span class=\"user-username\">{{ user.username }}</span>\n    <i class=\"fa fa-chevron-down\"></i>\n    <!-- <dropdown trigger=\".user-dropdown-trigger\">\n      <li><a >Settings</a></li>\n      <li><a href=\"mailto:hello@astralapp.com\">Support &amp; Feedback</a></li>\n      <li><a href=\"https://gratipay.com/syropian/\" target=\"_blank\"><i class=\"fa fa-heart\"></i> Gratipay</a></li>\n      <li><a href=\"javascript:void(0)\" onclick={parent.signOut}>Sign Out</a></li>\n    </dropdown> -->\n  </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-header.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":30,"vue-hot-reload-api":4}],39:[function(require,module,exports){
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"false\">\n    <input type=\"text\" name=\"name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag droppable\">JavaScript</li>\n    <li class=\"dashboard-list-item tag droppable\">PHP</li>\n    <li class=\"dashboard-list-item tag droppable\">Vuejs</li>\n    <li class=\"dashboard-list-item tag droppable\">Laravel</li>\n  </ul>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-sidebar.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _githubStore = require("./../stores/githubStore.js");
+
+var _githubStore2 = _interopRequireDefault(_githubStore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  name: "StarList",
+  data: function data() {
+    return {};
+  },
+
+  computed: {
+    stars: function stars() {
+      return _githubStore2.default.state.stars;
+    }
+  },
+  ready: function ready() {
+    _githubStore2.default.actions.fetchStars();
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo draggable\" v-for=\"star in stars\">\n      <h3 class=\"repo-name\">{{ star.full_name }}</h3>\n      <div class=\"repo-description\">{{ star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li>First Tag</li>\n        <li>Second Tag</li>\n        <li>Third Tag</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{ star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{ star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{ star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-star-list.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./../stores/githubStore.js":42,"vue":30,"vue-hot-reload-api":4}],41:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _userStore = require("./../stores/userStore.js");
 
 var _userStore2 = _interopRequireDefault(_userStore);
 
-var _githubStore = require("./../stores/githubStore.js");
+var _dashboardHeader = require("./dashboard-header.vue");
 
-var _githubStore2 = _interopRequireDefault(_githubStore);
+var _dashboardHeader2 = _interopRequireDefault(_dashboardHeader);
+
+var _dashboardSidebar = require("./dashboard-sidebar.vue");
+
+var _dashboardSidebar2 = _interopRequireDefault(_dashboardSidebar);
+
+var _dashboardStarList = require("./dashboard-star-list.vue");
+
+var _dashboardStarList2 = _interopRequireDefault(_dashboardStarList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14634,18 +14719,20 @@ exports.default = {
   computed: {
     user: function user() {
       return _userStore2.default.state.user;
-    },
-    stars: function stars() {
-      return _githubStore2.default.state.stars;
     }
   },
   ready: function ready() {
     _userStore2.default.actions.fetchUser();
-    _githubStore2.default.actions.fetchStars();
+  },
+
+  components: {
+    "dashboard-header": _dashboardHeader2.default,
+    "dashboard-sidebar": _dashboardSidebar2.default,
+    "star-list": _dashboardStarList2.default
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<h1>This is the dashboard!</h1>\n<h3>Sup {{ user.name }}</h3>\n<hr>\n<ul>\n  <li v-for=\"star in stars\">\n    {{ star.full_name }}\n  </li>\n</ul>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard\">\n  <dashboard-header :user=\"user\"></dashboard-header>\n  <div class=\"dashboard-main\">\n    <dashboard-sidebar></dashboard-sidebar>\n    <star-list></star-list>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -14657,7 +14744,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/githubStore.js":39,"./../stores/userStore.js":40,"vue":30,"vue-hot-reload-api":4}],39:[function(require,module,exports){
+},{"./../stores/userStore.js":43,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14749,7 +14836,7 @@ exports["default"] = new _vuex2["default"].Store({
 });
 module.exports = exports["default"];
 
-},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],40:[function(require,module,exports){
+},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],43:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

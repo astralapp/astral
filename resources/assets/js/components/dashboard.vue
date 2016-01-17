@@ -1,16 +1,17 @@
 <template>
-  <h1>This is the dashboard!</h1>
-  <h3>Sup {{ user.name }}</h3>
-  <hr />
-  <ul>
-    <li v-for="star in stars">
-      {{ star.full_name }}
-    </li>
-  </ul>
+  <div class="dashboard">
+    <dashboard-header :user="user"></dashboard-header>
+    <div class="dashboard-main">
+      <dashboard-sidebar></dashboard-sidebar>
+      <star-list></star-list>
+    </div>
+  </div>
 </template>
 <script>
 import userStore from "./../stores/userStore.js";
-import githubStore from "./../stores/githubStore.js";
+import DashboardHeader from "./dashboard-header.vue";
+import DashboardSidebar from "./dashboard-sidebar.vue";
+import StarList from "./dashboard-star-list.vue";
 export default {
   name: "Dashboard",
   data() {
@@ -20,13 +21,14 @@ export default {
     user() {
       return userStore.state.user;
     },
-    stars() {
-      return githubStore.state.stars;
-    }
   },
   ready() {
     userStore.actions.fetchUser()
-    githubStore.actions.fetchStars()
+  },
+  components: {
+    "dashboard-header": DashboardHeader,
+    "dashboard-sidebar": DashboardSidebar,
+    "star-list": StarList
   }
 }
 </script>
