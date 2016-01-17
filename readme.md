@@ -1,27 +1,63 @@
-## Laravel PHP Framework
+## Astral v2
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+[![Join the chat at https://gitter.im/astralapp/astral](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/astralapp/astral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/astralapp/astral.svg?branch=riotjs)](https://travis-ci.org/astralapp/astral)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+This is the repository for Astral v2. It is currently still in early development. Currently looking for core contributors!
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+---
 
-## Official Documentation
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+### Improvements
 
-## Contributing
+- Improved Caching
+- Improved UI/UX
+- Built on Laravel 5.2
+- Switched the front-end from AngularJS to VueJS
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
 
-## Security Vulnerabilities
+### Getting up and running
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+- Fork this repository, clone it, and `cd` into it
+- Install the front-end dependencies: `npm install`
+- Compile
+- [Install Homestead](http://laravel.com/docs/homestead#installation-and-setup)
+- Configure Homestead: `homestead edit`
 
-### License
+	```
+	[...]
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+	folders:
+	    - map: ~/<PATH TO REPO>
+	      to: /home/vagrant/astral
+
+	sites:
+	    - map: astralapp.app
+	      to: /home/vagrant/astral/public
+
+	databases:
+	    - astral
+
+	 [...]
+	```
+- Add the local development domain to your hosts file: `192.168.10.10  astralapp.app`
+- Create a new [GitHub personal access token](https://github.com/settings/tokens), and grab the keys it gives you
+- Copy the `.env.example` file and rename it to `.env`. Add your GitHub keys to it
+- SSH into your Homestead app, migrate the DB, and generate a new app key
+
+	```
+	$ homestead ssh
+	$ cd astral
+	$ php artisan migrate
+	$ php artisan key:generate
+	```
+
+- Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and bask in its glory!
+
+
+### Contributing
+
+- [Get up and running](#getting-up-and-running)
+- Create a new descriptively named branch
+- Commit your changes and push to your fork
+- Create a pull request with a clear, well written description of what the PR is all about
+- Party!!
