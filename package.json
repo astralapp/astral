@@ -2,7 +2,7 @@
   "name": "Astral",
   "private": true,
   "scripts": {
-    "test": "npm test"
+    "test": "karma start --singleRun=true"
   },
   "dependencies": {
     "local-storage": "^1.4.2",

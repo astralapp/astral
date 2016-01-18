@@ -14549,7 +14549,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/app.vue"
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/app.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14601,7 +14601,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/auth.vue"
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/auth.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14624,7 +14624,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-header.vue"
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-header.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14637,7 +14637,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-sidebar.vue"
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-sidebar.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14678,7 +14678,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-star-list.vue"
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-star-list.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14737,7 +14737,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard.vue"
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
