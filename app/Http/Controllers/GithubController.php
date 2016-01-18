@@ -20,17 +20,17 @@ class GithubController extends Controller
     return $this->middleware('jwt.auth');
   }
 
-  public function getStars(Request $request)
+  public function getStars(Request $request, GithubClient $client)
   {
       $page = (int)$request->input('page', 1);
       $access_token = $request->header('Access-Token');
-      $stars = GithubClient::getStars($page, $access_token);
+      $stars = $client->getStars($page, $access_token);
       return response()->json(compact('stars'), 200);
   }
 
-  public function getReadme(Request $request, $owner, $repo)
+  public function getReadme(Request $request, GithubClient $client, $owner, $repo)
   {
-    $readme = \GithubClient::getReadme($owner, $repo);
-    return \Response::json($readme, 200);
+    $readme = $client->getReadme($owner, $repo);
+    response()->json(compact('readme'), 200);
   }
 }

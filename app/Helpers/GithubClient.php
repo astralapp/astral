@@ -12,13 +12,13 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class GithubClient
 {
 
-  private static $starsCacheExpiry = 120; //minutes
-  private static $starsPerPage = 50;
+  private $starsCacheExpiry = 120; //minutes
+  private $starsPerPage = 50;
 
-  public static function getStars($page = 1, $token)
+  public function getStars($page = 1, $token)
   {
-    $cacheKey = self::starsCacheKey();
-    $cacheExpiry = self::$starsCacheExpiry;
+    $cacheKey = $this->starsCacheKey();
+    $cacheExpiry = $this->starsCacheExpiry;
     $starsArray = [];
 
     if($page == 1){
@@ -30,13 +30,13 @@ class GithubClient
         $cachedStars['stars'] = $uniqueStars;
         // Add a "cached" key so we can check on the front-end whether we should paginate or not. We set it to the number of pages currently cached, so we fetch only what we need in subsequent requests
         $cachedPages = count($cachedStars['stars']);
-        $cachedStars['cached'] = (int)ceil($cachedPages / self::$starsPerPage);
+        $cachedStars['cached'] = (int)ceil($cachedPages / $this->starsPerPage);
         return $cachedStars;
       }
     }
 
-    $starsUrl = 'https://api.github.com/user/starred?per_page='.self::$starsPerPage.'&page='.$page.'&access_token='.$token;
-    $client = self::getClient();
+    $starsUrl = 'https://api.github.com/user/starred?per_page='.$this->starsPerPage.'&page='.$page.'&access_token='.$token;
+    $client = $this->getClient();
     $res = $client->get(
         $starsUrl,
         []
@@ -45,7 +45,7 @@ class GithubClient
     $starsArray['stars'] = $stars;
     if ($page == 1) {
       $headerLink = $res->getHeader('link')[0];
-      $pageCount = self::getTotalPages($headerLink);
+      $pageCount = $this->getTotalPages($headerLink);
       $starsArray['page_count'] = $pageCount;
       Cache::put($cacheKey, $starsArray, $cacheExpiry);
       return $starsArray;
@@ -66,10 +66,10 @@ class GithubClient
 
   }
 
-  public static function getReadme($owner, $repo, $token)
+  public function getReadme($owner, $repo, $token)
   {
     $readmeUrl = 'https://api.github.com/repos/'.$owner.'/'.$repo.'/readme?access_token='.$token;
-    $client = self::getClient();
+    $client = $this->getClient();
     $res = $client->get(
         $readmeUrl,
         []
@@ -79,17 +79,12 @@ class GithubClient
     return $readme;
   }
 
-  private static function starsCacheKey()
+  private function starsCacheKey()
   {
     return 'user_'.Auth::id().'.github_stars';
   }
 
-  private static function getAccessToken()
-  {
-    return session('access_token');
-  }
-
-  private static function getTotalPages($link)
+  private function getTotalPages($link)
   {
     try {
       $linkArray = HTTPHeadersHelper::rels($link);
@@ -105,7 +100,7 @@ class GithubClient
     }
   }
 
-  private static function getClient()
+  private function getClient()
   {
     return new \GuzzleHttp\Client;
   }
