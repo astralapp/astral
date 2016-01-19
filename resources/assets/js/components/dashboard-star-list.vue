@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo draggable" v-for="star in stars" v-dropzone>
+      <li class="repo draggable" v-for="star in githubStars" v-dropzone>
         <h3 class="repo-name">{{* star.full_name }}</h3>
         <div class="repo-description">{{* star.description }}</div>
         <ul class="repo-tags">
@@ -18,7 +18,7 @@
 </template>
 <script>
 import Vue from "vue";
-import githubStore from "./../stores/githubStore.js";
+import store from "../store/store.js";
 import dnd from "./../directives/drag_and_drop.js";
 export default {
   name: "StarList",
@@ -26,12 +26,12 @@ export default {
     return {}
   },
   computed: {
-    stars() {
-      return githubStore.state.stars;
+    githubStars() {
+      return store.state.githubStars;
     }
   },
   ready() {
-    githubStore.actions.fetchStars()
+    store.actions.fetchGithubStars()
   },
   methods: {
     logTag: function(tag){

@@ -14658,9 +14658,9 @@ var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _tagStore = require("./../stores/tagStore.js");
+var _store = require("../store/store.js");
 
-var _tagStore2 = _interopRequireDefault(_tagStore);
+var _store2 = _interopRequireDefault(_store);
 
 var _drag_and_drop = require("./../directives/drag_and_drop.js");
 
@@ -14672,19 +14672,19 @@ exports.default = {
   name: "DashboardSidebar",
   computed: {
     newTag: function newTag() {
-      return _tagStore2.default.state.newTag;
+      return _store2.default.state.newTag;
     },
     tags: function tags() {
-      return _tagStore2.default.state.tags;
+      return _store2.default.state.tags;
     }
   },
   ready: function ready() {
-    _tagStore2.default.actions.fetchTags();
+    _store2.default.actions.fetchTags();
   },
 
   methods: {
     addTag: function addTag() {
-      _tagStore2.default.actions.addTag();
+      _store2.default.actions.addTag();
     }
   }
 };
@@ -14701,7 +14701,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../directives/drag_and_drop.js":42,"./../stores/tagStore.js":44,"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
+},{"../store/store.js":48,"./../directives/drag_and_drop.js":42,"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14712,9 +14712,9 @@ var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _githubStore = require("./../stores/githubStore.js");
+var _store = require("../store/store.js");
 
-var _githubStore2 = _interopRequireDefault(_githubStore);
+var _store2 = _interopRequireDefault(_store);
 
 var _drag_and_drop = require("./../directives/drag_and_drop.js");
 
@@ -14729,12 +14729,12 @@ exports.default = {
   },
 
   computed: {
-    stars: function stars() {
-      return _githubStore2.default.state.stars;
+    githubStars: function githubStars() {
+      return _store2.default.state.githubStars;
     }
   },
   ready: function ready() {
-    _githubStore2.default.actions.fetchStars();
+    _store2.default.actions.fetchGithubStars();
   },
 
   methods: {
@@ -14744,7 +14744,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo draggable\" v-for=\"star in stars\" v-dropzone=\"\">\n      <h3 class=\"repo-name\">{{* star.full_name }}</h3>\n      <div class=\"repo-description\">{{* star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in star.tags\">{{ tag.name }}</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo draggable\" v-for=\"star in githubStars\" v-dropzone=\"\">\n      <h3 class=\"repo-name\">{{* star.full_name }}</h3>\n      <div class=\"repo-description\">{{* star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in star.tags\">{{ tag.name }}</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -14756,16 +14756,16 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../directives/drag_and_drop.js":42,"./../stores/githubStore.js":43,"vue":30,"vue-hot-reload-api":4}],41:[function(require,module,exports){
+},{"../store/store.js":48,"./../directives/drag_and_drop.js":42,"vue":30,"vue-hot-reload-api":4}],41:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _userStore = require("./../stores/userStore.js");
+var _store = require("../store/store.js");
 
-var _userStore2 = _interopRequireDefault(_userStore);
+var _store2 = _interopRequireDefault(_store);
 
 var _dashboardHeader = require("./dashboard-header.vue");
 
@@ -14789,11 +14789,11 @@ exports.default = {
 
   computed: {
     user: function user() {
-      return _userStore2.default.state.user;
+      return _store2.default.state.user;
     }
   },
   ready: function ready() {
-    _userStore2.default.actions.fetchUser();
+    _store2.default.actions.fetchUser();
   },
 
   components: {
@@ -14815,7 +14815,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/userStore.js":45,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
+},{"../store/store.js":48,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -14860,6 +14860,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var _vue = require("vue");
@@ -14870,220 +14872,259 @@ var _vueResource = require("vue-resource");
 
 var _vueResource2 = _interopRequireDefault(_vueResource);
 
-var _vuex = require("vuex");
-
-var _vuex2 = _interopRequireDefault(_vuex);
-
 var _localStorage = require("local-storage");
 
 var _localStorage2 = _interopRequireDefault(_localStorage);
 
+var _mutationTypesJs = require("./mutation-types.js");
+
+var types = _interopRequireWildcard(_mutationTypesJs);
+
 _vue2["default"].use(_vueResource2["default"]);
-_vue2["default"].use(_vuex2["default"]);
 
-var state = {
-  stars: [],
-  totalPages: 0,
-  cachedPages: 0
+//User
+var fetchUser = function fetchUser(_ref) {
+  var dispatch = _ref.dispatch;
+  var state = _ref.state;
+
+  _vue2["default"].http.get("/api/auth/user", null, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+    }
+  }).then(function (response) {
+    dispatch(types.SET_USER, response.data.user);
+  });
 };
 
-var mutations = {
-  SET_STARS: function SET_STARS(state, stars) {
-    state.stars = stars;
-  },
-  SET_TOTAL_PAGES: function SET_TOTAL_PAGES(state, count) {
-    state.totalPages = count;
-  },
-  SET_CACHED_PAGES: function SET_CACHED_PAGES(state, count) {
-    state.cachedPages = count;
-  }
-};
+exports.fetchUser = fetchUser;
+//Github Stars
+var fetchGithubStars = function fetchGithubStars(_ref2) {
+  var dispatch = _ref2.dispatch;
+  var state = _ref2.state;
+  var actions = _ref2.actions;
+  var page = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 
-var actions = {
-  fetchStars: function fetchStars(store) {
-    var page = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
-
-    var currentPage = page;
-    var data = {};
-    _vue2["default"].http.get("/api/github/stars?page=" + page, null, {
-      headers: {
-        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt"),
-        "Access-Token": (0, _localStorage2["default"])("access_token")
-      }
-    }).then(function (response) {
-      data = response.data.stars;
-      if (data.page_count) {
-        store.dispatch("SET_TOTAL_PAGES", data.page_count);
-      }
-      if (data.cached) {
-        store.dispatch("SET_CACHED_PAGES", data.cached);
-      }
-      if (store.state.cachedPages && store.state.cachedPages === store.state.totalPages) {
-        store.dispatch("SET_STARS", data.stars);
-        return false;
+  var currentPage = page;
+  var data = {};
+  _vue2["default"].http.get("/api/github/stars?page=" + page, null, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt"),
+      "Access-Token": (0, _localStorage2["default"])("access_token")
+    }
+  }).then(function (response) {
+    data = response.data.stars;
+    if (data.page_count) {
+      dispatch(types.SET_TOTAL_PAGES, data.page_count);
+    }
+    if (data.cached) {
+      dispatch(types.SET_CACHED_PAGES, data.cached);
+    }
+    if (state.cachedPages && state.cachedPages === state.totalPages) {
+      dispatch(types.SET_GITHUB_STARS, data.stars);
+      return false;
+    } else {
+      if (state.cachedPages) {
+        currentPage += 1;
       } else {
-        if (store.state.cachedPages) {
-          currentPage += 1;
-        } else {
-          store.state.cachedPages++;
-        }
+        dispatch(types.INCREMENT_CACHED_PAGES);
       }
-      if (currentPage <= store.state.totalPages) {
-        store.dispatch("SET_STARS", data.stars);
-        store.actions.fetchStars(currentPage);
-      } else {
-        store.dispatch("SET_STARS", data.stars);
-      }
-    });
-  }
+    }
+    if (currentPage <= state.totalPages) {
+      dispatch(types.SET_GITHUB_STARS, data.stars);
+      actions.fetchGithubStars(currentPage);
+    } else {
+      dispatch(types.SET_GITHUB_STARS, data.stars);
+    }
+  });
 };
 
-exports["default"] = new _vuex2["default"].Store({
-  state: state,
-  mutations: mutations,
-  actions: actions
-});
-module.exports = exports["default"];
+exports.fetchGithubStars = fetchGithubStars;
+//Tags
+var fetchTags = function fetchTags(_ref3) {
+  var dispatch = _ref3.dispatch;
 
-},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],44:[function(require,module,exports){
+  _vue2["default"].http.get("/api/tags", null, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+    }
+  }).then(function (response) {
+    dispatch(types.SET_TAGS, response.data.tags);
+  });
+};
+
+exports.fetchTags = fetchTags;
+var addTag = function addTag(_ref4) {
+  var dispatch = _ref4.dispatch;
+  var state = _ref4.state;
+
+  _vue2["default"].http.post("/api/tags", state.newTag, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+    }
+  }).then(function (response) {
+    dispatch(types.ADD_TAG, response.data.tag);
+    dispatch(types.RESET_NEW_TAG);
+  });
+};
+exports.addTag = addTag;
+
+},{"./mutation-types.js":47,"local-storage":1,"vue":30,"vue-resource":18}],44:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _githubStarsMutations;
 
-var _vue = require("vue");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _vue2 = _interopRequireDefault(_vue);
+var _mutationTypesJs = require("../mutation-types.js");
 
-var _vueResource = require("vue-resource");
+var githubStarsInitialState = [];
 
-var _vueResource2 = _interopRequireDefault(_vueResource);
+exports.githubStarsInitialState = githubStarsInitialState;
+var githubStarsMutations = (_githubStarsMutations = {}, _defineProperty(_githubStarsMutations, _mutationTypesJs.SET_GITHUB_STARS, function (state, stars) {
+  state.githubStars = stars;
+}), _defineProperty(_githubStarsMutations, _mutationTypesJs.SET_TOTAL_PAGES, function (state, count) {
+  state.totalPages = count;
+}), _defineProperty(_githubStarsMutations, _mutationTypesJs.SET_CACHED_PAGES, function (state, count) {
+  state.cachedPages = count;
+}), _defineProperty(_githubStarsMutations, _mutationTypesJs.INCREMENT_CACHED_PAGES, function (state) {
+  state.cachedPages++;
+}), _githubStarsMutations);
+exports.githubStarsMutations = githubStarsMutations;
 
-var _vuex = require("vuex");
-
-var _vuex2 = _interopRequireDefault(_vuex);
-
-var _localStorage = require("local-storage");
-
-var _localStorage2 = _interopRequireDefault(_localStorage);
-
-_vue2["default"].use(_vueResource2["default"]);
-_vue2["default"].use(_vuex2["default"]);
-
-var state = {
-  tags: [],
-  newTag: {
-    name: "",
-    description: ""
-  }
-};
-
-var mutations = {
-  SET_NEW_TAG: function SET_NEW_TAG(state, tag) {
-    state.newTag = tag;
-  },
-  SET_TAGS: function SET_TAGS(state, tags) {
-    state.tags = tags;
-  },
-  ADD_TAG: function ADD_TAG(state, tag) {
-    state.tags.push(tag);
-  },
-  ADD_TAGS: function ADD_TAGS(state, tags) {
-    state.tags.concat(tags);
-  },
-  REMOVE_TAG: function REMOVE_TAG(state, index) {
-    state.tags.splice(index, 1);
-  }
-};
-
-var actions = {
-  fetchTags: function fetchTags(store) {
-    _vue2["default"].http.get("/api/tags", null, {
-      headers: {
-        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
-      }
-    }).then(function (response) {
-      store.dispatch('SET_TAGS', response.data.tags);
-    });
-  },
-  addTag: function addTag(store) {
-    _vue2["default"].http.post("/api/tags", store.state.newTag, {
-      headers: {
-        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
-      }
-    }).then(function (response) {
-      store.dispatch('ADD_TAG', response.data.tag);
-      store.state.newTag.name = "";
-      store.state.newTag.description = "";
-    });
-  }
-};
-
-exports["default"] = new _vuex2["default"].Store({
-  state: state,
-  mutations: mutations,
-  actions: actions
-});
-module.exports = exports["default"];
-
-},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],45:[function(require,module,exports){
+},{"../mutation-types.js":47}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _tagsMutations;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _mutationTypesJs = require("../mutation-types.js");
+
+var tagsInitialState = [];
+exports.tagsInitialState = tagsInitialState;
+var newTagInitialState = {
+  name: "",
+  description: ""
+};
+
+exports.newTagInitialState = newTagInitialState;
+var tagsMutations = (_tagsMutations = {}, _defineProperty(_tagsMutations, _mutationTypesJs.SET_NEW_TAG, function (state, tag) {
+  state.newTag = tag;
+}), _defineProperty(_tagsMutations, _mutationTypesJs.SET_TAGS, function (state, tags) {
+  state.tags = tags;
+}), _defineProperty(_tagsMutations, _mutationTypesJs.ADD_TAG, function (state, tag) {
+  state.tags.push(tag);
+}), _defineProperty(_tagsMutations, _mutationTypesJs.ADD_TAGS, function (state, tags) {
+  state.tags.concat(tags);
+}), _defineProperty(_tagsMutations, _mutationTypesJs.REMOVE_TAG, function (state, index) {
+  state.tags.splice(index, 1);
+}), _defineProperty(_tagsMutations, _mutationTypesJs.RESET_NEW_TAG, function (state) {
+  state.newTag.name = "";
+  state.newTag.description = "";
+}), _tagsMutations);
+exports.tagsMutations = tagsMutations;
+
+},{"../mutation-types.js":47}],46:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _mutationTypesJs = require("../mutation-types.js");
+
+var userInitialState = {};
+
+exports.userInitialState = userInitialState;
+var userMutations = _defineProperty({}, _mutationTypesJs.SET_USER, function (state, user) {
+  state.user = user;
+});
+exports.userMutations = userMutations;
+
+},{"../mutation-types.js":47}],47:[function(require,module,exports){
+//User
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var SET_USER = "SET_USER";
+
+exports.SET_USER = SET_USER;
+//Github Stars
+var SET_GITHUB_STARS = "SET_GITHUB_STARS";
+exports.SET_GITHUB_STARS = SET_GITHUB_STARS;
+var SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
+exports.SET_TOTAL_PAGES = SET_TOTAL_PAGES;
+var SET_CACHED_PAGES = "SET_CACHED_PAGES";
+exports.SET_CACHED_PAGES = SET_CACHED_PAGES;
+var INCREMENT_CACHED_PAGES = "INCREMENT_CACHED_PAGES";
+
+exports.INCREMENT_CACHED_PAGES = INCREMENT_CACHED_PAGES;
+//Tags
+var SET_NEW_TAG = "SET_NEW_TAG";
+exports.SET_NEW_TAG = SET_NEW_TAG;
+var SET_TAGS = "SET_TAGS";
+exports.SET_TAGS = SET_TAGS;
+var ADD_TAG = "ADD_TAG";
+exports.ADD_TAG = ADD_TAG;
+var ADD_TAGS = "ADD_TAGS";
+exports.ADD_TAGS = ADD_TAGS;
+var REMOVE_TAG = "REMOVE_TAG";
+exports.REMOVE_TAG = REMOVE_TAG;
+var RESET_NEW_TAG = "RESET_NEW_TAG";
+exports.RESET_NEW_TAG = RESET_NEW_TAG;
+
+},{}],48:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _vueResource = require("vue-resource");
-
-var _vueResource2 = _interopRequireDefault(_vueResource);
-
 var _vuex = require("vuex");
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _localStorage = require("local-storage");
+var _actionsJs = require('./actions.js');
 
-var _localStorage2 = _interopRequireDefault(_localStorage);
+var actions = _interopRequireWildcard(_actionsJs);
 
-_vue2["default"].use(_vueResource2["default"]);
+var _modulesUserJs = require("./modules/user.js");
+
+var _modulesGithubJs = require("./modules/github.js");
+
+var _modulesTagsJs = require("./modules/tags.js");
+
 _vue2["default"].use(_vuex2["default"]);
-
-var state = {
-  user: {}
-};
-
-var mutations = {
-  SET_USER: function SET_USER(state, user) {
-    state.user = user;
-  }
-};
-
-var actions = {
-  fetchUser: function fetchUser(store) {
-    _vue2["default"].http.get("/api/auth/user", null, {
-      headers: {
-        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
-      }
-    }).then(function (response) {
-      store.dispatch('SET_USER', response.data.user);
-    });
-  }
-};
-
 exports["default"] = new _vuex2["default"].Store({
-  state: state,
-  mutations: mutations,
-  actions: actions
+  state: {
+    user: _modulesUserJs.userInitialState,
+    githubStars: _modulesGithubJs.githubStarsInitialState,
+    tags: _modulesTagsJs.tagsInitialState,
+    newTag: _modulesTagsJs.newTagInitialState
+  },
+  actions: actions,
+  mutations: [_modulesUserJs.userMutations, _modulesGithubJs.githubStarsMutations, _modulesTagsJs.tagsMutations]
 });
 module.exports = exports["default"];
 
-},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}]},{},[35]);
+},{"./actions.js":43,"./modules/github.js":44,"./modules/tags.js":45,"./modules/user.js":46,"vue":30,"vuex":31}]},{},[35]);

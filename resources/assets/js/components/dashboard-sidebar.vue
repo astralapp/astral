@@ -32,21 +32,21 @@
 </template>
 <script>
 import Vue from "vue";
-import tagStore from "./../stores/tagStore.js";
+import store from "../store/store.js";
 import dnd from "./../directives/drag_and_drop.js";
 
 export default {
   name: "DashboardSidebar",
   computed: {
-    newTag(){ return tagStore.state.newTag },
-    tags(){ return tagStore.state.tags },
+    newTag(){ return store.state.newTag },
+    tags(){ return store.state.tags },
   },
   ready(){
-    tagStore.actions.fetchTags()
+    store.actions.fetchTags()
   },
   methods: {
     addTag: function(){
-      tagStore.actions.addTag();
+      store.actions.addTag();
     }
   }
 }

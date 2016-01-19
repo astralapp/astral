@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import userStore from "./../stores/userStore.js";
+import store from "../store/store.js";
 import DashboardHeader from "./dashboard-header.vue";
 import DashboardSidebar from "./dashboard-sidebar.vue";
 import StarList from "./dashboard-star-list.vue";
@@ -19,11 +19,11 @@ export default {
   },
   computed: {
     user() {
-      return userStore.state.user;
+      return store.state.user;
     },
   },
   ready() {
-    userStore.actions.fetchUser()
+    store.actions.fetchUser()
   },
   components: {
     "dashboard-header": DashboardHeader,
