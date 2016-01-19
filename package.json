@@ -5,6 +5,7 @@
     "test": "karma start --singleRun=true"
   },
   "dependencies": {
+    "dragula": "^3.6.3",
     "local-storage": "^1.4.2",
     "lodash": "^4.0.0",
     "vue": "^1.0.14",

@@ -22,8 +22,8 @@
       <input type="text" name="name" v-model="newTag.name" placeholder="Tag name">
       <button type="submit">Save</button>
     </form>
-    <ul class="dashboard-list sidebar-tags">
-      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="$index" v-draggable="tag">
+    <ul class="dashboard-list sidebar-tags" v-sortable>
+      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="$index" v-dropzone="tagStar">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
       </li>
@@ -47,6 +47,9 @@ export default {
   methods: {
     addTag: function(){
       store.actions.addTag();
+    },
+    tagStar: function(data, scope){
+      console.log(data, scope.tag);
     }
   }
 }
