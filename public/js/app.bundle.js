@@ -14549,7 +14549,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/app.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/app.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14601,7 +14601,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/auth.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/auth.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14624,7 +14624,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-header.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-header.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14632,19 +14632,52 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":30,"vue-hot-reload-api":4}],39:[function(require,module,exports){
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"false\">\n    <input type=\"text\" name=\"name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag droppable\">JavaScript</li>\n    <li class=\"dashboard-list-item tag droppable\">PHP</li>\n    <li class=\"dashboard-list-item tag droppable\">Vuejs</li>\n    <li class=\"dashboard-list-item tag droppable\">Laravel</li>\n  </ul>\n</div>\n"
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _tagStore = require("./../stores/tagStore.js");
+
+var _tagStore2 = _interopRequireDefault(_tagStore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  name: "DashboardSidebar",
+  computed: {
+    newTag: function newTag() {
+      return _tagStore2.default.state.newTag;
+    },
+    tags: function tags() {
+      return _tagStore2.default.state.tags;
+    }
+  },
+  ready: function ready() {
+    _tagStore2.default.actions.fetchTags();
+  },
+
+  methods: {
+    addTag: function addTag() {
+      _tagStore2.default.actions.addTag();
+    }
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag droppable\" v-for=\"tag in tags\">{{ tag.name }}</li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-sidebar.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-sidebar.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
+},{"./../stores/tagStore.js":43,"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14678,7 +14711,7 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-star-list.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard-star-list.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -14737,14 +14770,14 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard.vue"
+  var id = "/Users/sansa/Sites/astral/resources/assets/js/components/dashboard.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/userStore.js":43,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
+},{"./../stores/userStore.js":44,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14837,6 +14870,90 @@ exports["default"] = new _vuex2["default"].Store({
 module.exports = exports["default"];
 
 },{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],43:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vueResource = require("vue-resource");
+
+var _vueResource2 = _interopRequireDefault(_vueResource);
+
+var _vuex = require("vuex");
+
+var _vuex2 = _interopRequireDefault(_vuex);
+
+var _localStorage = require("local-storage");
+
+var _localStorage2 = _interopRequireDefault(_localStorage);
+
+_vue2["default"].use(_vueResource2["default"]);
+_vue2["default"].use(_vuex2["default"]);
+
+var state = {
+  tags: [],
+  newTag: {
+    name: "",
+    description: ""
+  }
+};
+
+var mutations = {
+  SET_NEW_TAG: function SET_NEW_TAG(state, tag) {
+    state.newTag = tag;
+  },
+  SET_TAGS: function SET_TAGS(state, tags) {
+    state.tags = tags;
+  },
+  ADD_TAG: function ADD_TAG(state, tag) {
+    state.tags.push(tag);
+  },
+  ADD_TAGS: function ADD_TAGS(state, tags) {
+    state.tags.concat(tags);
+  },
+  REMOVE_TAG: function REMOVE_TAG(state, index) {
+    state.tags.splice(index, 1);
+  }
+};
+
+var actions = {
+  fetchTags: function fetchTags(store) {
+    _vue2["default"].http.get("/api/tags", null, {
+      headers: {
+        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+      }
+    }).then(function (response) {
+      store.dispatch('SET_TAGS', response.data.tags);
+    });
+  },
+  addTag: function addTag(store) {
+    _vue2["default"].http.post("/api/tags", store.state.newTag, {
+      headers: {
+        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+      }
+    }).then(function (response) {
+      store.dispatch('ADD_TAG', response.data.tag);
+      store.state.newTag.name = "";
+      store.state.newTag.description = "";
+    });
+  }
+};
+
+exports["default"] = new _vuex2["default"].Store({
+  state: state,
+  mutations: mutations,
+  actions: actions
+});
+module.exports = exports["default"];
+
+},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],44:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

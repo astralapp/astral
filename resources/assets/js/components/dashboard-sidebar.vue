@@ -18,15 +18,31 @@
         <button class="tag-button-group-item">Sort</button>
       </div>
     </div>
-    <form class="tag-form" v-show="false">
-      <input type="text" name="name" placeholder="Tag name">
+    <form class="tag-form" v-show="true" @submit.prevent="addTag">
+      <input type="text" name="name" v-model="newTag.name" placeholder="Tag name">
       <button type="submit">Save</button>
     </form>
     <ul class="dashboard-list sidebar-tags">
-      <li class="dashboard-list-item tag droppable">JavaScript</li>
-      <li class="dashboard-list-item tag droppable">PHP</li>
-      <li class="dashboard-list-item tag droppable">Vuejs</li>
-      <li class="dashboard-list-item tag droppable">Laravel</li>
+      <li class="dashboard-list-item tag droppable" v-for="tag in tags">{{ tag.name }}</li>
     </ul>
   </div>
 </template>
+<script>
+import tagStore from "./../stores/tagStore.js";
+
+export default {
+  name: "DashboardSidebar",
+  computed: {
+    newTag(){ return tagStore.state.newTag },
+    tags(){ return tagStore.state.tags },
+  },
+  ready(){
+    tagStore.actions.fetchTags()
+  },
+  methods: {
+    addTag: function(){
+      tagStore.actions.addTag();
+    }
+  }
+}
+</script>

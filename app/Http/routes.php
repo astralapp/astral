@@ -24,4 +24,6 @@ Route::group(['prefix' => 'api'], function() {
   Route::get('auth/user', 'AuthController@fetchUser');
   Route::get('github/stars', 'GithubController@getStars');
   Route::get('github/repo/{owner}/{repo}/readme', 'GitHubController@getReadme');
+
+  Route::resource('tags', 'TagController');
 });

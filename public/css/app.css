@@ -1301,10 +1301,10 @@ tags-input .tags {
       text-transform: uppercase;
       border-radius: 0;
       font-size: 0.75rem;
-      height: 40px;
+      height: 41px;
       margin-bottom: -2px;
       position: relative;
-      top: -2px;
+      top: 0;
       right: 0;
       width: 20%; }
       .dashboard-sidebar .tag-form button[type=submit]:hover {

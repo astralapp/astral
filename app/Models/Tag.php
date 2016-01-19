@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Tag extends Model
 {
   protected $guarded = ['id'];
   protected $hidden = ['pivot', 'user_id'];
+  protected $fillable = ['name', 'description'];
   /**
    * The database table used by the model.
    *
@@ -17,7 +21,7 @@ class Tag extends Model
 
   public function stars()
   {
-    return $this->belongsToMany('App\Models\Star')
+    return $this->belongsToMany('App\Models\Star');
   }
   public function getIdAttribute($value)
   {
@@ -26,15 +30,16 @@ class Tag extends Model
   protected static function boot()
   {
     parent::boot();
-    static::creating(function($content)
+    static::creating(function($tag)
     {
-      $content->user_id = \Auth::id();
-      $content->sort_order = \Tag::where('user_id', \Auth::id())->count();
-      $content->slug = str_slug( $content->name );
+      $user = JWTAuth::parseToken()->authenticate();
+      $tag->user_id = Auth::id();
+      $tag->sort_order = self::where('user_id', Auth::id())->count();
+      $tag->slug = str_slug( $tag->name );
     });
-    static::saving(function($content)
+    static::saving(function($tag)
     {
-      $content->slug = str_slug( $content->name );
+      $tag->slug = str_slug( $tag->name );
     });
   }
 }
