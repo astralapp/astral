@@ -14500,6 +14500,10 @@ var _vueRouter = require("vue-router");
 
 var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
+var _vueResource = require("vue-resource");
+
+var _vueResource2 = _interopRequireDefault(_vueResource);
+
 var _componentsAppVue = require("./components/app.vue");
 
 var _componentsAppVue2 = _interopRequireDefault(_componentsAppVue);
@@ -14512,6 +14516,7 @@ var _componentsDashboardVue = require("./components/dashboard.vue");
 
 var _componentsDashboardVue2 = _interopRequireDefault(_componentsDashboardVue);
 
+_vue2["default"].use(_vueResource2["default"]);
 _vue2["default"].use(_vueRouter2["default"]);
 
 var router = new _vueRouter2["default"]({
@@ -14521,9 +14526,11 @@ var router = new _vueRouter2["default"]({
 
 router.map({
   "/auth": {
+    name: "auth",
     component: _componentsAuthVue2["default"]
   },
   "/dashboard": {
+    name: "dashboard",
     component: _componentsDashboardVue2["default"]
   }
 });
@@ -14532,9 +14539,18 @@ router.redirect({
   "/": "/auth"
 });
 
+_vue2["default"].http.interceptors.push({
+  response: function response(_response) {
+    if (_response.status === 401) {
+      router.go({ name: "auth" });
+    }
+    return _response;
+  }
+});
+
 router.start(_componentsAppVue2["default"], '#app');
 
-},{"./components/app.vue":36,"./components/auth.vue":37,"./components/dashboard.vue":41,"vue":30,"vue-router":29}],36:[function(require,module,exports){
+},{"./components/app.vue":36,"./components/auth.vue":37,"./components/dashboard.vue":41,"vue":30,"vue-resource":18,"vue-router":29}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14665,7 +14681,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag droppable\" v-for=\"tag in tags\">{{ tag.name }}</li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag droppable\" v-for=\"tag in tags\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

@@ -23,7 +23,10 @@
       <button type="submit">Save</button>
     </form>
     <ul class="dashboard-list sidebar-tags">
-      <li class="dashboard-list-item tag droppable" v-for="tag in tags">{{ tag.name }}</li>
+      <li class="dashboard-list-item tag droppable" v-for="tag in tags">
+        <i class="fa fa-tag"></i>
+        <span class="tag-name">{{ tag.name }}</span>
+      </li>
     </ul>
   </div>
 </template>
