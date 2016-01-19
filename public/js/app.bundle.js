@@ -15581,12 +15581,15 @@ exports.default = {
       _store2.default.actions.addTag();
     },
     tagStar: function tagStar(data, scope) {
-      console.log(data, scope.tag);
+      //console.log(data, scope.tag);
+    },
+    reorderTags: function reorderTags(sortMap) {
+      _store2.default.actions.reorderTags(sortMap);
     }
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"$index\" v-dropzone=\"tagStar\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15632,16 +15635,10 @@ exports.default = {
   },
   ready: function ready() {
     _store2.default.actions.fetchGithubStars();
-  },
-
-  methods: {
-    logTag: function logTag(tag, star) {
-      console.log(tag, star);
-    }
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"star in githubStars\" v-draggable=\"star\">\n      <h3 class=\"repo-name\">{{* star.full_name }}</h3>\n      <div class=\"repo-description\">{{* star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in star.tags\">{{ tag.name }}</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"star in githubStars\" track-by=\"id\" v-draggable=\"star\">\n      <h3 class=\"repo-name\">{{* star.full_name }}</h3>\n      <div class=\"repo-description\">{{* star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in star.tags\">{{ tag.name }}</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15757,6 +15754,7 @@ _vue2["default"].directive("dropzone", {
     this.el.addEventListener("drop", function (e) {
       e.preventDefault();
       e.stopPropagation();
+      e.target.classList.remove("dragging");
       var scope = _this._scope;
       var dropData = JSON.parse(e.dataTransfer.getData("text"));
       fn.apply(null, [dropData, scope]);
@@ -15765,11 +15763,27 @@ _vue2["default"].directive("dropzone", {
 });
 
 _vue2["default"].directive("sortable", {
+  params: ["sort"],
+  drake: null,
   bind: function bind() {},
   update: function update(value) {
-    (0, _dragula2["default"])([this.el]).on("drop", function (el, target, source, sibling) {
-      console.log(el, target, source, sibling);
-    });
+    var _this2 = this;
+
+    var sortMap = [];
+    if (!this.drake) {
+      this.drake = (0, _dragula2["default"])([this.el]).on("drop", function (el, target, source, sibling) {
+        sortMap = [].slice.call(source.children).map(function (el, index) {
+          return {
+            id: el.dataset.id,
+            sort_order: index
+          };
+        });
+        _this2.vm[_this2.params.sort].apply(null, [sortMap]);
+      });
+    }
+  },
+  unbind: function unbind() {
+    this.drake.destroy();
   }
 });
 
@@ -15873,9 +15887,23 @@ var fetchTags = function fetchTags(_ref3) {
 };
 
 exports.fetchTags = fetchTags;
-var addTag = function addTag(_ref4) {
+var reorderTags = function reorderTags(_ref4, sortMap) {
   var dispatch = _ref4.dispatch;
   var state = _ref4.state;
+
+  _vue2["default"].http.post("/api/tags/reorder", { "sortMap": sortMap }, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+    }
+  }).then(function (response) {
+    dispatch(types.SET_TAGS, response.data.tags);
+  });
+};
+
+exports.reorderTags = reorderTags;
+var addTag = function addTag(_ref5) {
+  var dispatch = _ref5.dispatch;
+  var state = _ref5.state;
 
   _vue2["default"].http.post("/api/tags", state.newTag, {
     headers: {

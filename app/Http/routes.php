@@ -26,4 +26,5 @@ Route::group(['prefix' => 'api'], function() {
   Route::get('github/repo/{owner}/{repo}/readme', 'GitHubController@getReadme');
 
   Route::resource('tags', 'TagController');
+  Route::post('tags/reorder', 'TagController@reorder');
 });

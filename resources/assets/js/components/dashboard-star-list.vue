@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="star in githubStars" v-draggable="star">
+      <li class="repo" v-for="star in githubStars" track-by="id" v-draggable="star">
         <h3 class="repo-name">{{* star.full_name }}</h3>
         <div class="repo-description">{{* star.description }}</div>
         <ul class="repo-tags">
@@ -32,11 +32,6 @@ export default {
   },
   ready() {
     store.actions.fetchGithubStars()
-  },
-  methods: {
-    logTag: function(tag, star){
-      console.log(tag, star);
-    }
   }
 }
 </script>

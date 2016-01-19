@@ -62,6 +62,16 @@ export const fetchTags = ({ dispatch }) => {
   });
 };
 
+export const reorderTags = ({ dispatch, state }, sortMap) => {
+  Vue.http.post("/api/tags/reorder", {"sortMap": sortMap}, {
+    headers: {
+      "Authorization": `Bearer ${ls("jwt")}`
+    }
+  }).then( (response) => {
+    dispatch(types.SET_TAGS, response.data.tags);
+  });
+};
+
 export const addTag = ({ dispatch, state }) => {
   Vue.http.post("/api/tags", state.newTag, {
     headers: {

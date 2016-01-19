@@ -22,7 +22,7 @@ Vue.directive("dropzone", {
     this.el.addEventListener("dragover", function(e){
       e.preventDefault();
       e.stopPropagation();
-      e.target.classList.add("dragging")
+      e.target.classList.add("dragging");
     }, false)
     this.el.addEventListener("dragleave", function(e){
       e.preventDefault();
@@ -32,6 +32,7 @@ Vue.directive("dropzone", {
     this.el.addEventListener("drop", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      e.target.classList.remove("dragging");
       let scope = this._scope;
       let dropData = JSON.parse(e.dataTransfer.getData("text"));
       fn.apply(null, [dropData, scope]);
@@ -40,10 +41,24 @@ Vue.directive("dropzone", {
 });
 
 Vue.directive("sortable", {
+  params: ["sort"],
+  drake: null,
   bind: function(){},
   update: function(value){
-    dragula([this.el]).on("drop", (el, target, source, sibling) => {
-      console.log(el, target, source, sibling);
-    });
+    let sortMap = [];
+    if(!this.drake){
+      this.drake = dragula([this.el]).on("drop", (el, target, source, sibling) => {
+        sortMap = [].slice.call(source.children).map(function(el, index){
+          return {
+            id: el.dataset.id,
+            sort_order: index
+          }
+        });
+        this.vm[this.params.sort].apply(null, [sortMap]);
+      });
+    }
+  },
+  unbind: function(){
+    this.drake.destroy();
   }
 });

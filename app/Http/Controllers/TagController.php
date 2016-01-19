@@ -27,7 +27,7 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = Tag::where( "user_id", Auth::id() )->get();
+        $tags = Tag::where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
         return response()->json(compact('tags'), 200);
     }
 
@@ -51,6 +51,17 @@ class TagController extends Controller
     {
       $tag = Tag::create( $request->only("name", "description") );
       return response()->json(compact('tag'), 200);
+    }
+
+    public function reorder(Request $request){
+      $sortMap = $request->only('sortMap')["sortMap"];
+			foreach($sortMap as $row){
+				$tag = Tag::find((int)$row["id"]);
+				$tag->sort_order = $row["sort_order"];
+				$tag->save();
+			}
+      $tags = Tag::where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+      return response()->json(compact('tags'), 200);
     }
 
     /**
