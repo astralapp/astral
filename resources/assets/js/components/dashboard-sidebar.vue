@@ -23,7 +23,7 @@
       <button type="submit">Save</button>
     </form>
     <ul class="dashboard-list sidebar-tags">
-      <li class="dashboard-list-item tag droppable" v-for="tag in tags">
+      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="$index" v-draggable="tag">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
       </li>
@@ -31,7 +31,9 @@
   </div>
 </template>
 <script>
+import Vue from "vue";
 import tagStore from "./../stores/tagStore.js";
+import dnd from "./../directives/drag_and_drop.js";
 
 export default {
   name: "DashboardSidebar",

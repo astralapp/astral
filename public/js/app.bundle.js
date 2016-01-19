@@ -14654,9 +14654,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
 var _tagStore = require("./../stores/tagStore.js");
 
 var _tagStore2 = _interopRequireDefault(_tagStore);
+
+var _drag_and_drop = require("./../directives/drag_and_drop.js");
+
+var _drag_and_drop2 = _interopRequireDefault(_drag_and_drop);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14681,7 +14689,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag droppable\" v-for=\"tag in tags\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"$index\" v-draggable=\"tag\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -14693,16 +14701,24 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/tagStore.js":43,"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
+},{"./../directives/drag_and_drop.js":42,"./../stores/tagStore.js":44,"vue":30,"vue-hot-reload-api":4}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
 var _githubStore = require("./../stores/githubStore.js");
 
 var _githubStore2 = _interopRequireDefault(_githubStore);
+
+var _drag_and_drop = require("./../directives/drag_and_drop.js");
+
+var _drag_and_drop2 = _interopRequireDefault(_drag_and_drop);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14719,10 +14735,16 @@ exports.default = {
   },
   ready: function ready() {
     _githubStore2.default.actions.fetchStars();
+  },
+
+  methods: {
+    logTag: function logTag(tag) {
+      console.log(tag);
+    }
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo draggable\" v-for=\"star in stars\">\n      <h3 class=\"repo-name\">{{ star.full_name }}</h3>\n      <div class=\"repo-description\">{{ star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li>First Tag</li>\n        <li>Second Tag</li>\n        <li>Third Tag</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{ star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{ star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{ star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo draggable\" v-for=\"star in stars\" v-dropzone=\"\">\n      <h3 class=\"repo-name\">{{* star.full_name }}</h3>\n      <div class=\"repo-description\">{{* star.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in star.tags\">{{ tag.name }}</li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* star.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* star.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* star.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -14734,7 +14756,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/githubStore.js":42,"vue":30,"vue-hot-reload-api":4}],41:[function(require,module,exports){
+},{"./../directives/drag_and_drop.js":42,"./../stores/githubStore.js":43,"vue":30,"vue-hot-reload-api":4}],41:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14793,7 +14815,45 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../stores/userStore.js":44,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
+},{"./../stores/userStore.js":45,"./dashboard-header.vue":38,"./dashboard-sidebar.vue":39,"./dashboard-star-list.vue":40,"vue":30,"vue-hot-reload-api":4}],42:[function(require,module,exports){
+"use strict";
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+_vue2["default"].directive("draggable", {
+  bind: function bind() {
+    this.el.setAttribute("draggable", true);
+  },
+  update: function update(value) {
+    this.el.addEventListener("dragstart", function (e) {
+      var tag = JSON.stringify(value);
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", tag);
+    }, false);
+  }
+});
+
+_vue2["default"].directive("dropzone", {
+  bind: function bind() {},
+  update: function update(value) {
+    this.el.addEventListener("dragover", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+    this.el.addEventListener("drop", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var tag = JSON.parse(e.dataTransfer.getData("text"));
+      console.log(tag);
+    }, false);
+  }
+});
+
+},{"vue":30}],43:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14885,7 +14945,7 @@ exports["default"] = new _vuex2["default"].Store({
 });
 module.exports = exports["default"];
 
-},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],43:[function(require,module,exports){
+},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],44:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14969,7 +15029,7 @@ exports["default"] = new _vuex2["default"].Store({
 });
 module.exports = exports["default"];
 
-},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],44:[function(require,module,exports){
+},{"local-storage":1,"vue":30,"vue-resource":18,"vuex":31}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
