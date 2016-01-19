@@ -31,7 +31,7 @@ router.redirect({
 Vue.http.interceptors.push({
   response: function (response) {
     if(response.status === 401){
-      router.go({name: "auth"});
+      window.location.href = "/api/auth";
     }
     return response;
   }
