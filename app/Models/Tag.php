@@ -19,6 +19,11 @@ class Tag extends Model
    */
   protected $table = 'tags';
 
+  public function user()
+  {
+    return $this->belongsTo('App\Models\User');
+  }
+
   public function stars()
   {
     return $this->belongsToMany('App\Models\Star');

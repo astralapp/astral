@@ -27,4 +27,6 @@ Route::group(['prefix' => 'api'], function() {
 
   Route::resource('tags', 'TagController');
   Route::post('tags/reorder', 'TagController@reorder');
+
+  Route::post('stars/tag', 'StarController@tag');
 });

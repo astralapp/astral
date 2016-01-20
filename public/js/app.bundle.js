@@ -15581,7 +15581,12 @@ exports.default = {
       _store2.default.actions.addTag();
     },
     tagStar: function tagStar(data, scope) {
-      //console.log(data, scope.tag);
+      var starData = {
+        repoId: data.id,
+        repoName: data.full_name,
+        tagId: scope.tag.id
+      };
+      _store2.default.actions.tagStar(starData);
     },
     reorderTags: function reorderTags(sortMap) {
       _store2.default.actions.reorderTags(sortMap);
@@ -15589,7 +15594,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n      <span class=\"tagged-count\" v-if=\"tag.stars.length\">{{tag.stars.length}}</span>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -15889,7 +15894,6 @@ var fetchTags = function fetchTags(_ref3) {
 exports.fetchTags = fetchTags;
 var reorderTags = function reorderTags(_ref4, sortMap) {
   var dispatch = _ref4.dispatch;
-  var state = _ref4.state;
 
   _vue2["default"].http.post("/api/tags/reorder", { "sortMap": sortMap }, {
     headers: {
@@ -15914,7 +15918,20 @@ var addTag = function addTag(_ref5) {
     dispatch(types.RESET_NEW_TAG);
   });
 };
+
 exports.addTag = addTag;
+var tagStar = function tagStar(_ref6, starData) {
+  var dispatch = _ref6.dispatch;
+
+  _vue2["default"].http.post("/api/stars/tag", starData, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+    }
+  }).then(function (response) {
+    dispatch(types.SET_TAGS, response.data.tags);
+  });
+};
+exports.tagStar = tagStar;
 
 },{"./mutation-types.js":56,"local-storage":10,"vue":39,"vue-resource":27}],53:[function(require,module,exports){
 "use strict";

@@ -27,7 +27,7 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = Tag::where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+        $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
         return response()->json(compact('tags'), 200);
     }
 
@@ -60,7 +60,7 @@ class TagController extends Controller
 				$tag->sort_order = $row["sort_order"];
 				$tag->save();
 			}
-      $tags = Tag::where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+      $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
       return response()->json(compact('tags'), 200);
     }
 

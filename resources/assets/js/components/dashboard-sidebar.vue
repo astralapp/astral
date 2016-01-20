@@ -26,6 +26,7 @@
       <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStar" :data-id="tag.id">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
+        <span class="tagged-count" v-if="tag.stars.length">{{tag.stars.length}}</span>
       </li>
     </ul>
   </div>
@@ -49,7 +50,12 @@ export default {
       store.actions.addTag();
     },
     tagStar: function(data, scope){
-      //console.log(data, scope.tag);
+      let starData = {
+        repoId: data.id,
+        repoName: data.full_name,
+        tagId: scope.tag.id
+      }
+      store.actions.tagStar(starData);
     },
     reorderTags: function(sortMap){
       store.actions.reorderTags(sortMap);

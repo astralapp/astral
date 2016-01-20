@@ -62,7 +62,7 @@ export const fetchTags = ({ dispatch }) => {
   });
 };
 
-export const reorderTags = ({ dispatch, state }, sortMap) => {
+export const reorderTags = ({ dispatch }, sortMap) => {
   Vue.http.post("/api/tags/reorder", {"sortMap": sortMap}, {
     headers: {
       "Authorization": `Bearer ${ls("jwt")}`
@@ -80,5 +80,15 @@ export const addTag = ({ dispatch, state }) => {
   }).then( (response) => {
     dispatch(types.ADD_TAG, response.data.tag);
     dispatch(types.RESET_NEW_TAG);
+  });
+};
+
+export const tagStar = ({ dispatch }, starData) => {
+  Vue.http.post("/api/stars/tag", starData, {
+    headers: {
+      "Authorization": `Bearer ${ls("jwt")}`
+    }
+  }).then( (response) => {
+    dispatch(types.SET_TAGS, response.data.tags);
   });
 };
