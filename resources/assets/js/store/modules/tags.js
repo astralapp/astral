@@ -11,7 +11,7 @@ export const tagsInitialState = [];
 export const newTagInitialState = {
   name: "",
   description: ""
-}
+};
 
 export const tagsMutations = {
   [SET_NEW_TAG] (state, tag){

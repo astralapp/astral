@@ -15606,7 +15606,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":57,"./../directives/drag_and_drop.js":51,"vue":39,"vue-hot-reload-api":13}],49:[function(require,module,exports){
+},{"../store/store.js":58,"./../directives/drag_and_drop.js":51,"vue":39,"vue-hot-reload-api":13}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15636,10 +15636,17 @@ exports.default = {
   computed: {
     githubStars: function githubStars() {
       return _store2.default.state.githubStars;
+    },
+    stars: function stars() {
+      return _store2.default.state.stars;
     }
   },
   ready: function ready() {
-    _store2.default.actions.fetchGithubStars();
+    _store2.default.actions.fetchStars().then(function () {
+      _store2.default.actions.fetchGithubStars().then(function () {
+        //Attatch tags to stars
+      });
+    });
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -15655,7 +15662,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":57,"./../directives/drag_and_drop.js":51,"vue":39,"vue-hot-reload-api":13}],50:[function(require,module,exports){
+},{"../store/store.js":58,"./../directives/drag_and_drop.js":51,"vue":39,"vue-hot-reload-api":13}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15714,7 +15721,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":57,"./dashboard-header.vue":47,"./dashboard-sidebar.vue":48,"./dashboard-star-list.vue":49,"vue":39,"vue-hot-reload-api":13}],51:[function(require,module,exports){
+},{"../store/store.js":58,"./dashboard-header.vue":47,"./dashboard-sidebar.vue":48,"./dashboard-star-list.vue":49,"vue":39,"vue-hot-reload-api":13}],51:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -15843,38 +15850,43 @@ var fetchGithubStars = function fetchGithubStars(_ref2) {
   var actions = _ref2.actions;
   var page = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 
-  var currentPage = page;
-  var data = {};
-  _vue2["default"].http.get("/api/github/stars?page=" + page, null, {
-    headers: {
-      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt"),
-      "Access-Token": (0, _localStorage2["default"])("access_token")
-    }
-  }).then(function (response) {
-    data = response.data.stars;
-    if (data.page_count) {
-      dispatch(types.SET_TOTAL_PAGES, data.page_count);
-    }
-    if (data.cached) {
-      dispatch(types.SET_CACHED_PAGES, data.cached);
-    }
-    if (state.cachedPages && state.cachedPages === state.totalPages) {
-      dispatch(types.SET_GITHUB_STARS, data.stars);
-      return false;
-    } else {
-      if (state.cachedPages) {
-        currentPage += 1;
-      } else {
-        dispatch(types.INCREMENT_CACHED_PAGES);
+  var promise = new Promise(function (resolve, reject) {
+    var currentPage = page;
+    var data = {};
+    _vue2["default"].http.get("/api/github/stars?page=" + page, null, {
+      headers: {
+        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt"),
+        "Access-Token": (0, _localStorage2["default"])("access_token")
       }
-    }
-    if (currentPage <= state.totalPages) {
-      dispatch(types.SET_GITHUB_STARS, data.stars);
-      actions.fetchGithubStars(currentPage);
-    } else {
-      dispatch(types.SET_GITHUB_STARS, data.stars);
-    }
+    }).then(function (response) {
+      data = response.data.stars;
+      if (data.page_count) {
+        dispatch(types.SET_TOTAL_PAGES, data.page_count);
+      }
+      if (data.cached) {
+        dispatch(types.SET_CACHED_PAGES, data.cached);
+      }
+      if (state.cachedPages && state.cachedPages === state.totalPages) {
+        dispatch(types.SET_GITHUB_STARS, data.stars);
+        resolve("GITHUB_STARS_LOADED");
+        return false;
+      } else {
+        if (state.cachedPages) {
+          currentPage += 1;
+        } else {
+          dispatch(types.INCREMENT_CACHED_PAGES);
+        }
+      }
+      if (currentPage <= state.totalPages) {
+        dispatch(types.SET_GITHUB_STARS, data.stars);
+        actions.fetchGithubStars(currentPage);
+      } else {
+        dispatch(types.SET_GITHUB_STARS, data.stars);
+        resolve("GITHUB_STARS_LOADED");
+      }
+    });
   });
+  return promise;
 };
 
 exports.fetchGithubStars = fetchGithubStars;
@@ -15920,6 +15932,7 @@ var addTag = function addTag(_ref5) {
 };
 
 exports.addTag = addTag;
+//Stars
 var tagStar = function tagStar(_ref6, starData) {
   var dispatch = _ref6.dispatch;
 
@@ -15931,9 +15944,26 @@ var tagStar = function tagStar(_ref6, starData) {
     dispatch(types.SET_TAGS, response.data.tags);
   });
 };
-exports.tagStar = tagStar;
 
-},{"./mutation-types.js":56,"local-storage":10,"vue":39,"vue-resource":27}],53:[function(require,module,exports){
+exports.tagStar = tagStar;
+var fetchStars = function fetchStars(_ref7) {
+  var dispatch = _ref7.dispatch;
+
+  var promise = new Promise(function (resolve, reject) {
+    _vue2["default"].http.get("/api/stars", null, {
+      headers: {
+        "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+      }
+    }).then(function (response) {
+      dispatch(types.SET_STARS, response.data.stars);
+      resolve("GITHUB_STARS_LOADED");
+    });
+  });
+  return promise;
+};
+exports.fetchStars = fetchStars;
+
+},{"./mutation-types.js":57,"local-storage":10,"vue":39,"vue-resource":27}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15960,7 +15990,26 @@ var githubStarsMutations = (_githubStarsMutations = {}, _defineProperty(_githubS
 }), _githubStarsMutations);
 exports.githubStarsMutations = githubStarsMutations;
 
-},{"../mutation-types.js":56}],54:[function(require,module,exports){
+},{"../mutation-types.js":57}],54:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _mutationTypesJs = require("../mutation-types.js");
+
+var starsInitialState = [];
+
+exports.starsInitialState = starsInitialState;
+var starsMutations = _defineProperty({}, _mutationTypesJs.SET_STARS, function (state, stars) {
+  state.stars = stars;
+});
+exports.starsMutations = starsMutations;
+
+},{"../mutation-types.js":57}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15997,7 +16046,7 @@ var tagsMutations = (_tagsMutations = {}, _defineProperty(_tagsMutations, _mutat
 }), _tagsMutations);
 exports.tagsMutations = tagsMutations;
 
-},{"../mutation-types.js":56}],55:[function(require,module,exports){
+},{"../mutation-types.js":57}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16016,7 +16065,7 @@ var userMutations = _defineProperty({}, _mutationTypesJs.SET_USER, function (sta
 });
 exports.userMutations = userMutations;
 
-},{"../mutation-types.js":56}],56:[function(require,module,exports){
+},{"../mutation-types.js":57}],57:[function(require,module,exports){
 //User
 "use strict";
 
@@ -16048,9 +16097,13 @@ exports.ADD_TAGS = ADD_TAGS;
 var REMOVE_TAG = "REMOVE_TAG";
 exports.REMOVE_TAG = REMOVE_TAG;
 var RESET_NEW_TAG = "RESET_NEW_TAG";
-exports.RESET_NEW_TAG = RESET_NEW_TAG;
 
-},{}],57:[function(require,module,exports){
+exports.RESET_NEW_TAG = RESET_NEW_TAG;
+//Stars
+var SET_STARS = "SET_STARS";
+exports.SET_STARS = SET_STARS;
+
+},{}],58:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16077,6 +16130,8 @@ var _modulesUserJs = require("./modules/user.js");
 
 var _modulesGithubJs = require("./modules/github.js");
 
+var _modulesStarsJs = require("./modules/stars.js");
+
 var _modulesTagsJs = require("./modules/tags.js");
 
 _vue2["default"].use(_vuex2["default"]);
@@ -16084,12 +16139,13 @@ exports["default"] = new _vuex2["default"].Store({
   state: {
     user: _modulesUserJs.userInitialState,
     githubStars: _modulesGithubJs.githubStarsInitialState,
+    stars: _modulesStarsJs.starsInitialState,
     tags: _modulesTagsJs.tagsInitialState,
     newTag: _modulesTagsJs.newTagInitialState
   },
   actions: actions,
-  mutations: [_modulesUserJs.userMutations, _modulesGithubJs.githubStarsMutations, _modulesTagsJs.tagsMutations]
+  mutations: [_modulesUserJs.userMutations, _modulesGithubJs.githubStarsMutations, _modulesTagsJs.tagsMutations, _modulesStarsJs.starsMutations]
 });
 module.exports = exports["default"];
 
-},{"./actions.js":52,"./modules/github.js":53,"./modules/tags.js":54,"./modules/user.js":55,"vue":39,"vuex":40}]},{},[44]);
+},{"./actions.js":52,"./modules/github.js":53,"./modules/stars.js":54,"./modules/tags.js":55,"./modules/user.js":56,"vue":39,"vuex":40}]},{},[44]);

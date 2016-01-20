@@ -14,3 +14,6 @@ export const ADD_TAG = "ADD_TAG";
 export const ADD_TAGS = "ADD_TAGS";
 export const REMOVE_TAG = "REMOVE_TAG";
 export const RESET_NEW_TAG = "RESET_NEW_TAG";
+
+//Stars
+export const SET_STARS = "SET_STARS"

@@ -19,36 +19,41 @@ export const fetchUser = ({ dispatch, state }) => {
 
 //Github Stars
 export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
-  let currentPage = page;
-  let data = {};
-  Vue.http.get(`/api/github/stars?page=${page}`, null, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`,
-      "Access-Token": ls("access_token")
-    }
-  }).then( (response) => {
-    data = response.data.stars
-    if(data.page_count) { dispatch(types.SET_TOTAL_PAGES, data.page_count); }
-    if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
-    if( state.cachedPages && state.cachedPages === state.totalPages ) {
-      dispatch(types.SET_GITHUB_STARS, data.stars);
-      return false
-    }
-    else {
-      if(state.cachedPages){
-        currentPage+= 1;
-      } else {
-        dispatch(types.INCREMENT_CACHED_PAGES)
+  let promise = new Promise( (resolve, reject) => {
+    let currentPage = page;
+    let data = {};
+    Vue.http.get(`/api/github/stars?page=${page}`, null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`,
+        "Access-Token": ls("access_token")
       }
-    }
-    if(currentPage <= state.totalPages) {
-      dispatch(types.SET_GITHUB_STARS, data.stars);
-      actions.fetchGithubStars(currentPage);
-    }
-    else {
-      dispatch(types.SET_GITHUB_STARS, data.stars);
-    }
+    }).then( (response) => {
+      data = response.data.stars
+      if(data.page_count) { dispatch(types.SET_TOTAL_PAGES, data.page_count); }
+      if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
+      if( state.cachedPages && state.cachedPages === state.totalPages ) {
+        dispatch(types.SET_GITHUB_STARS, data.stars);
+        resolve("GITHUB_STARS_LOADED");
+        return false
+      }
+      else {
+        if(state.cachedPages){
+          currentPage+= 1;
+        } else {
+          dispatch(types.INCREMENT_CACHED_PAGES)
+        }
+      }
+      if(currentPage <= state.totalPages) {
+        dispatch(types.SET_GITHUB_STARS, data.stars);
+        actions.fetchGithubStars(currentPage);
+      }
+      else {
+        dispatch(types.SET_GITHUB_STARS, data.stars);
+        resolve("GITHUB_STARS_LOADED");
+      }
+    });
   });
+  return promise;
 };
 
 //Tags
@@ -83,6 +88,8 @@ export const addTag = ({ dispatch, state }) => {
   });
 };
 
+
+//Stars
 export const tagStar = ({ dispatch }, starData) => {
   Vue.http.post("/api/stars/tag", starData, {
     headers: {
@@ -91,4 +98,18 @@ export const tagStar = ({ dispatch }, starData) => {
   }).then( (response) => {
     dispatch(types.SET_TAGS, response.data.tags);
   });
+};
+
+export const fetchStars = ({ dispatch }) => {
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.get("/api/stars", null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      dispatch(types.SET_STARS, response.data.stars);
+      resolve("GITHUB_STARS_LOADED");
+    });
+  });
+  return promise;
 };

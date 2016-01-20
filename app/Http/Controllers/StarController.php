@@ -22,6 +22,11 @@ class StarController extends Controller
     $this->middleware("jwt.auth");
   }
 
+  public function index(){
+    $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+    return response()->json(compact('stars'), 200);
+  }
+
   public function tag(Request $request){
     $star_id = $request->input('repoId');
 		$star_name = $request->input('repoName');

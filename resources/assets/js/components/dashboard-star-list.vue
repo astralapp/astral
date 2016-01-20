@@ -28,10 +28,17 @@ export default {
   computed: {
     githubStars() {
       return store.state.githubStars;
+    },
+    stars() {
+      return store.state.stars;
     }
   },
   ready() {
-    store.actions.fetchGithubStars()
-  }
+    store.actions.fetchStars().then( () => {
+      store.actions.fetchGithubStars().then( () => {
+        //Attatch tags to stars
+      });
+    });
+  },
 }
 </script>
