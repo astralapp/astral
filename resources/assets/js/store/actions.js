@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueResource from "vue-resource";
 import ls from "local-storage";
+import marked from "marked";
 import * as types from "./mutation-types.js";
 
 Vue.use(VueResource);
@@ -33,7 +34,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
       if( state.cachedPages && state.cachedPages === state.totalPages ) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve("GITHUB_STARS_LOADED");
+        resolve();
         return false
       }
       else {
@@ -49,12 +50,25 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       }
       else {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve("GITHUB_STARS_LOADED");
+        resolve();
       }
     });
   });
   return promise;
 };
+
+export const fetchReadme = ({ dispatch }, name) => {
+  let accessToken = ls("access_token");
+  Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then( (response) => {
+    let readme = marked( window.atob(response.data.content) );
+    dispatch(types.SET_README, readme);
+  });
+};
+
+export const setCurrentStar = ({ dispatch }, star) => {
+  dispatch(types.SET_CURRENT_STAR, star);
+}
+
 
 //Tags
 export const fetchTags = ({ dispatch }) => {
@@ -108,7 +122,7 @@ export const fetchStars = ({ dispatch }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_STARS, response.data.stars);
-      resolve("GITHUB_STARS_LOADED");
+      resolve();
     });
   });
   return promise;

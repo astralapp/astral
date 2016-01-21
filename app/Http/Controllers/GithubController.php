@@ -27,10 +27,4 @@ class GithubController extends Controller
       $stars = $client->getStars($page, $access_token);
       return response()->json(compact('stars'), 200);
   }
-
-  public function getReadme(Request $request, GithubClient $client, $owner, $repo)
-  {
-    $readme = $client->getReadme($owner, $repo);
-    response()->json(compact('readme'), 200);
-  }
 }

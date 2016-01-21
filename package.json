@@ -8,6 +8,7 @@
     "dragula": "^3.6.3",
     "local-storage": "^1.4.2",
     "lodash": "^4.0.0",
+    "marked": "^0.3.5",
     "vue": "^1.0.14",
     "vue-resource": "^0.6.1",
     "vue-router": "^0.7.8",

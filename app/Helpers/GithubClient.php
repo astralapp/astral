@@ -66,19 +66,6 @@ class GithubClient
 
   }
 
-  public function getReadme($owner, $repo, $token)
-  {
-    $readmeUrl = 'https://api.github.com/repos/'.$owner.'/'.$repo.'/readme?access_token='.$token;
-    $client = $this->getClient();
-    $res = $client->get(
-        $readmeUrl,
-        []
-    );
-    $readmeHash = json_decode( $res->getBody(), true );
-    $readme = ['readme' => \Markdown::convertToHtml( imap_base64($readmeHash['content']) )];
-    return $readme;
-  }
-
   private function starsCacheKey()
   {
     return 'user_'.Auth::id().'.github_stars';

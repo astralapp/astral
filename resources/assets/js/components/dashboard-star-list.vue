@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="star in githubStars" track-by="id" v-draggable="star">
+      <li class="repo" v-for="star in githubStars" track-by="id" v-draggable="star" @click="starClicked($index)">
         <h3 class="repo-name">{{* star.full_name }}</h3>
         <div class="repo-description">{{* star.description }}</div>
         <ul class="repo-tags">
@@ -15,11 +15,13 @@
       </li>
     </ul>
   </div>
+  <star-info></star-info>
 </template>
 <script>
 import Vue from "vue";
 import store from "../store/store.js";
 import dnd from "./../directives/drag_and_drop.js";
+import StarInfo from "./star-info.vue";
 export default {
   name: "StarList",
   data() {
@@ -36,9 +38,19 @@ export default {
   ready() {
     store.actions.fetchStars().then( () => {
       store.actions.fetchGithubStars().then( () => {
-        //Attatch tags to stars
+        console.log("Page loaded");
       });
     });
   },
+  methods: {
+    starClicked(index){
+      let star = this.githubStars[index];
+      store.actions.setCurrentStar(star);
+      store.actions.fetchReadme(star.full_name);
+    }
+  },
+  components: {
+    "star-info": StarInfo
+  }
 }
 </script>
