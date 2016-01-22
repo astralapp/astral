@@ -7,7 +7,7 @@
       <h3 class="sidebar-header-text">Stars</h3>
     </div>
     <ul class="dashboard-list sidebar-stars">
-      <li class="all-stars dashboard-list-item"><i class="fa fa-inbox"></i> All Stars</li>
+      <li class="all-stars dashboard-list-item" @click="clearCurrentTag"><i class="fa fa-inbox"></i> All Stars</li>
       <li class="untagged-stars dashboard-list-item"><i class="fa fa-star-o"></i> Untagged Stars</li>
     </ul>
     <div class="sidebar-header tags-header">
@@ -23,10 +23,10 @@
       <button type="submit">Save</button>
     </form>
     <ul class="dashboard-list sidebar-tags" v-sortable="tags" sort="reorderTags">
-      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStar" :data-id="tag.id">
+      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStar" :data-id="tag.id" @click="setCurrentTag(tag)">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
-        <span class="tagged-count" v-if="tag.stars.length">{{tag.stars.length}}</span>
+        <span class="tagged-count" v-if="tag.hasOwnProperty('stars') && tag.stars.length">{{tag.stars.length}}</span>
       </li>
     </ul>
   </div>
@@ -59,6 +59,12 @@ export default {
     },
     reorderTags: function(sortMap){
       store.actions.reorderTags(sortMap);
+    },
+    setCurrentTag: function(tag){
+      store.actions.setCurrentTag( tag );
+    },
+    clearCurrentTag: function() {
+      store.actions.resetCurrentTag();
     }
   }
 }

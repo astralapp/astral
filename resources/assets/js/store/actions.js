@@ -102,6 +102,14 @@ export const addTag = ({ dispatch, state }) => {
   });
 };
 
+export const setCurrentTag = ({ dispatch }, tag) => {
+  dispatch(types.SET_CURRENT_TAG, tag);
+};
+
+export const resetCurrentTag = ({ dispatch }) => {
+  dispatch(types.RESET_CURRENT_TAG);
+};
+
 
 //Stars
 export const tagStar = ({ dispatch }, starData) => {
@@ -111,6 +119,7 @@ export const tagStar = ({ dispatch }, starData) => {
     }
   }).then( (response) => {
     dispatch(types.SET_TAGS, response.data.tags);
+    dispatch(types.SET_STARS, response.data.stars);
   });
 };
 
@@ -126,4 +135,28 @@ export const fetchStars = ({ dispatch }) => {
     });
   });
   return promise;
+};
+
+//Misc.
+export const setSearchQuery = ({ dispatch }, query) => {
+  //Dispatch the original query as a string
+  dispatch(types.SET_SEARCH_QUERY, query);
+
+  //Tokenize the query
+  let searchArray = query.split(":");
+  let tags = searchArray.filter( (tag) => {
+    return tag[0] === "#";
+  }).map(( tag ) => {
+    return tag.substring(1);
+  });
+  let strings = searchArray.filter( (tag) => {
+    return tag[0] !== "#";
+  });
+  let tokenizedQuery = {
+    "query": query,
+    "tags": tags,
+    "strings": strings
+  };
+  dispatch(types.SET_TOKENIZED_SEARCH, tokenizedQuery);
+
 };

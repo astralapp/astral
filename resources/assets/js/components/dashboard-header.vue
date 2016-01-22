@@ -14,7 +14,7 @@
       </div> -->
     </div>
     <label for="galileo">
-      <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope">
+      <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope" v-model="searchQuery">
       <i class="fa fa-search"></i>
     </label>
     <div class="user-dropdown-trigger dropdown-trigger">
@@ -31,8 +31,21 @@
   </div>
 </template>
 <script>
+import store from "../store/store.js";
 export default {
   name: "DashboardHeader",
-  props: ["user"]
+  computed: {
+    user(){
+      return store.state.user;
+    },
+    searchQuery: {
+      get(){
+        return store.state.searchQuery;
+      },
+      set(newValue){
+        store.actions.setSearchQuery(newValue);
+      }
+    }
+  },
 }
 </script>

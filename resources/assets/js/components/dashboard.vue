@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <dashboard-header :user="user"></dashboard-header>
+    <dashboard-header></dashboard-header>
     <div class="dashboard-main">
       <dashboard-sidebar></dashboard-sidebar>
       <star-list></star-list>
@@ -14,14 +14,6 @@ import DashboardSidebar from "./dashboard-sidebar.vue";
 import StarList from "./dashboard-star-list.vue";
 export default {
   name: "Dashboard",
-  data() {
-    return {}
-  },
-  computed: {
-    user() {
-      return store.state.user;
-    },
-  },
   ready() {
     store.actions.fetchUser()
   },

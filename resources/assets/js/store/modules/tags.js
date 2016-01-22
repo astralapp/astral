@@ -4,7 +4,9 @@ import {
   ADD_TAGS,
   ADD_TAG,
   REMOVE_TAG,
-  RESET_NEW_TAG
+  RESET_NEW_TAG,
+  SET_CURRENT_TAG,
+  RESET_CURRENT_TAG
 } from "../mutation-types.js";
 
 export const tagsInitialState = [];
@@ -12,6 +14,8 @@ export const newTagInitialState = {
   name: "",
   description: ""
 };
+
+export const currentTagInitialState = {};
 
 export const tagsMutations = {
   [SET_NEW_TAG] (state, tag){
@@ -32,5 +36,11 @@ export const tagsMutations = {
   [RESET_NEW_TAG] (state){
     state.newTag.name = "";
     state.newTag.description = "";
+  },
+  [SET_CURRENT_TAG] (state, tag){
+    state.currentTag = tag;
+  },
+  [RESET_CURRENT_TAG] (state){
+    state.currentTag = {};
   }
 }

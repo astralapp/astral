@@ -43,7 +43,8 @@ class StarController extends Controller
       $star->save();
       $star->tags()->attach($tag_id);
     }
+    $stars = Star::with('tags')->where('user_id', Auth::id())->get();
     $tags = Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get();
-    return response()->json(compact('tags'), 200);
+    return response()->json(compact('stars', 'tags'), 200);
   }
 }
