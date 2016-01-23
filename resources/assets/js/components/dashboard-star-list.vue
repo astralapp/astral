@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | currentTagFilter" track-by="id" v-draggable="repo" @click="starClicked($index)">
+      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked($index)">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
@@ -21,10 +21,10 @@
 </template>
 <script>
 import Vue from "vue";
+import { intersection } from "lodash";
 import store from "../store/store.js";
 import dnd from "./../directives/drag_and_drop.js";
 import StarInfo from "./star-info.vue";
-import galileo from "./../filters/galileo.js";
 export default {
   name: "StarList",
   data() {
@@ -39,6 +39,9 @@ export default {
     },
     currentTag() {
       return store.state.currentTag;
+    },
+    searchQuery(){
+      return store.state.tokenizedSearchQuery;
     }
   },
   ready() {
@@ -82,6 +85,37 @@ export default {
         }
         else {
           return false;
+        }
+      });
+    },
+    galileo(arr){
+      let query = this.searchQuery;
+      //If there's no query return all items
+      if( query.query.replace(/\s/g, "") === "" ){
+        return arr;
+      }
+
+      //Begin the filter process
+      return arr.filter( (repo) => {
+        let searchText = `${repo.full_name} ${repo.hasOwnProperty("description") ? repo.description : ""}`.toLowerCase();
+        // If theres tags in the search query we have to bind the star to the repo
+        if( query.tags.length ){
+          let matchedStar = this.stars.filter( (star) => {
+            return star.repo_id === repo.id;
+          })[0];
+          //If star matched and it has tags
+          if( matchedStar && matchedStar.tags.length ){
+            let matchedTags = matchedStar.tags.map( (tag) => {
+              return tag.name.toLowerCase();
+            });
+            let hasTags =  intersection(query.tags, matchedTags).length === query.tags.length;
+            let hasStrings = ~searchText.indexOf( query.strings.join(" ").toLowerCase() );
+            return hasTags && hasStrings;
+          }
+        }
+        //Just search the repo text and/or description
+        else {
+          return ~searchText.indexOf( query.strings.join(" ").toLowerCase() );
         }
       });
     }

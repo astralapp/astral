@@ -31382,7 +31382,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":76,"vue":54,"vue-hot-reload-api":28}],63:[function(require,module,exports){
+},{"../store/store.js":75,"vue":54,"vue-hot-reload-api":28}],63:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31453,7 +31453,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":76,"./../directives/drag_and_drop.js":67,"vue":54,"vue-hot-reload-api":28}],64:[function(require,module,exports){
+},{"../store/store.js":75,"./../directives/drag_and_drop.js":67,"vue":54,"vue-hot-reload-api":28}],64:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31468,6 +31468,8 @@ var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
+var _lodash = require("lodash");
+
 var _store = require("../store/store.js");
 
 var _store2 = _interopRequireDefault(_store);
@@ -31479,10 +31481,6 @@ var _drag_and_drop2 = _interopRequireDefault(_drag_and_drop);
 var _starInfo = require("./star-info.vue");
 
 var _starInfo2 = _interopRequireDefault(_starInfo);
-
-var _galileo = require("./../filters/galileo.js");
-
-var _galileo2 = _interopRequireDefault(_galileo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31501,6 +31499,9 @@ exports.default = {
     },
     currentTag: function currentTag() {
       return _store2.default.state.currentTag;
+    },
+    searchQuery: function searchQuery() {
+      return _store2.default.state.tokenizedSearchQuery;
     }
   },
   ready: function ready() {
@@ -31547,6 +31548,39 @@ exports.default = {
           return false;
         }
       });
+    },
+    galileo: function galileo(arr) {
+      var _this2 = this;
+
+      var query = this.searchQuery;
+      //If there's no query return all items
+      if (query.query.replace(/\s/g, "") === "") {
+        return arr;
+      }
+
+      //Begin the filter process
+      return arr.filter(function (repo) {
+        var searchText = (repo.full_name + " " + (repo.hasOwnProperty("description") ? repo.description : "")).toLowerCase();
+        // If theres tags in the search query we have to bind the star to the repo
+        if (query.tags.length) {
+          var matchedStar = _this2.stars.filter(function (star) {
+            return star.repo_id === repo.id;
+          })[0];
+          //If star matched and it has tags
+          if (matchedStar && matchedStar.tags.length) {
+            var matchedTags = matchedStar.tags.map(function (tag) {
+              return tag.name.toLowerCase();
+            });
+            var hasTags = (0, _lodash.intersection)(query.tags, matchedTags).length === query.tags.length;
+            var hasStrings = ~searchText.indexOf(query.strings.join(" ").toLowerCase());
+            return hasTags && hasStrings;
+          }
+        }
+        //Just search the repo text and/or description
+        else {
+            return ~searchText.indexOf(query.strings.join(" ").toLowerCase());
+          }
+      });
     }
   },
   components: {
@@ -31554,7 +31588,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"repo in githubStars | currentTagFilter\" track-by=\"id\" v-draggable=\"repo\" @click=\"starClicked($index)\">\n      <h3 class=\"repo-name\">{{* repo.full_name }}</h3>\n      <div class=\"repo-description\">{{* repo.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in starTags(repo)\" track-by=\"id\" @click.stop=\"setCurrentTag(tag)\">\n          {{ tag.name }}\n        </li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* repo.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* repo.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* repo.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n<star-info></star-info>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"repo in githubStars | currentTagFilter | galileo\" track-by=\"id\" v-draggable=\"repo\" @click=\"starClicked($index)\">\n      <h3 class=\"repo-name\">{{* repo.full_name }}</h3>\n      <div class=\"repo-description\">{{* repo.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in starTags(repo)\" track-by=\"id\" @click.stop=\"setCurrentTag(tag)\">\n          {{ tag.name }}\n        </li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* repo.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* repo.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* repo.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n<star-info></star-info>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -31566,7 +31600,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":76,"./../directives/drag_and_drop.js":67,"./../filters/galileo.js":68,"./star-info.vue":66,"babel-runtime/core-js/object/keys":1,"vue":54,"vue-hot-reload-api":28}],65:[function(require,module,exports){
+},{"../store/store.js":75,"./../directives/drag_and_drop.js":67,"./star-info.vue":66,"babel-runtime/core-js/object/keys":1,"lodash":25,"vue":54,"vue-hot-reload-api":28}],65:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31616,7 +31650,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":76,"./dashboard-header.vue":62,"./dashboard-sidebar.vue":63,"./dashboard-star-list.vue":64,"vue":54,"vue-hot-reload-api":28}],66:[function(require,module,exports){
+},{"../store/store.js":75,"./dashboard-header.vue":62,"./dashboard-sidebar.vue":63,"./dashboard-star-list.vue":64,"vue":54,"vue-hot-reload-api":28}],66:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31657,7 +31691,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":76,"vue":54,"vue-hot-reload-api":28}],67:[function(require,module,exports){
+},{"../store/store.js":75,"vue":54,"vue-hot-reload-api":28}],67:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -31736,21 +31770,6 @@ _vue2["default"].directive("sortable", {
 });
 
 },{"dragula":14,"vue":54}],68:[function(require,module,exports){
-"use strict";
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var _vue = require("vue");
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _lodash = require("lodash");
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-_vue2["default"].filter("galileo", function (value, input) {});
-
-},{"lodash":25,"vue":54}],69:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31963,10 +31982,12 @@ var setSearchQuery = function setSearchQuery(_ref12, query) {
   var tags = searchArray.filter(function (tag) {
     return tag[0] === "#";
   }).map(function (tag) {
-    return tag.substring(1);
+    return tag.substring(1).toLowerCase();
   });
-  var strings = searchArray.filter(function (tag) {
-    return tag[0] !== "#";
+  var strings = searchArray.filter(function (s) {
+    return s[0] !== "#";
+  }).map(function (s) {
+    return s.toLowerCase();
   });
   var tokenizedQuery = {
     "query": query,
@@ -31977,7 +31998,7 @@ var setSearchQuery = function setSearchQuery(_ref12, query) {
 };
 exports.setSearchQuery = setSearchQuery;
 
-},{"./mutation-types.js":75,"local-storage":22,"marked":27,"vue":54,"vue-resource":42}],70:[function(require,module,exports){
+},{"./mutation-types.js":74,"local-storage":22,"marked":27,"vue":54,"vue-resource":42}],69:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32006,7 +32027,7 @@ var searchMutations = (_searchMutations = {}, _defineProperty(_searchMutations, 
 }), _searchMutations);
 exports.searchMutations = searchMutations;
 
-},{"../mutation-types.js":75}],71:[function(require,module,exports){
+},{"../mutation-types.js":74}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32037,7 +32058,7 @@ var githubStarsMutations = (_githubStarsMutations = {}, _defineProperty(_githubS
 }), _githubStarsMutations);
 exports.githubStarsMutations = githubStarsMutations;
 
-},{"../mutation-types.js":75}],72:[function(require,module,exports){
+},{"../mutation-types.js":74}],71:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32062,7 +32083,7 @@ var starsMutations = (_starsMutations = {}, _defineProperty(_starsMutations, _mu
 }), _starsMutations);
 exports.starsMutations = starsMutations;
 
-},{"../mutation-types.js":75}],73:[function(require,module,exports){
+},{"../mutation-types.js":74}],72:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32106,7 +32127,7 @@ var tagsMutations = (_tagsMutations = {}, _defineProperty(_tagsMutations, _mutat
 }), _tagsMutations);
 exports.tagsMutations = tagsMutations;
 
-},{"../mutation-types.js":75}],74:[function(require,module,exports){
+},{"../mutation-types.js":74}],73:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32125,7 +32146,7 @@ var userMutations = _defineProperty({}, _mutationTypesJs.SET_USER, function (sta
 });
 exports.userMutations = userMutations;
 
-},{"../mutation-types.js":75}],75:[function(require,module,exports){
+},{"../mutation-types.js":74}],74:[function(require,module,exports){
 //User
 "use strict";
 
@@ -32177,7 +32198,7 @@ exports.SET_SEARCH_QUERY = SET_SEARCH_QUERY;
 var SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCH";
 exports.SET_TOKENIZED_SEARCH = SET_TOKENIZED_SEARCH;
 
-},{}],76:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32229,4 +32250,4 @@ exports["default"] = new _vuex2["default"].Store({
 });
 module.exports = exports["default"];
 
-},{"./actions.js":69,"./modules/galileo.js":70,"./modules/github.js":71,"./modules/stars.js":72,"./modules/tags.js":73,"./modules/user.js":74,"vue":54,"vuex":55}]},{},[59]);
+},{"./actions.js":68,"./modules/galileo.js":69,"./modules/github.js":70,"./modules/stars.js":71,"./modules/tags.js":72,"./modules/user.js":73,"vue":54,"vuex":55}]},{},[59]);

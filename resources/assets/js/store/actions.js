@@ -147,10 +147,12 @@ export const setSearchQuery = ({ dispatch }, query) => {
   let tags = searchArray.filter( (tag) => {
     return tag[0] === "#";
   }).map(( tag ) => {
-    return tag.substring(1);
+    return tag.substring(1).toLowerCase();
   });
-  let strings = searchArray.filter( (tag) => {
-    return tag[0] !== "#";
+  let strings = searchArray.filter( (s) => {
+    return s[0] !== "#";
+  }).map( (s) => {
+    return s.toLowerCase();
   });
   let tokenizedQuery = {
     "query": query,
