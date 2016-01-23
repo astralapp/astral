@@ -30610,6 +30610,26 @@ function merge(target, source, deep) {
 
 }));
 },{}],43:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}],44:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -30902,7 +30922,7 @@ exports.default = {
     Vue = _Vue;
   }
 };
-},{"./middlewares/devtool":44,"./middlewares/logger":45,"./util":46}],44:[function(require,module,exports){
+},{"./middlewares/devtool":45,"./middlewares/logger":46,"./util":47}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30917,7 +30937,7 @@ exports.default = {
   }
 };
 module.exports = exports['default'];
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30980,7 +31000,7 @@ function pad(num, maxLength) {
   return repeat('0', maxLength - num.toString().length) + num;
 }
 module.exports = exports['default'];
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31076,7 +31096,7 @@ function deepClone(obj) {
     return obj;
   }
 }
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -31139,7 +31159,7 @@ _vue2["default"].http.interceptors.push({
 
 router.start(_componentsAppVue2["default"], '#app');
 
-},{"./components/app.vue":48,"./components/auth.vue":49,"./components/dashboard.vue":53,"vue":42,"vue-resource":30,"vue-router":41}],48:[function(require,module,exports){
+},{"./components/app.vue":49,"./components/auth.vue":50,"./components/dashboard.vue":54,"vue":42,"vue-resource":30,"vue-router":41}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31161,7 +31181,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":42,"vue-hot-reload-api":16}],49:[function(require,module,exports){
+},{"vue":42,"vue-hot-reload-api":16}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31213,7 +31233,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"local-storage":10,"vue":42,"vue-hot-reload-api":16}],50:[function(require,module,exports){
+},{"local-storage":10,"vue":42,"vue-hot-reload-api":16}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31256,7 +31276,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":65,"vue":42,"vue-hot-reload-api":16}],51:[function(require,module,exports){
+},{"../store/store.js":67,"vue":42,"vue-hot-reload-api":16}],52:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31327,7 +31347,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":65,"./../directives/drag_and_drop.js":55,"vue":42,"vue-hot-reload-api":16}],52:[function(require,module,exports){
+},{"../store/store.js":67,"./../directives/drag_and_drop.js":57,"vue":42,"vue-hot-reload-api":16}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31424,7 +31444,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":65,"./../directives/drag_and_drop.js":55,"./../filters/currentTag.js":56,"./../filters/galileo.js":57,"./star-info.vue":54,"lodash":13,"vue":42,"vue-hot-reload-api":16}],53:[function(require,module,exports){
+},{"../store/store.js":67,"./../directives/drag_and_drop.js":57,"./../filters/currentTag.js":58,"./../filters/galileo.js":59,"./star-info.vue":55,"lodash":13,"vue":42,"vue-hot-reload-api":16}],54:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31474,7 +31494,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":65,"./dashboard-header.vue":50,"./dashboard-sidebar.vue":51,"./dashboard-star-list.vue":52,"vue":42,"vue-hot-reload-api":16}],54:[function(require,module,exports){
+},{"../store/store.js":67,"./dashboard-header.vue":51,"./dashboard-sidebar.vue":52,"./dashboard-star-list.vue":53,"vue":42,"vue-hot-reload-api":16}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31489,10 +31509,19 @@ var _store = require("../store/store.js");
 
 var _store2 = _interopRequireDefault(_store);
 
+var _tagEditor = require("./tag-editor.vue");
+
+var _tagEditor2 = _interopRequireDefault(_tagEditor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
   name: "StarInfo",
+  data: function data() {
+    return {
+      tags: ["Foo", "Bar", "Baz"]
+    };
+  },
   computed: {
     readme: function readme() {
       return _store2.default.state.readme;
@@ -31500,10 +31529,13 @@ exports.default = {
     star: function star() {
       return _store2.default.state.currentStar;
     }
+  },
+  components: {
+    "tag-editor": _tagEditor2.default
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <div class=\"empty-placeholder\" v-show=\"!star\">No Repo Selected</div>\n  <div class=\"empty-placeholder\" v-show=\"star &amp;&amp; !readme\">No Readme For {{ star.full_name }}</div>\n  <div class=\"manage-star\">\n    <!--<div class=\"edit-star-tags\">\n       <button class=\"toggle-tag-editor\" ng-click=\"toggleTagEditor()\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n      <div class=\"tags-dropdown\" ng-show=\"addingTags\" set-focus-if=\"addingTags\">\n        <tags-input ng-model=\"$parent.currentStarTags\" display-property=\"name\" resize=\"addingTags\" min-length=\"1\" replace-spaces-with-dashes=\"false\" add-on-enter=\"false\" add-on-blur=\"false\">\n          <auto-complete source=\"fetchTagsForAutoComplete($query)\" min-length=\"1\"></auto-complete>\n        </tags-input>\n        <button class=\"save-tags btn-flat\" ng-click=\"syncTagsToStar()\" trigger-on-enter=\"addingTags\">Save Tags</button>\n      </div>\n    </div> -->\n    <!-- <button class=\"unstar-repo\" ng-click=\"unstarStar()\"><i class=\"fa fa-star-o\"></i> Unstar</button> -->\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <div class=\"empty-placeholder\" v-show=\"!star\">No Repo Selected</div>\n  <div class=\"empty-placeholder\" v-show=\"star &amp;&amp; !readme\">No Readme For {{ star.full_name }}</div>\n  <div class=\"manage-star\">\n    <!--<div class=\"edit-star-tags\">\n       <button class=\"toggle-tag-editor\" ng-click=\"toggleTagEditor()\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n      <div class=\"tags-dropdown\" ng-show=\"addingTags\" set-focus-if=\"addingTags\">\n        <tags-input ng-model=\"$parent.currentStarTags\" display-property=\"name\" resize=\"addingTags\" min-length=\"1\" replace-spaces-with-dashes=\"false\" add-on-enter=\"false\" add-on-blur=\"false\">\n          <auto-complete source=\"fetchTagsForAutoComplete($query)\" min-length=\"1\"></auto-complete>\n        </tags-input>\n        <button class=\"save-tags btn-flat\" ng-click=\"syncTagsToStar()\" trigger-on-enter=\"addingTags\">Save Tags</button>\n      </div>\n    </div> -->\n    <!-- <button class=\"unstar-repo\" ng-click=\"unstarStar()\"><i class=\"fa fa-star-o\"></i> Unstar</button> -->\n    <tag-editor :tags=\"tags\"></tag-editor>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -31515,7 +31547,90 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":65,"vue":42,"vue-hot-reload-api":16}],55:[function(require,module,exports){
+},{"../store/store.js":67,"./tag-editor.vue":56,"vue":42,"vue-hot-reload-api":16}],56:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n.tag-editor {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(0,0,0,0.08);\n  box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n  border-radius: 6px;\n  margin: 20px 0 0 20px;\n  padding: 10px;\n  width: 400px;\n}\n.tag-editor--host{\n  cursor: text;\n  word-wrap: break-word;\n}\n.tag-editor--tags-list {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n.tag-editor--tag {\n  background: #708EA3;\n  border-radius: 3px;\n  color: #fff;\n  float: left;\n  font-size: 0.8rem;\n  font-weight: bold;\n  height: 26px;\n  line-height: 25px;\n  margin: 2px;\n  padding: 0 5px;\n  display: inline-block;\n}\n.tag-editor--delete-tag {\n  cursor: pointer;\n  font-size: 1rem;\n  margin-left: 5px;\n  vertical-align: middle;\n  line-height: normal;\n  position: relative; top: -1px;\n}\n.tag-editor--input{\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  border: none;\n  float: left;\n  height: 30px;\n  margin-left: 5px;\n  outline: 0;\n}\n.tag-editor--save-tags{\n  clear: left;\n  display: block!important;\n  margin-top: 50px;\n  width: 100%;\n}\n")
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  name: "TagEditor",
+  props: ["tags", "autocomplete"],
+  data: function data() {
+    return {
+      newTag: "",
+      canDelete: false
+    };
+  },
+  ready: function ready() {
+    this.resizeInput();
+  },
+
+  methods: {
+    addTag: function addTag() {
+      if (this.newTag.replace(/\s/g, "") !== "" && this.newTag.replace(/\s/g, "") !== ",") {
+        this.tags.push(this.newTag.slice(0, -1));
+        this.newTag = "";
+      }
+    },
+    deleteTag: function deleteTag(index, usingKeyboard) {
+      if (usingKeyboard) {
+        if (!this.canDelete) {
+          return false;
+        }
+      }
+      this.tags.splice(index, 1);
+    },
+    inputKeydown: function inputKeydown() {
+      this.deleteCheck();
+      this.resizeInput();
+    },
+    deleteCheck: function deleteCheck() {
+      this.canDelete = this.newTag.replace(/\s/g, "") === "";
+    },
+    resizeInput: function resizeInput() {
+      var $measurer = document.querySelector(".tag-editor--measure");
+      var $input = document.querySelector(".tag-editor--input");
+      var placeholder = $input.getAttribute("placeholder");
+      var width = 0;
+      if ($input.value.replace(/\s/g, "") !== "") {
+        $measurer.textContent = $input.value;
+      } else {
+        $measurer.textContent = placeholder;
+      }
+      $measurer.style.display = "";
+      width = $measurer.offsetWidth + 5;
+      $measurer.style.display = "none";
+      $input.style.width = width + "px";
+    }
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tag-editor\">\n  <span class=\"tag-editor--measure\" @style=\"\n  {\n    display: 'none',\n    visibility:'hidden',\n    width: 'auto',\n    whiteSpace: 'pre'\n  }\n  \"></span>\n  <div class=\"tag-editor--host\">\n    <ul class=\"tag-editor--tags-list\">\n      <li class=\"tag-editor--tag\" v-for=\"tag in tags\">\n        <span class=\"tag-editor--tag-name\">{{ tag }}</span>\n        <span class=\"tag-editor--delete-tag\" @click=\"deleteTag($index, false)\">×</span>\n      </li>\n    </ul>\n    <input type=\"text\" placeholder=\"Add a tag\" v-model=\"newTag\" @keyup=\"resizeInput\" @keyup.188=\"addTag\" @keyup.8=\"deleteTag(tags.length - 1, true)\" @keydown=\"inputKeydown\" class=\"tag-editor--input\">\n  </div>\n  <button type=\"button\" name=\"button\" class=\"tag-editor--save-tags\">Save Tags</button>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\n.tag-editor {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(0,0,0,0.08);\n  box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n  border-radius: 6px;\n  margin: 20px 0 0 20px;\n  padding: 10px;\n  width: 400px;\n}\n.tag-editor--host{\n  cursor: text;\n  word-wrap: break-word;\n}\n.tag-editor--tags-list {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n.tag-editor--tag {\n  background: #708EA3;\n  border-radius: 3px;\n  color: #fff;\n  float: left;\n  font-size: 0.8rem;\n  font-weight: bold;\n  height: 26px;\n  line-height: 25px;\n  margin: 2px;\n  padding: 0 5px;\n  display: inline-block;\n}\n.tag-editor--delete-tag {\n  cursor: pointer;\n  font-size: 1rem;\n  margin-left: 5px;\n  vertical-align: middle;\n  line-height: normal;\n  position: relative; top: -1px;\n}\n.tag-editor--input{\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  border: none;\n  float: left;\n  height: 30px;\n  margin-left: 5px;\n  outline: 0;\n}\n.tag-editor--save-tags{\n  clear: left;\n  display: block!important;\n  margin-top: 50px;\n  width: 100%;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":42,"vue-hot-reload-api":16,"vueify-insert-css":43}],57:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -31593,7 +31708,7 @@ _vue2["default"].directive("sortable", {
   }
 });
 
-},{"dragula":2,"vue":42}],56:[function(require,module,exports){
+},{"dragula":2,"vue":42}],58:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -31622,7 +31737,7 @@ _vue2["default"].filter("currentTagFilter", function (value) {
   });
 });
 
-},{"vue":42}],57:[function(require,module,exports){
+},{"vue":42}],59:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -31670,7 +31785,7 @@ _vue2["default"].filter("galileo", function (value) {
   });
 });
 
-},{"lodash":13,"vue":42}],58:[function(require,module,exports){
+},{"lodash":13,"vue":42}],60:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31899,7 +32014,7 @@ var setSearchQuery = function setSearchQuery(_ref12, query) {
 };
 exports.setSearchQuery = setSearchQuery;
 
-},{"./mutation-types.js":64,"local-storage":10,"marked":15,"vue":42,"vue-resource":30}],59:[function(require,module,exports){
+},{"./mutation-types.js":66,"local-storage":10,"marked":15,"vue":42,"vue-resource":30}],61:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31928,7 +32043,7 @@ var searchMutations = (_searchMutations = {}, _defineProperty(_searchMutations, 
 }), _searchMutations);
 exports.searchMutations = searchMutations;
 
-},{"../mutation-types.js":64}],60:[function(require,module,exports){
+},{"../mutation-types.js":66}],62:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31959,7 +32074,7 @@ var githubStarsMutations = (_githubStarsMutations = {}, _defineProperty(_githubS
 }), _githubStarsMutations);
 exports.githubStarsMutations = githubStarsMutations;
 
-},{"../mutation-types.js":64}],61:[function(require,module,exports){
+},{"../mutation-types.js":66}],63:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31984,7 +32099,7 @@ var starsMutations = (_starsMutations = {}, _defineProperty(_starsMutations, _mu
 }), _starsMutations);
 exports.starsMutations = starsMutations;
 
-},{"../mutation-types.js":64}],62:[function(require,module,exports){
+},{"../mutation-types.js":66}],64:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32028,7 +32143,7 @@ var tagsMutations = (_tagsMutations = {}, _defineProperty(_tagsMutations, _mutat
 }), _tagsMutations);
 exports.tagsMutations = tagsMutations;
 
-},{"../mutation-types.js":64}],63:[function(require,module,exports){
+},{"../mutation-types.js":66}],65:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32047,7 +32162,7 @@ var userMutations = _defineProperty({}, _mutationTypesJs.SET_USER, function (sta
 });
 exports.userMutations = userMutations;
 
-},{"../mutation-types.js":64}],64:[function(require,module,exports){
+},{"../mutation-types.js":66}],66:[function(require,module,exports){
 //User
 "use strict";
 
@@ -32099,7 +32214,7 @@ exports.SET_SEARCH_QUERY = SET_SEARCH_QUERY;
 var SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCH";
 exports.SET_TOKENIZED_SEARCH = SET_TOKENIZED_SEARCH;
 
-},{}],65:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32151,4 +32266,4 @@ exports["default"] = new _vuex2["default"].Store({
 });
 module.exports = exports["default"];
 
-},{"./actions.js":58,"./modules/galileo.js":59,"./modules/github.js":60,"./modules/stars.js":61,"./modules/tags.js":62,"./modules/user.js":63,"vue":42,"vuex":43}]},{},[47]);
+},{"./actions.js":60,"./modules/galileo.js":61,"./modules/github.js":62,"./modules/stars.js":63,"./modules/tags.js":64,"./modules/user.js":65,"vue":42,"vuex":44}]},{},[48]);

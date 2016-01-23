@@ -13,6 +13,7 @@
         </div>
       </div> -->
       <!-- <button class="unstar-repo" ng-click="unstarStar()"><i class="fa fa-star-o"></i> Unstar</button> -->
+      <tag-editor :tags="tags"></tag-editor>
       <div class="clone-url">
         <label for="txtGitHubCloneURL">Clone:</label>
         <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" readonly/>
@@ -29,11 +30,20 @@
 <script>
 import Vue from "vue";
 import store from "../store/store.js";
+import TagEditor from "./tag-editor.vue";
 export default {
   name: "StarInfo",
+  data: function(){
+    return {
+      tags: ["Foo", "Bar", "Baz"]
+    }
+  },
   computed: {
     readme(){ return store.state.readme; },
     star(){ return store.state.currentStar; }
+  },
+  components: {
+    "tag-editor": TagEditor
   }
 }
 </script>
