@@ -69,9 +69,10 @@ export default {
         $measurer.textContent = placeholder;
       }
       $measurer.style.display = "";
-      width = $measurer.offsetWidth + 5;
+      width = $measurer.offsetWidth + 5 + 3;
       $measurer.style.display = "none";
       $input.style.width = `${width}px`;
+      $input.scrollLeft = 0
     }
   }
 }
@@ -122,6 +123,7 @@ export default {
   float: left;
   height: 30px;
   margin-left: 5px;
+  padding: 0;
   outline: 0;
 }
 .tag-editor--save-tags{

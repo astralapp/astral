@@ -37,4 +37,6 @@ Vue.http.interceptors.push({
   }
 });
 
+Vue.config.debug = true;
+
 router.start(App, '#app')

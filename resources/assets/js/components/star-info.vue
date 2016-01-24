@@ -13,7 +13,7 @@
         </div>
       </div> -->
       <!-- <button class="unstar-repo" ng-click="unstarStar()"><i class="fa fa-star-o"></i> Unstar</button> -->
-      <tag-editor :tags="tags"></tag-editor>
+      <tag-editor :tags="tagList"></tag-editor>
       <div class="clone-url">
         <label for="txtGitHubCloneURL">Clone:</label>
         <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" readonly/>
@@ -33,14 +33,29 @@ import store from "../store/store.js";
 import TagEditor from "./tag-editor.vue";
 export default {
   name: "StarInfo",
-  data: function(){
-    return {
-      tags: ["Foo", "Bar", "Baz"]
-    }
-  },
   computed: {
-    readme(){ return store.state.readme; },
-    star(){ return store.state.currentStar; }
+    readme(){
+      return store.state.readme;
+    },
+    star(){
+      return store.state.currentStar;
+    },
+    userStar(){
+      return store.state.stars.filter( (star) => {
+        return this.star.id === star.repo_id;
+      })[0];
+    },
+    tagList(){
+
+      if(this.userStar && this.userStar.hasOwnProperty("tags")){
+        return this.userStar.tags.map( (tag) => {
+          return tag.name;
+        });
+      }
+      else {
+        return [];
+      }
+    }
   },
   components: {
     "tag-editor": TagEditor

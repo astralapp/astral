@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked($index)">
+      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
@@ -51,9 +51,8 @@ export default {
     store.actions.fetchGithubStars();
   },
   methods: {
-    starClicked(index){
-      let star = this.githubStars[index];
-      store.actions.setCurrentStar(star);
+    starClicked(repo){
+      store.actions.setCurrentStar(repo);
       store.actions.fetchReadme(star.full_name);
     },
     starTags(repo){

@@ -31157,6 +31157,8 @@ _vue2["default"].http.interceptors.push({
   }
 });
 
+_vue2["default"].config.debug = true;
+
 router.start(_componentsAppVue2["default"], '#app');
 
 },{"./components/app.vue":49,"./components/auth.vue":50,"./components/dashboard.vue":54,"vue":42,"vue-resource":30,"vue-router":41}],49:[function(require,module,exports){
@@ -31335,7 +31337,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\" @click=\"clearCurrentTag\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"true\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\" @click=\"setCurrentTag(tag)\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n      <span class=\"tagged-count\" v-if=\"tag.hasOwnProperty('stars') &amp;&amp; tag.stars.length\">{{tag.stars.length}}</span>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\" @click=\"clearCurrentTag\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"false\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\" @click=\"setCurrentTag(tag)\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n      <span class=\"tagged-count\" v-if=\"tag.hasOwnProperty('stars') &amp;&amp; tag.stars.length\">{{tag.stars.length}}</span>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -31408,9 +31410,8 @@ exports.default = {
   },
 
   methods: {
-    starClicked: function starClicked(index) {
-      var star = this.githubStars[index];
-      _store2.default.actions.setCurrentStar(star);
+    starClicked: function starClicked(repo) {
+      _store2.default.actions.setCurrentStar(repo);
       _store2.default.actions.fetchReadme(star.full_name);
     },
     starTags: function starTags(repo) {
@@ -31432,7 +31433,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"repo in githubStars | currentTagFilter | galileo\" track-by=\"id\" v-draggable=\"repo\" @click=\"starClicked($index)\">\n      <h3 class=\"repo-name\">{{* repo.full_name }}</h3>\n      <div class=\"repo-description\">{{* repo.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in starTags(repo)\" track-by=\"id\" @click.stop=\"setCurrentTag(tag)\">\n          {{ tag.name }}\n        </li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* repo.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* repo.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* repo.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n<star-info></star-info>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"repo in githubStars | currentTagFilter | galileo\" track-by=\"id\" v-draggable=\"repo\" @click=\"starClicked(repo)\">\n      <h3 class=\"repo-name\">{{* repo.full_name }}</h3>\n      <div class=\"repo-description\">{{* repo.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in starTags(repo)\" track-by=\"id\" @click.stop=\"setCurrentTag(tag)\">\n          {{ tag.name }}\n        </li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* repo.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* repo.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* repo.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n<star-info></star-info>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -31517,17 +31518,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   name: "StarInfo",
-  data: function data() {
-    return {
-      tags: ["Foo", "Bar", "Baz"]
-    };
-  },
   computed: {
     readme: function readme() {
       return _store2.default.state.readme;
     },
     star: function star() {
       return _store2.default.state.currentStar;
+    },
+    userStar: function userStar() {
+      var _this = this;
+
+      return _store2.default.state.stars.filter(function (star) {
+        return _this.star.id === star.repo_id;
+      })[0];
+    },
+    tagList: function tagList() {
+
+      if (this.userStar && this.userStar.hasOwnProperty("tags")) {
+        return this.userStar.tags.map(function (tag) {
+          return tag.name;
+        });
+      } else {
+        return [];
+      }
     }
   },
   components: {
@@ -31535,7 +31548,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <div class=\"empty-placeholder\" v-show=\"!star\">No Repo Selected</div>\n  <div class=\"empty-placeholder\" v-show=\"star &amp;&amp; !readme\">No Readme For {{ star.full_name }}</div>\n  <div class=\"manage-star\">\n    <!--<div class=\"edit-star-tags\">\n       <button class=\"toggle-tag-editor\" ng-click=\"toggleTagEditor()\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n      <div class=\"tags-dropdown\" ng-show=\"addingTags\" set-focus-if=\"addingTags\">\n        <tags-input ng-model=\"$parent.currentStarTags\" display-property=\"name\" resize=\"addingTags\" min-length=\"1\" replace-spaces-with-dashes=\"false\" add-on-enter=\"false\" add-on-blur=\"false\">\n          <auto-complete source=\"fetchTagsForAutoComplete($query)\" min-length=\"1\"></auto-complete>\n        </tags-input>\n        <button class=\"save-tags btn-flat\" ng-click=\"syncTagsToStar()\" trigger-on-enter=\"addingTags\">Save Tags</button>\n      </div>\n    </div> -->\n    <!-- <button class=\"unstar-repo\" ng-click=\"unstarStar()\"><i class=\"fa fa-star-o\"></i> Unstar</button> -->\n    <tag-editor :tags=\"tags\"></tag-editor>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <div class=\"empty-placeholder\" v-show=\"!star\">No Repo Selected</div>\n  <div class=\"empty-placeholder\" v-show=\"star &amp;&amp; !readme\">No Readme For {{ star.full_name }}</div>\n  <div class=\"manage-star\">\n    <!--<div class=\"edit-star-tags\">\n       <button class=\"toggle-tag-editor\" ng-click=\"toggleTagEditor()\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n      <div class=\"tags-dropdown\" ng-show=\"addingTags\" set-focus-if=\"addingTags\">\n        <tags-input ng-model=\"$parent.currentStarTags\" display-property=\"name\" resize=\"addingTags\" min-length=\"1\" replace-spaces-with-dashes=\"false\" add-on-enter=\"false\" add-on-blur=\"false\">\n          <auto-complete source=\"fetchTagsForAutoComplete($query)\" min-length=\"1\"></auto-complete>\n        </tags-input>\n        <button class=\"save-tags btn-flat\" ng-click=\"syncTagsToStar()\" trigger-on-enter=\"addingTags\">Save Tags</button>\n      </div>\n    </div> -->\n    <!-- <button class=\"unstar-repo\" ng-click=\"unstarStar()\"><i class=\"fa fa-star-o\"></i> Unstar</button> -->\n    <tag-editor :tags=\"tagList\"></tag-editor>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -31548,7 +31561,7 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"../store/store.js":67,"./tag-editor.vue":56,"vue":42,"vue-hot-reload-api":16}],56:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n.tag-editor {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(0,0,0,0.08);\n  box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n  border-radius: 6px;\n  margin: 20px 0 0 20px;\n  padding: 10px;\n  width: 400px;\n}\n.tag-editor--host{\n  cursor: text;\n  word-wrap: break-word;\n}\n.tag-editor--tags-list {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n.tag-editor--tag {\n  background: #708EA3;\n  border-radius: 3px;\n  color: #fff;\n  float: left;\n  font-size: 0.8rem;\n  font-weight: bold;\n  height: 26px;\n  line-height: 25px;\n  margin: 2px;\n  padding: 0 5px;\n  display: inline-block;\n}\n.tag-editor--delete-tag {\n  cursor: pointer;\n  font-size: 1rem;\n  margin-left: 5px;\n  vertical-align: middle;\n  line-height: normal;\n  position: relative; top: -1px;\n}\n.tag-editor--input{\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  border: none;\n  float: left;\n  height: 30px;\n  margin-left: 5px;\n  outline: 0;\n}\n.tag-editor--save-tags{\n  clear: left;\n  display: block!important;\n  margin-top: 50px;\n  width: 100%;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert("\n.tag-editor {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(0,0,0,0.08);\n  box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n  border-radius: 6px;\n  margin: 20px 0 0 20px;\n  padding: 10px;\n  width: 400px;\n}\n.tag-editor--host{\n  cursor: text;\n  word-wrap: break-word;\n}\n.tag-editor--tags-list {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n.tag-editor--tag {\n  background: #708EA3;\n  border-radius: 3px;\n  color: #fff;\n  float: left;\n  font-size: 0.8rem;\n  font-weight: bold;\n  height: 26px;\n  line-height: 25px;\n  margin: 2px;\n  padding: 0 5px;\n  display: inline-block;\n}\n.tag-editor--delete-tag {\n  cursor: pointer;\n  font-size: 1rem;\n  margin-left: 5px;\n  vertical-align: middle;\n  line-height: normal;\n  position: relative; top: -1px;\n}\n.tag-editor--input{\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  border: none;\n  float: left;\n  height: 30px;\n  margin-left: 5px;\n  padding: 0;\n  outline: 0;\n}\n.tag-editor--save-tags{\n  clear: left;\n  display: block!important;\n  margin-top: 50px;\n  width: 100%;\n}\n")
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31607,9 +31620,10 @@ exports.default = {
         $measurer.textContent = placeholder;
       }
       $measurer.style.display = "";
-      width = $measurer.offsetWidth + 5;
+      width = $measurer.offsetWidth + 5 + 3;
       $measurer.style.display = "none";
       $input.style.width = width + "px";
+      $input.scrollLeft = 0;
     }
   }
 };
@@ -31621,7 +31635,7 @@ if (module.hot) {(function () {  module.hot.accept()
   if (!hotAPI.compatible) return
   var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n.tag-editor {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(0,0,0,0.08);\n  box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n  border-radius: 6px;\n  margin: 20px 0 0 20px;\n  padding: 10px;\n  width: 400px;\n}\n.tag-editor--host{\n  cursor: text;\n  word-wrap: break-word;\n}\n.tag-editor--tags-list {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n.tag-editor--tag {\n  background: #708EA3;\n  border-radius: 3px;\n  color: #fff;\n  float: left;\n  font-size: 0.8rem;\n  font-weight: bold;\n  height: 26px;\n  line-height: 25px;\n  margin: 2px;\n  padding: 0 5px;\n  display: inline-block;\n}\n.tag-editor--delete-tag {\n  cursor: pointer;\n  font-size: 1rem;\n  margin-left: 5px;\n  vertical-align: middle;\n  line-height: normal;\n  position: relative; top: -1px;\n}\n.tag-editor--input{\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  border: none;\n  float: left;\n  height: 30px;\n  margin-left: 5px;\n  outline: 0;\n}\n.tag-editor--save-tags{\n  clear: left;\n  display: block!important;\n  margin-top: 50px;\n  width: 100%;\n}\n"] = false
+    require("vueify-insert-css").cache["\n.tag-editor {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(0,0,0,0.08);\n  box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n  border-radius: 6px;\n  margin: 20px 0 0 20px;\n  padding: 10px;\n  width: 400px;\n}\n.tag-editor--host{\n  cursor: text;\n  word-wrap: break-word;\n}\n.tag-editor--tags-list {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n.tag-editor--tag {\n  background: #708EA3;\n  border-radius: 3px;\n  color: #fff;\n  float: left;\n  font-size: 0.8rem;\n  font-weight: bold;\n  height: 26px;\n  line-height: 25px;\n  margin: 2px;\n  padding: 0 5px;\n  display: inline-block;\n}\n.tag-editor--delete-tag {\n  cursor: pointer;\n  font-size: 1rem;\n  margin-left: 5px;\n  vertical-align: middle;\n  line-height: normal;\n  position: relative; top: -1px;\n}\n.tag-editor--input{\n  -webkit-appearance: none;\n     -moz-appearance: none;\n          appearance: none;\n  border: none;\n  float: left;\n  height: 30px;\n  margin-left: 5px;\n  padding: 0;\n  outline: 0;\n}\n.tag-editor--save-tags{\n  clear: left;\n  display: block!important;\n  margin-top: 50px;\n  width: 100%;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -32211,7 +32225,7 @@ exports.SET_CURRENT_STAR = SET_CURRENT_STAR;
 //Galileo
 var SET_SEARCH_QUERY = "SET_SEARCH_QUERY";
 exports.SET_SEARCH_QUERY = SET_SEARCH_QUERY;
-var SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCH";
+var SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCHw";
 exports.SET_TOKENIZED_SEARCH = SET_TOKENIZED_SEARCH;
 
 },{}],67:[function(require,module,exports){

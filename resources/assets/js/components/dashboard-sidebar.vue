@@ -18,7 +18,7 @@
         <button class="tag-button-group-item">Sort</button>
       </div>
     </div>
-    <form class="tag-form" v-show="true" @submit.prevent="addTag">
+    <form class="tag-form" v-show="false" @submit.prevent="addTag">
       <input type="text" name="name" v-model="newTag.name" placeholder="Tag name">
       <button type="submit">Save</button>
     </form>
