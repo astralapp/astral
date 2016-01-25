@@ -25,7 +25,6 @@
 <script>
 import Vue from "vue";
 import store from "../store/store.js";
-import dropdown from "../directives/dropdown.js";
 import TagEditor from "./tag-editor.vue";
 export default {
   name: "StarInfo",

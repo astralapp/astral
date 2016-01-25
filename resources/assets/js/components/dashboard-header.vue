@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-header">
     <h2>
-      <span>All Stars</span>
+      <span>{{ currentTagName }}</span>
     </h2>
     <div class="tag-settings-trigger">
       <i class="fa fa-cog"></i>
@@ -37,6 +37,9 @@ export default {
   computed: {
     user(){
       return store.state.user;
+    },
+    currentTagName(){
+      return Object.keys(store.state.currentTag).length ? store.state.currentTag.name : "All Stars"
     },
     searchQuery: {
       get(){
