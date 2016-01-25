@@ -1,3 +1,11 @@
+.dropdown-wrap {
+  position: relative;
+  .dropdown {
+    @include transform( translate(-50%, 2px));
+    position: absolute; top: 100%; left: 50%;
+    margin: 0;
+  }
+}
 .dropdown-trigger {
   cursor: pointer;
   position: relative;

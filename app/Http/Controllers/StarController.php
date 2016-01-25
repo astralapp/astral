@@ -47,4 +47,35 @@ class StarController extends Controller
     $tags = Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get();
     return response()->json(compact('stars', 'tags'), 200);
   }
+
+  public function syncTags(Request $request){
+    $repo = $request->input('star');
+    $tags = $request->input('tags');
+    $star = Star::where('repo_id', $repo['id'])->where('user_id', Auth::id())->first();
+    if(!$star){
+      $star = new Star();
+      $star->repo_id = $repo['id'];
+      $star->repo_name = $repo['full_name'];
+      $star->save();
+    }
+    $tagIds = [];
+    if( empty($tags) ){
+      $star->tags()->sync([]);
+    }
+    else {
+      foreach($tags as $tag){
+        $tagName = strtolower($tag['name']);
+        $userTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->first();
+        if(!$userTag){
+          $userTag = new Tag();
+          $userTag->name = $tag['name'];
+          $userTag->save();
+        }
+        array_push($tagIds, $userTag->id);
+        $star->tags()->sync($tagIds);
+      }
+    }
+    $stars = Star::with('tags')->where('user_id', Auth::user()->id)->get();
+    return response()->json(compact('stars'), 200);
+  }
 }

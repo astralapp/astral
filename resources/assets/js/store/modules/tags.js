@@ -1,7 +1,6 @@
 import {
   SET_NEW_TAG,
   SET_TAGS,
-  ADD_TAGS,
   ADD_TAG,
   REMOVE_TAG,
   RESET_NEW_TAG,
@@ -26,9 +25,6 @@ export const tagsMutations = {
   },
   [ADD_TAG] (state, tag){
     state.tags.push(tag);
-  },
-  [ADD_TAGS] (state, tags){
-    state.tags.concat(tags);
   },
   [REMOVE_TAG] (state, index){
     state.tags.splice(index, 1);

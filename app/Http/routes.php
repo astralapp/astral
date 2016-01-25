@@ -29,4 +29,5 @@ Route::group(['prefix' => 'api'], function() {
 
   Route::get('stars', 'StarController@index');
   Route::post('stars/tag', 'StarController@tag');
+  Route::post('stars/syncTags', 'StarController@syncTags');
 });

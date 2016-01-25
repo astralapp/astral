@@ -12,7 +12,6 @@ export const SET_README = "SET_README";
 export const SET_NEW_TAG = "SET_NEW_TAG";
 export const SET_TAGS = "SET_TAGS";
 export const ADD_TAG = "ADD_TAG";
-export const ADD_TAGS = "ADD_TAGS";
 export const REMOVE_TAG = "REMOVE_TAG";
 export const RESET_NEW_TAG = "RESET_NEW_TAG";
 export const SET_CURRENT_TAG = "SET_CURRENT_TAG";

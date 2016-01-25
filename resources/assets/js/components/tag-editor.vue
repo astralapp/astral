@@ -1,5 +1,5 @@
 <template>
-  <div class="tag-editor">
+  <div class="tag-editor dropdown">
     <span class="tag-editor--measure" @style="
     {
       display: 'none',
@@ -8,37 +8,47 @@
       whiteSpace: 'pre'
     }
     "
-    ></span>
+    >{{ measureString }}</span>
     <div class="tag-editor--host">
       <ul class="tag-editor--tags-list">
         <li class="tag-editor--tag" v-for="tag in tags">
-          <span class="tag-editor--tag-name">{{ tag }}</span>
+          <span class="tag-editor--tag-name">{{ tag.name }}</span>
           <span class="tag-editor--delete-tag" @click="deleteTag($index, false)">&times;</span>
         </li>
       </ul>
-      <input type="text" placeholder="Add a tag" v-model="newTag" @keyup="resizeInput" @keyup.188="addTag" @keyup.8="deleteTag(tags.length - 1, true)" @keydown="inputKeydown" class="tag-editor--input">
+      <input type="text" :placeholder="placeholder" v-model="newTag" @keyup="resizeInput" @keyup.188="addTag" @keyup.8="deleteTag(tags.length - 1, true)" @keydown="inputKeydown" class="tag-editor--input">
     </div>
-    <button type="button" name="button" class="tag-editor--save-tags">Save Tags</button>
+    <button type="button" name="button" class="tag-editor--save-tags btn-flat" @click="syncTags">Save Tags</button>
   </div>
 </template>
 <script>
 import Vue from "vue";
 export default {
   name: "TagEditor",
-  props: ["tags", "autocomplete"],
+  props: ["tags", "autocomplete", "placeholder"],
   data: function(){
     return {
       newTag: "",
-      canDelete: false
+      canDelete: false,
+    }
+  },
+  computed: {
+    measureString(){
+      if(this.newTag.replace(/\s/g, "") === ""){
+        return this.placeholder;
+      }
+      else {
+        return this.newTag;
+      }
     }
   },
   ready(){
-    this.resizeInput();
+    document.querySelector(".tag-editor--measure").style.display = "none";
   },
   methods: {
-    addTag(){
-      if(this.newTag.replace(/\s/g, "") !== "" && this.newTag.replace(/\s/g, "") !== ","){
-        this.tags.push(this.newTag.slice(0, -1));
+    addTag(e){
+      if(this.newTag.replace(/\s/g, "") !== "" && this.newTag.replace(/\s/g, "") !== "," && !this._hasModifierKey(e)){
+        this.tags.push({name: this.newTag.slice(0, -1)});
         this.newTag = "";
       }
     },
@@ -60,19 +70,16 @@ export default {
     resizeInput(){
       let $measurer = document.querySelector(".tag-editor--measure");
       let $input = document.querySelector(".tag-editor--input");
-      let placeholder = $input.getAttribute("placeholder");
-      let width = 0;
-      if($input.value.replace(/\s/g, "") !== ""){
-        $measurer.textContent = $input.value;
-      }
-      else {
-        $measurer.textContent = placeholder;
-      }
       $measurer.style.display = "";
-      width = $measurer.offsetWidth + 5 + 3;
+      let width = $measurer.offsetWidth + 5 + 3;
       $measurer.style.display = "none";
       $input.style.width = `${width}px`;
-      $input.scrollLeft = 0
+    },
+    _hasModifierKey(event){
+      return event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+    },
+    syncTags(){
+      this.$dispatch("SYNC_TAGS", this.tags);
     }
   }
 }
@@ -81,15 +88,34 @@ export default {
 .tag-editor {
   background: #fff;
   background-clip: padding-box;
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid rgba(55,53,112,0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   border-radius: 6px;
   margin: 20px 0 0 20px;
-  padding: 10px;
-  width: 400px;
+  padding: 15px;
+  position: absolute;
+  width: 250px;
+}
+.tag-editor:before {
+  transform: translateX(-50%) rotate(45deg);
+  background: #fff;
+  background-clip: padding-box;
+  border-top: 1px solid rgba(55,53,112,0.1);
+  border-left: 1px solid rgba(55,53,112,0.1);
+  content: "";
+  position: absolute; top: -6px; left: 50%;
+  width: 12px; height: 12px;
+  z-index: 99;
 }
 .tag-editor--host{
+  background: #fcfcfc;
+  background-clip: padding-box;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.15);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
   cursor: text;
+  overflow: hidden;
+  padding: 1px;
   word-wrap: break-word;
 }
 .tag-editor--tags-list {
@@ -121,15 +147,22 @@ export default {
   appearance: none;
   border: none;
   float: left;
+  font-size: 0.8rem;
   height: 30px;
   margin-left: 5px;
   padding: 0;
   outline: 0;
+  width: 77px;
 }
-.tag-editor--save-tags{
+.tag-editor--save-tags {
   clear: left;
-  display: block!important;
-  margin-top: 50px;
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08rem;
+  line-height: 1;
+  margin-top: 15px;
+  padding: 0.58rem;
+  text-transform: uppercase;
   width: 100%;
 }
 </style>

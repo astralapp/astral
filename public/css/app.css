@@ -579,6 +579,19 @@ th {
   opacity: 0.5;
   pointer-events: none; }
 
+.dropdown-wrap {
+  position: relative; }
+  .dropdown-wrap .dropdown {
+    -webkit-transform: translate(-50%, 2px);
+    -moz-transform: translate(-50%, 2px);
+    -ms-transform: translate(-50%, 2px);
+    -o-transform: translate(-50%, 2px);
+    transform: translate(-50%, 2px);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin: 0; }
+
 .dropdown-trigger {
   cursor: pointer;
   position: relative;
