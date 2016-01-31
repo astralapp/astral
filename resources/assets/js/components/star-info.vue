@@ -6,7 +6,7 @@
       <div class="edit-star-tags">
           <div class="dropdown-wrap">
             <button class="toggle-tag-editor" @click="toggleTagEditor"><i class="fa fa-tag"></i> Edit Tags</button>
-            <tag-editor :tags.sync="tagList" v-show="tagEditorShowing" :placeholder="'Add a tag'"></tag-editor>
+            <tag-editor :tags.sync="tagList" :class="{'active': tagEditorShowing}" :placeholder="'Add a tag'"></tag-editor>
           </div>
       </div>
       <div class="clone-url">
@@ -62,8 +62,9 @@ export default {
     showTagEditor(){ return this.tagEditorShowing = true },
     hideTagEditor(){ return this.tagEditorShowing = false },
     syncTags(tags){
-      store.actions.syncTags(this.star, tags);
-      this.hideTagEditor();
+      console.log(tags);
+      // store.actions.syncTags(this.star, tags);
+      // this.hideTagEditor();
     }
   },
   events: {

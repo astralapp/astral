@@ -1,44 +1,17 @@
 .dropdown-wrap {
   position: relative;
   .dropdown {
-    @include transform( translate(-50%, 2px));
+    @include transition(all 250ms ease);
+    @include transform( translate(-50%, -10px) scale(0.95));
     position: absolute; top: 100%; left: 50%;
     margin: 0;
-  }
-}
-.dropdown-trigger {
-  cursor: pointer;
-  position: relative;
-  text-decoration: none;
-  > i.fa { pointer-events: none; }
-  dropdown {
-    @include transition ( all 250ms ease );
-    @include transform( translate(-50%, -10px) scale(0.95) );
-    background: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(#373570, 0.1);
-    border-radius: 3px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.08);
-    margin-top: 5px;
     opacity: 0;
-    pointer-events: none;
-    position: absolute; top: 100%; left: 50%;
-    z-index: 999;
-    &::before {
-      @include transform( translateX(-50%) rotate(45deg) );
-      @include size( 12px );
-      background: #fff;
-      background-clip: padding-box;
-      border-top: 1px solid rgba(#373570, 0.1);
-      border-left: 1px solid rgba(#373570, 0.1);
-      content: '';
-      position: absolute; top: -6px; left: 50%;
-      z-index: 99;
-    }
+    visibility: hidden;
+    will-change: transform, opacity;
     &.active {
-      @include transform( translate(-50%, 0) scale(1) );
+      @include transform( translate(-50%, 2px) scale(1));
       opacity: 1;
-      pointer-events: auto;
+      visibility: visible;
     }
   }
 }

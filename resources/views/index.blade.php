@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <!-- <% HTML::style('css/prettify_themes/github.css') %>
   <% HTML::style('bower_components/chosen_v1.1.0/chosen.min.css') %> -->
+  {!! Html::style('css/vendor/select2.min.css') !!}
   {!! Html::style('css/app.css') !!}
 </head>
 <body>
