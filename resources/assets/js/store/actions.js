@@ -69,7 +69,6 @@ export const setCurrentStar = ({ dispatch }, star) => {
   dispatch(types.SET_CURRENT_STAR, star);
 }
 
-
 //Tags
 export const fetchTags = ({ dispatch }) => {
   Vue.http.get("/api/tags", null, {
@@ -146,6 +145,16 @@ export const fetchStars = ({ dispatch }) => {
     });
   });
   return promise;
+};
+
+export const editStarNotes = ( {dispatch}, star, text) => {
+  Vue.http.post("/api/stars/notes", {star: star, text: text}, {
+    headers: {
+      "Authorization": `Bearer ${ls("jwt")}`
+    }
+  }).then( (response) => {
+    dispatch(types.SET_STARS, response.data.stars);
+  });
 };
 
 //Misc.

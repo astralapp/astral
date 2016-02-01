@@ -20,7 +20,6 @@ export const RESET_CURRENT_TAG = "RESET_CURRENT_TAG";
 //Stars
 export const SET_STARS = "SET_STARS";
 export const SET_CURRENT_STAR = "SET_CURRENT_STAR";
-export const SET_CURRENT_STAR_NOTES = "SET_CURRENT_STAR_NOTES";
 
 //Galileo
 export const SET_SEARCH_QUERY = "SET_SEARCH_QUERY";

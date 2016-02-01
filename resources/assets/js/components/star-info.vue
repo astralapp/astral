@@ -24,7 +24,7 @@
       {{{ readme }}}
     </div>
     <div class="repo-notes" v-show="star.hasOwnProperty('id') && noteEditorShowing">
-      <textarea class="repo-note-editor" @keyup="saveNote | debounce 300"></textarea>
+      <textarea class="repo-note-editor" @keyup="saveNotes | debounce 1000" v-model="currentNotes">{{ notes }}</textarea>
     </div>
   </div>
 </template>
@@ -37,7 +37,8 @@ export default {
   data(){
     return {
       tagEditorShowing: false,
-      noteEditorShowing: false
+      noteEditorShowing: false,
+      currentNotes: ""
     }
   },
   computed: {
@@ -46,6 +47,14 @@ export default {
     },
     star(){
       return store.state.currentStar;
+    },
+    notes(){
+      if( this.userStar && this.userStar.hasOwnProperty("id") ){
+        return this.userStar.notes;
+      }
+      else {
+        return "";
+      }
     },
     userStar(){
       return store.state.stars.filter( (star) => {
@@ -77,6 +86,9 @@ export default {
     syncTags(tags){
       store.actions.syncTags(this.star, tags);
       this.hideTagEditor();
+    },
+    saveNotes(){
+      store.actions.editStarNotes(this.star, this.currentNotes);
     }
   },
   events: {

@@ -47039,7 +47039,8 @@ exports.default = {
   data: function data() {
     return {
       tagEditorShowing: false,
-      noteEditorShowing: false
+      noteEditorShowing: false,
+      currentNotes: ""
     };
   },
 
@@ -47049,6 +47050,13 @@ exports.default = {
     },
     star: function star() {
       return _store2.default.state.currentStar;
+    },
+    notes: function notes() {
+      if (this.userStar && this.userStar.hasOwnProperty("id")) {
+        return this.userStar.notes;
+      } else {
+        return "";
+      }
     },
     userStar: function userStar() {
       var _this = this;
@@ -47088,6 +47096,9 @@ exports.default = {
     syncTags: function syncTags(tags) {
       _store2.default.actions.syncTags(this.star, tags);
       this.hideTagEditor();
+    },
+    saveNotes: function saveNotes() {
+      _store2.default.actions.editStarNotes(this.star, this.currentNotes);
     }
   },
   events: {
@@ -47102,7 +47113,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"tagEditorShowing = !tagEditorShowing\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <div>\n            <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n          </div>\n        </div>\n    </div>\n    <button class=\"toggle-tag-editor\" @click=\"noteEditorShowing = !noteEditorShowing\"><i class=\"fa fa-sticky-note\"></i> Notes</button>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n  <div class=\"repo-notes\" v-show=\"star.hasOwnProperty('id') &amp;&amp; noteEditorShowing\">\n    <textarea class=\"repo-note-editor\" @keyup=\"saveNote | debounce 300\"></textarea>\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"tagEditorShowing = !tagEditorShowing\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <div>\n            <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n          </div>\n        </div>\n    </div>\n    <button class=\"toggle-tag-editor\" @click=\"noteEditorShowing = !noteEditorShowing\"><i class=\"fa fa-sticky-note\"></i> Notes</button>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n  <div class=\"repo-notes\" v-show=\"star.hasOwnProperty('id') &amp;&amp; noteEditorShowing\">\n    <textarea class=\"repo-note-editor\" @keyup=\"saveNotes | debounce 1000\" v-model=\"currentNotes\">{{ notes }}</textarea>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47587,9 +47598,22 @@ var fetchStars = function fetchStars(_ref12) {
 };
 
 exports.fetchStars = fetchStars;
-//Misc.
-var setSearchQuery = function setSearchQuery(_ref13, query) {
+var editStarNotes = function editStarNotes(_ref13, star, text) {
   var dispatch = _ref13.dispatch;
+
+  _vue2["default"].http.post("/api/stars/notes", { star: star, text: text }, {
+    headers: {
+      "Authorization": "Bearer " + (0, _localStorage2["default"])("jwt")
+    }
+  }).then(function (response) {
+    dispatch(types.SET_STARS, response.data.stars);
+  });
+};
+
+exports.editStarNotes = editStarNotes;
+//Misc.
+var setSearchQuery = function setSearchQuery(_ref14, query) {
+  var dispatch = _ref14.dispatch;
 
   //Dispatch the original query as a string
   dispatch(types.SET_SEARCH_QUERY, query);
@@ -47704,8 +47728,6 @@ var starsMutations = (_starsMutations = {}, _defineProperty(_starsMutations, _mu
   state.stars = stars;
 }), _defineProperty(_starsMutations, _mutationTypesJs.SET_CURRENT_STAR, function (state, star) {
   state.currentStar = star;
-}), _defineProperty(_starsMutations, _mutationTypesJs.SET_CURRENT_STAR_NOTES, function (state, notes) {
-  state.currentStar.notes = notes;
 }), _starsMutations);
 exports.starsMutations = starsMutations;
 
@@ -47812,10 +47834,8 @@ exports.RESET_CURRENT_TAG = RESET_CURRENT_TAG;
 var SET_STARS = "SET_STARS";
 exports.SET_STARS = SET_STARS;
 var SET_CURRENT_STAR = "SET_CURRENT_STAR";
-exports.SET_CURRENT_STAR = SET_CURRENT_STAR;
-var SET_CURRENT_STAR_NOTES = "SET_CURRENT_STAR_NOTES";
 
-exports.SET_CURRENT_STAR_NOTES = SET_CURRENT_STAR_NOTES;
+exports.SET_CURRENT_STAR = SET_CURRENT_STAR;
 //Galileo
 var SET_SEARCH_QUERY = "SET_SEARCH_QUERY";
 exports.SET_SEARCH_QUERY = SET_SEARCH_QUERY;

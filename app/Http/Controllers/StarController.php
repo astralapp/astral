@@ -75,7 +75,23 @@ class StarController extends Controller
         $star->tags()->sync($tagIds);
       }
     }
-    $stars = Star::with('tags')->where('user_id', Auth::user()->id)->get();
+    $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+    return response()->json(compact('stars'), 200);
+  }
+
+  public function editNotes(Request $request){
+    $repo = $request->input('star');
+    $text = $request->input('text');
+    $star = Star::where('repo_id', $repo['id'])->where('user_id', Auth::id())->first();
+    if(!$star){
+      $star = new Star();
+      $star->repo_id = $repo['id'];
+      $star->repo_name = $repo['full_name'];
+      $star->save();
+    }
+    $star->notes = $text;
+    $star->save();
+    $stars = Star::with('tags')->where('user_id', Auth::id())->get();
     return response()->json(compact('stars'), 200);
   }
 }

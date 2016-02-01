@@ -1,7 +1,6 @@
 import {
   SET_STARS,
-  SET_CURRENT_STAR,
-  SET_CURRENT_STAR_NOTES
+  SET_CURRENT_STAR
 } from "../mutation-types.js";
 
 export const starsInitialState = [];
@@ -14,7 +13,4 @@ export const starsMutations = {
   [SET_CURRENT_STAR] (state, star) {
     state.currentStar = star;
   },
-  [SET_CURRENT_STAR_NOTES] (state, notes) {
-    state.currentStar.notes = notes;
-  }
 };
