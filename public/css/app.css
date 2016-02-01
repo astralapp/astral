@@ -1059,6 +1059,9 @@ th {
   .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
     color: #fff; }
 
+.select2-container--default .select2-search--inline .select2-search__field {
+  height: 26px; }
+
 .login-status {
   position: absolute;
   top: 0px;

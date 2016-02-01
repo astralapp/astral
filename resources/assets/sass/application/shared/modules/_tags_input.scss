@@ -111,3 +111,7 @@
   margin: -1px 0 0 8px;
   &:hover { color: #fff; }
 }
+
+.select2-container--default .select2-search--inline .select2-search__field {
+  height: 26px;
+}

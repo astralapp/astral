@@ -1,8 +1,8 @@
 <template>
   <div class="tag-editor dropdown">
-    <select multiple v-tag-select="tags" :autocomplete="tagList" style="width:216px">
+    <select multiple v-tag-select style="width:216px">
       <option v-if="!tags.length" value="-1"></option>
-      <option v-for="tag in tags" :value="$index" selected>{{ tag.name }}</option>
+      <option v-for="tag in tags" :value="tag.name" :selected="tag.selected">{{ tag.text }}</option>
     </select>
     <button type="button" name="button" class="tag-editor--save-tags btn-flat" @click="syncTags">Save Tags</button>
   </div>
@@ -11,31 +11,33 @@
 import Vue from "vue";
 import store from "../store/store.js";
 import "../directives/tag-select.js";
-import Autocomplete from "./autocomplete.vue";
 export default {
   name: "TagEditor",
-  props: ["tags", "placeholder"],
-  data: function(){
+  props: ["tags"],
+  data(){
     return {
-      newTag: ""
+      tagsToSync: []
     }
   },
   computed: {
     tagList(){
-      return store.state.tags.map(function(tag){
-        return tag.name;
+      return this.tags.map(function(tag){
+        return {id: tag.id, text: tag.name };
       });
     }
   },
   ready(){
+    this.tagsToSync = this.tags;
   },
   methods: {
     syncTags(){
-      this.$dispatch("SYNC_TAGS", this.tags);
+      this.$dispatch("SYNC_TAGS", this.tagsToSync);
     }
   },
-  components: {
-    "autocomplete": Autocomplete
+  events: {
+    "CURRENT_TAGS_CHANGED": function(tags){
+      this.tagsToSync = tags;
+    }
   }
 }
 </script>

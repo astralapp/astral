@@ -1,26 +1,28 @@
 import Vue from "vue";
 import $ from "jquery";
 import select2 from "select2";
+window.$ = $;
 Vue.directive("tag-select", {
   params: ["autocomplete"],
   bind: function(){
-    // $(this.el).select2({
-    //   tags: true,
-    //   data: this.params.autocomplete,
-    //   tokenSeparators: [","],
-    //   minimumInputLength: 2,
-    //   placeholder: "Add a tag"
-    // });
+    this.vm.$on("SYNC_TAGS", (tags) => {
+
+    })
   },
   update: function(value){
+    let self = this;
+    if( $(this.el).data("select2") ){
+      $(this.el).select2().trigger("change");
+    }
     setTimeout( () => {
       $(this.el).select2({
         tags: true,
-        data: this.params.autocomplete,
         tokenSeparators: [","],
         minimumInputLength: 2,
         placeholder: "Add a tag",
-        dropdownAutoWidth: true
+      }).on("change", function(){
+        let tagData = $(this).select2("data").map(function(tag){ return {name: tag.text} });
+        self.vm.$dispatch("CURRENT_TAGS_CHANGED", tagData);
       });
     }, 0);
   },

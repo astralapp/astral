@@ -46140,26 +46140,6 @@ function merge(target, source, deep) {
   return Vue;
 
 }));
-},{}],"/Users/user/Sites/Homestead/astral/node_modules/vueify-insert-css/index.js":[function(require,module,exports){
-var inserted = exports.cache = {}
-
-exports.insert = function (css) {
-  if (inserted[css]) return
-  inserted[css] = true
-
-  var elem = document.createElement('style')
-  elem.setAttribute('type', 'text/css')
-
-  if ('textContent' in elem) {
-    elem.textContent = css
-  } else {
-    elem.styleSheet.cssText = css
-  }
-
-  document.getElementsByTagName('head')[0].appendChild(elem)
-  return elem
-}
-
 },{}],"/Users/user/Sites/Homestead/astral/node_modules/vuex/lib/index.js":[function(require,module,exports){
 'use strict';
 
@@ -46766,45 +46746,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"local-storage":"/Users/user/Sites/Homestead/astral/node_modules/local-storage/local-storage.js","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/autocomplete.vue":[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n.autocomplete-container, .autocomplete-container * {\n  box-sizing: border-box;\n}\n.autocomplete-container {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(55,53,112,0.1);\n  border-radius: 3px;\n  box-shadow: 0 5px 10px rgba(0,0,0,0.2);\n  position: absolute; top: 50px; left: 15px;\n  margin-top: 5px;\n  width: 218px;\n}\n.autocomplete-container ul {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n\n.autocomplete-container ul li {\n  font-size: 0.85rem;\n  padding: 0 10px;\n}\n")
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _vue = require("vue");
-
-var _vue2 = _interopRequireDefault(_vue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  name: "Autocomplete",
-  props: ["term", "source", "on-select"],
-  data: function data() {
-    return {};
-  }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"autocomplete-container\">\n  <ul v-if=\"term\">\n    <li v-for=\"item in source | filterBy term\">\n      {{ item }}\n    </li>\n  </ul>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/autocomplete.vue"
-  module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n.autocomplete-container, .autocomplete-container * {\n  box-sizing: border-box;\n}\n.autocomplete-container {\n  background: #fff;\n  background-clip: padding-box;\n  border: 1px solid rgba(55,53,112,0.1);\n  border-radius: 3px;\n  box-shadow: 0 5px 10px rgba(0,0,0,0.2);\n  position: absolute; top: 50px; left: 15px;\n  margin-top: 5px;\n  width: 218px;\n}\n.autocomplete-container ul {\n  list-style-type: none;\n  margin: 0; padding: 0;\n}\n\n.autocomplete-container ul li {\n  font-size: 0.85rem;\n  padding: 0 10px;\n}\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js","vueify-insert-css":"/Users/user/Sites/Homestead/astral/node_modules/vueify-insert-css/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-header.vue":[function(require,module,exports){
+},{"local-storage":"/Users/user/Sites/Homestead/astral/node_modules/local-storage/local-storage.js","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/dashboard-header.vue":[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47082,6 +47024,10 @@ var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
+var _lodash = require("lodash");
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _store = require("../store/store.js");
 
 var _store2 = _interopRequireDefault(_store);
@@ -47114,15 +47060,22 @@ exports.default = {
         return _this.star.id === star.repo_id;
       })[0];
     },
+    tags: function tags() {
+      return _store2.default.state.tags;
+    },
     tagList: function tagList() {
+      var _this2 = this;
 
-      if (this.userStar && this.userStar.hasOwnProperty("tags")) {
-        return this.userStar.tags.map(function (tag) {
-          return { name: tag.name };
-        });
-      } else {
-        return [];
-      }
+      return this.tags.map(function (tag) {
+        var isSelected = _this2.userStar.tags.map(function (tag) {
+          return tag.id;
+        }).indexOf(tag.id) > -1;
+        return {
+          id: tag.id,
+          text: tag.name,
+          selected: isSelected
+        };
+      });
     }
   },
   methods: {
@@ -47136,9 +47089,9 @@ exports.default = {
       return this.tagEditorShowing = false;
     },
     syncTags: function syncTags(tags) {
-      console.log(tags);
-      // store.actions.syncTags(this.star, tags);
-      // this.hideTagEditor();
+      // console.log(tags);
+      _store2.default.actions.syncTags(this.star, tags);
+      this.hideTagEditor();
     }
   },
   events: {
@@ -47155,7 +47108,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"toggleTagEditor\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <tag-editor :tags.sync=\"tagList\" :class=\"{'active': tagEditorShowing}\" :placeholder=\"'Add a tag'\"></tag-editor>\n        </div>\n    </div>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"toggleTagEditor\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n        </div>\n    </div>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47167,7 +47120,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./tag-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue":[function(require,module,exports){
+},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./tag-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue","lodash":"/Users/user/Sites/Homestead/astral/node_modules/lodash/index.js","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue":[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47184,40 +47137,41 @@ var _store2 = _interopRequireDefault(_store);
 
 require("../directives/tag-select.js");
 
-var _autocomplete = require("./autocomplete.vue");
-
-var _autocomplete2 = _interopRequireDefault(_autocomplete);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
   name: "TagEditor",
-  props: ["tags", "placeholder"],
+  props: ["tags"],
   data: function data() {
     return {
-      newTag: ""
+      tagsToSync: []
     };
   },
+
   computed: {
     tagList: function tagList() {
-      return _store2.default.state.tags.map(function (tag) {
-        return tag.name;
+      return this.tags.map(function (tag) {
+        return { id: tag.id, text: tag.name };
       });
     }
   },
-  ready: function ready() {},
+  ready: function ready() {
+    this.tagsToSync = this.tags;
+  },
 
   methods: {
     syncTags: function syncTags() {
-      this.$dispatch("SYNC_TAGS", this.tags);
+      this.$dispatch("SYNC_TAGS", this.tagsToSync);
     }
   },
-  components: {
-    "autocomplete": _autocomplete2.default
+  events: {
+    "CURRENT_TAGS_CHANGED": function CURRENT_TAGS_CHANGED(tags) {
+      this.tagsToSync = tags;
+    }
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tag-editor dropdown\">\n  <select multiple=\"\" v-tag-select=\"tags\" :autocomplete=\"tagList\" style=\"width:216px\">\n    <option v-if=\"!tags.length\" value=\"-1\"></option>\n    <option v-for=\"tag in tags\" :value=\"$index\" selected=\"\">{{ tag.name }}</option>\n  </select>\n  <button type=\"button\" name=\"button\" class=\"tag-editor--save-tags btn-flat\" @click=\"syncTags\">Save Tags</button>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tag-editor dropdown\">\n  <select multiple=\"\" v-tag-select=\"\" style=\"width:216px\">\n    <option v-if=\"!tags.length\" value=\"-1\"></option>\n    <option v-for=\"tag in tags\" :value=\"tag.name\" :selected=\"tag.selected\">{{ tag.text }}</option>\n  </select>\n  <button type=\"button\" name=\"button\" class=\"tag-editor--save-tags btn-flat\" @click=\"syncTags\">Save Tags</button>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47229,7 +47183,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../directives/tag-select.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/directives/tag-select.js","../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./autocomplete.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/autocomplete.vue","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/directives/drag_and_drop.js":[function(require,module,exports){
+},{"../directives/tag-select.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/directives/tag-select.js","../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/directives/drag_and_drop.js":[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -47324,28 +47278,30 @@ var _select2 = require("select2");
 
 var _select22 = _interopRequireDefault(_select2);
 
+window.$ = _jquery2["default"];
 _vue2["default"].directive("tag-select", {
   params: ["autocomplete"],
   bind: function bind() {
-    // $(this.el).select2({
-    //   tags: true,
-    //   data: this.params.autocomplete,
-    //   tokenSeparators: [","],
-    //   minimumInputLength: 2,
-    //   placeholder: "Add a tag"
-    // });
+    this.vm.$on("SYNC_TAGS", function (tags) {});
   },
   update: function update(value) {
     var _this = this;
 
+    var self = this;
+    if ((0, _jquery2["default"])(this.el).data("select2")) {
+      (0, _jquery2["default"])(this.el).select2().trigger("change");
+    }
     setTimeout(function () {
       (0, _jquery2["default"])(_this.el).select2({
         tags: true,
-        data: _this.params.autocomplete,
         tokenSeparators: [","],
         minimumInputLength: 2,
-        placeholder: "Add a tag",
-        dropdownAutoWidth: true
+        placeholder: "Add a tag"
+      }).on("change", function () {
+        var tagData = (0, _jquery2["default"])(this).select2("data").map(function (tag) {
+          return { name: tag.text };
+        });
+        self.vm.$dispatch("CURRENT_TAGS_CHANGED", tagData);
       });
     }, 0);
   },

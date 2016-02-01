@@ -6,7 +6,7 @@
       <div class="edit-star-tags">
           <div class="dropdown-wrap">
             <button class="toggle-tag-editor" @click="toggleTagEditor"><i class="fa fa-tag"></i> Edit Tags</button>
-            <tag-editor :tags.sync="tagList" :class="{'active': tagEditorShowing}" :placeholder="'Add a tag'"></tag-editor>
+            <tag-editor :tags="tagList" :class="{'active': tagEditorShowing}"></tag-editor>
           </div>
       </div>
       <div class="clone-url">
@@ -24,6 +24,7 @@
 </template>
 <script>
 import Vue from "vue";
+import _ from "lodash";
 import store from "../store/store.js";
 import TagEditor from "./tag-editor.vue";
 export default {
@@ -45,16 +46,20 @@ export default {
         return this.star.id === star.repo_id;
       })[0];
     },
+    tags(){
+      return store.state.tags;
+    },
     tagList(){
-
-      if(this.userStar && this.userStar.hasOwnProperty("tags")){
-        return this.userStar.tags.map( (tag) => {
-          return { name: tag.name }
-        });
-      }
-      else {
-        return [];
-      }
+      return this.tags.map( (tag) => {
+        let isSelected = this.userStar.tags.map(function(tag){
+          return tag.id;
+        }).indexOf(tag.id) > -1;
+        return {
+          id: tag.id,
+          text: tag.name,
+          selected: isSelected
+        }
+      });
     }
   },
   methods: {
@@ -62,15 +67,15 @@ export default {
     showTagEditor(){ return this.tagEditorShowing = true },
     hideTagEditor(){ return this.tagEditorShowing = false },
     syncTags(tags){
-      console.log(tags);
-      // store.actions.syncTags(this.star, tags);
-      // this.hideTagEditor();
+      // console.log(tags);
+      store.actions.syncTags(this.star, tags);
+      this.hideTagEditor();
     }
   },
   events: {
     "SYNC_TAGS": function(tags){
       this.syncTags(tags);
-    }
+    },
   },
   ready(){
     // console.log(this.star);
