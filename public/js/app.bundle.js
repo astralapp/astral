@@ -47067,9 +47067,12 @@ exports.default = {
       var _this2 = this;
 
       return this.tags.map(function (tag) {
-        var isSelected = _this2.userStar.tags.map(function (tag) {
-          return tag.id;
-        }).indexOf(tag.id) > -1;
+        var isSelected = false;
+        if (_this2.userStar && _this2.userStar.tags) {
+          isSelected = _this2.userStar.tags.map(function (tag) {
+            return tag.id;
+          }).indexOf(tag.id) > -1;
+        }
         return {
           id: tag.id,
           text: tag.name,
@@ -47148,13 +47151,7 @@ exports.default = {
     };
   },
 
-  computed: {
-    tagList: function tagList() {
-      return this.tags.map(function (tag) {
-        return { id: tag.id, text: tag.name };
-      });
-    }
-  },
+  computed: {},
   ready: function ready() {
     this.tagsToSync = this.tags;
   },
@@ -47171,7 +47168,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tag-editor dropdown\">\n  <select multiple=\"\" v-tag-select=\"\" style=\"width:216px\">\n    <option v-if=\"!tags.length\" value=\"-1\"></option>\n    <option v-for=\"tag in tags\" :value=\"tag.name\" :selected=\"tag.selected\">{{ tag.text }}</option>\n  </select>\n  <button type=\"button\" name=\"button\" class=\"tag-editor--save-tags btn-flat\" @click=\"syncTags\">Save Tags</button>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"tag-editor dropdown\">\n  <select multiple=\"\" v-tag-select=\"tags\" style=\"width:216px\">\n    <option v-if=\"!tags.length\" value=\"-1\"></option>\n    <option v-for=\"tag in tags\" :value=\"tag.name\" :selected=\"tag.selected\">{{ tag.text }}</option>\n  </select>\n  <button type=\"button\" name=\"button\" class=\"tag-editor--save-tags btn-flat\" @click=\"syncTags\">Save Tags</button>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47278,12 +47275,8 @@ var _select2 = require("select2");
 
 var _select22 = _interopRequireDefault(_select2);
 
-window.$ = _jquery2["default"];
 _vue2["default"].directive("tag-select", {
-  params: ["autocomplete"],
-  bind: function bind() {
-    this.vm.$on("SYNC_TAGS", function (tags) {});
-  },
+  bind: function bind() {},
   update: function update(value) {
     var _this = this;
 

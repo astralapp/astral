@@ -1,13 +1,8 @@
 import Vue from "vue";
 import $ from "jquery";
 import select2 from "select2";
-window.$ = $;
 Vue.directive("tag-select", {
-  params: ["autocomplete"],
   bind: function(){
-    this.vm.$on("SYNC_TAGS", (tags) => {
-
-    })
   },
   update: function(value){
     let self = this;

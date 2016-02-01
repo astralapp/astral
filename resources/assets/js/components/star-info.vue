@@ -51,9 +51,12 @@ export default {
     },
     tagList(){
       return this.tags.map( (tag) => {
-        let isSelected = this.userStar.tags.map(function(tag){
-          return tag.id;
-        }).indexOf(tag.id) > -1;
+        let isSelected = false;
+        if( this.userStar && this.userStar.tags ){
+          isSelected = this.userStar.tags.map(function(tag){
+            return tag.id;
+          }).indexOf(tag.id) > -1;
+        }
         return {
           id: tag.id,
           text: tag.name,
