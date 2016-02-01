@@ -47024,10 +47024,6 @@ var _vue = require("vue");
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _lodash = require("lodash");
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _store = require("../store/store.js");
 
 var _store2 = _interopRequireDefault(_store);
@@ -47123,7 +47119,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./tag-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue","lodash":"/Users/user/Sites/Homestead/astral/node_modules/lodash/index.js","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue":[function(require,module,exports){
+},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./tag-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue":[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -24,7 +24,6 @@
 </template>
 <script>
 import Vue from "vue";
-import _ from "lodash";
 import store from "../store/store.js";
 import TagEditor from "./tag-editor.vue";
 export default {
