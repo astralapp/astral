@@ -5,10 +5,13 @@
     <div class="manage-star" v-if="star.hasOwnProperty('id')">
       <div class="edit-star-tags">
           <div class="dropdown-wrap">
-            <button class="toggle-tag-editor" @click="toggleTagEditor"><i class="fa fa-tag"></i> Edit Tags</button>
-            <tag-editor :tags="tagList" :class="{'active': tagEditorShowing}"></tag-editor>
+            <button class="toggle-tag-editor" @click="tagEditorShowing = !tagEditorShowing"><i class="fa fa-tag"></i> Edit Tags</button>
+            <div>
+              <tag-editor :tags="tagList" :class="{'active': tagEditorShowing}"></tag-editor>
+            </div>
           </div>
       </div>
+      <button class="toggle-tag-editor" @click="noteEditorShowing = !noteEditorShowing"><i class="fa fa-sticky-note"></i> Notes</button>
       <div class="clone-url">
         <label for="txtGitHubCloneURL">Clone:</label>
         <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" readonly/>
@@ -20,6 +23,9 @@
     <div class="repo-readme syntax">
       {{{ readme }}}
     </div>
+    <div class="repo-notes" v-show="star.hasOwnProperty('id') && noteEditorShowing">
+      <textarea class="repo-note-editor" @keyup="saveNote | debounce 300"></textarea>
+    </div>
   </div>
 </template>
 <script>
@@ -30,7 +36,8 @@ export default {
   name: "StarInfo",
   data(){
     return {
-      tagEditorShowing: false
+      tagEditorShowing: false,
+      noteEditorShowing: false
     }
   },
   computed: {
@@ -65,11 +72,9 @@ export default {
     }
   },
   methods: {
-    toggleTagEditor(){ return this.tagEditorShowing = !this.tagEditorShowing },
     showTagEditor(){ return this.tagEditorShowing = true },
     hideTagEditor(){ return this.tagEditorShowing = false },
     syncTags(tags){
-      // console.log(tags);
       store.actions.syncTags(this.star, tags);
       this.hideTagEditor();
     }
@@ -80,7 +85,6 @@ export default {
     },
   },
   ready(){
-    // console.log(this.star);
   },
   components: {
     "tag-editor": TagEditor

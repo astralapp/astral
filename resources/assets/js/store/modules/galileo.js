@@ -7,7 +7,8 @@ export const searchInitialState = "";
 export const tokenizedSearchInitialState = {
   query: "",
   tags: [],
-  strings: []
+  strings: [],
+  languages: []
 };
 
 

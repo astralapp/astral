@@ -369,3 +369,17 @@
     }
   }
 }
+.repo-notes {
+  background: #fff;
+  overflow: hidden;
+  position: absolute; top: 45px; left: 0; bottom: 0; right: 0;
+  textarea {
+    @include appearance(none);
+    @include size(100%);
+    border: none;
+    font-family: "Courier New", "Courier", monospace;
+    outline: none;
+    padding: 20px;
+    word-wrap: break-word;
+  }
+}

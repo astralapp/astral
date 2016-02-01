@@ -2009,6 +2009,28 @@ th {
       max-width: 100%;
       height: auto; }
 
+.repo-notes {
+  background: #fff;
+  overflow: hidden;
+  position: absolute;
+  top: 45px;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  .repo-notes textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-family: "Courier New", "Courier", monospace;
+    outline: none;
+    padding: 20px;
+    word-wrap: break-word; }
+
 *, *::before, *::after {
   box-sizing: border-box; }
 

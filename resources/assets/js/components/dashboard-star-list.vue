@@ -17,7 +17,9 @@
       </li>
     </ul>
   </div>
-  <star-info></star-info>
+  <div>
+    <star-info></star-info>
+  </div>
 </template>
 <script>
 import Vue from "vue";

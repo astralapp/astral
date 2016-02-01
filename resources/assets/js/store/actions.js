@@ -165,10 +165,16 @@ export const setSearchQuery = ({ dispatch }, query) => {
   }).map( (s) => {
     return s.toLowerCase();
   });
+  let languages = searchArray.filter( (s) => {
+    return s[0] === "@"
+  }).map( (s) => {
+    return s.toLowerCase();
+  });
   let tokenizedQuery = {
     "query": query,
     "tags": tags,
-    "strings": strings
+    "strings": strings,
+    "languages": languages
   };
   dispatch(types.SET_TOKENIZED_SEARCH, tokenizedQuery);
 

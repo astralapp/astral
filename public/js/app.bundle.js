@@ -46951,7 +46951,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"repo in githubStars | currentTagFilter | galileo\" track-by=\"id\" v-draggable=\"repo\" @click=\"starClicked(repo)\">\n      <h3 class=\"repo-name\">{{* repo.full_name }}</h3>\n      <div class=\"repo-description\">{{* repo.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in starTags(repo)\" track-by=\"id\" @click.stop=\"setCurrentTag(tag)\">\n          {{ tag.name }}\n        </li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* repo.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* repo.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* repo.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n<star-info></star-info>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repos\">\n  <ul class=\"repos\">\n    <li class=\"repo\" v-for=\"repo in githubStars | currentTagFilter | galileo\" track-by=\"id\" v-draggable=\"repo\" @click=\"starClicked(repo)\">\n      <h3 class=\"repo-name\">{{* repo.full_name }}</h3>\n      <div class=\"repo-description\">{{* repo.description }}</div>\n      <ul class=\"repo-tags\">\n        <li v-for=\"tag in starTags(repo)\" track-by=\"id\" @click.stop=\"setCurrentTag(tag)\">\n          {{ tag.name }}\n        </li>\n      </ul>\n      <div class=\"repo-stats\">\n        <div class=\"repo-stat stars\"><i class=\"fa fa-star\"></i> {{* repo.stargazers_count }}</div>\n        <div class=\"repo-stat forks\"><i class=\"fa fa-code-fork\"></i> {{* repo.forks_count }}</div>\n        <div class=\"repo-stat link\"><a href=\"{{* repo.html_url }}\" target=\"_blank\">View on GitHub</a></div>\n      </div>\n    </li>\n  </ul>\n</div>\n<div>\n  <star-info></star-info>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47038,7 +47038,8 @@ exports.default = {
   name: "StarInfo",
   data: function data() {
     return {
-      tagEditorShowing: false
+      tagEditorShowing: false,
+      noteEditorShowing: false
     };
   },
 
@@ -47078,9 +47079,6 @@ exports.default = {
     }
   },
   methods: {
-    toggleTagEditor: function toggleTagEditor() {
-      return this.tagEditorShowing = !this.tagEditorShowing;
-    },
     showTagEditor: function showTagEditor() {
       return this.tagEditorShowing = true;
     },
@@ -47088,7 +47086,6 @@ exports.default = {
       return this.tagEditorShowing = false;
     },
     syncTags: function syncTags(tags) {
-      // console.log(tags);
       _store2.default.actions.syncTags(this.star, tags);
       this.hideTagEditor();
     }
@@ -47098,16 +47095,14 @@ exports.default = {
       this.syncTags(tags);
     }
   },
-  ready: function ready() {
-    // console.log(this.star);
-  },
+  ready: function ready() {},
 
   components: {
     "tag-editor": _tagEditor2.default
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"toggleTagEditor\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n        </div>\n    </div>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"tagEditorShowing = !tagEditorShowing\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <div>\n            <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n          </div>\n        </div>\n    </div>\n    <button class=\"toggle-tag-editor\" @click=\"noteEditorShowing = !noteEditorShowing\"><i class=\"fa fa-sticky-note\"></i> Notes</button>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n  <div class=\"repo-notes\" v-show=\"star.hasOwnProperty('id') &amp;&amp; noteEditorShowing\">\n    <textarea class=\"repo-note-editor\" @keyup=\"saveNote | debounce 300\"></textarea>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47611,10 +47606,16 @@ var setSearchQuery = function setSearchQuery(_ref13, query) {
   }).map(function (s) {
     return s.toLowerCase();
   });
+  var languages = searchArray.filter(function (s) {
+    return s[0] === "@";
+  }).map(function (s) {
+    return s.toLowerCase();
+  });
   var tokenizedQuery = {
     "query": query,
     "tags": tags,
-    "strings": strings
+    "strings": strings,
+    "languages": languages
   };
   dispatch(types.SET_TOKENIZED_SEARCH, tokenizedQuery);
 };
@@ -47638,7 +47639,8 @@ exports.searchInitialState = searchInitialState;
 var tokenizedSearchInitialState = {
   query: "",
   tags: [],
-  strings: []
+  strings: [],
+  languages: []
 };
 
 exports.tokenizedSearchInitialState = tokenizedSearchInitialState;
@@ -47702,6 +47704,8 @@ var starsMutations = (_starsMutations = {}, _defineProperty(_starsMutations, _mu
   state.stars = stars;
 }), _defineProperty(_starsMutations, _mutationTypesJs.SET_CURRENT_STAR, function (state, star) {
   state.currentStar = star;
+}), _defineProperty(_starsMutations, _mutationTypesJs.SET_CURRENT_STAR_NOTES, function (state, notes) {
+  state.currentStar.notes = notes;
 }), _starsMutations);
 exports.starsMutations = starsMutations;
 
@@ -47808,12 +47812,14 @@ exports.RESET_CURRENT_TAG = RESET_CURRENT_TAG;
 var SET_STARS = "SET_STARS";
 exports.SET_STARS = SET_STARS;
 var SET_CURRENT_STAR = "SET_CURRENT_STAR";
-
 exports.SET_CURRENT_STAR = SET_CURRENT_STAR;
+var SET_CURRENT_STAR_NOTES = "SET_CURRENT_STAR_NOTES";
+
+exports.SET_CURRENT_STAR_NOTES = SET_CURRENT_STAR_NOTES;
 //Galileo
 var SET_SEARCH_QUERY = "SET_SEARCH_QUERY";
 exports.SET_SEARCH_QUERY = SET_SEARCH_QUERY;
-var SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCHw";
+var SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCH";
 exports.SET_TOKENIZED_SEARCH = SET_TOKENIZED_SEARCH;
 
 },{}],"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js":[function(require,module,exports){
