@@ -46819,6 +46819,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   name: "DashboardSidebar",
+  data: function data() {
+    return {
+      addTagFormShowing: false
+    };
+  },
+
   computed: {
     newTag: function newTag() {
       return _store2.default.state.newTag;
@@ -46855,7 +46861,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\" @click=\"clearCurrentTag\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"false\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\" @click=\"setCurrentTag(tag)\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n      <span class=\"tagged-count\" v-if=\"tag.hasOwnProperty('stars') &amp;&amp; tag.stars.length\">{{tag.stars.length}}</span>\n    </li>\n  </ul>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-sidebar\">\n  <div class=\"dashboard-sidebar-header\">\n    <h3>Astral</h3>\n  </div>\n  <div class=\"sidebar-header\">\n    <h3 class=\"sidebar-header-text\">Stars</h3>\n  </div>\n  <ul class=\"dashboard-list sidebar-stars\">\n    <li class=\"all-stars dashboard-list-item\" @click=\"clearCurrentTag\"><i class=\"fa fa-inbox\"></i> All Stars</li>\n    <li class=\"untagged-stars dashboard-list-item\"><i class=\"fa fa-star-o\"></i> Untagged Stars</li>\n  </ul>\n  <div class=\"sidebar-header tags-header\">\n    <h3 class=\"sidebar-header-text\">Tags</h3>\n    <div class=\"tag-button-group\">\n      <button class=\"tag-button-group-item\" @click=\"addTagFormShowing = !addTagFormShowing\">Add</button>\n      <button class=\"tag-button-group-item\">Edit</button>\n      <button class=\"tag-button-group-item\">Sort</button>\n    </div>\n  </div>\n  <form class=\"tag-form\" v-show=\"addTagFormShowing\" @submit.prevent=\"addTag\">\n    <input type=\"text\" name=\"name\" v-model=\"newTag.name\" placeholder=\"Tag name\">\n    <button type=\"submit\">Save</button>\n  </form>\n  <ul class=\"dashboard-list sidebar-tags\" v-sortable=\"tags\" sort=\"reorderTags\">\n    <li class=\"dashboard-list-item tag\" v-for=\"tag in tags\" track-by=\"id\" v-dropzone=\"tagStar\" :data-id=\"tag.id\" @click=\"setCurrentTag(tag)\">\n      <i class=\"fa fa-tag\"></i>\n      <span class=\"tag-name\">{{ tag.name }}</span>\n      <span class=\"tagged-count\" v-if=\"tag.hasOwnProperty('stars') &amp;&amp; tag.stars.length\">{{tag.stars.length}}</span>\n    </li>\n  </ul>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47032,6 +47038,10 @@ var _tagEditor = require("./tag-editor.vue");
 
 var _tagEditor2 = _interopRequireDefault(_tagEditor);
 
+var _starNotesEditor = require("./star-notes-editor.vue");
+
+var _starNotesEditor2 = _interopRequireDefault(_starNotesEditor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -47097,23 +47107,27 @@ exports.default = {
       _store2.default.actions.syncTags(this.star, tags);
       this.hideTagEditor();
     },
-    saveNotes: function saveNotes() {
-      _store2.default.actions.editStarNotes(this.star, this.currentNotes);
+    saveNotes: function saveNotes(notes) {
+      _store2.default.actions.editStarNotes(this.star, notes);
     }
   },
   events: {
     "SYNC_TAGS": function SYNC_TAGS(tags) {
       this.syncTags(tags);
+    },
+    "NOTES_SAVED": function NOTES_SAVED(notes) {
+      this.saveNotes(notes);
     }
   },
   ready: function ready() {},
 
   components: {
-    "tag-editor": _tagEditor2.default
+    "tag-editor": _tagEditor2.default,
+    "star-notes-editor": _starNotesEditor2.default
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"tagEditorShowing = !tagEditorShowing\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <div>\n            <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n          </div>\n        </div>\n    </div>\n    <button class=\"toggle-tag-editor\" @click=\"noteEditorShowing = !noteEditorShowing\"><i class=\"fa fa-sticky-note\"></i> Notes</button>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n  <div class=\"repo-notes\" v-show=\"star.hasOwnProperty('id') &amp;&amp; noteEditorShowing\">\n    <textarea class=\"repo-note-editor\" @keyup=\"saveNotes | debounce 1000\" v-model=\"currentNotes\">{{ notes }}</textarea>\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-repo-details\">\n  <!-- <div class=\"empty-placeholder\" v-show=\"star.hasOwnProperty('id') && !readme\" v-show=\"!readme\">No Readme For {{ star.full_name }}</div> -->\n  <div class=\"empty-placeholder\" v-show=\"!star.hasOwnProperty('id')\">No Repo Selected</div>\n  <div class=\"manage-star\" v-if=\"star.hasOwnProperty('id')\">\n    <div class=\"edit-star-tags\">\n        <div class=\"dropdown-wrap\">\n          <button class=\"toggle-tag-editor\" @click=\"tagEditorShowing = !tagEditorShowing\"><i class=\"fa fa-tag\"></i> Edit Tags</button>\n          <div>\n            <tag-editor :tags=\"tagList\" :class=\"{'active': tagEditorShowing}\"></tag-editor>\n          </div>\n        </div>\n    </div>\n    <button class=\"toggle-tag-editor\" @click=\"noteEditorShowing = !noteEditorShowing\"><i class=\"fa fa-sticky-note\"></i> Notes</button>\n    <div class=\"clone-url\">\n      <label for=\"txtGitHubCloneURL\">Clone:</label>\n      <input type=\"text\" id=\"txtGitHubCloneURL\" :value=\"star.ssh_url\" readonly=\"\">\n    </div>\n  </div>\n  <!-- <div class=\"readme-loading-overlay\" ng-show=\"readmeLoading\">\n    <spinner color=\"#658399\"></spinner>\n  </div> -->\n  <div class=\"repo-readme syntax\">\n    {{{ readme }}}\n  </div>\n  <div>\n    <star-notes-editor :notes=\"notes\" v-show=\"star.hasOwnProperty('id') &amp;&amp; noteEditorShowing\"></star-notes-editor>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47125,7 +47139,66 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./tag-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue":[function(require,module,exports){
+},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","./star-notes-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/star-notes-editor.vue","./tag-editor.vue":"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/star-notes-editor.vue":[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _store = require("../store/store.js");
+
+var _store2 = _interopRequireDefault(_store);
+
+var _marked = require("marked");
+
+var _marked2 = _interopRequireDefault(_marked);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  name: "StarNotesEditor",
+  props: ["notes"],
+  data: function data() {
+    return {
+      currentNotes: "",
+      previewMode: false
+    };
+  },
+
+  computed: {
+    renderedNotes: function renderedNotes() {
+      return (0, _marked2.default)(this.notes);
+    }
+  },
+  ready: function ready() {},
+
+  methods: {
+    saveNotes: function saveNotes() {
+      if (this.currentNotes.replace(/\s/g, "") !== "") {
+        this.$dispatch("NOTES_SAVED", this.currentNotes);
+      }
+    }
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"repo-notes\">\n  <div class=\"repo-note-toolbar\">\n    <button class=\"note-toolbar-button segment\">Preview</button>\n    <button class=\"note-toolbar-button segment\">Edit</button>\n  </div>\n  <textarea class=\"repo-note-editor\" @input=\"saveNotes | debounce 1000\" v-model=\"currentNotes\">{{ notes }}</textarea>\n  <div class=\"repo-note-preview\" v-show=\"previewMode\">{{{ renderedNotes }}}</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/user/Sites/Homestead/astral/resources/assets/js/components/star-notes-editor.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../store/store.js":"/Users/user/Sites/Homestead/astral/resources/assets/js/store/store.js","marked":"/Users/user/Sites/Homestead/astral/node_modules/marked/lib/marked.js","vue":"/Users/user/Sites/Homestead/astral/node_modules/vue/dist/vue.js","vue-hot-reload-api":"/Users/user/Sites/Homestead/astral/node_modules/vue-hot-reload-api/index.js"}],"/Users/user/Sites/Homestead/astral/resources/assets/js/components/tag-editor.vue":[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

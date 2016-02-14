@@ -2017,19 +2017,82 @@ th {
   left: 0;
   bottom: 0;
   right: 0; }
+  .repo-notes .repo-note-toolbar {
+    border-bottom: 1px solid #eee;
+    height: 45px;
+    padding: 0 20px; }
+    .repo-notes .repo-note-toolbar .note-toolbar-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -o-appearance: none;
+      appearance: none;
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      color: #ccc;
+      font-size: 0.9rem;
+      outline: none;
+      padding: 5px 10px;
+      margin-top: 8px; }
+      .repo-notes .repo-note-toolbar .note-toolbar-button.segment {
+        margin-left: 0;
+        margin-right: -4px; }
+        .repo-notes .repo-note-toolbar .note-toolbar-button.segment:first-child {
+          border-top-left-radius: 2px;
+          border-bottom-left-radius: 2px;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-right: none; }
+        .repo-notes .repo-note-toolbar .note-toolbar-button.segment:last-child {
+          border-top-right-radius: 2px;
+          border-bottom-right-radius: 2px;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0; }
   .repo-notes textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
-    height: 100%;
-    width: 100%;
     border: none;
     font-family: "Courier New", "Courier", monospace;
     outline: none;
     padding: 20px;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     word-wrap: break-word; }
+  .repo-notes .repo-note-preview {
+    background: #fff;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 20px;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    word-wrap: break-word; }
+    .repo-notes .repo-note-preview h1:first-of-type {
+      margin-top: 0; }
+    .repo-notes .repo-note-preview a {
+      color: #56a07b; }
+      .repo-notes .repo-note-preview a:hover {
+        text-decoration: none; }
+    .repo-notes .repo-note-preview pre {
+      border: 1px solid #eee;
+      padding: 0 0.5em; }
+    .repo-notes .repo-note-preview p code {
+      font-size: 0.9rem; }
+    .repo-notes .repo-note-preview img {
+      max-width: 100%;
+      height: auto; }
 
 *, *::before, *::after {
   box-sizing: border-box; }

@@ -13,12 +13,12 @@
     <div class="sidebar-header tags-header">
       <h3 class="sidebar-header-text">Tags</h3>
       <div class="tag-button-group">
-        <button class="tag-button-group-item">Add</button>
+        <button class="tag-button-group-item" @click="addTagFormShowing = !addTagFormShowing">Add</button>
         <button class="tag-button-group-item">Edit</button>
         <button class="tag-button-group-item">Sort</button>
       </div>
     </div>
-    <form class="tag-form" v-show="false" @submit.prevent="addTag">
+    <form class="tag-form" v-show="addTagFormShowing" @submit.prevent="addTag">
       <input type="text" name="name" v-model="newTag.name" placeholder="Tag name">
       <button type="submit">Save</button>
     </form>
@@ -38,6 +38,11 @@ import dnd from "./../directives/drag_and_drop.js";
 
 export default {
   name: "DashboardSidebar",
+  data(){
+    return {
+      addTagFormShowing: false
+    }
+  },
   computed: {
     newTag(){ return store.state.newTag },
     tags(){ return store.state.tags },

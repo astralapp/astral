@@ -23,8 +23,8 @@
     <div class="repo-readme syntax">
       {{{ readme }}}
     </div>
-    <div class="repo-notes" v-show="star.hasOwnProperty('id') && noteEditorShowing">
-      <textarea class="repo-note-editor" @keyup="saveNotes | debounce 1000" v-model="currentNotes">{{ notes }}</textarea>
+    <div>
+      <star-notes-editor :notes="notes" v-show="star.hasOwnProperty('id') && noteEditorShowing"></star-notes-editor>
     </div>
   </div>
 </template>
@@ -32,6 +32,7 @@
 import Vue from "vue";
 import store from "../store/store.js";
 import TagEditor from "./tag-editor.vue";
+import StarNotesEditor from "./star-notes-editor.vue";
 export default {
   name: "StarInfo",
   data(){
@@ -87,19 +88,23 @@ export default {
       store.actions.syncTags(this.star, tags);
       this.hideTagEditor();
     },
-    saveNotes(){
-      store.actions.editStarNotes(this.star, this.currentNotes);
+    saveNotes(notes){
+      store.actions.editStarNotes(this.star, notes);
     }
   },
   events: {
     "SYNC_TAGS": function(tags){
       this.syncTags(tags);
     },
+    "NOTES_SAVED": function(notes){
+      this.saveNotes(notes);
+    }
   },
   ready(){
   },
   components: {
-    "tag-editor": TagEditor
+    "tag-editor": TagEditor,
+    "star-notes-editor": StarNotesEditor
   }
 }
 </script>
