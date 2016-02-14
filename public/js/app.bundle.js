@@ -47365,7 +47365,7 @@ _vue2["default"].directive("tag-select", {
 
     var self = this;
     if ((0, _jquery2["default"])(this.el).data("select2")) {
-      (0, _jquery2["default"])(this.el).select2().trigger("change");
+      (0, _jquery2["default"])("[data-select2-tag]").remove();
     }
     setTimeout(function () {
       (0, _jquery2["default"])(_this.el).select2({

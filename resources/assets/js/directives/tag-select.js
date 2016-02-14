@@ -7,7 +7,7 @@ Vue.directive("tag-select", {
   update: function(value){
     let self = this;
     if( $(this.el).data("select2") ){
-      $(this.el).select2().trigger("change");
+      $("[data-select2-tag]").remove();
     }
     setTimeout( () => {
       $(this.el).select2({
