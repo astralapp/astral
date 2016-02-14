@@ -56,6 +56,7 @@ export default {
     starClicked(repo){
       store.actions.setCurrentStar(repo);
       store.actions.fetchReadme(repo.full_name);
+      this.$broadcast("STAR_CHANGED");
     },
     starTags(repo){
       let matchedStar = this.stars.filter( (star) => {

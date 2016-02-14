@@ -2021,34 +2021,53 @@ th {
     border-bottom: 1px solid #eee;
     height: 45px;
     padding: 0 20px; }
-    .repo-notes .repo-note-toolbar .note-toolbar-button {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      -ms-appearance: none;
-      -o-appearance: none;
-      appearance: none;
-      background: #eee;
-      border: 1px solid #ccc;
-      border-radius: 2px;
-      color: #ccc;
-      font-size: 0.9rem;
-      outline: none;
-      padding: 5px 10px;
-      margin-top: 8px; }
-      .repo-notes .repo-note-toolbar .note-toolbar-button.segment {
-        margin-left: 0;
-        margin-right: -4px; }
-        .repo-notes .repo-note-toolbar .note-toolbar-button.segment:first-child {
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          border-right: none; }
-        .repo-notes .repo-note-toolbar .note-toolbar-button.segment:last-child {
-          border-top-right-radius: 2px;
-          border-bottom-right-radius: 2px;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0; }
+    .repo-notes .repo-note-toolbar .toggle-edit-mode {
+      display: inline-block;
+      margin: 1px 0 0 -4px; }
+      .repo-notes .repo-note-toolbar .toggle-edit-mode input[type=checkbox] {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        margin: 0;
+        padding: 0; }
+        .repo-notes .repo-note-toolbar .toggle-edit-mode input[type=checkbox] + label {
+          -webkit-transition: all 250ms ease;
+          -moz-transition: all 250ms ease;
+          transition: all 250ms ease;
+          background: transparent;
+          border-radius: 3px;
+          color: #B0B6BA;
+          cursor: pointer;
+          font-size: 22px; }
+          .repo-notes .repo-note-toolbar .toggle-edit-mode input[type=checkbox] + label i.fa {
+            padding: 10px 8px; }
+          .repo-notes .repo-note-toolbar .toggle-edit-mode input[type=checkbox] + label + .toggle-hint {
+            -webkit-transition: all 250ms ease-out;
+            -moz-transition: all 250ms ease-out;
+            transition: all 250ms ease-out;
+            -webkit-transform: translate3d(-10px, 0, 0);
+            -moz-transform: translate3d(-10px, 0, 0);
+            -ms-transform: translate3d(-10px, 0, 0);
+            -o-transform: translate3d(-10px, 0, 0);
+            transform: translate3d(-10px, 0, 0);
+            color: #B0B6BA;
+            display: inline-block;
+            font-size: 0.8rem;
+            opacity: 0;
+            pointer-events: none;
+            position: relative;
+            top: -3px;
+            will-change: transform; }
+          .repo-notes .repo-note-toolbar .toggle-edit-mode input[type=checkbox] + label:hover + .toggle-hint {
+            -webkit-transform: translate3d(0, 0, 0);
+            -moz-transform: translate3d(0, 0, 0);
+            -ms-transform: translate3d(0, 0, 0);
+            -o-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            opacity: 1; }
+        .repo-notes .repo-note-toolbar .toggle-edit-mode input[type=checkbox]:checked + label {
+          background: rgba(176, 182, 186, 0.25);
+          color: #56a07b; }
   .repo-notes textarea {
     -webkit-appearance: none;
     -moz-appearance: none;

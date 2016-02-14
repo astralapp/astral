@@ -98,6 +98,9 @@ export default {
     },
     "NOTES_SAVED": function(notes){
       this.saveNotes(notes);
+    },
+    "STAR_CHANGED": function(){
+      this.noteEditorShowing = false;
     }
   },
   ready(){

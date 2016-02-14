@@ -46937,6 +46937,7 @@ exports.default = {
     starClicked: function starClicked(repo) {
       _store2.default.actions.setCurrentStar(repo);
       _store2.default.actions.fetchReadme(repo.full_name);
+      this.$broadcast("STAR_CHANGED");
     },
     starTags: function starTags(repo) {
       var matchedStar = this.stars.filter(function (star) {
@@ -47117,6 +47118,9 @@ exports.default = {
     },
     "NOTES_SAVED": function NOTES_SAVED(notes) {
       this.saveNotes(notes);
+    },
+    "STAR_CHANGED": function STAR_CHANGED() {
+      this.noteEditorShowing = false;
     }
   },
   ready: function ready() {},
@@ -47172,21 +47176,25 @@ exports.default = {
 
   computed: {
     renderedNotes: function renderedNotes() {
-      return (0, _marked2.default)(this.notes);
+      if (this.notes && this.notes.replace(/\s/g, "") !== "") {
+        return (0, _marked2.default)(this.notes);
+      } else {
+        return "";
+      }
     }
   },
   ready: function ready() {},
 
   methods: {
     saveNotes: function saveNotes() {
-      if (this.currentNotes.replace(/\s/g, "") !== "") {
+      if (this.currentNotes && this.currentNotes.replace(/\s/g, "") !== "") {
         this.$dispatch("NOTES_SAVED", this.currentNotes);
       }
     }
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"repo-notes\">\n  <div class=\"repo-note-toolbar\">\n    <button class=\"note-toolbar-button segment\">Preview</button>\n    <button class=\"note-toolbar-button segment\">Edit</button>\n  </div>\n  <textarea class=\"repo-note-editor\" @input=\"saveNotes | debounce 1000\" v-model=\"currentNotes\">{{ notes }}</textarea>\n  <div class=\"repo-note-preview\" v-show=\"previewMode\">{{{ renderedNotes }}}</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"repo-notes\">\n  <div class=\"repo-note-toolbar\">\n    <div class=\"toggle-edit-mode\">\n      <input type=\"checkbox\" id=\"toggle-edit-mode\" v-model=\"previewMode\">\n      <label for=\"toggle-edit-mode\"><i class=\"fa fa-eye\"></i></label>\n      <div class=\"toggle-hint\">Toggle Preview Mode</div>\n    </div>\n  </div>\n  <textarea class=\"repo-note-editor\" @input=\"saveNotes | debounce 1000\" v-model=\"currentNotes\">{{ notes }}</textarea>\n  <div class=\"repo-note-preview\" v-show=\"previewMode\">{{{ renderedNotes }}}</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

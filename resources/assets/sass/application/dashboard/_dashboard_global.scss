@@ -377,31 +377,42 @@
     border-bottom: 1px solid #eee;
     height: 45px;
     padding: 0 20px;
-    .note-toolbar-button {
-      @include appearance(none);
-      background: #eee;
-      border: 1px solid #ccc;
-      border-radius: 2px;
-      color: #ccc;
-      font-size: 0.9rem;
-      outline: none;
-      padding: 5px 10px;
-      margin-top: 8px;
-      &.segment {
-        margin-left: 0;
-        margin-right: -4px;
-        &:first-child {
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          border-right: none;
+    .toggle-edit-mode {
+      display: inline-block;
+      margin: 1px 0 0 -4px;
+      input[type=checkbox]{
+        @include size(0);
+        visibility: hidden;
+        margin: 0; padding: 0;
+        & + label {
+          @include transition(all 250ms ease);
+          background: transparent;
+          border-radius: 3px;
+          color: #B0B6BA;
+          cursor: pointer;
+          font-size: 22px;
+          i.fa {
+            padding: 10px 8px;
+          }
+          & + .toggle-hint {
+            @include transition(all 250ms ease-out);
+            @include transform(translate3d(-10px,0,0));
+            color: #B0B6BA;
+            display: inline-block;
+            font-size: 0.8rem;
+            opacity: 0;
+            pointer-events: none;
+            position: relative; top: -3px;
+            will-change: transform;
+          }
+          &:hover + .toggle-hint {
+            @include transform(translate3d(0,0,0));
+            opacity: 1;
+          }
         }
-        &:last-child {
-          border-top-right-radius: 2px;
-          border-bottom-right-radius: 2px;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
+        &:checked + label {
+          background: rgba(#B0B6BA, 0.25);
+          color: $primary;
         }
       }
     }
