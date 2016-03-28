@@ -14,7 +14,7 @@
       </div> -->
     </div>
     <label for="galileo">
-      <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope" v-model="searchQuery">
+      <input type="text" id="galileo" class="telescope" placeholder="Gaze through your telescope" v-model="currentSearchQuery">
       <i class="fa fa-search"></i>
     </label>
     <div class="user-dropdown-trigger dropdown-trigger">
@@ -51,7 +51,7 @@ export default {
     currentTagName(){
       return Object.keys(this.currentTag).length ? this.currentTag.name : "All Stars"
     },
-    searchQuery: {
+    currentSearchQuery: {
       get(){
         return this.searchQuery;
       },

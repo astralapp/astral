@@ -45,7 +45,8 @@ export default {
     getters: {
       githubStars: githubStars,
       currentTag: currentTag,
-      searchQuery: tokenizedSearchQuery
+      searchQuery: tokenizedSearchQuery,
+      stars: stars
     },
     actions: {
       fetchStars,

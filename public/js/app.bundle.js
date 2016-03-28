@@ -47301,7 +47301,7 @@ exports.default = {
       return (0, _keys2.default)(this.currentTag).length ? this.currentTag.name : "All Stars";
     },
 
-    searchQuery: {
+    currentSearchQuery: {
       get: function get() {
         return this.searchQuery;
       },
@@ -47312,7 +47312,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-header\">\n  <h2>\n    <span>{{ currentTagName }}</span>\n  </h2>\n  <div class=\"tag-settings-trigger\">\n    <i class=\"fa fa-cog\"></i>\n    <!-- <div class=\"dropdown\" hide={true}>\n      <form  class=\"frm-tagname\">\n        <input type=\"text\">\n        <button class=\"btn-flat\" type=\"submit\">Save</button>\n      </form>\n      <button class=\"btn-flat btn-danger\">Delete Tag</button>\n    </div> -->\n  </div>\n  <label for=\"galileo\">\n    <input type=\"text\" id=\"galileo\" class=\"telescope\" placeholder=\"Gaze through your telescope\" v-model=\"searchQuery\">\n    <i class=\"fa fa-search\"></i>\n  </label>\n  <div class=\"user-dropdown-trigger dropdown-trigger\">\n    <img :src=\"user.avatar_url\" alt=\"{{ user.name }}\" class=\"user-avatar\">\n    <span class=\"user-username\">{{ user.username }}</span>\n    <i class=\"fa fa-chevron-down\"></i>\n    <!-- <dropdown trigger=\".user-dropdown-trigger\">\n      <li><a >Settings</a></li>\n      <li><a href=\"mailto:hello@astralapp.com\">Support &amp; Feedback</a></li>\n      <li><a href=\"https://gratipay.com/syropian/\" target=\"_blank\"><i class=\"fa fa-heart\"></i> Gratipay</a></li>\n      <li><a href=\"javascript:void(0)\" onclick={parent.signOut}>Sign Out</a></li>\n    </dropdown> -->\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dashboard-header\">\n  <h2>\n    <span>{{ currentTagName }}</span>\n  </h2>\n  <div class=\"tag-settings-trigger\">\n    <i class=\"fa fa-cog\"></i>\n    <!-- <div class=\"dropdown\" hide={true}>\n      <form  class=\"frm-tagname\">\n        <input type=\"text\">\n        <button class=\"btn-flat\" type=\"submit\">Save</button>\n      </form>\n      <button class=\"btn-flat btn-danger\">Delete Tag</button>\n    </div> -->\n  </div>\n  <label for=\"galileo\">\n    <input type=\"text\" id=\"galileo\" class=\"telescope\" placeholder=\"Gaze through your telescope\" v-model=\"currentSearchQuery\">\n    <i class=\"fa fa-search\"></i>\n  </label>\n  <div class=\"user-dropdown-trigger dropdown-trigger\">\n    <img :src=\"user.avatar_url\" alt=\"{{ user.name }}\" class=\"user-avatar\">\n    <span class=\"user-username\">{{ user.username }}</span>\n    <i class=\"fa fa-chevron-down\"></i>\n    <!-- <dropdown trigger=\".user-dropdown-trigger\">\n      <li><a >Settings</a></li>\n      <li><a href=\"mailto:hello@astralapp.com\">Support &amp; Feedback</a></li>\n      <li><a href=\"https://gratipay.com/syropian/\" target=\"_blank\"><i class=\"fa fa-heart\"></i> Gratipay</a></li>\n      <li><a href=\"javascript:void(0)\" onclick={parent.signOut}>Sign Out</a></li>\n    </dropdown> -->\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -47441,7 +47441,8 @@ exports.default = {
     getters: {
       githubStars: _githubGetters.githubStars,
       currentTag: _tagsGetters.currentTag,
-      searchQuery: _galileoGetters.tokenizedSearchQuery
+      searchQuery: _galileoGetters.tokenizedSearchQuery,
+      stars: _starsGetters.stars
     },
     actions: {
       fetchStars: _actions.fetchStars,
@@ -47522,7 +47523,7 @@ exports.default = {
       user: _userGetters.user
     },
     actions: {
-      fetchUser: fetchUser
+      fetchUser: _actions.fetchUser
     }
   },
   ready: function ready() {
@@ -48446,7 +48447,8 @@ var state = {
     name: "",
     description: ""
   },
-  tags: []
+  tags: [],
+  currentTag: {}
 };
 
 var mutations = (_mutations = {}, _defineProperty(_mutations, _mutationTypesJs.SET_NEW_TAG, function (state, tag) {

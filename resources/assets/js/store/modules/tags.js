@@ -13,7 +13,8 @@ const state = {
     name: "",
     description: ""
   },
-  tags: []
+  tags: [],
+  currentTag: {}
 }
 
 export const mutations = {

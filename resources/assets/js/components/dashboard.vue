@@ -9,7 +9,7 @@
 </template>
 <script>
 import { user } from "../store/getters/userGetters";
-import { fetchuser } from "../store/actions";
+import { fetchUser } from "../store/actions";
 import DashboardHeader from "./dashboard-header.vue";
 import DashboardSidebar from "./dashboard-sidebar.vue";
 import StarList from "./dashboard-star-list.vue";
