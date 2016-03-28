@@ -23,39 +23,46 @@
 </template>
 <script>
 import Vue from "vue";
+import { githubStars } from "../store/getters/githubGetters";
+import { stars } from "../store/getters/starsGetters";
+import { currentTag } from "../store/getters/tagsGetters";
+import { tokenizedSearchQuery } from "../store/getters/galileoGetters";
+import {
+  fetchStars,
+  fetchGithubStars,
+  fetchReadme,
+  setCurrentStar,
+  setCurrentTag,
+} from "../store/actions";
 import { intersection } from "lodash";
-import store from "../store/store.js";
 import dnd from "./../directives/drag_and_drop.js";
 import currentTagFilter from "./../filters/currentTag.js";
 import galileo from "./../filters/galileo.js";
 import StarInfo from "./star-info.vue";
 export default {
   name: "StarList",
-  data() {
-    return {}
-  },
-  computed: {
-    githubStars() {
-      return store.state.githubStars;
+  vuex: {
+    getters: {
+      githubStars: githubStars,
+      currentTag: currentTag,
+      searchQuery: tokenizedSearchQuery
     },
-    stars() {
-      return store.state.stars;
-    },
-    currentTag() {
-      return store.state.currentTag;
-    },
-    searchQuery(){
-      return store.state.tokenizedSearchQuery;
+    actions: {
+      fetchStars,
+      fetchGithubStars,
+      fetchReadme,
+      setCurrentStar,
+      setCurrentTag,
     }
   },
   ready() {
-    store.actions.fetchStars();
-    store.actions.fetchGithubStars();
+    this.fetchStars();
+    this.fetchGithubStars();
   },
   methods: {
     starClicked(repo){
-      store.actions.setCurrentStar(repo);
-      store.actions.fetchReadme(repo.full_name);
+      this.setCurrentStar(repo);
+      this.fetchReadme(repo.full_name);
       this.$broadcast("STAR_CHANGED");
     },
     starTags(repo){
@@ -68,13 +75,10 @@ export default {
       else {
         return [];
       }
-    },
-    setCurrentTag(tag){
-      store.actions.setCurrentTag( tag );
     }
   },
   components: {
     "star-info": StarInfo
   }
-};
+}
 </script>

@@ -12,10 +12,10 @@
     "marked": "^0.3.5",
     "miss-plete": "^1.4.3",
     "select2": "^4.0.1",
-    "vue": "^1.0.14",
+    "vue": "^1.0.19",
     "vue-resource": "^0.6.1",
     "vue-router": "^0.7.8",
-    "vuex": "^0.2.0"
+    "vuex": "^0.6.2"
   },
   "devDependencies": {
     "babel": "^5.8.23",

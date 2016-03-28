@@ -9,7 +9,6 @@
 </template>
 <script>
 import Vue from "vue";
-import store from "../store/store.js";
 import "../directives/tag-select.js";
 export default {
   name: "TagEditor",
@@ -18,8 +17,6 @@ export default {
     return {
       tagsToSync: []
     }
-  },
-  computed: {
   },
   ready(){
     this.tagsToSync = this.tags;

@@ -13,7 +13,6 @@
 </template>
 <script>
 import Vue from "vue";
-import store from "../store/store.js";
 import marked from "marked";
 export default {
   name: "StarNotesEditor",
@@ -33,8 +32,6 @@ export default {
         return "";
       }
     }
-  },
-  ready(){
   },
   methods: {
     saveNotes(){

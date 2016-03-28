@@ -6,10 +6,12 @@ import {
   SET_README
 } from "../mutation-types.js";
 
-export const githubStarsInitialState = [];
-export const readmeInitialState = "";
+const state = {
+    githubStars: [],
+    readme: []
+}
 
-export const githubStarsMutations = {
+export const mutations = {
   [SET_GITHUB_STARS] (state, stars) {
     state.githubStars = stars;
   },
@@ -25,5 +27,9 @@ export const githubStarsMutations = {
   [SET_README] (state, readme) {
     state.readme = readme;
   }
+}
 
+export default {
+  state,
+  mutations
 }

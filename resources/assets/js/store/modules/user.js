@@ -1,9 +1,16 @@
 import { SET_USER } from "../mutation-types.js";
 
-export const userInitialState = {};
+const state = {
+  user: {}
+}
 
-export const userMutations = {
+export const mutations = {
   [SET_USER] (state, user) {
     state.user = user;
   }
-};
+}
+
+export default {
+  state,
+  mutations
+}

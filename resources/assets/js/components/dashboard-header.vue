@@ -31,22 +31,32 @@
   </div>
 </template>
 <script>
-import store from "../store/store.js";
+import { user } from "../store/getters/userGetters";
+import { currentTag } from "../store/getters/tagsGetters";
+import { searchQuery } from "../store/getters/galileoGetters";
+import { setSearchQuery } from "../store/actions";
 export default {
   name: "DashboardHeader",
-  computed: {
-    user(){
-      return store.state.user;
+  vuex: {
+    getters: {
+      user: user,
+      currentTag: currentTag,
+      query: searchQuery
     },
+    actions: {
+      setSearchQuery
+    }
+  },
+  computed: {
     currentTagName(){
-      return Object.keys(store.state.currentTag).length ? store.state.currentTag.name : "All Stars"
+      return Object.keys(this.currentTag).length ? this.currentTag.name : "All Stars"
     },
     searchQuery: {
       get(){
-        return store.state.searchQuery;
+        return this.searchQuery;
       },
       set(newValue){
-        store.actions.setSearchQuery(newValue);
+        this.setSearchQuery(newValue);
       }
     }
   },

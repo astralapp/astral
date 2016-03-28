@@ -8,14 +8,23 @@
   </div>
 </template>
 <script>
-import store from "../store/store.js";
+import { user } from "../store/getters/userGetters";
+import { fetchuser } from "../store/actions";
 import DashboardHeader from "./dashboard-header.vue";
 import DashboardSidebar from "./dashboard-sidebar.vue";
 import StarList from "./dashboard-star-list.vue";
 export default {
   name: "Dashboard",
+  vuex: {
+    getters: {
+      user: user
+    },
+    actions: {
+      fetchUser
+    }
+  },
   ready() {
-    store.actions.fetchUser()
+    this.fetchUser()
   },
   components: {
     "dashboard-header": DashboardHeader,

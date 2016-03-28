@@ -8,15 +8,15 @@ import {
   RESET_CURRENT_TAG
 } from "../mutation-types.js";
 
-export const tagsInitialState = [];
-export const newTagInitialState = {
-  name: "",
-  description: ""
-};
+const state = {
+  newTag: {
+    name: "",
+    description: ""
+  },
+  tags: []
+}
 
-export const currentTagInitialState = {};
-
-export const tagsMutations = {
+export const mutations = {
   [SET_NEW_TAG] (state, tag){
     state.newTag = tag;
   },
@@ -39,4 +39,9 @@ export const tagsMutations = {
   [RESET_CURRENT_TAG] (state){
     state.currentTag = {};
   }
+}
+
+export default {
+  state,
+  mutations
 }

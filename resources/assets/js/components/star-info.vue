@@ -30,11 +30,26 @@
 </template>
 <script>
 import Vue from "vue";
-import store from "../store/store.js";
+import { readme } from "../store/getters/githubGetters";
+import { stars, currentStar } from "../store/getters/starsGetters";
+import { tags } from "../store/getters/tagsGetters";
+import { editStarNotes, syncTags } from "../store/actions";
 import TagEditor from "./tag-editor.vue";
 import StarNotesEditor from "./star-notes-editor.vue";
 export default {
   name: "StarInfo",
+  vuex: {
+    getters: {
+      readme: readme,
+      stars: stars,
+      star: currentStar,
+      tags: tags
+    },
+    actions: {
+      editStarNotes,
+      sync: syncTags
+    }
+  },
   data(){
     return {
       tagEditorShowing: false,
@@ -43,12 +58,6 @@ export default {
     }
   },
   computed: {
-    readme(){
-      return store.state.readme;
-    },
-    star(){
-      return store.state.currentStar;
-    },
     notes(){
       if( this.userStar && this.userStar.hasOwnProperty("id") ){
         return this.userStar.notes;
@@ -58,12 +67,9 @@ export default {
       }
     },
     userStar(){
-      return store.state.stars.filter( (star) => {
+      return this.stars.filter( (star) => {
         return this.star.id === star.repo_id;
       })[0];
-    },
-    tags(){
-      return store.state.tags;
     },
     tagList(){
       return this.tags.map( (tag) => {
@@ -85,11 +91,11 @@ export default {
     showTagEditor(){ return this.tagEditorShowing = true },
     hideTagEditor(){ return this.tagEditorShowing = false },
     syncTags(tags){
-      store.actions.syncTags(this.star, tags);
+      this.sync(this.star, tags);
       this.hideTagEditor();
     },
     saveNotes(notes){
-      store.actions.editStarNotes(this.star, notes);
+      this.editStarNotes(this.star, notes);
     }
   },
   events: {
@@ -102,8 +108,6 @@ export default {
     "STAR_CHANGED": function(){
       this.noteEditorShowing = false;
     }
-  },
-  ready(){
   },
   components: {
     "tag-editor": TagEditor,
