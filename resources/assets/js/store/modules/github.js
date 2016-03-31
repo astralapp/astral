@@ -8,7 +8,9 @@ import {
 
 const state = {
     githubStars: [],
-    readme: []
+    readme: "",
+    totalPages: 0,
+    cachedPages: 0
 }
 
 export const mutations = {

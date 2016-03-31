@@ -32,21 +32,21 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       data = response.data.stars
       if(data.page_count) { dispatch(types.SET_TOTAL_PAGES, data.page_count); }
       if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
-      if( state.cachedPages && state.cachedPages === state.totalPages ) {
+      if( state.github.cachedPages && state.github.cachedPages === state.github.totalPages ) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
         resolve();
         return false
       }
       else {
-        if(state.cachedPages){
+        if(state.github.cachedPages){
           currentPage+= 1;
         } else {
           dispatch(types.INCREMENT_CACHED_PAGES)
         }
       }
-      if(currentPage <= state.totalPages) {
+      if(currentPage <= state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        actions.fetchGithubStars(currentPage);
+        fetchGithubStars({dispatch, state}, currentPage);
       }
       else {
         dispatch(types.SET_GITHUB_STARS, data.stars);

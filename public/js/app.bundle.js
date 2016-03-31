@@ -48056,20 +48056,20 @@ var fetchGithubStars = function fetchGithubStars(_ref2) {
       if (data.cached) {
         dispatch(types.SET_CACHED_PAGES, data.cached);
       }
-      if (state.cachedPages && state.cachedPages === state.totalPages) {
+      if (state.github.cachedPages && state.github.cachedPages === state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
         resolve();
         return false;
       } else {
-        if (state.cachedPages) {
+        if (state.github.cachedPages) {
           currentPage += 1;
         } else {
           dispatch(types.INCREMENT_CACHED_PAGES);
         }
       }
-      if (currentPage <= state.totalPages) {
+      if (currentPage <= state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        actions.fetchGithubStars(currentPage);
+        fetchGithubStars({ dispatch: dispatch, state: state }, currentPage);
       } else {
         dispatch(types.SET_GITHUB_STARS, data.stars);
         resolve();
@@ -48378,7 +48378,9 @@ var _mutationTypesJs = require("../mutation-types.js");
 
 var state = {
   githubStars: [],
-  readme: []
+  readme: "",
+  totalPages: 0,
+  cachedPages: 0
 };
 
 var mutations = (_mutations = {}, _defineProperty(_mutations, _mutationTypesJs.SET_GITHUB_STARS, function (state, stars) {
