@@ -5,3 +5,4 @@ Homestead.json
 .env
 .sass-cache
 .DS_Store
+/public/maps

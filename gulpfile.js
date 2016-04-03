@@ -1,52 +1,48 @@
 var gulp = require("gulp");
-var browserify = require("browserify");
-var babelify = require("babelify");
-var vueify = require("vueify");
-var watchify = require("watchify");
-var source = require("vinyl-source-stream");
-var Server = require("karma").Server;
-var bourbon = require("node-bourbon");
 var sass = require("gulp-sass");
 var notify = require("gulp-notify");
+var uglify = require("gulp-uglify");
+var sourcemaps = require("gulp-sourcemaps");
+var browserify = require("browserify");
+var watchify = require("watchify");
+var babelify = require("babelify");
+var vueify = require("vueify");
+var source = require("vinyl-source-stream");
+var buffer = require("vinyl-buffer");
+var Server = require("karma").Server;
+var bourbon = require("node-bourbon");
+var assign = require("lodash/assign");
 
-function scripts(watch){
-  var bundler, rebundle;
-  bundler = browserify({
-    basedir: __dirname,
-    debug: false,
-    entries: "./resources/assets/js/app.js",
-    cache: {},
-    packageCache: {},
-    fullPaths: watch
-  });
-  if(watch){
-    bundler = watchify(bundler, {
-      poll: true,
-      ignoreWatch: ["**/node_modules/**"]
-    });
-  }
-  bundler.transform(babelify.configure({
-    extensions: [".js"]
-  }));
-  bundler.transform(vueify);
-
-  rebundle = function() {
-    var stream = bundler.bundle();
-    stream.on("error", function(err){
-      console.log(err.message);
-      this.emit("end");
-    });
-    stream.pipe(source("app.bundle.js")).pipe( gulp.dest("./public/js") );
-  };
-  bundler.on("log", function(data) {
-    console.log("Script bundling succeeded: " + data);
-});
-  bundler.on("update", rebundle);
-  return rebundle();
+var browserifyArgs = {
+  debug: true,
+  entries: "./resources/assets/js/app.js",
+  transform: [
+    ["babelify", {
+      extensions: [".js"]
+    }],
+    "vueify"
+  ]
 }
-gulp.task("scripts", function () {
-  return scripts(false);
-});
+
+var watchifyArgs = assign(watchify.args, browserifyArgs);
+var bundler = watchify(browserify(watchifyArgs));
+
+function scripts(){
+  console.log("Bundling started...");
+  console.time("Bundling finished");
+  return bundler
+    .bundle()
+    .on("end", function(){ console.timeEnd("Bundling finished") })
+    .pipe(source("app.bundle.js"))
+    .pipe(buffer())
+    .pipe(sourcemaps.init())
+    .pipe(uglify())
+    .pipe(sourcemaps.write("../maps"))
+    .pipe(gulp.dest("./public/js"));
+}
+
+bundler.on("update", scripts);
+gulp.task("js", scripts);
 
 gulp.task("sass", function(){
   gulp.src("resources/assets/sass/app.scss")
@@ -61,7 +57,6 @@ gulp.task("sass", function(){
 
 
 gulp.task("watch", function(){
-  scripts(true);
   gulp.watch(["resources/assets/sass/**/*.scss"], ["sass"]);
 });
 
@@ -78,7 +73,7 @@ gulp.task("tdd", function (done) {
   }, done).start();
 });
 gulp.task("default", [
-  "scripts",
+  "js",
   "sass",
   "watch"
 ]);
