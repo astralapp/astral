@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)">
+      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == githubStars[$index].id }">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
@@ -24,7 +24,7 @@
 <script>
 import Vue from "vue";
 import { githubStars } from "../store/getters/githubGetters";
-import { stars } from "../store/getters/starsGetters";
+import { stars, currentStar } from "../store/getters/starsGetters";
 import { currentTag } from "../store/getters/tagsGetters";
 import { tokenizedSearchQuery } from "../store/getters/galileoGetters";
 import {
@@ -43,10 +43,11 @@ export default {
   name: "StarList",
   vuex: {
     getters: {
-      githubStars: githubStars,
-      currentTag: currentTag,
-      searchQuery: tokenizedSearchQuery,
-      stars: stars
+      githubStars,
+      currentTag,
+      currentStar,
+      stars,
+      searchQuery: tokenizedSearchQuery
     },
     actions: {
       fetchStars,
