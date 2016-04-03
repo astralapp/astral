@@ -91,7 +91,7 @@ export const reorderTags = ({ dispatch }, sortMap) => {
 };
 
 export const addTag = ({ dispatch, state }) => {
-  Vue.http.post("/api/tags", state.newTag, {
+  Vue.http.post("/api/tags", state.tags.newTag, {
     headers: {
       "Authorization": `Bearer ${ls("jwt")}`
     }
@@ -116,7 +116,7 @@ export const syncTags = ({ dispatch, actions }, repo, tags) => {
     }
   }).then( (response) => {
     dispatch(types.SET_STARS, response.data.stars);
-    actions.fetchTags();
+    fetchTags({dispatch});
   });
 };
 

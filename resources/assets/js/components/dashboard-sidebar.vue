@@ -48,8 +48,8 @@ export default {
   name: "DashboardSidebar",
   vuex: {
     getters: {
-      newTag: newTag,
-      tags: tags
+      newTag,
+      tags
     },
     actions: {
       fetchTags,
