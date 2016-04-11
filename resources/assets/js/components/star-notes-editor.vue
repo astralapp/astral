@@ -13,6 +13,7 @@
 </template>
 <script>
 import Vue from "vue";
+import highlight from "highlight.js";
 import marked from "marked";
 export default {
   name: "StarNotesEditor",
@@ -42,7 +43,11 @@ export default {
   },
   ready(){
     marked.setOptions({
-      sanitize: true
+      sanitize: true,
+      breaks: true,
+      highlight: (code) => {
+        return highlight.highlightAuto(code).value;
+      }
     });
   }
 }
