@@ -1,5 +1,5 @@
 describe("Auth Component", function () {
-  var Auth = require("../../resources/assets/js/components/auth.vue");
+  var Auth = require("../../../resources/assets/js/components/auth.vue");
   it("should have a name", function(){
     expect(Auth.name).toBe("Auth");
   });

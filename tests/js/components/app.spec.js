@@ -1,5 +1,5 @@
 describe("App Component", function () {
-  var App = require("../../resources/assets/js/components/app.vue");
+  var App = require("../../../resources/assets/js/components/app.vue");
   it("should have a name", function(){
     expect(App.name).toBe("App");
   });

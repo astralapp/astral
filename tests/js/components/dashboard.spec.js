@@ -1,5 +1,5 @@
 describe("Dashboard Component", function () {
-  var Dashboard = require("../../resources/assets/js/components/dashboard.vue");
+  var Dashboard = require("../../../resources/assets/js/components/dashboard.vue");
   it("should have a name", function(){
     expect(Dashboard.name).toBe("Dashboard");
   });
