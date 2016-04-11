@@ -39,6 +39,11 @@ export default {
         this.$dispatch("NOTES_SAVED", this.currentNotes);
       }
     }
+  },
+  ready(){
+    marked.setOptions({
+      sanitize: true
+    });
   }
 }
 </script>

@@ -58,6 +58,9 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
 };
 
 export const fetchReadme = ({ dispatch }, name) => {
+  marked.setOptions({
+    sanitize: true
+  });
   let accessToken = ls("access_token");
   Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then( (response) => {
     let readme = marked( window.atob(response.data.content) );
