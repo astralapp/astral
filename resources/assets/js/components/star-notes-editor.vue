@@ -21,10 +21,13 @@ export default {
   data(){
     return {
       currentNotes: "",
-      previewMode: false
+      previewMode: this.hasNotes
     }
   },
   computed: {
+    hasNotes(){
+      return this.notes && this.notes.replace(/\s/g, "") !== "";
+    },
     renderedNotes(){
       if( this.notes && this.notes.replace(/\s/g, "") !== "" ){
         return marked(this.notes);

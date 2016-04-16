@@ -19,7 +19,9 @@ router.map({
     component: Auth
   },
   "/dashboard": {
-    name: "dashboard",
+    component: Dashboard,
+  },
+  "/dashboard/:tag": {
     component: Dashboard,
   }
 });
@@ -39,4 +41,4 @@ Vue.http.interceptors.push({
 
 Vue.config.debug = true;
 
-router.start(App, '#app')
+router.start(App, "#app");

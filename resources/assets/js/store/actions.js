@@ -79,13 +79,17 @@ export const setCurrentStar = ({ dispatch }, star) => {
 
 //Tags
 export const fetchTags = ({ dispatch }) => {
-  Vue.http.get("/api/tags", null, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    dispatch(types.SET_TAGS, response.data.tags);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.get("/api/tags", null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      dispatch(types.SET_TAGS, response.data.tags);
+      resolve();
+    });
   });
+  return promise;
 };
 
 export const reorderTags = ({ dispatch }, sortMap) => {
