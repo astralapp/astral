@@ -88,11 +88,11 @@ export default {
     },
     setTag: function(tag){
       this.setCurrentTag(tag);
-      this.$route.router.go(`/dashboard/${tag.slug}`);
+      this.$route.router.replace(`/dashboard/${tag.slug}`);
     },
     resetTag: function(){
       this.resetCurrentTag()
-      this.$route.router.go("/dashboard");
+      this.$route.router.replace("/dashboard");
     }
   }
 }
