@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | currentTag | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }">
+      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
