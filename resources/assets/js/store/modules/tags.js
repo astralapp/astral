@@ -5,7 +5,7 @@ import {
   REMOVE_TAG,
   RESET_NEW_TAG,
   SET_CURRENT_TAG,
-  RESET_CURRENT_TAG
+  RESET_CURRENT_TAG,
 } from "../mutation-types.js";
 
 const state = {

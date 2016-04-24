@@ -9,8 +9,8 @@
 @import "application/shared/modules/modal";
 @import "application/shared/modules/flash_message";
 @import "application/shared/modules/tags_input";
+@import "application/components";
 @import "application/dashboard/dashboard_global";
-@import "components";
 
 *, *::before, *::after {
   box-sizing: border-box;

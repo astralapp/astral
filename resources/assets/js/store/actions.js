@@ -121,7 +121,7 @@ export const resetCurrentTag = ({ dispatch }) => {
   dispatch(types.RESET_CURRENT_TAG);
 };
 
-export const syncTags = ({ dispatch, actions }, repo, tags) => {
+export const syncTags = ({ dispatch }, repo, tags) => {
   Vue.http.post("/api/stars/syncTags", {"star": repo, "tags": tags}, {
     headers: {
       "Authorization": `Bearer ${ls("jwt")}`
@@ -131,6 +131,18 @@ export const syncTags = ({ dispatch, actions }, repo, tags) => {
     fetchTags({dispatch});
   });
 };
+
+export const editTagName = ({dispatch}, tagId, name) => {
+  Vue.http.put(`/api/tags/${tagId}`, {"name": name}, {
+    headers: {
+      "Authorization": `Bearer ${ls("jwt")}`
+    }
+  }).then( (response) => {
+    fetchStars({dispatch});
+    fetchTags({dispatch});
+    setCurrentTag({dispatch}, response.data.tag);
+  });
+}
 
 
 //Stars

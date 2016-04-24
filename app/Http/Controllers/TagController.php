@@ -95,7 +95,10 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $tag = Tag::where('id', $id)->where('user_id', Auth::id())->first();
+        $tag->name = $request->input('name');
+        $tag->save();
+        return response()->json(compact('tag'), 200);
     }
 
     /**

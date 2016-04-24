@@ -35,7 +35,7 @@
     }
   }
 </script>
-<style type="sass">
+<style>
 .auth {
   @include position( absolute, 0px 0px 0px 0px );
   background: url(../images/bg.jpg);
@@ -127,5 +127,4 @@
     opacity: 0;
   }
 }
-
 </style>

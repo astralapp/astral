@@ -30,7 +30,7 @@ var browserifyArgs = {
   ],
   plugin: [
     ["vueify-extract-css", {
-      out: "./resources/assets/sass/_components.scss"
+      out: "./resources/assets/sass/application/_components.scss"
     }]
   ]
 }

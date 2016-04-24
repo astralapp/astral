@@ -1,157 +1,64 @@
 @import 'dashboard_sidebar';
 .dashboard {
-  background: #fafafa;
-  overflow-y: scroll;
-  position: absolute; top: 0; left: 0; bottom: 0; right: 0;
   .user-settings-modal { width: 500px; }
-  .dashboard-header {
-    background: #fff;
-    border-bottom: 1px solid rgba(#373570, 0.1);
-    color: #fff;
-    height: $dashboard-header-height;
-    line-height: $dashboard-header-height;
-    position: absolute; left: $dashboard-sidebar-width; right: 0;
-    h2 {
-      color: $dark-blue;
+  .loading-status {
+    display: inline-block;
+    position: relative; left: 30px; top: -3px;
+    color: #658399;
+  }
+  .user-dropdown-trigger {
+    color: lighten($dark-blue, 30%);
+    display: inline-block;
+    float: right;
+    margin-right: 40px;
+    .user-avatar {
+      @include size( 40px );
+      border-radius: 50%;
       display: inline-block;
-      margin: 0 0 0 20px;
+      pointer-events: none;
+      position: relative; top: 10px;
+      margin-right: 5px;
     }
-    .tag-settings-trigger {
-      @include transition ( color 150ms linear );
-      color: lighten($dark-blue, 30%);
-      display: inline-block;
+    .user-username {
       font-size: 0.9rem;
-      line-height: 1;
-      margin-left: 5px;
-      margin-right: 10px;
-      top: -3px;
-      &:hover {
-        color: lighten($dark-blue, 15%);
+      pointer-events: none;
+      position: relative; top: -5px;
+      + i.fa {
+        font-size: 0.75rem;
+        pointer-events: none;
+        position: relative; top: -6px; left: 3px;
       }
-      .dropdown {
-        padding: 10px;
-        width: 200px;
-        .frm-tagname {
-          input[type=text] {
-            @include textfield();
-            @include size( 100% 34px );
-          }
-        }
-        button {
-          display: block;
-          font-size: 0.7rem;
-          letter-spacing: 0.08rem;
-          line-height: 1;
-          margin-top: 5px;
-          padding: 0.58rem;
-          text-transform: uppercase;
-          width: 100%;
-        }
-      }
-      ul {
+    }
+    .dropdown {
+      width: 178px;
+      top: 90%;
+      .dropdown-list {
+        line-height: 1;
         list-style-type: none;
-        padding: 0; margin: 0;
-        margin-top: 5px;
-        width: 100%;
+        margin: 12px 0; padding: 0;
         li {
           display: block;
-          font-size: 0.8rem;
-          width: 100%;
+          font-size: 0.9rem;
+          &:last-of-type {
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+          }
           a {
-            color: $dark-blue;
+            @include size( 100% );
+            color: $main-text-color;
             display: block;
-            padding: 6px 12px;
+            padding: 10px 20px;
             text-decoration: none;
             &:hover {
-              background: $primary;
+              background: $steel-blue;
               color: #fff;
             }
           }
         }
       }
     }
-    label[for=galileo] {
-      position: relative;
-      .telescope {
-        @include textfield();
-        border-radius: 15px;
-        font-size: 0.9rem;
-        height: 30px;
-        padding-left: 34px;
-        position: relative; top: -4px; left: 20px;
-        width: 300px;
-        @include placeholder {
-          color: rgba($dark-steel, 0.5);
-        }
-        &:focus + .fa {
-          color: rgba($dark-steel, 0.8);
-        }
-      }
-      .fa {
-        color: rgba($dark-steel, 0.5);
-        position: absolute; top: -1px; left: 34px;
-        z-index: 11;
-      }
-    }
-
-    .loading-status {
-      display: inline-block;
-      position: relative; left: 30px; top: -3px;
-      color: #658399;
-    }
-    .user-dropdown-trigger {
-      color: lighten($dark-blue, 30%);
-      display: inline-block;
-      float: right;
-      margin-right: 40px;
-      .user-avatar {
-        @include size( 40px );
-        border-radius: 50%;
-        display: inline-block;
-        pointer-events: none;
-        position: relative; top: 10px;
-        margin-right: 5px;
-      }
-      .user-username {
-        font-size: 0.9rem;
-        pointer-events: none;
-        position: relative; top: -5px;
-        + i.fa {
-          font-size: 0.75rem;
-          pointer-events: none;
-          position: relative; top: -6px; left: 3px;
-        }
-      }
-      .dropdown {
-        width: 178px;
-        top: 90%;
-        .dropdown-list {
-          line-height: 1;
-          list-style-type: none;
-          margin: 12px 0; padding: 0;
-          li {
-            display: block;
-            font-size: 0.9rem;
-            &:last-of-type {
-              border-bottom-left-radius: 3px;
-              border-bottom-right-radius: 3px;
-            }
-            a {
-              @include size( 100% );
-              color: $main-text-color;
-              display: block;
-              padding: 10px 20px;
-              text-decoration: none;
-              &:hover {
-                background: $steel-blue;
-                color: #fff;
-              }
-            }
-          }
-        }
-      }
-    }
   }
+
 }
 .dashboard-repos {
   position: absolute; top: $dashboard-header-height; bottom: 0; left: $dashboard-sidebar-width;
