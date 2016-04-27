@@ -108,7 +108,7 @@ export const addTag = ({ dispatch, state }) => {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
-    dispatch(types.ADD_TAG, response.data.tag);
+    dispatch(types.SET_TAGS, response.data.tags);
     dispatch(types.RESET_NEW_TAG);
   });
 };
@@ -139,7 +139,7 @@ export const editTagName = ({dispatch}, tagId, name) => {
     }
   }).then( (response) => {
     fetchStars({dispatch});
-    fetchTags({dispatch});
+    dispatch(types.SET_TAGS, response.data.tags);
     setCurrentTag({dispatch}, response.data.tag);
   });
 }

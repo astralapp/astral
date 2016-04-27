@@ -60,7 +60,9 @@ class TagController extends Controller
     {
       Cache::forget($this->cacheKey);
       $tag = Tag::create( $request->only("name", "description") );
-      return response()->json(compact('tag'), 200);
+      $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+      Cache::put($this->cacheKey, $tags, 120);
+      return response()->json(compact('tags'), 200);
     }
 
     public function reorder(Request $request){
@@ -111,7 +113,9 @@ class TagController extends Controller
         $tag = Tag::where('id', $id)->where('user_id', Auth::id())->first();
         $tag->name = $request->input('name');
         $tag->save();
-        return response()->json(compact('tag'), 200);
+        $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+        Cache::put($this->cacheKey, $tags, 120);
+        return response()->json(compact('tag', 'tags'), 200);
     }
 
     /**
