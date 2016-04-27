@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tag;
 
 use Auth;
+use Cache;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -20,14 +21,22 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $cacheKey;
     public function __construct()
     {
       $this->middleware("jwt.auth");
+      $this->cacheKey = 'user_'.Auth::id().'.tags';
     }
 
     public function index()
     {
-        $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+        if( Cache::has($this->cacheKey) ){
+          $tags = Cache::get($this->cacheKey);
+        }
+        else {
+          $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+          Cache::put($this->cacheKey, $tags, 120);
+        }
         return response()->json(compact('tags'), 200);
     }
 
@@ -49,11 +58,13 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+      Cache::forget($this->cacheKey);
       $tag = Tag::create( $request->only("name", "description") );
       return response()->json(compact('tag'), 200);
     }
 
     public function reorder(Request $request){
+      Cache::forget($this->cacheKey);
       $sortMap = $request->only('sortMap')["sortMap"];
 			foreach($sortMap as $row){
 				$tag = Tag::find((int)$row["id"]);
@@ -61,6 +72,7 @@ class TagController extends Controller
 				$tag->save();
 			}
       $tags = Tag::with('stars.tags')->where( "user_id", Auth::id() )->orderBy('sort_order', 'asc')->get();
+      Cache::put($this->cacheKey, $tags, 120);
       return response()->json(compact('tags'), 200);
     }
 
@@ -95,6 +107,7 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
+        Cache::forget($this->cacheKey);
         $tag = Tag::where('id', $id)->where('user_id', Auth::id())->first();
         $tag->name = $request->input('name');
         $tag->save();
