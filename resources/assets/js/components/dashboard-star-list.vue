@@ -1,11 +1,11 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | currentTagFilter | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }">
+      <li class="repo" v-for="repo in githubStars | currentTagFilter currentTag | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
-          <li v-for="tag in starTags(repo)" track-by="id" @click.stop="setCurrentTag(tag)">
+          <li v-for="tag in repo.tags" track-by="slug" @click.stop="setCurrentTag(tag)">
             {{ tag.name }}
           </li>
         </ul>
@@ -67,17 +67,6 @@ export default {
       this.fetchReadme(repo.full_name);
       this.$broadcast("STAR_CHANGED");
     },
-    starTags(repo){
-      let matchedStar = this.stars.filter( (star) => {
-        return star.repo_id === repo.id;
-      })[0];
-      if( matchedStar && matchedStar.tags.length ){
-        return matchedStar.tags;
-      }
-      else {
-        return [];
-      }
-    }
   },
   components: {
     "star-info": StarInfo

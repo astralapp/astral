@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     currentTagExists(){
-      return Object.keys(this.currentTag).length ? true : false;
+      return this.currentTag.id !== -1;
     }
   },
 }

@@ -121,23 +121,25 @@ export const resetCurrentTag = ({ dispatch }) => {
   dispatch(types.RESET_CURRENT_TAG);
 };
 
-export const syncTags = ({ dispatch }, repo, tags) => {
+export const syncTags = ({ dispatch, state }, repo, tags) => {
   Vue.http.post("/api/stars/syncTags", {"star": repo, "tags": tags}, {
     headers: {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
+    fetchGithubStars({dispatch, state});
     dispatch(types.SET_STARS, response.data.stars);
     fetchTags({dispatch});
   });
 };
 
-export const editTagName = ({dispatch}, tagId, name) => {
+export const editTagName = ({dispatch, state}, tagId, name) => {
   Vue.http.put(`/api/tags/${tagId}`, {"name": name}, {
     headers: {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
+    fetchGithubStars({dispatch, state});
     fetchStars({dispatch});
     dispatch(types.SET_TAGS, response.data.tags);
     setCurrentTag({dispatch}, response.data.tag);
@@ -146,12 +148,13 @@ export const editTagName = ({dispatch}, tagId, name) => {
 
 
 //Stars
-export const tagStar = ({ dispatch }, starData) => {
+export const tagStar = ({ dispatch, state }, starData) => {
   Vue.http.post("/api/stars/tag", starData, {
     headers: {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
+    fetchGithubStars({dispatch, state});
     dispatch(types.SET_TAGS, response.data.tags);
     dispatch(types.SET_STARS, response.data.stars);
   });

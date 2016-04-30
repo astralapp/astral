@@ -1389,6 +1389,23 @@ th {
     text-transform: uppercase;
     width: 100%; }
 
+.select2-dropdown {
+  background: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+
+.select2-results__option {
+  font-size: 0.9rem;
+  padding: 10px; }
+  .select2-results__option:last-child {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px; }
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background: #658399;
+  color: #fff; }
+
 .dashboard-sidebar {
   background: #28343d;
   overflow-y: auto;

@@ -14,31 +14,42 @@ const state = {
     description: ""
   },
   tags: [],
-  currentTag: {}
+  currentTag: {
+    id: -1,
+    name: "",
+    description: "",
+    sort_order: -1,
+    created_at: "",
+    updated_at: "",
+    slug: "",
+    stars: []
+  }
 }
 
 export const mutations = {
   [SET_NEW_TAG] (state, tag){
-    state.newTag = tag;
+    state.newTag = Object.assign({}, state.newTag, tag);
   },
   [SET_TAGS] (state, tags){
     state.tags = tags;
   },
-  [ADD_TAG] (state, tag){
-    state.tags.push(tag);
-  },
-  [REMOVE_TAG] (state, index){
-    state.tags.splice(index, 1);
-  },
   [RESET_NEW_TAG] (state){
-    state.newTag.name = "";
-    state.newTag.description = "";
+    state.newTag = Object.assign({}, state.newTag, {name: "", description: ""});
   },
   [SET_CURRENT_TAG] (state, tag){
-    state.currentTag = tag;
+    state.currentTag = Object.assign({}, state.currentTag, tag);
   },
   [RESET_CURRENT_TAG] (state){
-    state.currentTag = {};
+    state.currentTag = Object.assign({}, state.currentTag, {
+      id: -1,
+      name: "",
+      description: "",
+      sort_order: -1,
+      created_at: "",
+      updated_at: "",
+      slug: "",
+      stars: []
+    });
   }
 }
 
