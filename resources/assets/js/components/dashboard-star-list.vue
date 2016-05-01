@@ -5,7 +5,7 @@
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
-          <li v-for="tag in repo.tags" track-by="slug" @click.stop="setCurrentTag(tag)">
+          <li v-for="tag in repo.tags" track-by="slug" @click.stop="setTag(tag)">
             {{ tag.name }}
           </li>
         </ul>
@@ -67,6 +67,10 @@ export default {
       this.fetchReadme(repo.full_name);
       this.$broadcast("STAR_CHANGED");
     },
+    setTag(tag){
+      this.setCurrentTag(tag);
+      this.$route.router.replace(`/dashboard/${tag.slug}`);
+    }
   },
   components: {
     "star-info": StarInfo
