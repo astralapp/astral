@@ -107,6 +107,7 @@ export default {
     },
     "STAR_CHANGED": function(){
       this.noteEditorShowing = false;
+      this.$broadcast("STAR_CHANGED");
     }
   },
   components: {

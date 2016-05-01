@@ -21,13 +21,10 @@ export default {
   data(){
     return {
       currentNotes: "",
-      previewMode: this.hasNotes
+      previewMode: false
     }
   },
   computed: {
-    hasNotes(){
-      return this.notes && this.notes.replace(/\s/g, "") !== "";
-    },
     renderedNotes(){
       if( this.notes && this.notes.replace(/\s/g, "") !== "" ){
         return marked(this.notes);
@@ -38,10 +35,21 @@ export default {
     }
   },
   methods: {
+    hasNotes(){
+      return this.notes && this.notes.replace(/\s/g, "") !== "";
+    },
     saveNotes(){
-      if( this.currentNotes && this.currentNotes.replace(/\s/g, "") !== "" ){
+      if( this.currentNotes ){
         this.$dispatch("NOTES_SAVED", this.currentNotes);
       }
+    }
+  },
+  events: {
+    "STAR_CHANGED": function(){
+      setTimeout(() => {
+        this.previewMode = this.hasNotes();
+      }, 1);
+
     }
   },
   ready(){
