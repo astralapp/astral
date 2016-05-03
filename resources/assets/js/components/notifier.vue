@@ -1,0 +1,44 @@
+<template>
+  <div :class="'dashboard-notifier dashboard-notifier-' + mode" v-show="show" transition="dashboard-notifier">
+    <div class="dashboard-notifierInner">
+      <div class="dashboard-notifierMessage">
+      {{ message }}
+      </div>
+      <div class="dashboard-dismissNotifier" @click="hideNotifier()">&times;</div>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+export default {
+  name: "Notifier",
+  props: ["timeout"],
+  data(){
+    return {
+      _timeout: null,
+      show: false,
+      mode: "success",
+      message: ""
+    }
+  },
+  methods: {
+    showNotifier(){
+      this.show = true;
+      this._timeout = setTimeout(() => {
+        this.show = false;
+      }, parseInt(this.timeout, 10) + 500);
+    },
+    hideNotifier(){
+      clearTimeout(this._timeout);
+      this.show = false;
+    }
+  },
+  events: {
+    "NOTIFICATION": function(message, mode = "success"){
+      this.message = message;
+      this.mode = mode;
+      this.showNotifier();
+    }
+  }
+}
+</script>

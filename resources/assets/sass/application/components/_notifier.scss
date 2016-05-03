@@ -1,0 +1,52 @@
+.dashboard-notifier {
+  position: fixed; bottom: 20px; right: 20px;
+  width: $dashboard-sidebar-width;
+  z-index: 99999;
+  .dashboard-notifierInner {
+    @include size( 100% );
+    background: $primary;
+    border-radius: 3px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 20px 30px 20px 20px;
+    .dashboard-notifierMessage {
+      flex-grow: 1;
+    }
+    .dashboard-dismissNotifier {
+      transform:translateY(-50%);
+      color: darken($primary, 12%);
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-top: -1px;
+      position: absolute; top: 50%; right: 10px;
+      text-shadow: 0 1px 0 rgba(#fff,0.12);
+      &:hover {
+        color: darken($primary, 16%);
+      }
+    }
+  }
+  &-error {
+    .dashboard-notifierInner{
+      background: $red;
+      .dashboard-dismissNotifier {
+        color: darken($red, 12%);
+        &:hover {
+          color: darken($red, 16%);
+        }
+      }
+    }
+  }
+}
+.dashboard-notifier-transition {
+  transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  will-change: transform, opacity;
+}
+.dashboard-notifier-enter, .dashboard-notifier-leave {
+  transform: translate3d(40px, 0, 0);
+  opacity: 0;
+}

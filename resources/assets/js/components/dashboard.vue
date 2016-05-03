@@ -5,6 +5,7 @@
       <dashboard-sidebar></dashboard-sidebar>
       <star-list></star-list>
     </div>
+    <div><notifier timeout="3000"></notifier></div>
   </div>
 </template>
 <script>
@@ -13,6 +14,7 @@ import { fetchUser } from "../store/actions";
 import DashboardHeader from "./dashboard-header.vue";
 import DashboardSidebar from "./dashboard-sidebar.vue";
 import StarList from "./dashboard-star-list.vue";
+import Notifier from "./notifier.vue";
 export default {
   name: "Dashboard",
   vuex: {
@@ -29,7 +31,8 @@ export default {
   components: {
     "dashboard-header": DashboardHeader,
     "dashboard-sidebar": DashboardSidebar,
-    "star-list": StarList
+    "star-list": StarList,
+    "notifier": Notifier
   }
 }
 </script>
