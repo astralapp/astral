@@ -10,7 +10,9 @@
         "laravelcollective/html": "5.2.*",
         "tymon/jwt-auth": "0.5.*",
     		"guzzlehttp/guzzle": "~6.0",
-        "laravel/socialite": "^2.0"
+        "laravel/socialite": "^2.0",
+        "mistic100/randomcolor": "^1.0",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

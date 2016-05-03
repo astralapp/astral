@@ -13,7 +13,7 @@ class AddColorColumnToTags extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            //
+            $table->string('color')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddColorColumnToTags extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            //
+            $table->dropColumn('color');
         });
     }
 }
