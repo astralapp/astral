@@ -1,5 +1,6 @@
 var gulp = require("gulp");
 var sass = require("gulp-sass");
+var autoprefixer = require("gulp-autoprefixer");
 var notify = require("gulp-notify");
 var uglify = require("gulp-uglify");
 var sourcemaps = require("gulp-sourcemaps");
@@ -52,6 +53,9 @@ gulp.task("sass", function(){
     }).on("error", notify.onError(function (error) {
         return "Build Failed: " + error.message;
     })))
+    .pipe(autoprefixer({
+      browsers: ["last 2 versions"]
+    }))
     .pipe(gulp.dest("./public/css"));
 });
 
