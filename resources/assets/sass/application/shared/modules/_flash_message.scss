@@ -1,5 +1,4 @@
 .dashboard-flash-message {
-  @include ng-flash-message-animation();
   position: fixed; bottom: 20px; right: 20px;
   width: $dashboard-sidebar-width;
   z-index: 99999;

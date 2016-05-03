@@ -1,5 +1,4 @@
 .dashboard-modal-overlay {
-  @include ng-modal-animation();
   background: rgba($dark-blue, 0.85);
   position: fixed; top: 0; right: 0; bottom: 0; left: 0;
   text-align: center;

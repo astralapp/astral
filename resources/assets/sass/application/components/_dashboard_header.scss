@@ -1,0 +1,37 @@
+.dashboard-dashboardHeader {
+  background: #fff;
+  border-bottom: 1px solid rgba(#373570, 0.1);
+  color: #fff;
+  height: $dashboard-header-height;
+  line-height: $dashboard-header-height;
+  position: absolute; left: $dashboard-sidebar-width; right: 0;
+  h2 {
+    color: $dark-blue;
+    display: inline-block;
+    margin: 0 0 0 20px;
+  }
+}
+.dashboard-searchBar {
+  display: inline-block;
+  label[for=galileo] { position: relative; }
+  .dashboard-telescope {
+    @include textfield();
+    border-radius: 15px;
+    font-size: 0.9rem;
+    height: 30px;
+    padding-left: 34px;
+    position: relative; top: -4px; left: 20px;
+    width: 300px;
+    @include placeholder {
+      color: rgba($dark-steel, 0.5);
+    }
+    &:focus + .fa {
+      color: rgba($dark-steel, 0.8);
+    }
+  }
+  .fa {
+    color: rgba($dark-steel, 0.5);
+    position: absolute; top: -1px; left: 34px;
+    z-index: 11;
+  }
+}

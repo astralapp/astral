@@ -1,4 +1,3 @@
-@import 'dashboard_sidebar';
 .dashboard {
   .user-settings-modal { width: 500px; }
   .loading-status {
@@ -199,7 +198,6 @@
       position: relative;
       margin-left: 20px;
       .tags-dropdown {
-        @include ng-tag-dropdown-animation();
         background: #fff;
         background-clip: padding-box;
         border: 1px solid rgba(#373570, 0.1);

@@ -1,7 +1,6 @@
 @import "bourbon";
 @import "application/shared/normalize";
 @import "application/shared/variables";
-@import "application/shared/modules/ng_animations";
 @import "application/shared/modules/btn";
 @import "application/shared/modules/input";
 @import "application/shared/modules/dropdown";
@@ -9,8 +8,11 @@
 @import "application/shared/modules/modal";
 @import "application/shared/modules/flash_message";
 @import "application/shared/modules/tags_input";
-@import "application/components";
 @import "application/dashboard/dashboard_global";
+@import "application/components/auth";
+@import "application/components/dashboard";
+@import "application/components/edit_tag_dropdown";
+@import "application/components/tag_editor";
 
 *, *::before, *::after {
   box-sizing: border-box;

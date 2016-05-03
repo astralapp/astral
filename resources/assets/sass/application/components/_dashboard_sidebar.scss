@@ -1,0 +1,167 @@
+.dashboard-sidebar {
+  background: $dark-blue;
+  overflow-y: auto; overflow-x: hidden;
+  position: absolute; top: 60px;; bottom: 0; left: 0;
+  width: $dashboard-sidebar-width;
+  .dashboard-sidebar-header {
+    @include size( $dashboard-sidebar-width 60px );
+    padding: 0 20px;
+    background: $primary;
+    text-align: left;
+    position: fixed; top: 0; left: 0;
+    h3 {
+      color: #fff;
+      font-weight: 600;
+      margin: 0;
+      position: relative; top: 18px;
+    }
+  }
+  .sidebar-header {
+    color: rgba(#fff, 0.3);
+    font-size: 0.7rem;
+    font-weight: bold;
+    height: 42px;
+    line-height: 44px;
+    overflow: hidden;
+    padding: 0 0 0 20px;
+    position: relative;
+    text-transform: uppercase;
+    &.tags-header {
+      overflow: visible;
+      .tag-button-group {
+        float: right;
+        font-size: 0;
+        height: 100%;
+        position: relative;
+        .tag-button-group-item {
+          @include transition ( all 200ms linear );
+          @include appearance(none);
+          background: transparent;
+          border: none;
+          border-left: 1px solid rgba(#fff, 0.08);
+          color: rgba(#fff, 0.65);
+          display: inline-block;
+          font-size: 0.8rem;
+          height: 100%;
+          outline: none;
+          padding: 0 15px;
+          &:hover {
+            background: rgba(#fff, 0.03);
+            color: rgba(#fff, 0.85);
+          }
+        }
+      }
+    }
+    .sidebar-header-text {
+      display: inline-block;
+      margin: 0;
+      position: relative; top: -2px;
+    }
+  }
+  .tag-form {
+    background: $dark-blue;
+    font-size: 0;
+    input[type=text] {
+      @include appearance( none );
+      background: rgba(#fff, 0.1);
+      background-clip: padding-box;
+      border-radius: 0;
+      border: none;
+      display: inline-block;
+      outline: none;
+      float: left;
+      font-size: 0.75rem;
+      height: 40px;
+      padding: 0 12px;
+      position: relative; top: 0; left: 0;
+      width: 80%;
+      &:focus {
+        background: #fff;
+        color: $dark-blue;
+      }
+    }
+    button[type=submit] {
+      @include btn_flat( $primary );
+      border-radius: 0;
+      font-size: 0.75rem;
+      height: 41px;
+      margin-bottom: -2px;
+      position: relative; top: 0; right: 0;
+      width: 20%;
+    }
+  }
+  .dashboard-list {
+    clear: both;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    .dashboard-list-item {
+      @include transition ( all 200ms linear );
+      border-bottom: 1px solid rgba(#fff, 0.08);
+      color: rgba(#fff, 0.65);
+      cursor: pointer;
+      font-size: 0.8rem;
+      height: 42px;
+      line-height: 42px;
+      padding: 0 20px;
+      &:first-child, &:only-child { border-top: 1px solid rgba(#fff, 0.08); }
+      i.fa { margin-right: 5px; pointer-events: none; }
+      &.selected {
+        background: rgba(#fff, 0.05);
+        color: #fff;
+      }
+      &:hover {
+        background: rgba(#fff, 0.03);
+        color: rgba(#fff, 0.85);
+      }
+      &.selected {
+        background: rgba(#fff, 0.05);
+        color: #fff;
+      }
+    }
+    &.sidebar-tags .tag {
+      &.ui-sortable-helper {
+        @include transition ( none );
+        border-top: 1px solid rgba(#fff, 0.08);
+        cursor: -webkit-grabbing; cursor: -moz-grabbing;
+      }
+      &.dragging {
+        background: $primary;
+        color: #fff;
+      }
+      &.ng-enter {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(-100%) );
+        opacity: 0;
+      }
+      &.ng-enter-active {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(0) );
+        opacity: 1;
+      }
+      &.ng-leave {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(0) );
+        opacity: 1;
+      }
+      &.ng-leave-active {
+        @include transition ( all 300ms ease-in-out );
+        @include transform( translateX(-100%) );
+        opacity: 0;
+      }
+      .tagged-count {
+        background: rgba(#fff, 0.1);
+        border-radius: 100px;
+        color: #fff;
+        display: inline-block;
+        float: right;
+        font-size: 0.6rem;
+        font-weight: bold;
+        line-height: 1;
+        padding: 0.3rem 0.7rem;
+        position: relative;
+        top: 11px;
+      }
+    }
+  }
+}

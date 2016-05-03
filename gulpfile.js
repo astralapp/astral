@@ -13,12 +13,6 @@ var Server = require("karma").Server;
 var bourbon = require("node-bourbon");
 var assign = require("lodash/assign");
 
-vueify.compiler.applyConfig({
-  sass: {
-    includePaths: bourbon.includePaths,
-  }
-});
-
 var browserifyArgs = {
   debug: true,
   entries: "./resources/assets/js/app.js",
@@ -27,11 +21,6 @@ var browserifyArgs = {
       extensions: [".js"]
     }],
     "vueify"
-  ],
-  plugin: [
-    ["vueify-extract-css", {
-      out: "./resources/assets/sass/application/_components.scss"
-    }]
   ]
 }
 
