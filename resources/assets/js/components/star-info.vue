@@ -13,8 +13,8 @@
       </div>
       <button class="toggle-tag-editor" @click="noteEditorShowing = !noteEditorShowing"><i class="fa fa-sticky-note"></i> Notes</button>
       <div class="clone-url">
-        <label for="txtGitHubCloneURL">Clone:</label>
-        <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" readonly/>
+        <label for="txtGitHubCloneURL" @click="focusCloneInput">Clone:</label>
+        <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" @focus="focusCloneInput" readonly/>
       </div>
     </div>
     <!-- <div class="readme-loading-overlay" ng-show="readmeLoading">
@@ -96,6 +96,12 @@ export default {
     },
     saveNotes(notes){
       this.editStarNotes(this.star, notes);
+    },
+    focusCloneInput(){
+      setTimeout(() => {
+        document.getElementById("txtGitHubCloneURL").focus();
+        document.getElementById("txtGitHubCloneURL").select();
+      }, 0);
     }
   },
   events: {

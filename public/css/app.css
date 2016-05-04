@@ -1174,6 +1174,7 @@ th {
       position: relative;
       right: 20px; }
       .dashboard-repo-details .manage-star .clone-url > label {
+        cursor: pointer;
         margin-right: 4px; }
       .dashboard-repo-details .manage-star .clone-url input[type=text] {
         -webkit-appearance: none;
@@ -1191,6 +1192,7 @@ th {
         padding: 0 12px;
         height: 34px;
         width: 280px;
+        cursor: pointer;
         font-size: 0.8rem;
         position: relative;
         top: -2px; }

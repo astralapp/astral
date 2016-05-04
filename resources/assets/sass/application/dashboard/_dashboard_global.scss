@@ -233,10 +233,14 @@
     .clone-url {
       float: right;
       position: relative; right: 20px;
-      > label { margin-right: 4px; }
+      > label {
+        cursor: pointer;
+        margin-right: 4px;
+      }
       input[type=text] {
         @include textfield();
         @include size( 280px 34px );
+        cursor: pointer;
         font-size: 0.8rem;
         position: relative; top: -2px;
       }

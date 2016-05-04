@@ -39,7 +39,8 @@ function scripts(){
     .pipe(sourcemaps.init())
     .pipe(uglify())
     .pipe(sourcemaps.write("../maps"))
-    .pipe(gulp.dest("./public/js"));
+    .pipe(gulp.dest("./public/js"))
+    .pipe(notify("JS Build Complete!"));
 }
 
 bundler.on("update", scripts);
