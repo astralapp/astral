@@ -86,7 +86,7 @@ export default {
   methods: {
     doAddTag: function(){
       this.addTag();
-      this.$parent.$broadcast("NOTIFICATION", `${this.newTag.name} was created successfully.`);
+      this.$root.$broadcast("NOTIFICATION", `${this.newTag.name} was created successfully.`);
     },
     tagStarWithData: function(data, scope){
       let starData = {

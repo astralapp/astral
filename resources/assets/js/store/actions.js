@@ -134,16 +134,20 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
 };
 
 export const editTagName = ({dispatch, state}, tagId, name) => {
-  Vue.http.put(`/api/tags/${tagId}`, {"name": name}, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    fetchGithubStars({dispatch, state});
-    fetchStars({dispatch});
-    dispatch(types.SET_TAGS, response.data.tags);
-    setCurrentTag({dispatch}, response.data.tag);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.put(`/api/tags/${tagId}`, {"name": name}, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      fetchGithubStars({dispatch, state});
+      fetchStars({dispatch});
+      dispatch(types.SET_TAGS, response.data.tags);
+      setCurrentTag({dispatch}, response.data.tag);
+      resolve(response.data.tag);
+    });
   });
+  return promise;
 }
 
 

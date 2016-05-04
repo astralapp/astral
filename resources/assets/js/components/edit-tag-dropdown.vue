@@ -3,7 +3,7 @@
     <i class="fa fa-cog"></i>
     <div class="dashboardHeader-editTagDropdown" v-show="tagEditorShowing">
       <input type="text" v-model="currentTagField">
-      <button class="btn-flat" @click="editTagName(currentTag.id, currentTagName)">Save</button>
+      <button class="btn-flat" @click="doEditTagName(currentTag.id, currentTagName)">Save</button>
       <button class="btn-flat btn-danger">Delete Tag</button>
     </div>
   </div>
@@ -45,6 +45,13 @@ export default {
   methods: {
     currentTagExists(){
       return this.currentTag.id !== -1;
+    },
+    doEditTagName(id, name){
+      this.editTagName(id, name).then((res) => {
+        this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`);
+        this.$route.router.replace(`/dashboard/${res.slug}`);
+      });
+
     }
   },
 }
