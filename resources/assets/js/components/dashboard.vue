@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard" @click="hideUserDropdown">
     <dashboard-header></dashboard-header>
     <div class="dashboard-main">
       <dashboard-sidebar></dashboard-sidebar>
@@ -27,6 +27,11 @@ export default {
   },
   ready() {
     this.fetchUser()
+  },
+  methods: {
+    hideUserDropdown(){
+      this.$broadcast("HIDE_USER_DROPDOWN");
+    }
   },
   components: {
     "dashboard-header": DashboardHeader,

@@ -10,10 +10,11 @@
         <i class="fa fa-search"></i>
       </label>
     </div>
-    <div class="user-dropdown-trigger dropdown-trigger">
-      <img :src="user.avatar_url" :alt="user.name" class="user-avatar"/>
-      <span class="user-username">{{ user.username }}</span>
+    <div class="dashboard-userDropdown" @click.stop="userDropdownVisible = !userDropdownVisible">
+      <img :src="user.avatar_url" :alt="user.name" class="dashboard-userDropdownAvatar"/>
+      <span class="dashboard-userDropdownName">{{ user.username }}</span>
       <i class="fa fa-chevron-down"></i>
+      <user-dropdown :visible="userDropdownVisible"></user-dropdown>
     </div>
   </div>
 </template>
@@ -23,8 +24,14 @@ import { currentTag } from "../store/getters/tagsGetters";
 import { searchQuery } from "../store/getters/galileoGetters";
 import { setSearchQuery } from "../store/actions";
 import EditTagDropdown from "./edit-tag-dropdown.vue";
+import UserDropdown from "./user-dropdown.vue";
 export default {
   name: "DashboardHeader",
+  data(){
+    return {
+      userDropdownVisible: false
+    }
+  },
   vuex: {
     getters: {
       user: user,
@@ -50,6 +57,12 @@ export default {
   },
   components: {
     "edit-tag-dropdown": EditTagDropdown,
+    "user-dropdown": UserDropdown
+  },
+  events: {
+    "HIDE_USER_DROPDOWN": function(){
+      this.userDropdownVisible = false;
+    }
   }
 }
 </script>

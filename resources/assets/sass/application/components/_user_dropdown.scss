@@ -1,0 +1,88 @@
+.dashboard-userDropdown {
+  color: lighten($dark-blue, 30%);
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  margin-left: auto; margin-right: 40px;
+}
+
+.dashboard-userDropdownAvatar {
+  @include size( 40px );
+  background: lighten($dark-blue, 30%);
+  border-radius: 50%;
+  display: inline-block;
+  pointer-events: none;
+  position: relative;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.dashboard-userDropdownName {
+  font-size: 0.9rem;
+  pointer-events: none;
+  position: relative;
+  + i.fa {
+    font-size: 0.75rem;
+    pointer-events: none;
+    position: relative; top: 0; left: 3px;
+  }
+}
+
+.dashboard-userDropdownMenu {
+  background: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(#373570, 0.1);
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+  position: absolute; top: 140%; left: 50%;
+  width: 178px;
+  will-change: transform, opacity;
+  z-index: 11;
+  &::before {
+    transform: translateX(-50%) rotate(45deg);
+    @include size( 12px );
+    background: #fff;
+    background-clip: padding-box;
+    border-top: 1px solid rgba(#373570, 0.1);
+    border-left: 1px solid rgba(#373570, 0.1);
+    content: '';
+    position: absolute; top: -6px; left: 50%;
+    z-index: 99;
+  }
+  &-transition {
+    transition: all 250ms $easeOutCubic;
+    transform: translate3d(-50%, 2px, 0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  &-enter, &-leave {
+    transform: translate(-50%, -10px) scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.dashboard-userDropdownMenuItems {
+  line-height: 1;
+  list-style-type: none;
+  margin: 12px 0; padding: 0;
+  .dashboard-userDropdownMenuItem {
+    display: block;
+    font-size: 0.9rem;
+    &:last-child {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+    a {
+      @include size( 100% );
+      color: $main-text-color;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+      &:hover {
+        background: $steel-blue;
+        color: #fff;
+      }
+    }
+  }
+}

@@ -14,8 +14,8 @@
   .fa { pointer-events: none; }
 }
 .dashboardHeader-editTagDropdown {
-  @include transition ( all 250ms ease );
-  @include transform( translate(-50%, -10px) );
+  transition: all 250ms $easeOutCubic;
+  transform: translate(-50%, -10px);
   background: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(#373570, 0.1);
@@ -28,6 +28,7 @@
   z-index: 999;
   padding: 10px;
   width: 200px;
+  will-change: transform, opacity;
   &::before {
     @include transform( translateX(-50%) rotate(45deg) );
     @include size( 12px );

@@ -1226,9 +1226,10 @@ th {
         text-decoration: none; }
     .dashboard-repo-details .repo-readme pre {
       border: 1px solid #eee;
+      font-size: 12px;
       padding: 0 0.5em; }
     .dashboard-repo-details .repo-readme p code {
-      font-size: 0.9rem; }
+      font-size: 12px; }
     .dashboard-repo-details .repo-readme img {
       max-width: 100%;
       height: auto; }
@@ -1451,12 +1452,107 @@ th {
   100% {
     opacity: 0; } }
 
+.dashboard-userDropdown {
+  color: #658399;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  margin-left: auto;
+  margin-right: 40px; }
+
+.dashboard-userDropdownAvatar {
+  height: 40px;
+  width: 40px;
+  background: #658399;
+  border-radius: 50%;
+  display: inline-block;
+  pointer-events: none;
+  position: relative;
+  margin-right: 5px;
+  vertical-align: middle; }
+
+.dashboard-userDropdownName {
+  font-size: 0.9rem;
+  pointer-events: none;
+  position: relative; }
+  .dashboard-userDropdownName + i.fa {
+    font-size: 0.75rem;
+    pointer-events: none;
+    position: relative;
+    top: 0;
+    left: 3px; }
+
+.dashboard-userDropdownMenu {
+  background: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(55, 53, 112, 0.1);
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  position: absolute;
+  top: 140%;
+  left: 50%;
+  width: 178px;
+  will-change: transform, opacity;
+  z-index: 11; }
+  .dashboard-userDropdownMenu::before {
+    -webkit-transform: translateX(-50%) rotate(45deg);
+            transform: translateX(-50%) rotate(45deg);
+    height: 12px;
+    width: 12px;
+    background: #fff;
+    background-clip: padding-box;
+    border-top: 1px solid rgba(55, 53, 112, 0.1);
+    border-left: 1px solid rgba(55, 53, 112, 0.1);
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    z-index: 99; }
+  .dashboard-userDropdownMenu-transition {
+    transition: all 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transform: translate3d(-50%, 2px, 0) scale(1);
+            transform: translate3d(-50%, 2px, 0) scale(1);
+    opacity: 1;
+    visibility: visible; }
+  .dashboard-userDropdownMenu-enter, .dashboard-userDropdownMenu-leave {
+    -webkit-transform: translate(-50%, -10px) scale(0.95);
+            transform: translate(-50%, -10px) scale(0.95);
+    opacity: 0;
+    visibility: hidden; }
+
+.dashboard-userDropdownMenuItems {
+  line-height: 1;
+  list-style-type: none;
+  margin: 12px 0;
+  padding: 0; }
+  .dashboard-userDropdownMenuItems .dashboard-userDropdownMenuItem {
+    display: block;
+    font-size: 0.9rem; }
+    .dashboard-userDropdownMenuItems .dashboard-userDropdownMenuItem:last-child {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    .dashboard-userDropdownMenuItems .dashboard-userDropdownMenuItem a {
+      height: 100%;
+      width: 100%;
+      color: #666;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none; }
+      .dashboard-userDropdownMenuItems .dashboard-userDropdownMenuItem a:hover {
+        background: #658399;
+        color: #fff; }
+
 .dashboard-dashboardHeader {
   background: #fff;
   border-bottom: 1px solid rgba(55, 53, 112, 0.1);
   color: #fff;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   height: 60px;
-  line-height: 60px;
   position: absolute;
   left: 280px;
   right: 0; }
@@ -1466,7 +1562,8 @@ th {
     margin: 0 0 0 20px; }
 
 .dashboard-searchBar {
-  display: inline-block; }
+  display: inline-block;
+  margin-left: 25px; }
   .dashboard-searchBar label[for=galileo] {
     position: relative; }
   .dashboard-searchBar .dashboard-telescope {
@@ -1487,9 +1584,6 @@ th {
     font-size: 0.9rem;
     height: 30px;
     padding-left: 34px;
-    position: relative;
-    top: -4px;
-    left: 20px;
     width: 300px; }
     .dashboard-searchBar .dashboard-telescope:focus {
       background: #fff; }
@@ -1506,8 +1600,8 @@ th {
   .dashboard-searchBar .fa {
     color: rgba(98, 108, 112, 0.5);
     position: absolute;
-    top: -1px;
-    left: 34px;
+    top: 2px;
+    left: 12px;
     z-index: 11; }
 
 .dashboard-sidebar {
@@ -1797,9 +1891,9 @@ th {
     pointer-events: none; }
 
 .dashboardHeader-editTagDropdown {
-  transition: all 250ms ease;
+  transition: all 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
   -webkit-transform: translate(-50%, -10px);
-  transform: translate(-50%, -10px);
+          transform: translate(-50%, -10px);
   background: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(55, 53, 112, 0.1);
@@ -1814,6 +1908,7 @@ th {
   z-index: 999;
   padding: 10px;
   width: 200px;
+  will-change: transform, opacity;
   -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
   opacity: 1;

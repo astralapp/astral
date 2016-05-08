@@ -22,3 +22,6 @@ $sans: 'Karla', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 $dashboard-header-height: 60px;
 $dashboard-sidebar-width: 280px;
 $dashboard-repos-list-width: 420px;
+
+$easeOutCubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+$easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
