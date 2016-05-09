@@ -7,6 +7,6 @@ describe("App Component", function () {
     expect(App.hasOwnProperty("store")).toBe(true);
   });
   it("should have a router view in its template", function(){
-    expect(App.template).toMatch("<router-view></router-view>")
+    expect(App.template).toMatch(/<router-view\s*(.*)><\/router-view>/i)
   });
 })

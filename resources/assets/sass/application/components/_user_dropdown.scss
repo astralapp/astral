@@ -37,7 +37,7 @@
   position: absolute; top: 140%; left: 50%;
   width: 178px;
   will-change: transform, opacity;
-  z-index: 11;
+  z-index: 999;
   &::before {
     transform: translateX(-50%) rotate(45deg);
     @include size( 12px );

@@ -1493,7 +1493,7 @@ th {
   left: 50%;
   width: 178px;
   will-change: transform, opacity;
-  z-index: 11; }
+  z-index: 999; }
   .dashboard-userDropdownMenu::before {
     -webkit-transform: translateX(-50%) rotate(45deg);
             transform: translateX(-50%) rotate(45deg);
