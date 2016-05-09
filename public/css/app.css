@@ -1865,6 +1865,13 @@ th {
           transform: translate3d(40px, 0, 0);
   opacity: 0; }
 
+.router-transition {
+  transition: opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  opacity: 1; }
+
+.router-enter, .router-leave {
+  opacity: 0; }
+
 .dashboard {
   background: #fafafa;
   overflow-y: scroll;

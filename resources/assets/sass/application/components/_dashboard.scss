@@ -2,6 +2,13 @@
 @import "application/components/dashboard_sidebar";
 @import "application/components/notifier";
 
+.router-transition {
+  transition: opacity 500ms $easeOutCubic;
+  opacity: 1;
+}
+.router-enter, .router-leave {
+  opacity: 0;
+}
 
 .dashboard {
   background: #fafafa;

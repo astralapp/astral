@@ -9,6 +9,7 @@
   </div>
 </template>
 <script>
+import ls from "local-storage";
 import { user } from "../store/getters/userGetters";
 import { fetchUser } from "../store/actions";
 import DashboardHeader from "./dashboard-header.vue";
@@ -26,7 +27,12 @@ export default {
     }
   },
   ready() {
-    this.fetchUser()
+    if( ls("jwt") ){
+      this.fetchUser();
+    }
+    else {
+      this.$route.router.go("/auth");
+    }
   },
   methods: {
     hideUserDropdown(){
