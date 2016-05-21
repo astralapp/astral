@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Astral\Http\Controllers;
 
-use App\Http\Requests;
-use App\Models\User;
+use Astral\Http\Requests;
+use Astral\Models\User;
 use Auth;
 use JWTAuth;
 use Socialite;

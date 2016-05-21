@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace Astral\Helpers;
 
 use Auth;
 use Cache;

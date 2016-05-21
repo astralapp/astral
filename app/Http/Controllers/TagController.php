@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Astral\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Models\Tag;
+use Astral\Http\Requests;
+use Astral\Http\Controllers\Controller;
+use Astral\Models\Tag;
 use Auth;
 use Cache;
 use JWTAuth;

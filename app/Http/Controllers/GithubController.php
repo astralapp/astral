@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Astral\Http\Controllers;
 
-use App\Helpers\GithubClient;
-use App\Http\Requests;
-use App\Models\Star;
+use Astral\Helpers\GithubClient;
+use Astral\Http\Requests;
+use Astral\Models\Star;
 use Auth;
 use Illuminate\Http\Request;
 use JWTAuth;

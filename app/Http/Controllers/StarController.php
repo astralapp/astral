@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Astral\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\ClientInterface;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Models\Star;
-use App\Models\Tag;
+use Astral\Http\Requests;
+use Astral\Http\Controllers\Controller;
+use Astral\Models\Star;
+use Astral\Models\Tag;
 use Auth;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Astral\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -14,7 +14,7 @@ class User extends Authenticatable
      */
     public function stars()
     {
-        return $this->hasMany('App\Models\Star');
+        return $this->hasMany('Astral\Models\Star');
     }
 
     /**
@@ -22,6 +22,6 @@ class User extends Authenticatable
      */
     public function tags()
     {
-        return $this->hasMany('App\Models\Tag');
+        return $this->hasMany('Astral\Models\Tag');
     }
 }

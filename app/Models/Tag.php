@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Astral\Models;
 
 use Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ class Tag extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('Astral\Models\User');
     }
 
     /**
@@ -33,7 +33,7 @@ class Tag extends Model
      */
     public function stars()
     {
-        return $this->belongsToMany('App\Models\Star');
+        return $this->belongsToMany('Astral\Models\Star');
     }
 
     /**

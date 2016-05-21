@@ -151,10 +151,10 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Astral\Providers\AppServiceProvider::class,
+        Astral\Providers\AuthServiceProvider::class,
+        Astral\Providers\EventServiceProvider::class,
+        Astral\Providers\RouteServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,

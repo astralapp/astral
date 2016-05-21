@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Astral\Console\Commands;
 
 use Illuminate\Console\Command;
 use \Colors\RandomColor;
-use App\Models\Tag;
+use Astral\Models\Tag;
 
 class ColorTags extends Command
 {
