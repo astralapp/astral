@@ -15,7 +15,7 @@ class TagController extends Controller
 {
     public function __construct()
     {
-        $this->middleware("jwt.auth");
+        $this->middleware('jwt.auth');
     }
 
     /**
@@ -23,7 +23,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::with('stars.tags')->where("user_id", Auth::id())->orderBy('sort_order', 'asc')->get();
+        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
         return response()->json(compact('tags'), 200);
     }
 
@@ -34,8 +34,8 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        $tag = Tag::create($request->only("name", "description"));
-        $tags = Tag::with('stars.tags')->where("user_id", Auth::id())->orderBy('sort_order', 'asc')->get();
+        $tag = Tag::create($request->only('name', 'description'));
+        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
         return response()->json(compact('tags'), 200);
     }
 
@@ -46,13 +46,13 @@ class TagController extends Controller
      */
     public function reorder(Request $request)
     {
-        $sortMap = $request->only('sortMap')["sortMap"];
+        $sortMap = $request->only('sortMap')['sortMap'];
         foreach ($sortMap as $row) {
-            $tag = Tag::find((int)$row["id"]);
-            $tag->sort_order = $row["sort_order"];
+            $tag = Tag::find((int)$row['id']);
+            $tag->sort_order = $row['sort_order'];
             $tag->save();
         }
-        $tags = Tag::with('stars.tags')->where("user_id", Auth::id())->orderBy('sort_order', 'asc')->get();
+        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
         return response()->json(compact('tags'), 200);
     }
 
@@ -67,7 +67,7 @@ class TagController extends Controller
         $tag = Tag::where('id', $id)->where('user_id', Auth::id())->first();
         $tag->name = $request->input('name');
         $tag->save();
-        $tags = Tag::with('stars.tags')->where("user_id", Auth::id())->orderBy('sort_order', 'asc')->get();
+        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
         return response()->json(compact('tag', 'tags'), 200);
     }
 }
