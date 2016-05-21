@@ -11,9 +11,9 @@ class HTTPHeadersHelper
      */
     public static function rels($h)
     {
-        $h = "Link: " . $h;
+        $h = 'Link: ' . $h;
         $h = preg_replace("/(\r\n|\r)/", "\n", $h);
-        $h = explode("\n", preg_replace("/(\n)[ \t]+/", " ", $h));
+        $h = explode("\n", preg_replace("/(\n)[ \t]+/", ' ', $h));
         $rels = [];
         foreach ($h as $f) {
             if (!strncmp($f, 'X-Pingback: ', 12)) {
