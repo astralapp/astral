@@ -90,7 +90,7 @@ class GithubClient
             $lastRel = $linkArray["last"][0];
             $urlParts = parse_url($lastRel);
             $queryString = $urlParts["query"];
-            $qsArray = array();
+            $qsArray = [];
             parse_str($queryString, $qsArray);
             return (int)$qsArray["page"];
         } catch (Exception $e) {
