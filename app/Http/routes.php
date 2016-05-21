@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::group(['prefix' => 'api'], function() {
-  Route::group(['middleware' => 'web'], function(){
+Route::group(['prefix' => 'api'], function () {
+  Route::group(['middleware' => 'web'], function () {
     Route::get('auth', 'AuthController@redirectToProvider');
     Route::get('auth/callback', 'AuthController@handleProviderCallback');
   });

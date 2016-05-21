@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Astral\Http\Middleware;
 
 use Illuminate\Cookie\Middleware\EncryptCookies as BaseEncrypter;
 
