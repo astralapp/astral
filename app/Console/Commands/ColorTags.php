@@ -39,14 +39,14 @@ class ColorTags extends Command
      */
     public function handle()
     {
-      $tags = Tag::whereNull('color')->get();
-      $bar = $this->output->createProgressBar(count($tags));
-      foreach($tags as $tag){
-        $tag->color = RandomColor::one();
-        $tag->save();
-        $bar->advance();
-      }
-      $bar->finish();
-      $this->info('Colors successfully added to '.count($tags).' tags.');
+        $tags = Tag::whereNull('color')->get();
+        $bar = $this->output->createProgressBar(count($tags));
+        foreach ($tags as $tag) {
+            $tag->color = RandomColor::one();
+            $tag->save();
+            $bar->advance();
+        }
+        $bar->finish();
+        $this->info('Colors successfully added to '.count($tags).' tags.');
     }
 }

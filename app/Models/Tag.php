@@ -2,49 +2,66 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class Tag extends Model
 {
-  protected $guarded = ['id'];
-  protected $hidden = ['pivot', 'user_id'];
-  protected $fillable = ['name', 'description'];
-  /**
-   * The database table used by the model.
-   *
-   * @var string
-   */
-  protected $table = 'tags';
+    /** @var array */
+    protected $guarded = ['id'];
 
-  public function user()
-  {
-    return $this->belongsTo('App\Models\User');
-  }
+    /** @var array */
+    protected $hidden = ['pivot', 'user_id'];
 
-  public function stars()
-  {
-    return $this->belongsToMany('App\Models\Star');
-  }
-  public function getIdAttribute($value)
-  {
-    return (int)$value;
-  }
-  protected static function boot()
-  {
-    parent::boot();
-    static::creating(function($tag)
+    /** @var array */
+    protected $fillable = ['name', 'description'];
+
+    /** @var array */
+    protected $table = 'tags';
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
     {
-      $user = JWTAuth::parseToken()->authenticate();
-      $tag->user_id = Auth::id();
-      $tag->sort_order = self::where('user_id', Auth::id())->count();
-      $tag->slug = str_slug( $tag->name );
-    });
-    static::saving(function($tag)
+        return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function stars()
     {
-      $tag->slug = str_slug( $tag->name );
-    });
-  }
+        return $this->belongsToMany('App\Models\Star');
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return int
+     */
+    public function getIdAttribute($value)
+    {
+        return (int)$value;
+    }
+
+    /**
+     *
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($tag) {
+            JWTAuth::parseToken()->authenticate();
+            $tag->user_id = Auth::id();
+            $tag->sort_order = self::where('user_id', Auth::id())->count();
+            $tag->slug = str_slug($tag->name);
+        });
+
+        static::saving(function ($tag) {
+            $tag->slug = str_slug($tag->name);
+        });
+    }
 }
