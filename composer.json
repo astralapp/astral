@@ -2,7 +2,7 @@
     "name": "astralapp/astral",
     "description": "Organize Your GitHub Stars With Ease",
     "keywords": ["laravel", "github", "stars"],
-    "license": "MIT",
+    "license": "BSD-3-Clause",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
