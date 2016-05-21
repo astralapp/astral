@@ -1,23 +1,27 @@
 <?php
 
-namespace App\Models;
+namespace Astral\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
+    /** @var array */
     protected $table = 'users';
 
-    public function stars() {
-      return $this->hasMany('App\Models\Star');
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function stars()
+    {
+        return $this->hasMany('Astral\Models\Star');
     }
 
-    public function tags() {
-      return $this->hasMany('App\Models\Tag');
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tags()
+    {
+        return $this->hasMany('Astral\Models\Tag');
     }
 }

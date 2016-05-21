@@ -1,15 +1,15 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "astralapp/astral",
+    "description": "Organize Your GitHub Stars With Ease",
+    "keywords": ["laravel", "github", "stars"],
+    "license": "BSD-3-Clause",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "5.2.*",
         "tymon/jwt-auth": "0.5.*",
-    		"guzzlehttp/guzzle": "~6.0",
+        "guzzlehttp/guzzle": "~6.0",
         "laravel/socialite": "^2.0",
         "mistic100/randomcolor": "^1.0",
         "doctrine/dbal": "^2.5"
@@ -26,7 +26,7 @@
             "database"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "Astral\\": "app/"
         }
     },
     "autoload-dev": {

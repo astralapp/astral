@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Astral\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
