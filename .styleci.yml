@@ -1,3 +1,8 @@
 preset: psr2
 
 linting: true
+
+enabled:
+  - single_quote
+  - no_leading_namespace_whitespace
+  - short_scalar_cast
