@@ -32,7 +32,7 @@ class GithubClient
             if (Cache::has($cacheKey)) {
                 // Get everything currently cached
                 $cachedStars = Cache::get($cacheKey);
-                $uniqueStars = array_map("unserialize", array_unique(array_map("serialize", $cachedStars['stars'])));
+                $uniqueStars = array_map('unserialize', array_unique(array_map('serialize', $cachedStars['stars'])));
                 $cachedStars['stars'] = $uniqueStars;
                 // Add a "cached" key so we can check on the front-end whether we should paginate or not. We set it to the number of pages currently cached, so we fetch only what we need in subsequent requests
                 $cachedPages = count($cachedStars['stars']);
@@ -61,7 +61,7 @@ class GithubClient
             $oldStars = $cachedStars['stars'];
             $newStars = $starsArray['stars'];
             $mergedStars = array_merge($oldStars, $newStars);
-            $uniqueStars = array_map("unserialize", array_unique(array_map("serialize", $mergedStars)));
+            $uniqueStars = array_map('unserialize', array_unique(array_map('serialize', $mergedStars)));
             // Add stars to the stars key
             $mergedStarsArray['stars'] = $uniqueStars;
             $mergedStarsArray['page_count'] = $cachedStars['page_count'];
@@ -87,12 +87,12 @@ class GithubClient
     {
         try {
             $linkArray = HTTPHeadersHelper::rels($link);
-            $lastRel = $linkArray["last"][0];
+            $lastRel = $linkArray['last'][0];
             $urlParts = parse_url($lastRel);
-            $queryString = $urlParts["query"];
+            $queryString = $urlParts['query'];
             $qsArray = [];
             parse_str($queryString, $qsArray);
-            return (int)$qsArray["page"];
+            return (int)$qsArray['page'];
         } catch (Exception $e) {
             return 1;
         }
