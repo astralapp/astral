@@ -50,8 +50,7 @@ class GithubClient
         $stars = json_decode($res->getBody(), true);
         $starsArray['stars'] = $stars;
         if ($page == 1) {
-            $headerLink = $res->getHeader('link')[0];
-            $pageCount = $this->getTotalPages($headerLink);
+            $pageCount = $res->hasHeader('link') ? $this->getTotalPages($res->getHeader('link')[0]) : 1;
             $starsArray['page_count'] = $pageCount;
             Cache::put($cacheKey, $starsArray, $cacheExpiry);
             return $starsArray;
