@@ -18,6 +18,8 @@
     "vuex": "^0.6.2"
   },
   "devDependencies": {
+    "babel-core": "^6.9.0",
+    "babel-runtime": "^6.9.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-notify": "^2.2.0",
@@ -30,8 +32,9 @@
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-spec-reporter": "0.0.23",
     "laravel-elixir": "^6.0.0-2",
+    "laravel-elixir-vueify": "^1.0.3",
     "node-bourbon": "^4.2.3",
     "phantomjs": "^1.9.19",
-    "vueify": "^8.3.2"
+    "stream-browserify": "^2.0.1"
   }
 }
