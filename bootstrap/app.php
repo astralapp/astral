@@ -41,6 +41,11 @@ $app->singleton(
     Astral\Exceptions\Handler::class
 );
 
+/**
+ * Some helper functions.
+ */
+require "helpers.php";
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

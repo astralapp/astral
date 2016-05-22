@@ -45,6 +45,22 @@ class Handler extends ExceptionHandler
       */
      public function render($request, Exception $e)
      {
+         if($request->ajax()) {
+             if($e instanceof HttpException) {
+                 return response()->json([
+                     'code' => $e->getStatusCode(),
+                     'message' => $e->getMessage(),
+                     'errors' => [],
+                 ], $e->getStatusCode());
+             } else if ($e instanceof ApiException) {
+                 return response()->json([
+                     'code' => $e->getStatusCode(),
+                     'message' => $e->getMessage(),
+                     'errors' => $e->getErrors(),
+                 ], $e->getStatusCode());
+             }
+         }
+
          if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
              return response()->view('index');
          }
