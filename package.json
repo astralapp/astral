@@ -18,15 +18,10 @@
     "vuex": "^0.6.2"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
-    "babelify": "^6.3.0",
-    "browserify": "^13.0.0",
-    "browserify-hmr": "^0.3.1",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.1.1",
-    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.19",
@@ -37,10 +32,6 @@
     "laravel-elixir": "^6.0.0-2",
     "node-bourbon": "^4.2.3",
     "phantomjs": "^1.9.19",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "vueify": "^8.3.2",
-    "vueify-extract-css": "^0.1.0",
-    "watchify": "^3.7.0"
+    "vueify": "^8.3.2"
   }
 }
