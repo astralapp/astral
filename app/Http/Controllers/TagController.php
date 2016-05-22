@@ -23,8 +23,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
-        return response()->json(compact('tags'), 200);
+        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
     }
 
     /**
@@ -35,8 +34,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $tag = Tag::create($request->only('name', 'description'));
-        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
-        return response()->json(compact('tags'), 200);
+        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
     }
 
     /**
@@ -52,8 +50,7 @@ class TagController extends Controller
             $tag->sort_order = $row['sort_order'];
             $tag->save();
         }
-        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
-        return response()->json(compact('tags'), 200);
+        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
     }
 
     /**
@@ -67,7 +64,10 @@ class TagController extends Controller
         $tag = Tag::where('id', $id)->where('user_id', Auth::id())->first();
         $tag->name = $request->input('name');
         $tag->save();
-        $tags = Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
-        return response()->json(compact('tag', 'tags'), 200);
+
+        return [
+            'tag' => $tag,
+            'tags' => Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get(),
+        ];
     }
 }

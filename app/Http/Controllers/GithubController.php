@@ -37,6 +37,6 @@ class GithubController extends Controller
                 $stars['stars'][$i]['tags'] = [];
             }
         }
-        return response()->json(compact('stars'), 200);
+        return $stars;
     }
 }
