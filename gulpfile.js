@@ -5,10 +5,7 @@ var notify = require("gulp-notify");
 var Server = require("karma").Server;
 var bourbon = require("node-bourbon");
 var elixir = require("laravel-elixir");
-
-elixir.config.js.browserify.transformers.push({
-    name: "vueify",
-});
+var vueify = require('laravel-elixir-vueify');
 
 gulp.task("js", function(){
   elixir(function(mix) {
