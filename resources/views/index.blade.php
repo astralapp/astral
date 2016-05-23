@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/tomorrow.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   {!! Html::style('css/vendor/select2.min.css') !!}
-  {!! Html::style('css/app.css') !!}
+  <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
 </head>
 <body>
 <div id="app"></div>
