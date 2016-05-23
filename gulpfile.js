@@ -10,6 +10,7 @@ var vueify = require('laravel-elixir-vueify');
 gulp.task("js", function(){
   elixir(function(mix) {
       mix.browserify("./resources/assets/js/app.js", "./public/js/app.bundle.js");
+      mix.version("js/app.bundle.js");
   });
 });
 
@@ -26,7 +27,6 @@ gulp.task("sass", function(){
     }))
     .pipe(gulp.dest("./public/css"));
 });
-
 
 gulp.task("watch", function(){
   gulp.watch(["resources/assets/sass/**/*.scss"], ["sass"]);
