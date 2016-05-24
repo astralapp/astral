@@ -11,7 +11,7 @@ module.exports = function(config) {
     browsers: ["PhantomJS"],
     reporters: ["spec"],
     browserify: {
-      transform: ["babelify", "vueify"]
+      transform: [["babelify", {presets: ["es2015"]}], "vueify"]
     }
   });
 }
