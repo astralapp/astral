@@ -8,9 +8,9 @@ const {
 } = mutations;
 
 describe("Tag Mutations", () => {
-  it("should be able to set content for a new tag", function(){
+  it("should be able to set content for a new tag", () => {
     const newTag = {
-      nane: "VueJS",
+      name: "VueJS",
       description: "All things VueJS"
     }
     const state = {};
