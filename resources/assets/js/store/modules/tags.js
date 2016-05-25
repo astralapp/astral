@@ -14,16 +14,7 @@ const state = {
     description: ""
   },
   tags: [],
-  currentTag: {
-    id: -1,
-    name: "",
-    description: "",
-    sort_order: -1,
-    created_at: "",
-    updated_at: "",
-    slug: "",
-    stars: []
-  }
+  currentTag: {}
 }
 
 export const mutations = {
@@ -40,16 +31,7 @@ export const mutations = {
     state.currentTag = Object.assign({}, state.currentTag, tag);
   },
   [RESET_CURRENT_TAG] (state){
-    state.currentTag = Object.assign({}, state.currentTag, {
-      id: -1,
-      name: "",
-      description: "",
-      sort_order: -1,
-      created_at: "",
-      updated_at: "",
-      slug: "",
-      stars: []
-    });
+    state.currentTag = {};
   }
 }
 
