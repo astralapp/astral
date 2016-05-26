@@ -5,7 +5,7 @@ const {
 } = mutations;
 
 describe("Star Mutations", () => {
-  it("should be able to receieve an array of stars", () => {
+  it("should be able to receive an array of stars", () => {
     const testStars = [
       {id: 1, repo_id: 1},
       {id: 2, repo_id: 2},
