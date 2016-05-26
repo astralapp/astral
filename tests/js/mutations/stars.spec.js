@@ -5,7 +5,7 @@ const {
 } = mutations;
 
 describe("Star Mutations", () => {
-  it("should be able to receive an array of stars", () => {
+  it("can receive an array of stars", () => {
     const testStars = [
       {id: 1, repo_id: 1},
       {id: 2, repo_id: 2},
@@ -15,7 +15,7 @@ describe("Star Mutations", () => {
     SET_STARS(state, testStars);
     expect(state.stars).toEqual(testStars);
   });
-  it("should be able to set the current star", () => {
+  it("can set the current star", () => {
     const star = {id: 1, repo_id: 1};
     const state = {};
     SET_CURRENT_STAR(state, star);
