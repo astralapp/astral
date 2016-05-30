@@ -1,8 +1,6 @@
 import Vue from "vue";
 import VueResource from "vue-resource";
 import ls from "local-storage";
-import highlight from "highlight.js";
-import marked from "marked";
 import * as types from "./mutation-types.js";
 
 Vue.use(VueResource);
@@ -59,17 +57,17 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
 };
 
 export const fetchReadme = ({ dispatch }, name) => {
-  marked.setOptions({
-    sanitize: true,
-    breaks: true,
-    highlight: (code) => {
-      return highlight.highlightAuto(code).value;
-    }
-  });
   let accessToken = ls("access_token");
   Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then( (response) => {
-    let readme = marked( window.atob(response.data.content) );
-    dispatch(types.SET_README, readme);
+    let readme  = atob(response.data.content);
+    Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
+      headers: {
+        "Content-Type": "text/plain"
+      }
+    }).then( (response) => {
+      let renderedReadme = response.data;
+      dispatch(types.SET_README, renderedReadme);
+    });
   });
 };
 
