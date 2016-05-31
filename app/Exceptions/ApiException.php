@@ -8,9 +8,8 @@ class ApiException extends \Exception
     protected $message;
     protected $code;
     protected $previous;
-    /**
-     * @type \Illuminate\Support\MessageBag
-     */
+
+    /** @var \Illuminate\Support\MessageBag */
     protected $errors;
 
     public function __construct($message = "Something went wrong.", $code = 400, \Exception $previous = null)
