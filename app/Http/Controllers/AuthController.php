@@ -10,7 +10,6 @@ use Socialite;
 
 class AuthController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('jwt.auth', ['only' => ['fetchUser']]);
