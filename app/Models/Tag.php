@@ -43,12 +43,9 @@ class Tag extends Model
      */
     public function getIdAttribute($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 
-    /**
-     *
-     */
     protected static function boot()
     {
         parent::boot();

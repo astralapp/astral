@@ -27,9 +27,6 @@ class Star extends Model
         return $this->belongsToMany('Astral\Models\Tag');
     }
 
-    /**
-     *
-     */
     protected static function boot()
     {
         parent::boot();

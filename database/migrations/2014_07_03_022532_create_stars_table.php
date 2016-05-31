@@ -5,11 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateStarsTable extends Migration
 {
-
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -26,8 +23,6 @@ class CreateStarsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

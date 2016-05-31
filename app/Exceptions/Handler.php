@@ -28,26 +28,27 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
-     * @return void
+     * @param \Exception $e
      */
     public function report(Exception $e)
     {
         parent::report($e);
     }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
-     */
+     /**
+      * Render an exception into an HTTP response.
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @param  \Exception  $e
+      *
+      * @return \Illuminate\Http\Response
+      */
      public function render($request, Exception $e)
      {
          if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
              return response()->view('index');
          }
+
          return parent::render($request, $e);
      }
 }
