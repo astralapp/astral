@@ -19,16 +19,16 @@ class Response
     {
         $response = $next($request);
 
-        $status_code = $response->getStatusCode();
+        $statusCode = $response->getStatusCode();
 
-        $method = "code_{$status_code}";
+        $method = "code_{$statusCode}";
 
         if (method_exists($this, $method)) {
             return response()->json([
-                'code' => $status_code,
+                'code' => $statusCode,
                 'message' => $this->{$method}($response),
                 'errors' => [],
-            ], $status_code);
+            ], $statusCode);
         }
 
         return $response;
