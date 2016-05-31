@@ -15,12 +15,12 @@ class GithubClient
     private $starsPerPage = 50;
 
     /**
-     * @param int    $page
      * @param string $token
+     * @param int    $page
      *
      * @return array
      */
-    public function getStars($page = 1, $token)
+    public function getStars($token, $page = 1)
     {
         $cacheKey = $this->starsCacheKey();
         $cacheExpiry = $this->starsCacheExpiry;
