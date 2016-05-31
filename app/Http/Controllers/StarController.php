@@ -2,7 +2,6 @@
 
 namespace Astral\Http\Controllers;
 
-
 use Astral\Http\Requests;
 use Astral\Models\Star;
 use Astral\Models\Tag;
