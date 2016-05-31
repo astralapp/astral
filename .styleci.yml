@@ -1,8 +1,3 @@
-preset: psr2
+preset: laravel
 
 linting: true
-
-enabled:
-  - single_quote
-  - no_leading_namespace_whitespace
-  - short_scalar_cast
