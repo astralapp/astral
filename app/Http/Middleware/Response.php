@@ -38,7 +38,7 @@ class Response
     {
         $content = $response->getContent();
 
-        if (empty( $content )) {
+        if (empty($content)) {
             $content = "Success, but no response received.";
         }
 
