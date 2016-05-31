@@ -42,7 +42,7 @@ class Response
             $content = "Success, but no response received.";
         }
 
-        return is_json($content) ? json_decode($content) : $content;
+        return $this->is_json($content) ? json_decode($content) : $content;
     }
 
     private function code_405(BaseResponse $response) : string
@@ -53,5 +53,13 @@ class Response
     private function code_404(BaseResponse $response) : string
     {
         return 'Could not route request. Check the documentation.';
+    }
+
+    /** @todo: Refactor to make generally available */
+    private function is_json($input)
+    {
+        json_decode($input);
+
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }
