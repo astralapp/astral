@@ -12,7 +12,7 @@ class ApiException extends \Exception
     /** @var \Illuminate\Support\MessageBag */
     protected $errors;
 
-    public function __construct($message = "Something went wrong.", $code = 400, \Exception $previous = null)
+    public function __construct($message = 'Something went wrong.', $code = 400, \Exception $previous = null)
     {
         $this->message = $message;
         $this->code = $code;
@@ -37,5 +37,4 @@ class ApiException extends \Exception
     {
         return $this->errors;
     }
-
 }
