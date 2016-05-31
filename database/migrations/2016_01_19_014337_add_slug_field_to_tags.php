@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddSlugFieldToTags extends Migration
 {
@@ -13,7 +13,7 @@ class AddSlugFieldToTags extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-          $table->string('slug');
+            $table->string('slug');
         });
     }
 
