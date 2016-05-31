@@ -3,7 +3,7 @@
 namespace Astral\Console\Commands;
 
 use Illuminate\Console\Command;
-use \Colors\RandomColor;
+use Colors\RandomColor;
 use Astral\Models\Tag;
 
 class ColorTags extends Command
@@ -24,8 +24,6 @@ class ColorTags extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {

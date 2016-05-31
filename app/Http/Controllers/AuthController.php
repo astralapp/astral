@@ -2,7 +2,6 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Http\Requests;
 use Astral\Models\User;
 use Auth;
 use JWTAuth;
@@ -10,7 +9,6 @@ use Socialite;
 
 class AuthController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('jwt.auth', ['only' => ['fetchUser']]);
@@ -38,7 +36,7 @@ class AuthController extends Controller
         $user = User::where('github_id', $id)->first();
         $token = $githubUser->token;
         // If the user exists, just update fields that they may have changed in their Github settings
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             $user->username = $githubUser->getNickname();
             if ($githubUser->getName()) {
                 $user->name = $githubUser->getName();
@@ -57,7 +55,8 @@ class AuthController extends Controller
             $user->save();
         }
         $jwt = JWTAuth::fromUser($user);
-        return redirect('/auth?token=' . $jwt . '&access_token=' . $token);
+
+        return redirect('/auth?token='.$jwt.'&access_token='.$token);
     }
 
     /**
@@ -66,6 +65,7 @@ class AuthController extends Controller
     public function fetchUser()
     {
         $user = Auth::user();
+
         return response()->json(compact('user'), 200);
     }
 

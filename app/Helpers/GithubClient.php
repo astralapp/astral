@@ -5,7 +5,6 @@ namespace Astral\Helpers;
 use Auth;
 use Cache;
 use GuzzleHttp\Client;
-use JWTAuth;
 
 class GithubClient
 {
@@ -16,12 +15,12 @@ class GithubClient
     private $starsPerPage = 50;
 
     /**
-     * @param int $page
      * @param string $token
+     * @param int    $page
      *
      * @return array
      */
-    public function getStars($page = 1, $token)
+    public function getStars($token, $page = 1)
     {
         $cacheKey = $this->starsCacheKey();
         $cacheExpiry = $this->starsCacheExpiry;
@@ -36,12 +35,13 @@ class GithubClient
                 $cachedStars['stars'] = $uniqueStars;
                 // Add a "cached" key so we can check on the front-end whether we should paginate or not. We set it to the number of pages currently cached, so we fetch only what we need in subsequent requests
                 $cachedPages = count($cachedStars['stars']);
-                $cachedStars['cached'] = (int)ceil($cachedPages / $this->starsPerPage);
+                $cachedStars['cached'] = (int) ceil($cachedPages / $this->starsPerPage);
+
                 return $cachedStars;
             }
         }
 
-        $starsUrl = 'https://api.github.com/user/starred?per_page=' . $this->starsPerPage . '&page=' . $page . '&access_token=' . $token;
+        $starsUrl = 'https://api.github.com/user/starred?per_page='.$this->starsPerPage.'&page='.$page.'&access_token='.$token;
         $client = $this->getClient();
         $res = $client->get(
             $starsUrl,
@@ -53,6 +53,7 @@ class GithubClient
             $pageCount = $res->hasHeader('link') ? $this->getTotalPages($res->getHeader('link')[0]) : 1;
             $starsArray['page_count'] = $pageCount;
             Cache::put($cacheKey, $starsArray, $cacheExpiry);
+
             return $starsArray;
         } else {
             $cachedStars = Cache::get($cacheKey);
@@ -65,6 +66,7 @@ class GithubClient
             $mergedStarsArray['stars'] = $uniqueStars;
             $mergedStarsArray['page_count'] = $cachedStars['page_count'];
             Cache::put($cacheKey, $mergedStarsArray, $cacheExpiry);
+
             return $mergedStarsArray;
         }
     }
@@ -74,7 +76,7 @@ class GithubClient
      */
     private function starsCacheKey()
     {
-        return 'user_' . Auth::id() . '.github_stars';
+        return 'user_'.Auth::id().'.github_stars';
     }
 
     /**
@@ -91,7 +93,8 @@ class GithubClient
             $queryString = $urlParts['query'];
             $qsArray = [];
             parse_str($queryString, $qsArray);
-            return (int)$qsArray['page'];
+
+            return (int) $qsArray['page'];
         } catch (Exception $e) {
             return 1;
         }

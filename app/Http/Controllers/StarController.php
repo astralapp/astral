@@ -3,14 +3,9 @@
 namespace Astral\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\ClientInterface;
-use Astral\Http\Requests;
-use Astral\Http\Controllers\Controller;
 use Astral\Models\Star;
 use Astral\Models\Tag;
 use Auth;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class StarController extends Controller
 {
@@ -25,6 +20,7 @@ class StarController extends Controller
     public function index()
     {
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+
         return response()->json(compact('stars'), 200);
     }
 
@@ -39,7 +35,7 @@ class StarController extends Controller
         $star_name = $request->input('repoName');
         $tag_id = $request->input('tagId');
         $star = Star::where('repo_id', $star_id)->where('user_id', Auth::id())->first();
-        if (!is_null($star)) {
+        if (! is_null($star)) {
             $star->tags()->sync([$tag_id], false);
             $star->save();
         } else {
@@ -51,6 +47,7 @@ class StarController extends Controller
         }
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
         $tags = Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get();
+
         return response()->json(compact('stars', 'tags'), 200);
     }
 
@@ -64,7 +61,7 @@ class StarController extends Controller
         $repo = $request->input('star');
         $tags = $request->input('tags');
         $star = Star::where('repo_id', $repo['id'])->where('user_id', Auth::id())->first();
-        if (!$star) {
+        if (! $star) {
             $star = new Star();
             $star->repo_id = $repo['id'];
             $star->repo_name = $repo['full_name'];
@@ -77,7 +74,7 @@ class StarController extends Controller
             foreach ($tags as $tag) {
                 $tagName = strtolower($tag['name']);
                 $userTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->first();
-                if (!$userTag) {
+                if (! $userTag) {
                     $userTag = new Tag();
                     $userTag->name = $tag['name'];
                     $userTag->save();
@@ -87,6 +84,7 @@ class StarController extends Controller
             }
         }
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+
         return response()->json(compact('stars'), 200);
     }
 
@@ -100,7 +98,7 @@ class StarController extends Controller
         $repo = $request->input('star');
         $text = $request->input('text');
         $star = Star::where('repo_id', $repo['id'])->where('user_id', Auth::id())->first();
-        if (!$star) {
+        if (! $star) {
             $star = new Star();
             $star->repo_id = $repo['id'];
             $star->repo_name = $repo['full_name'];
@@ -109,6 +107,7 @@ class StarController extends Controller
         $star->notes = $text;
         $star->save();
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+
         return response()->json(compact('stars'), 200);
     }
 }
