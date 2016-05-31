@@ -5,11 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateStarsTagsPivot extends Migration
 {
-
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -25,8 +22,6 @@ class CreateStarsTagsPivot extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
