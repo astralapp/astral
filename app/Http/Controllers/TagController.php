@@ -2,14 +2,12 @@
 
 namespace Astral\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Astral\Http\Requests;
-use Astral\Http\Controllers\Controller;
 use Astral\Models\Tag;
 use Auth;
 use Cache;
+use Illuminate\Http\Request;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class TagController extends Controller
 {
@@ -34,6 +32,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $tag = Tag::create($request->only('name', 'description'));
+
         return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
     }
 
@@ -50,6 +49,7 @@ class TagController extends Controller
             $tag->sort_order = $row['sort_order'];
             $tag->save();
         }
+
         return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
     }
 

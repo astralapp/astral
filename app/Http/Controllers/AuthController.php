@@ -57,6 +57,7 @@ class AuthController extends Controller
             $user->save();
         }
         $jwt = JWTAuth::fromUser($user);
+
         return redirect('/auth?token=' . $jwt . '&access_token=' . $token);
     }
 
