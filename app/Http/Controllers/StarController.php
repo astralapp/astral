@@ -2,12 +2,10 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Http\Requests;
 use Astral\Models\Star;
 use Astral\Models\Tag;
 use Auth;
 use Illuminate\Http\Request;
-use JWTAuth;
 
 class StarController extends Controller
 {

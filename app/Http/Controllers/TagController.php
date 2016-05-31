@@ -2,12 +2,9 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Http\Requests;
 use Astral\Models\Tag;
 use Auth;
-use Cache;
 use Illuminate\Http\Request;
-use JWTAuth;
 
 class TagController extends Controller
 {

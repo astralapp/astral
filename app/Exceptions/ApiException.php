@@ -1,4 +1,6 @@
-<?php namespace Astral\Exceptions;
+<?php
+
+namespace Astral\Exceptions;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\MessageBag;
@@ -22,7 +24,7 @@ class ApiException extends \Exception
 
     public function withErrors(Validator $v) : ApiException
     {
-        $e = new ApiException($this->message, $this->code, $this->previous);
+        $e = new self($this->message, $this->code, $this->previous);
         $e->errors = $v->errors();
 
         return $e;

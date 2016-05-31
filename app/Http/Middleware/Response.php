@@ -39,7 +39,7 @@ class Response
         $content = $response->getContent();
 
         if (empty($content)) {
-            $content = "Success, but no response received.";
+            $content = 'Success, but no response received.';
         }
 
         return $this->is_json($content) ? json_decode($content) : $content;
