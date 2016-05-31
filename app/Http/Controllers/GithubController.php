@@ -15,7 +15,7 @@ class GithubController extends Controller
     }
 
     /**
-     * @param Request      $request
+     * @param Request $request
      * @param GithubClient $client
      *
      * @return \Illuminate\Http\JsonResponse
