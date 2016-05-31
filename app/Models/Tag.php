@@ -46,9 +46,7 @@ class Tag extends Model
         return (int) $value;
     }
 
-    /**
-     *
-     */
+
     protected static function boot()
     {
         parent::boot();
