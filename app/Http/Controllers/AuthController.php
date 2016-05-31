@@ -2,7 +2,6 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Http\Requests;
 use Astral\Models\User;
 use Auth;
 use JWTAuth;
@@ -10,7 +9,6 @@ use Socialite;
 
 class AuthController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('jwt.auth', ['only' => ['fetchUser']]);
@@ -57,7 +55,8 @@ class AuthController extends Controller
             $user->save();
         }
         $jwt = JWTAuth::fromUser($user);
-        return redirect('/auth?token=' . $jwt . '&access_token=' . $token);
+
+        return redirect('/auth?token='.$jwt.'&access_token='.$token);
     }
 
     /**
@@ -66,6 +65,7 @@ class AuthController extends Controller
     public function fetchUser()
     {
         $user = Auth::user();
+
         return response()->json(compact('user'), 200);
     }
 

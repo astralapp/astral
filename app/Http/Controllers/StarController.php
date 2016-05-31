@@ -3,14 +3,9 @@
 namespace Astral\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\ClientInterface;
-use Astral\Http\Requests;
-use Astral\Http\Controllers\Controller;
 use Astral\Models\Star;
 use Astral\Models\Tag;
 use Auth;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class StarController extends Controller
 {
@@ -25,6 +20,7 @@ class StarController extends Controller
     public function index()
     {
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+
         return response()->json(compact('stars'), 200);
     }
 
@@ -51,6 +47,7 @@ class StarController extends Controller
         }
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
         $tags = Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get();
+
         return response()->json(compact('stars', 'tags'), 200);
     }
 
@@ -87,6 +84,7 @@ class StarController extends Controller
             }
         }
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+
         return response()->json(compact('stars'), 200);
     }
 
@@ -109,6 +107,7 @@ class StarController extends Controller
         $star->notes = $text;
         $star->save();
         $stars = Star::with('tags')->where('user_id', Auth::id())->get();
+
         return response()->json(compact('stars'), 200);
     }
 }
