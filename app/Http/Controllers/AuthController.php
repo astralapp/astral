@@ -64,9 +64,7 @@ class AuthController extends Controller
      */
     public function fetchUser()
     {
-        $user = Auth::user();
-
-        return response()->json(compact('user'), 200);
+        return Auth::user();
     }
 
     public function logout()

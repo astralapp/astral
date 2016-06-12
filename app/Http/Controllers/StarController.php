@@ -2,10 +2,10 @@
 
 namespace Astral\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Astral\Models\Star;
 use Astral\Models\Tag;
 use Auth;
+use Illuminate\Http\Request;
 
 class StarController extends Controller
 {
@@ -19,9 +19,7 @@ class StarController extends Controller
      */
     public function index()
     {
-        $stars = Star::with('tags')->where('user_id', Auth::id())->get();
-
-        return response()->json(compact('stars'), 200);
+        return Star::with('tags')->where('user_id', Auth::id())->get();
     }
 
     /**
@@ -45,10 +43,11 @@ class StarController extends Controller
             $star->save();
             $star->tags()->attach($tag_id);
         }
-        $stars = Star::with('tags')->where('user_id', Auth::id())->get();
-        $tags = Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get();
 
-        return response()->json(compact('stars', 'tags'), 200);
+        return [
+            'stars' => Star::with('tags')->where('user_id', Auth::id())->get(),
+            'tags' => Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get(),
+        ];
     }
 
     /**
@@ -83,9 +82,8 @@ class StarController extends Controller
                 $star->tags()->sync($tagIds);
             }
         }
-        $stars = Star::with('tags')->where('user_id', Auth::id())->get();
 
-        return response()->json(compact('stars'), 200);
+        return Star::with('tags')->where('user_id', Auth::id())->get();
     }
 
     /**
@@ -106,8 +104,7 @@ class StarController extends Controller
         }
         $star->notes = $text;
         $star->save();
-        $stars = Star::with('tags')->where('user_id', Auth::id())->get();
 
-        return response()->json(compact('stars'), 200);
+        return Star::with('tags')->where('user_id', Auth::id())->get();
     }
 }

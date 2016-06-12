@@ -20,15 +20,18 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('auth', 'AuthController@redirectToProvider');
         Route::get('auth/callback', 'AuthController@handleProviderCallback');
     });
-    Route::get('auth/logout', 'AuthController@logout');
-    Route::get('auth/user', 'AuthController@fetchUser');
-    Route::get('github/stars', 'GithubController@getStars');
 
-    Route::resource('tags', 'TagController');
-    Route::post('tags/reorder', 'TagController@reorder');
+    Route::group(['middleware' => 'response'], function () {
+        Route::get('auth/logout', 'AuthController@logout');
+        Route::get('auth/user', 'AuthController@fetchUser');
+        Route::get('github/stars', 'GithubController@getStars');
 
-    Route::get('stars', 'StarController@index');
-    Route::post('stars/tag', 'StarController@tag');
-    Route::post('stars/syncTags', 'StarController@syncTags');
-    Route::post('stars/notes', 'StarController@editNotes');
+        Route::resource('tags', 'TagController');
+        Route::post('tags/reorder', 'TagController@reorder');
+
+        Route::get('stars', 'StarController@index');
+        Route::post('stars/tag', 'StarController@tag');
+        Route::post('stars/syncTags', 'StarController@syncTags');
+        Route::post('stars/notes', 'StarController@editNotes');
+    });
 });

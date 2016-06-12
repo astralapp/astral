@@ -12,7 +12,7 @@ export const fetchUser = ({ dispatch, state }) => {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
-    dispatch(types.SET_USER, response.data.user);
+    dispatch(types.SET_USER, response.data.message);
   });
 };
 
@@ -28,7 +28,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
         "Access-Token": ls("access_token")
       }
     }).then( (response) => {
-      data = response.data.stars
+      data = response.data.message;
       if(data.page_count) { dispatch(types.SET_TOTAL_PAGES, data.page_count); }
       if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
       if( state.github.cachedPages && state.github.cachedPages === state.github.totalPages ) {
@@ -83,7 +83,7 @@ export const fetchTags = ({ dispatch }) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then( (response) => {
-      dispatch(types.SET_TAGS, response.data.tags);
+      dispatch(types.SET_TAGS, response.data.message);
       resolve();
     });
   });
@@ -96,7 +96,7 @@ export const reorderTags = ({ dispatch }, sortMap) => {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
-    dispatch(types.SET_TAGS, response.data.tags);
+    dispatch(types.SET_TAGS, response.data.message);
   });
 };
 
@@ -106,7 +106,7 @@ export const addTag = ({ dispatch, state }) => {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
-    dispatch(types.SET_TAGS, response.data.tags);
+    dispatch(types.SET_TAGS, response.data.message);
     dispatch(types.RESET_NEW_TAG);
   });
 };
@@ -126,7 +126,7 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
     }
   }).then( (response) => {
     fetchGithubStars({dispatch, state});
-    dispatch(types.SET_STARS, response.data.stars);
+    dispatch(types.SET_STARS, response.data.message);
     fetchTags({dispatch});
   });
 };
@@ -140,9 +140,9 @@ export const editTagName = ({dispatch, state}, tagId, name) => {
     }).then( (response) => {
       fetchGithubStars({dispatch, state});
       fetchStars({dispatch});
-      dispatch(types.SET_TAGS, response.data.tags);
-      setCurrentTag({dispatch}, response.data.tag);
-      resolve(response.data.tag);
+      dispatch(types.SET_TAGS, response.data.message.tags);
+      setCurrentTag({dispatch}, response.data.message.tag);
+      resolve(response.data.message.tag);
     });
   });
   return promise;
@@ -157,8 +157,8 @@ export const tagStar = ({ dispatch, state }, starData) => {
     }
   }).then( (response) => {
     fetchGithubStars({dispatch, state});
-    dispatch(types.SET_TAGS, response.data.tags);
-    dispatch(types.SET_STARS, response.data.stars);
+    dispatch(types.SET_TAGS, response.data.message.tags);
+    dispatch(types.SET_STARS, response.data.message.stars);
   });
 };
 
@@ -169,7 +169,7 @@ export const fetchStars = ({ dispatch }) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then( (response) => {
-      dispatch(types.SET_STARS, response.data.stars);
+      dispatch(types.SET_STARS, response.data.message);
       resolve();
     });
   });
@@ -182,7 +182,7 @@ export const editStarNotes = ( {dispatch}, star, text) => {
       "Authorization": `Bearer ${ls("jwt")}`
     }
   }).then( (response) => {
-    dispatch(types.SET_STARS, response.data.stars);
+    dispatch(types.SET_STARS, response.data.message);
   });
 };
 
