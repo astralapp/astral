@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     currentTagName(){
-      return this.currentTag.id !== -1 ? this.currentTag.name : "All Stars"
+      return Object.keys(this.currentTag).length ? this.currentTag.name : "All Stars"
     },
     currentSearchQuery: {
       get(){
