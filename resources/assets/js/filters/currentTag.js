@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 Vue.filter("currentTagFilter", function(value, currentTag){
-  if( currentTag.id === -1 ){
+  if( !Object.keys(currentTag).length ){
     return value;
   }
   return value.filter(function(repo){

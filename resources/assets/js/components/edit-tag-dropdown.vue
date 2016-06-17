@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     currentTagExists(){
-      return this.currentTag.id !== -1;
+      return Object.keys(this.currentTag).length ? true : false;
     },
     doEditTagName(id, name){
       this.editTagName(id, name).then((res) => {
