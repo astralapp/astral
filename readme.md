@@ -19,7 +19,7 @@ This is the repository for Astral v2. It is currently still in early development
 
 - Fork this repository, clone it, and `cd` into it
 - Install the front-end dependencies: `npm install`
-- Compile
+- Install the PHP dependenices: `composer install`
 - [Install Homestead](http://laravel.com/docs/homestead#installation-and-setup)
 - Configure Homestead: `homestead edit`
 
