@@ -91,11 +91,15 @@ export default {
     showTagEditor(){ return this.tagEditorShowing = true },
     hideTagEditor(){ return this.tagEditorShowing = false },
     syncTags(tags){
-      this.sync(this.star, tags);
+      this.sync(this.star, tags).catch( (errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error");
+      });
       this.hideTagEditor();
     },
     saveNotes(notes){
-      this.editStarNotes(this.star, notes);
+      this.editStarNotes(this.star, notes).catch( (errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error saving your notes for this star.", "error");
+      });
     },
     focusCloneInput(){
       setTimeout(() => {
