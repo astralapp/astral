@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "dragula": "^3.6.3",
+    "highlight.js": "^9.5.0",
     "jquery": "^2.2.0",
     "local-storage": "^1.4.2",
     "lodash": "^4.0.0",
@@ -39,7 +40,8 @@
     "node-bourbon": "^4.2.3",
     "phantomjs": "^1.9.19",
     "stream-browserify": "^2.0.1",
-    "vueify": "^8.4.1",
+    "vue-hot-reload-api": "^2.0.5",
+    "vueify": "^8.7.0",
     "watchify": "^3.7.0"
   }
 }
