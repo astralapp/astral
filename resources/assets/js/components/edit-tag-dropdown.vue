@@ -50,6 +50,8 @@ export default {
       this.editTagName(id, name).then((res) => {
         this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`);
         this.$route.router.replace(`/dashboard/${res.slug}`);
+      }).catch( (errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error renaming this tag.", "error");
       });
 
     }

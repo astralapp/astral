@@ -7,13 +7,19 @@ Vue.use(VueResource);
 
 //User
 export const fetchUser = ({ dispatch, state }) => {
-  Vue.http.get("/api/auth/user", null, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    dispatch(types.SET_USER, response.data.message);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.get("/api/auth/user", null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      dispatch(types.SET_USER, response.data.message);
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
+    });
   });
+  return promise;
 };
 
 
@@ -33,7 +39,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
       if( state.github.cachedPages && state.github.cachedPages === state.github.totalPages ) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve();
+        resolve(data.stars);
         return false
       }
       else {
@@ -49,8 +55,10 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       }
       else {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve();
+        resolve(data.stars);
       }
+    }, (response) => {
+      reject(response.data.errors);
     });
   });
   return promise;
@@ -58,17 +66,23 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
 
 export const fetchReadme = ({ dispatch }, name) => {
   let accessToken = ls("access_token");
-  Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then( (response) => {
-    let readme  = atob(response.data.content);
-    Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
-      headers: {
-        "Content-Type": "text/plain"
-      }
-    }).then( (response) => {
-      let renderedReadme = response.data;
-      dispatch(types.SET_README, renderedReadme);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then( (response) => {
+      let readme  = atob(response.data.content);
+      Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
+        headers: {
+          "Content-Type": "text/plain"
+        }
+      }).then( (response) => {
+        let renderedReadme = response.data;
+        dispatch(types.SET_README, renderedReadme);
+        resolve(renderedReadme);
+      });
+    }, (response) => {
+      reject(response.data.errors);
     });
   });
+  return promise;
 };
 
 export const setCurrentStar = ({ dispatch }, star) => {
@@ -84,31 +98,45 @@ export const fetchTags = ({ dispatch }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_TAGS, response.data.message);
-      resolve();
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
     });
   });
   return promise;
 };
 
 export const reorderTags = ({ dispatch }, sortMap) => {
-  Vue.http.post("/api/tags/reorder", {"sortMap": sortMap}, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    dispatch(types.SET_TAGS, response.data.message);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.post("/api/tags/reorder", {"sortMap": sortMap}, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      dispatch(types.SET_TAGS, response.data.message);
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors)
+    });
   });
+  return promise;
 };
 
 export const addTag = ({ dispatch, state }) => {
-  Vue.http.post("/api/tags", state.tags.newTag, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    dispatch(types.SET_TAGS, response.data.message);
-    dispatch(types.RESET_NEW_TAG);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.post("/api/tags", state.tags.newTag, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      dispatch(types.SET_TAGS, response.data.message);
+      dispatch(types.RESET_NEW_TAG);
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
+    });
   });
+  return promise;
 };
 
 export const setCurrentTag = ({ dispatch }, tag) => {
@@ -120,15 +148,21 @@ export const resetCurrentTag = ({ dispatch }) => {
 };
 
 export const syncTags = ({ dispatch, state }, repo, tags) => {
-  Vue.http.post("/api/stars/syncTags", {"star": repo, "tags": tags}, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    fetchGithubStars({dispatch, state});
-    dispatch(types.SET_STARS, response.data.message);
-    fetchTags({dispatch});
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.post("/api/stars/syncTags", {"star": repo, "tags": tags}, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      fetchGithubStars({dispatch, state});
+      dispatch(types.SET_STARS, response.data.message);
+      fetchTags({dispatch});
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
+    });
   });
+  return promise;
 };
 
 export const editTagName = ({dispatch, state}, tagId, name) => {
@@ -143,6 +177,8 @@ export const editTagName = ({dispatch, state}, tagId, name) => {
       dispatch(types.SET_TAGS, response.data.message.tags);
       setCurrentTag({dispatch}, response.data.message.tag);
       resolve(response.data.message.tag);
+    }, (response) => {
+      reject(response.data.errors);
     });
   });
   return promise;
@@ -151,15 +187,21 @@ export const editTagName = ({dispatch, state}, tagId, name) => {
 
 //Stars
 export const tagStar = ({ dispatch, state }, starData) => {
-  Vue.http.post("/api/stars/tag", starData, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    fetchGithubStars({dispatch, state});
-    dispatch(types.SET_TAGS, response.data.message.tags);
-    dispatch(types.SET_STARS, response.data.message.stars);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.post("/api/stars/tag", starData, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      fetchGithubStars({dispatch, state});
+      dispatch(types.SET_TAGS, response.data.message.tags);
+      dispatch(types.SET_STARS, response.data.message.stars);
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
+    });
   });
+  return promise;
 };
 
 export const fetchStars = ({ dispatch }) => {
@@ -170,20 +212,28 @@ export const fetchStars = ({ dispatch }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_STARS, response.data.message);
-      resolve();
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
     });
   });
   return promise;
 };
 
 export const editStarNotes = ( {dispatch}, star, text) => {
-  Vue.http.post("/api/stars/notes", {star: star, text: text}, {
-    headers: {
-      "Authorization": `Bearer ${ls("jwt")}`
-    }
-  }).then( (response) => {
-    dispatch(types.SET_STARS, response.data.message);
+  let promise = new Promise( (resolve, reject) => {
+    Vue.http.post("/api/stars/notes", {star: star, text: text}, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then( (response) => {
+      dispatch(types.SET_STARS, response.data.message);
+      resolve(response.data.message);
+    }, (response) => {
+      reject(response.data.errors);
+    });
   });
+  return promise;
 };
 
 //Misc.
@@ -215,5 +265,4 @@ export const setSearchQuery = ({ dispatch }, query) => {
     "languages": languages
   };
   dispatch(types.SET_TOKENIZED_SEARCH, tokenizedQuery);
-
 };
