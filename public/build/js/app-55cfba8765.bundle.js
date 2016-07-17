@@ -65515,7 +65515,7 @@ var fetchUser = exports.fetchUser = function fetchUser(_ref) {
       }
     }).then(function (response) {
       dispatch(types.SET_USER, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65548,7 +65548,7 @@ var fetchGithubStars = exports.fetchGithubStars = function fetchGithubStars(_ref
       }
       if (state.github.cachedPages && state.github.cachedPages === state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve();
+        resolve(data.stars);
         return false;
       } else {
         if (state.github.cachedPages) {
@@ -65562,7 +65562,7 @@ var fetchGithubStars = exports.fetchGithubStars = function fetchGithubStars(_ref
         fetchGithubStars({ dispatch: dispatch, state: state }, currentPage);
       } else {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve();
+        resolve(data.stars);
       }
     }, function (response) {
       reject(response.data.errors);
@@ -65585,7 +65585,7 @@ var fetchReadme = exports.fetchReadme = function fetchReadme(_ref3, name) {
       }).then(function (response) {
         var renderedReadme = response.data;
         dispatch(types.SET_README, renderedReadme);
-        resolve();
+        resolve(renderedReadme);
       });
     }, function (response) {
       reject(response.data.errors);
@@ -65611,7 +65611,7 @@ var fetchTags = exports.fetchTags = function fetchTags(_ref5) {
       }
     }).then(function (response) {
       dispatch(types.SET_TAGS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65629,7 +65629,7 @@ var reorderTags = exports.reorderTags = function reorderTags(_ref6, sortMap) {
       }
     }).then(function (response) {
       dispatch(types.SET_TAGS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65649,7 +65649,7 @@ var addTag = exports.addTag = function addTag(_ref7) {
     }).then(function (response) {
       dispatch(types.SET_TAGS, response.data.message);
       dispatch(types.RESET_NEW_TAG);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65682,7 +65682,7 @@ var syncTags = exports.syncTags = function syncTags(_ref10, repo, tags) {
       fetchGithubStars({ dispatch: dispatch, state: state });
       dispatch(types.SET_STARS, response.data.message);
       fetchTags({ dispatch: dispatch });
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65726,7 +65726,7 @@ var tagStar = exports.tagStar = function tagStar(_ref12, starData) {
       fetchGithubStars({ dispatch: dispatch, state: state });
       dispatch(types.SET_TAGS, response.data.message.tags);
       dispatch(types.SET_STARS, response.data.message.stars);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65744,7 +65744,7 @@ var fetchStars = exports.fetchStars = function fetchStars(_ref13) {
       }
     }).then(function (response) {
       dispatch(types.SET_STARS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65762,7 +65762,7 @@ var editStarNotes = exports.editStarNotes = function editStarNotes(_ref14, star,
       }
     }).then(function (response) {
       dispatch(types.SET_STARS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, function (response) {
       reject(response.data.errors);
     });

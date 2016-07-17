@@ -14,7 +14,7 @@ export const fetchUser = ({ dispatch, state }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_USER, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
@@ -39,7 +39,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       if(data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached); }
       if( state.github.cachedPages && state.github.cachedPages === state.github.totalPages ) {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve();
+        resolve(data.stars);
         return false
       }
       else {
@@ -55,7 +55,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       }
       else {
         dispatch(types.SET_GITHUB_STARS, data.stars);
-        resolve();
+        resolve(data.stars);
       }
     }, (response) => {
       reject(response.data.errors);
@@ -76,7 +76,7 @@ export const fetchReadme = ({ dispatch }, name) => {
       }).then( (response) => {
         let renderedReadme = response.data;
         dispatch(types.SET_README, renderedReadme);
-        resolve();
+        resolve(renderedReadme);
       });
     }, (response) => {
       reject(response.data.errors);
@@ -98,7 +98,7 @@ export const fetchTags = ({ dispatch }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_TAGS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
@@ -114,7 +114,7 @@ export const reorderTags = ({ dispatch }, sortMap) => {
       }
     }).then( (response) => {
       dispatch(types.SET_TAGS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors)
     });
@@ -131,7 +131,7 @@ export const addTag = ({ dispatch, state }) => {
     }).then( (response) => {
       dispatch(types.SET_TAGS, response.data.message);
       dispatch(types.RESET_NEW_TAG);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
@@ -157,7 +157,7 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
       fetchGithubStars({dispatch, state});
       dispatch(types.SET_STARS, response.data.message);
       fetchTags({dispatch});
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
@@ -196,7 +196,7 @@ export const tagStar = ({ dispatch, state }, starData) => {
       fetchGithubStars({dispatch, state});
       dispatch(types.SET_TAGS, response.data.message.tags);
       dispatch(types.SET_STARS, response.data.message.stars);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
@@ -212,7 +212,7 @@ export const fetchStars = ({ dispatch }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_STARS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
@@ -228,7 +228,7 @@ export const editStarNotes = ( {dispatch}, star, text) => {
       }
     }).then( (response) => {
       dispatch(types.SET_STARS, response.data.message);
-      resolve();
+      resolve(response.data.message);
     }, (response) => {
       reject(response.data.errors);
     });
