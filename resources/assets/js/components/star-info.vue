@@ -24,7 +24,7 @@
       {{{ readme }}}
     </div>
     <div>
-      <star-notes-editor :notes="notes" v-show="star.hasOwnProperty('id') && noteEditorShowing"></star-notes-editor>
+      <star-notes-editor :notes="notes" v-if="star.hasOwnProperty('id') && noteEditorShowing"></star-notes-editor>
     </div>
   </div>
 </template>
