@@ -64614,13 +64614,21 @@ exports.default = {
           _this.setCurrentTag(tag);
         }
       }
+    }).catch(function (errors) {
+      _this.$root.$broadcast("NOTIFICATION", "There was an error fetching your tags.", "error");
     });
   },
 
   methods: {
     doAddTag: function doAddTag() {
-      this.addTag();
-      this.$root.$broadcast("NOTIFICATION", this.newTag.name + " was created successfully.");
+      var _this2 = this;
+
+      var newTagName = this.newTag.name;
+      this.addTag().then(function () {
+        _this2.$root.$broadcast("NOTIFICATION", newTagName + " was created successfully.");
+      }).catch(function (errors) {
+        _this2.$root.$broadcast("NOTIFICATION", "There was an error creating this tag.", "error");
+      });
     },
     tagStarWithData: function tagStarWithData(data, scope) {
       var starData = {
@@ -64674,8 +64682,6 @@ var _galileoGetters = require("../store/getters/galileoGetters");
 
 var _actions = require("../store/actions");
 
-var _lodash = require("lodash");
-
 var _drag_and_drop = require("./../directives/drag_and_drop.js");
 
 var _drag_and_drop2 = _interopRequireDefault(_drag_and_drop);
@@ -64713,14 +64719,22 @@ exports.default = {
     }
   },
   ready: function ready() {
+    var _this = this;
+
     this.fetchStars();
-    this.fetchGithubStars();
+    this.fetchGithubStars().catch(function (errors) {
+      _this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error");
+    });
   },
 
   methods: {
     starClicked: function starClicked(repo) {
+      var _this2 = this;
+
       this.setCurrentStar(repo);
-      this.fetchReadme(repo.full_name);
+      this.fetchReadme(repo.full_name).catch(function (errors) {
+        _this2.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error");
+      });
       this.$broadcast("STAR_CHANGED");
     },
     setTag: function setTag(tag) {
@@ -64745,7 +64759,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../store/actions":255,"../store/getters/galileoGetters":256,"../store/getters/githubGetters":257,"../store/getters/starsGetters":258,"../store/getters/tagsGetters":259,"./../directives/drag_and_drop.js":251,"./../filters/currentTag.js":253,"./../filters/galileo.js":254,"./star-info.vue":247,"lodash":205,"vue":236,"vue-hot-reload-api":210}],244:[function(require,module,exports){
+},{"../store/actions":255,"../store/getters/galileoGetters":256,"../store/getters/githubGetters":257,"../store/getters/starsGetters":258,"../store/getters/tagsGetters":259,"./../directives/drag_and_drop.js":251,"./../filters/currentTag.js":253,"./../filters/galileo.js":254,"./star-info.vue":247,"vue":236,"vue-hot-reload-api":210}],244:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64926,6 +64940,7 @@ exports.default = {
       var _this = this;
 
       this.show = true;
+      clearTimeout(this._timeout);
       this._timeout = setTimeout(function () {
         _this.show = false;
       }, parseInt(this.timeout, 10) + 500);
@@ -65500,6 +65515,7 @@ var fetchUser = exports.fetchUser = function fetchUser(_ref) {
       }
     }).then(function (response) {
       dispatch(types.SET_USER, response.data.message);
+      resolve();
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65569,6 +65585,7 @@ var fetchReadme = exports.fetchReadme = function fetchReadme(_ref3, name) {
       }).then(function (response) {
         var renderedReadme = response.data;
         dispatch(types.SET_README, renderedReadme);
+        resolve();
       });
     }, function (response) {
       reject(response.data.errors);
@@ -65612,6 +65629,7 @@ var reorderTags = exports.reorderTags = function reorderTags(_ref6, sortMap) {
       }
     }).then(function (response) {
       dispatch(types.SET_TAGS, response.data.message);
+      resolve();
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65631,6 +65649,7 @@ var addTag = exports.addTag = function addTag(_ref7) {
     }).then(function (response) {
       dispatch(types.SET_TAGS, response.data.message);
       dispatch(types.RESET_NEW_TAG);
+      resolve();
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65663,6 +65682,7 @@ var syncTags = exports.syncTags = function syncTags(_ref10, repo, tags) {
       fetchGithubStars({ dispatch: dispatch, state: state });
       dispatch(types.SET_STARS, response.data.message);
       fetchTags({ dispatch: dispatch });
+      resolve();
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65706,6 +65726,7 @@ var tagStar = exports.tagStar = function tagStar(_ref12, starData) {
       fetchGithubStars({ dispatch: dispatch, state: state });
       dispatch(types.SET_TAGS, response.data.message.tags);
       dispatch(types.SET_STARS, response.data.message.stars);
+      resolve();
     }, function (response) {
       reject(response.data.errors);
     });
@@ -65741,6 +65762,7 @@ var editStarNotes = exports.editStarNotes = function editStarNotes(_ref14, star,
       }
     }).then(function (response) {
       dispatch(types.SET_STARS, response.data.message);
+      resolve();
     }, function (response) {
       reject(response.data.errors);
     });

@@ -24,6 +24,7 @@ export default {
   methods: {
     showNotifier(){
       this.show = true;
+      clearTimeout(this._timeout);
       this._timeout = setTimeout(() => {
         this.show = false;
       }, parseInt(this.timeout, 10) + 500);

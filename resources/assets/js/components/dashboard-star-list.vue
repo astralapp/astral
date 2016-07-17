@@ -34,7 +34,6 @@ import {
   setCurrentStar,
   setCurrentTag,
 } from "../store/actions";
-import { intersection } from "lodash";
 import dnd from "./../directives/drag_and_drop.js";
 import currentTagFilter from "./../filters/currentTag.js";
 import galileo from "./../filters/galileo.js";
@@ -58,13 +57,17 @@ export default {
     }
   },
   ready() {
-    this.fetchStars();
-    this.fetchGithubStars();
+    this.fetchStars()
+    this.fetchGithubStars().catch( (errors) => {
+      this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error");
+    });
   },
   methods: {
     starClicked(repo){
       this.setCurrentStar(repo);
-      this.fetchReadme(repo.full_name);
+      this.fetchReadme(repo.full_name).catch((errors) => {
+        this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error");
+      });
       this.$broadcast("STAR_CHANGED");
     },
     setTag(tag){

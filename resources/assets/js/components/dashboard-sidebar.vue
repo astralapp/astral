@@ -81,12 +81,18 @@ export default {
           this.setCurrentTag(tag);
         }
       }
+    }).catch((errors) => {
+      this.$root.$broadcast("NOTIFICATION", "There was an error fetching your tags.", "error");
     });
   },
   methods: {
     doAddTag: function(){
-      this.addTag();
-      this.$root.$broadcast("NOTIFICATION", `${this.newTag.name} was created successfully.`);
+      const newTagName = this.newTag.name
+      this.addTag().then( () => {
+        this.$root.$broadcast("NOTIFICATION", `${newTagName} was created successfully.`);
+      }).catch( (errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error creating this tag.", "error");
+      });
     },
     tagStarWithData: function(data, scope){
       let starData = {

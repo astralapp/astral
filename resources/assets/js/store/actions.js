@@ -14,6 +14,7 @@ export const fetchUser = ({ dispatch, state }) => {
       }
     }).then( (response) => {
       dispatch(types.SET_USER, response.data.message);
+      resolve();
     }, (response) => {
       reject(response.data.errors);
     });
@@ -75,6 +76,7 @@ export const fetchReadme = ({ dispatch }, name) => {
       }).then( (response) => {
         let renderedReadme = response.data;
         dispatch(types.SET_README, renderedReadme);
+        resolve();
       });
     }, (response) => {
       reject(response.data.errors);
@@ -112,6 +114,7 @@ export const reorderTags = ({ dispatch }, sortMap) => {
       }
     }).then( (response) => {
       dispatch(types.SET_TAGS, response.data.message);
+      resolve();
     }, (response) => {
       reject(response.data.errors)
     });
@@ -128,6 +131,7 @@ export const addTag = ({ dispatch, state }) => {
     }).then( (response) => {
       dispatch(types.SET_TAGS, response.data.message);
       dispatch(types.RESET_NEW_TAG);
+      resolve();
     }, (response) => {
       reject(response.data.errors);
     });
@@ -153,6 +157,7 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
       fetchGithubStars({dispatch, state});
       dispatch(types.SET_STARS, response.data.message);
       fetchTags({dispatch});
+      resolve();
     }, (response) => {
       reject(response.data.errors);
     });
@@ -191,6 +196,7 @@ export const tagStar = ({ dispatch, state }, starData) => {
       fetchGithubStars({dispatch, state});
       dispatch(types.SET_TAGS, response.data.message.tags);
       dispatch(types.SET_STARS, response.data.message.stars);
+      resolve();
     }, (response) => {
       reject(response.data.errors);
     });
@@ -222,6 +228,7 @@ export const editStarNotes = ( {dispatch}, star, text) => {
       }
     }).then( (response) => {
       dispatch(types.SET_STARS, response.data.message);
+      resolve();
     }, (response) => {
       reject(response.data.errors);
     });
