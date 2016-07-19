@@ -65075,7 +65075,8 @@ exports.default = {
   name: "Auth",
   data: function data() {
     return {
-      authenticated: false
+      authenticated: false,
+      error: ""
     };
   },
 
@@ -65088,29 +65089,39 @@ exports.default = {
     },
     goToDashboard: function goToDashboard() {
       this.$route.router.go("/dashboard");
+    },
+    authFailed: function authFailed() {
+      this.authenticated = false;
+      this.error = "Unable to authenticate user.";
     }
   },
   ready: function ready() {
     window.goToDashboard = this.goToDashboard.bind(null);
+    window.authFailed = this.authFailed.bind(null);
   },
 
   route: {
     data: function data(_ref) {
       var to = _ref.to;
 
-      if (to.query.token && to.query.access_token) {
-        (0, _localStorage2.default)("jwt", to.query.token);
-        (0, _localStorage2.default)("access_token", to.query.access_token);
-        setTimeout(function () {
-          window.opener.goToDashboard();
-          window.close();
-        }, 0);
+      if (to.query.error) {
+        window.opener.authFailed();
+        window.close();
+      } else {
+        if (to.query.token && to.query.access_token) {
+          (0, _localStorage2.default)("jwt", to.query.token);
+          (0, _localStorage2.default)("access_token", to.query.access_token);
+          setTimeout(function () {
+            window.opener.goToDashboard();
+            window.close();
+          }, 0);
+        }
       }
     }
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"auth\">\n  <div class=\"auth-authenticated\" v-show=\"authenticated\">\n    <div class=\"auth-statusText\">\n      Signing In\n    </div>\n    <div class=\"auth-pulser\"></div>\n  </div>\n  <div class=\"auth-signIn\" v-else=\"\">\n    <img src=\"images/logo.svg\" alt=\"Astral\">\n      <button class=\"auth-signInButton\" @click=\"authorize\">Sign In</button>\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"auth\">\n  <div class=\"auth-authenticated\" v-show=\"authenticated\">\n    <div class=\"auth-statusText\">\n      Signing In\n    </div>\n    <div class=\"auth-pulser\"></div>\n  </div>\n  <div class=\"auth-signIn\" v-else=\"\">\n    <img src=\"images/logo.svg\" alt=\"Astral\">\n      <div class=\"auth-error\" v-show=\"error != ''\">{{ error }}</div>\n      <button class=\"auth-signInButton\" @click=\"authorize\">Sign In</button>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

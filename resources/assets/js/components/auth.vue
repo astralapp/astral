@@ -8,6 +8,7 @@
     </div>
     <div class="auth-signIn" v-else>
       <img src="images/logo.svg" alt="Astral">
+        <div class="auth-error" v-show="error != ''">{{ error }}</div>
         <button class="auth-signInButton" @click="authorize">Sign In</button>
     </div>
   </div>
@@ -18,7 +19,8 @@
     name: "Auth",
     data() {
       return {
-        authenticated: false
+        authenticated: false,
+        error: ""
       }
     },
     methods: {
@@ -30,20 +32,31 @@
       },
       goToDashboard(){
         this.$route.router.go("/dashboard");
+      },
+      authFailed(){
+        this.authenticated = false;
+        this.error = "Unable to authenticate user.";
       }
     },
     ready() {
       window.goToDashboard = this.goToDashboard.bind(null);
+      window.authFailed = this.authFailed.bind(null);
     },
     route: {
       data({ to }){
-        if(to.query.token && to.query.access_token){
-          ls("jwt", to.query.token);
-          ls("access_token", to.query.access_token);
-          setTimeout(function(){
-            window.opener.goToDashboard()
-            window.close();
-          }, 0);
+        if(to.query.error){
+          window.opener.authFailed()
+          window.close();
+        }
+        else {
+          if(to.query.token && to.query.access_token){
+            ls("jwt", to.query.token);
+            ls("access_token", to.query.access_token);
+            setTimeout(function(){
+              window.opener.goToDashboard()
+              window.close();
+            }, 0);
+          }
         }
       }
     }

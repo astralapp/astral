@@ -7,6 +7,7 @@ use Auth;
 use JWTAuth;
 use Socialite;
 use Log;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -30,8 +31,11 @@ class AuthController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(Request $request)
     {
+        if( isset($request['error']) ){
+          return redirect("/auth?error=true");
+        }
         $githubUser = Socialite::driver('github')->user();
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
