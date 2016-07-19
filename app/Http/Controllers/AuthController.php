@@ -6,6 +6,7 @@ use Astral\Models\User;
 use Auth;
 use JWTAuth;
 use Socialite;
+use Log;
 
 class AuthController extends Controller
 {
@@ -69,6 +70,13 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+      if ($token = JWTAuth::getToken()) {
+          try {
+              JWTAuth::invalidate($token);
+          } catch (Exception $e) {
+              Log::error($e);
+          }
+      }
+      return redirect("auth");
     }
 }
