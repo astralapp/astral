@@ -33,7 +33,7 @@ class AuthController extends Controller
      */
     public function handleProviderCallback(Request $request)
     {
-        if(isset($request['error'])){
+        if (isset($request['error'])){
             return redirect("/auth?error=true");
         }
         $githubUser = Socialite::driver('github')->user();
@@ -81,6 +81,7 @@ class AuthController extends Controller
                 Log::error($e);
             }
         }
+
         return redirect("auth");
     }
 }
