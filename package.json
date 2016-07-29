@@ -12,6 +12,7 @@
     "lodash": "^4.0.0",
     "marked": "^0.3.5",
     "select2": "^4.0.1",
+    "simplemde": "^1.11.2",
     "vue": "^1.0.19",
     "vue-resource": "^0.6.1",
     "vue-router": "^0.7.8",

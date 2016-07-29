@@ -281,82 +281,30 @@
   background: #fff;
   overflow: hidden;
   position: absolute; top: 45px; left: 0; bottom: 0; right: 0;
-  .repo-note-toolbar {
-    border-bottom: 1px solid #eee;
-    height: 45px;
-    padding: 0 20px;
-    .toggle-edit-mode {
-      display: inline-block;
-      margin: 1px 0 0 -4px;
-      input[type=checkbox]{
-        @include size(0);
-        visibility: hidden;
-        margin: 0; padding: 0;
-        & + label {
-          @include transition(all 250ms ease);
-          background: transparent;
-          border-radius: 3px;
-          color: #B0B6BA;
-          cursor: pointer;
-          font-size: 22px;
-          i.fa {
-            padding: 10px 8px;
-          }
-          & + .toggle-hint {
-            @include transition(all 250ms ease-out);
-            @include transform(translate3d(-10px,0,0));
-            color: #B0B6BA;
-            display: inline-block;
-            font-size: 0.8rem;
-            opacity: 0;
-            pointer-events: none;
-            position: relative; top: -3px;
-            will-change: transform;
-          }
-          &:hover + .toggle-hint {
-            @include transform(translate3d(0,0,0));
-            opacity: 1;
-          }
-        }
-        &:checked + label {
-          background: rgba(#B0B6BA, 0.25);
-          color: $primary;
-        }
-      }
-    }
-  }
-  textarea {
-    @include appearance(none);
+  .editor-toolbar {
     border: none;
-    font-family: "Courier New", "Courier", monospace;
-    outline: none;
-    padding: 20px;
-    position: absolute; top: 45px; right: 0; bottom: 0; left: 0;
-    width: 100%;
-    word-wrap: break-word;
+    position: absolute; top: 0; left: 0; width: 100%;
   }
-  .repo-note-preview {
-    background: #fff;
-    font-size: 0.9rem;
+  .repo-notes-status {
+    @include transition(opacity 250ms ease);
+    color: $green;
+    font-size: 0.85rem;
+    font-weight: bold;
+    opacity: 0;
+    position: absolute; top: 17px; right: 20px;
+    &.active { opacity: 1; }
+  }
+  .CodeMirror {
+    border-left: none; border-right: none; border-bottom: none;
+    border-top: 1px solid rgba(#373570, 0.1);
+    color: #28343d;
     line-height: 1.5;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    padding: 20px;
-    position: absolute; top: 45px; right: 0; bottom: 0; left: 0;
-    word-wrap: break-word;
-    h1:first-of-type { margin-top: 0; }
-    a {
-      color: $primary;
-      &:hover { text-decoration: none; }
-    }
-    pre {
-      border: 1px solid #eee;
-      padding: 0 0.5em;
-    }
-    p code { font-size: 0.9rem; }
-    img {
-      max-width: 100%;
-      height: auto;
-    }
+    position: absolute; top: 49px; left: 0; right: 0; bottom: 0;
+  }
+  .editor-toolbar, .CodeMirror {
+    border-radius: 0!important;
+  }
+  .CodeMirror-fullscreen, .editor-toolbar.fullscreen {
+    z-index: 99!important;
   }
 }

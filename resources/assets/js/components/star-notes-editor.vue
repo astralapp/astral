@@ -1,65 +1,61 @@
 <template>
   <div class="repo-notes">
-    <div class="repo-note-toolbar">
-      <div class="toggle-edit-mode">
-        <input type="checkbox" id="toggle-edit-mode" v-model="previewMode" />
-        <label for="toggle-edit-mode"><i class="fa fa-eye"></i></label>
-        <div class="toggle-hint">Toggle Preview Mode</div>
-      </div>
-    </div>
-    <textarea class="repo-note-editor" @input="saveNotes | debounce 1000" v-model="currentNotes">{{ notes }}</textarea>
-    <div class="repo-note-preview" v-show="previewMode">{{{ renderedNotes }}}</div>
+    <textarea class="repo-note-editor" v-el:editor></textarea>
+    <div class="repo-notes-status" :class="{'active': notesSaved}">Saved</div>
   </div>
 </template>
 <script>
 import Vue from "vue";
 import highlight from "highlight.js";
-import marked from "marked";
+import SimpleMDE from "simplemde";
+import { debounce } from "lodash";
 export default {
   name: "StarNotesEditor",
   props: ["notes"],
   data(){
     return {
+      editor: null,
       currentNotes: "",
-      previewMode: false
+      notesSaved: false
     }
   },
-  computed: {
-    renderedNotes(){
-      if( this.notes && this.notes.replace(/\s/g, "") !== "" ){
-        return marked(this.notes);
-      }
-      else {
-        return "";
-      }
-    }
+  ready(){
+    this.editor = new SimpleMDE({
+      element: this.$els.editor,
+      initialValue: this.notes,
+      forceSync: true,
+      autoDownloadFontAwesome: false,
+      renderingConfig: {
+        codeSyntaxHighlighting: true
+      },
+      spellChecker: false,
+      hideIcons: ["side-by-side", "guide"],
+      showIcons: ["code"],
+      status: false
+    });
+    this.editor.codemirror.on("change", debounce(() => {
+      this.currentNotes = this.editor.value();
+      Vue.nextTick(() => {
+        this.saveNotes()
+      });
+    }, 1000))
   },
   methods: {
-    hasNotes(){
-      return this.notes && this.notes.replace(/\s/g, "") !== "";
-    },
-    saveNotes(){
-      if( this.currentNotes ){
-        this.$dispatch("NOTES_SAVED", this.currentNotes);
-      }
+    saveNotes (){
+      this.$dispatch("NOTES_SAVED", this.currentNotes);
+      this.notesSaved = true
+      setTimeout(() => {
+        this.notesSaved = false
+      }, 3000)
     }
   },
   events: {
     "STAR_CHANGED": function(){
-      setTimeout(() => {
-        this.previewMode = this.hasNotes();
-      }, 1);
-
+      //Set new notes
+      Vue.nextTick(() => {
+        this.editor.value(this.notes);
+      })
     }
   },
-  ready(){
-    marked.setOptions({
-      sanitize: true,
-      breaks: true,
-      highlight: (code) => {
-        return highlight.highlightAuto(code).value;
-      }
-    });
-  }
 }
 </script>
