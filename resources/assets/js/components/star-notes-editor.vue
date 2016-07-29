@@ -5,21 +5,22 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import highlight from "highlight.js";
-import SimpleMDE from "simplemde";
-import { debounce } from "lodash";
+import Vue from "vue"
+import SimpleMDE from "simplemde"
+import { debounce } from "lodash"
+import "highlight.js"
+
 export default {
   name: "StarNotesEditor",
   props: ["notes"],
-  data(){
+  data () {
     return {
       editor: null,
       currentNotes: "",
       notesSaved: false
     }
   },
-  ready(){
+  ready () {
     this.editor = new SimpleMDE({
       element: this.$els.editor,
       initialValue: this.notes,
@@ -32,17 +33,17 @@ export default {
       hideIcons: ["side-by-side", "guide"],
       showIcons: ["code"],
       status: false
-    });
+    })
     this.editor.codemirror.on("change", debounce(() => {
-      this.currentNotes = this.editor.value();
+      this.currentNotes = this.editor.value()
       Vue.nextTick(() => {
         this.saveNotes()
-      });
+      })
     }, 1000))
   },
   methods: {
-    saveNotes (){
-      this.$dispatch("NOTES_SAVED", this.currentNotes);
+    saveNotes () {
+      this.$dispatch("NOTES_SAVED", this.currentNotes)
       this.notesSaved = true
       setTimeout(() => {
         this.notesSaved = false
@@ -50,12 +51,12 @@ export default {
     }
   },
   events: {
-    "STAR_CHANGED": function(){
-      //Set new notes
+    "STAR_CHANGED": function () {
+      //  Set new notes
       Vue.nextTick(() => {
-        this.editor.value(this.notes);
+        this.editor.value(this.notes)
       })
     }
-  },
+  }
 }
 </script>

@@ -1,3 +1,3 @@
 export const user = state => {
-  return state.user.user;
+  return state.user.user
 }

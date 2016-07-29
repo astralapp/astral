@@ -9,11 +9,10 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
 export default {
   name: "Notifier",
   props: ["timeout"],
-  data(){
+  data () {
     return {
       _timeout: null,
       show: false,
@@ -22,23 +21,23 @@ export default {
     }
   },
   methods: {
-    showNotifier(){
-      this.show = true;
-      clearTimeout(this._timeout);
+    showNotifier () {
+      this.show = true
+      clearTimeout(this._timeout)
       this._timeout = setTimeout(() => {
-        this.show = false;
-      }, parseInt(this.timeout, 10) + 500);
+        this.show = false
+      }, parseInt(this.timeout, 10) + 500)
     },
-    hideNotifier(){
-      clearTimeout(this._timeout);
-      this.show = false;
+    hideNotifier () {
+      clearTimeout(this._timeout)
+      this.show = false
     }
   },
   events: {
-    "NOTIFICATION": function(message, mode = "success"){
-      this.message = message;
-      this.mode = mode;
-      this.showNotifier();
+    "NOTIFICATION": function (message, mode = "success") {
+      this.message = message
+      this.mode = mode
+      this.showNotifier()
     }
   }
 }

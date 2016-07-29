@@ -22,22 +22,22 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import { githubStars } from "../store/getters/githubGetters";
-import { stars, currentStar } from "../store/getters/starsGetters";
-import { currentTag } from "../store/getters/tagsGetters";
-import { tokenizedSearchQuery } from "../store/getters/galileoGetters";
+import { githubStars } from "../store/getters/githubGetters"
+import { stars, currentStar } from "../store/getters/starsGetters"
+import { currentTag } from "../store/getters/tagsGetters"
+import { tokenizedSearchQuery } from "../store/getters/galileoGetters"
 import {
   fetchStars,
   fetchGithubStars,
   fetchReadme,
   setCurrentStar,
-  setCurrentTag,
-} from "../store/actions";
-import dnd from "./../directives/drag_and_drop.js";
-import currentTagFilter from "./../filters/currentTag.js";
-import galileo from "./../filters/galileo.js";
-import StarInfo from "./star-info.vue";
+  setCurrentTag
+} from "../store/actions"
+import StarInfo from "./star-info.vue"
+import "./../filters/currentTag.js"
+import "./../filters/galileo.js"
+import "./../directives/drag_and_drop.js"
+
 export default {
   name: "StarList",
   vuex: {
@@ -53,26 +53,26 @@ export default {
       fetchGithubStars,
       fetchReadme,
       setCurrentStar,
-      setCurrentTag,
+      setCurrentTag
     }
   },
-  ready() {
+  ready () {
     this.fetchStars()
-    this.fetchGithubStars().catch( (errors) => {
-      this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error");
-    });
+    this.fetchGithubStars().catch((errors) => {
+      this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error")
+    })
   },
   methods: {
-    starClicked(repo){
-      this.setCurrentStar(repo);
+    starClicked (repo) {
+      this.setCurrentStar(repo)
       this.fetchReadme(repo.full_name).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error");
-      });
-      this.$broadcast("STAR_CHANGED");
+        this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error")
+      })
+      this.$broadcast("STAR_CHANGED")
     },
-    setTag(tag){
-      this.setCurrentTag(tag);
-      this.$route.router.replace(`/dashboard/${tag.slug}`);
+    setTag (tag) {
+      this.setCurrentTag(tag)
+      this.$route.router.replace(`/dashboard/${tag.slug}`)
     }
   },
   components: {

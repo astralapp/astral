@@ -9,13 +9,14 @@
   </div>
 </template>
 <script>
-import ls from "local-storage";
-import { user } from "../store/getters/userGetters";
-import { fetchUser } from "../store/actions";
-import DashboardHeader from "./dashboard-header.vue";
-import DashboardSidebar from "./dashboard-sidebar.vue";
-import StarList from "./dashboard-star-list.vue";
-import Notifier from "./notifier.vue";
+import ls from "local-storage"
+import { user } from "../store/getters/userGetters"
+import { fetchUser } from "../store/actions"
+import DashboardHeader from "./dashboard-header.vue"
+import DashboardSidebar from "./dashboard-sidebar.vue"
+import StarList from "./dashboard-star-list.vue"
+import Notifier from "./notifier.vue"
+
 export default {
   name: "Dashboard",
   vuex: {
@@ -26,17 +27,16 @@ export default {
       fetchUser
     }
   },
-  ready() {
-    if( ls("jwt") ){
-      this.fetchUser();
-    }
-    else {
-      this.$route.router.go("/auth");
+  ready () {
+    if (ls("jwt")) {
+      this.fetchUser()
+    } else {
+      this.$route.router.go("/auth")
     }
   },
   methods: {
-    hideUserDropdown(){
-      this.$broadcast("HIDE_USER_DROPDOWN");
+    hideUserDropdown () {
+      this.$broadcast("HIDE_USER_DROPDOWN")
     }
   },
   components: {
