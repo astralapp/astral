@@ -8,7 +8,8 @@
     </div>
     <div class="auth-signIn" v-else>
       <img src="images/logo.svg" alt="Astral">
-        <a class="auth-signInButton" href="/api/auth">Sign In</a>
+        <div class="auth-error" v-show="error != ''">{{ error }}</div>
+        <button class="auth-signInButton" @click="authorize">Sign In</button>
     </div>
   </div>
 </template>
@@ -18,18 +19,44 @@
     name: "Auth",
     data() {
       return {
-        authenticated: false
+        authenticated: false,
+        error: ""
       }
+    },
+    methods: {
+      authorize(){
+        this.authenticated = true;
+        const left = screen.availWidth / 2 - 400;
+        const authPopup = window.open("/api/auth", "social_auth", `width=800,height=600,dialog,top=100,left=${left}`);
+        authPopup.window.focus();
+      },
+      goToDashboard(){
+        this.$route.router.go("/dashboard");
+      },
+      authFailed(){
+        this.authenticated = false;
+        this.error = "Unable to authenticate user.";
+      }
+    },
+    ready() {
+      window.goToDashboard = this.goToDashboard.bind(null);
+      window.authFailed = this.authFailed.bind(null);
     },
     route: {
       data({ to }){
-        if(to.query.token && to.query.access_token){
-          this.authenticated = true;
-          ls("jwt", to.query.token);
-          ls("access_token", to.query.access_token);
-          setTimeout( () => {
-            this.$route.router.go("/dashboard")
-          }, 1);
+        if(to.query.error){
+          window.opener.authFailed()
+          window.close();
+        }
+        else {
+          if(to.query.token && to.query.access_token){
+            ls("jwt", to.query.token);
+            ls("access_token", to.query.access_token);
+            setTimeout(function(){
+              window.opener.goToDashboard()
+              window.close();
+            }, 0);
+          }
         }
       }
     }
