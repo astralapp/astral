@@ -9,8 +9,9 @@
   </div>
 </template>
 <script>
-import { currentTag } from "../store/getters/tagsGetters";
-import { editTagName } from "../store/actions";
+import { currentTag } from "../store/getters/tagsGetters"
+import { editTagName } from "../store/actions"
+
 export default {
   name: "EditTagDropdown",
   vuex: {
@@ -21,7 +22,7 @@ export default {
       editTagName
     }
   },
-  data(){
+  data () {
     return {
       currentTagName: "",
       tagEditorShowing: false
@@ -29,32 +30,30 @@ export default {
   },
   computed: {
     currentTagField: {
-      get(){
-        if( this.currentTagName.replace(/\s/g, "") === "" ){
-          return this.currentTag.name;
+      get () {
+        if (this.currentTagName.replace(/\s/g, "") === "") {
+          return this.currentTag.name
         } else {
-          return this.currentTagName;
+          return this.currentTagName
         }
-
       },
-      set(newValue){
-        this.currentTagName = newValue;
+      set (newValue) {
+        this.currentTagName = newValue
       }
     }
   },
   methods: {
-    currentTagExists(){
-      return Object.keys(this.currentTag).length ? true : false;
+    currentTagExists () {
+      return Boolean(Object.keys(this.currentTag).length)
     },
-    doEditTagName(id, name){
+    doEditTagName (id, name) {
       this.editTagName(id, name).then((res) => {
-        this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`);
-        this.$route.router.replace(`/dashboard/${res.slug}`);
-      }).catch( (errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error renaming this tag.", "error");
-      });
-
+        this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`)
+        this.$route.router.replace(`/dashboard/${res.slug}`)
+      }).catch((errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error renaming this tag.", "error")
+      })
     }
-  },
+  }
 }
 </script>

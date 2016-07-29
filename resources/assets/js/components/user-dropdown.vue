@@ -10,15 +10,16 @@
   </div>
 </template>
 <script>
-import ls from "local-storage";
+import ls from "local-storage"
+
 export default {
   name: "UserDropdown",
   props: ["visible"],
   methods: {
-    logout(){
-      ls.remove("jwt");
-      ls.remove("access_token");
-      window.location = "/api/auth/logout";
+    logout () {
+      ls.remove("jwt")
+      ls.remove("access_token")
+      window.location = "/api/auth/logout"
     }
   }
 }

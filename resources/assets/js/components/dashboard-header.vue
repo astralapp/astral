@@ -19,15 +19,16 @@
   </div>
 </template>
 <script>
-import { user } from "../store/getters/userGetters";
-import { currentTag } from "../store/getters/tagsGetters";
-import { searchQuery } from "../store/getters/galileoGetters";
-import { setSearchQuery } from "../store/actions";
-import EditTagDropdown from "./edit-tag-dropdown.vue";
-import UserDropdown from "./user-dropdown.vue";
+import { user } from "../store/getters/userGetters"
+import { currentTag } from "../store/getters/tagsGetters"
+import { searchQuery } from "../store/getters/galileoGetters"
+import { setSearchQuery } from "../store/actions"
+import EditTagDropdown from "./edit-tag-dropdown.vue"
+import UserDropdown from "./user-dropdown.vue"
+
 export default {
   name: "DashboardHeader",
-  data(){
+  data () {
     return {
       userDropdownVisible: false
     }
@@ -43,15 +44,15 @@ export default {
     }
   },
   computed: {
-    currentTagName(){
+    currentTagName () {
       return Object.keys(this.currentTag).length ? this.currentTag.name : "All Stars"
     },
     currentSearchQuery: {
-      get(){
-        return this.searchQuery;
+      get () {
+        return this.searchQuery
       },
-      set(newValue){
-        this.setSearchQuery(newValue);
+      set (newValue) {
+        this.setSearchQuery(newValue)
       }
     }
   },
@@ -60,8 +61,8 @@ export default {
     "user-dropdown": UserDropdown
   },
   events: {
-    "HIDE_USER_DROPDOWN": function(){
-      this.userDropdownVisible = false;
+    "HIDE_USER_DROPDOWN": function () {
+      this.userDropdownVisible = false
     }
   }
 }

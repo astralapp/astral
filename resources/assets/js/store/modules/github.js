@@ -4,30 +4,30 @@ import {
   SET_CACHED_PAGES,
   INCREMENT_CACHED_PAGES,
   SET_README
-} from "../mutation-types.js";
+} from "../mutation-types.js"
 
 const state = {
-    githubStars: [],
-    readme: "",
-    totalPages: 0,
-    cachedPages: 0
+  githubStars: [],
+  readme: "",
+  totalPages: 0,
+  cachedPages: 0
 }
 
 export const mutations = {
   [SET_GITHUB_STARS] (state, stars) {
-    state.githubStars = stars;
+    state.githubStars = stars
   },
-  [SET_TOTAL_PAGES] (state, count){
-    state.totalPages = count;
+  [SET_TOTAL_PAGES] (state, count) {
+    state.totalPages = count
   },
-  [SET_CACHED_PAGES] (state, count){
-    state.cachedPages = count;
+  [SET_CACHED_PAGES] (state, count) {
+    state.cachedPages = count
   },
-  [INCREMENT_CACHED_PAGES] (state){
-    state.cachedPages++;
+  [INCREMENT_CACHED_PAGES] (state) {
+    state.cachedPages++
   },
   [SET_README] (state, readme) {
-    state.readme = readme;
+    state.readme = readme
   }
 }
 

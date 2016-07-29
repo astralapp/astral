@@ -8,27 +8,27 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import "../directives/tag-select.js";
+import "../directives/tag-select.js"
+
 export default {
   name: "TagEditor",
   props: ["tags"],
-  data(){
+  data () {
     return {
       tagsToSync: []
     }
   },
-  ready(){
-    this.tagsToSync = this.tags;
+  ready () {
+    this.tagsToSync = this.tags
   },
   methods: {
-    syncTags(){
-      this.$dispatch("SYNC_TAGS", this.tagsToSync);
+    syncTags () {
+      this.$dispatch("SYNC_TAGS", this.tagsToSync)
     }
   },
   events: {
-    "CURRENT_TAGS_CHANGED": function(tags){
-      this.tagsToSync = tags;
+    "CURRENT_TAGS_CHANGED": function (tags) {
+      this.tagsToSync = tags
     }
   }
 }

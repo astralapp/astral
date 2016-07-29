@@ -32,8 +32,7 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import { newTag, tags, currentTag } from "../store/getters/tagsGetters";
+import { newTag, tags, currentTag } from "../store/getters/tagsGetters"
 import {
   fetchTags,
   addTag,
@@ -41,8 +40,8 @@ import {
   reorderTags,
   setCurrentTag,
   resetCurrentTag
-} from "../store/actions";
-import dnd from "./../directives/drag_and_drop.js";
+} from "../store/actions"
+import "./../directives/drag_and_drop.js"
 
 export default {
   name: "DashboardSidebar",
@@ -61,54 +60,54 @@ export default {
       resetCurrentTag
     }
   },
-  data(){
+  data () {
     return {
       addTagFormShowing: false
     }
   },
   computed: {
-    noCurrentTag(){
+    noCurrentTag () {
       return this.currentTag.id === -1
     }
   },
-  ready(){
+  ready () {
     this.fetchTags().then(() => {
-      if(this.$route.params.tag){
-        let tag = this.tags.find( (tag) => {
-          return tag.slug === this.$route.params.tag;
-        });
-        if(tag){
-          this.setCurrentTag(tag);
+      if (this.$route.params.tag) {
+        const tag = this.tags.find((tag) => {
+          return tag.slug === this.$route.params.tag
+        })
+        if (tag) {
+          this.setCurrentTag(tag)
         }
       }
     }).catch((errors) => {
-      this.$root.$broadcast("NOTIFICATION", "There was an error fetching your tags.", "error");
-    });
+      this.$root.$broadcast("NOTIFICATION", "There was an error fetching your tags.", "error")
+    })
   },
   methods: {
-    doAddTag: function(){
+    doAddTag: function () {
       const newTagName = this.newTag.name
-      this.addTag().then( () => {
-        this.$root.$broadcast("NOTIFICATION", `${newTagName} was created successfully.`);
-      }).catch( (errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error creating this tag.", "error");
-      });
+      this.addTag().then(() => {
+        this.$root.$broadcast("NOTIFICATION", `${newTagName} was created successfully.`)
+      }).catch((errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error creating this tag.", "error")
+      })
     },
-    tagStarWithData: function(data, scope){
-      let starData = {
+    tagStarWithData: function (data, scope) {
+      const starData = {
         repoId: data.id,
         repoName: data.full_name,
         tagId: scope.tag.id
       }
-      this.tagStar(starData);
+      this.tagStar(starData)
     },
-    setTag: function(tag){
-      this.setCurrentTag(tag);
-      this.$route.router.replace(`/dashboard/${tag.slug}`);
+    setTag: function (tag) {
+      this.setCurrentTag(tag)
+      this.$route.router.replace(`/dashboard/${tag.slug}`)
     },
-    resetTag: function(){
+    resetTag: function () {
       this.resetCurrentTag()
-      this.$route.router.replace("/dashboard");
+      this.$route.router.replace("/dashboard")
     }
   }
 }

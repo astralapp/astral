@@ -1,4 +1,4 @@
-import { SET_USER } from "../mutation-types.js";
+import { SET_USER } from "../mutation-types.js"
 
 const state = {
   user: {}
@@ -6,7 +6,7 @@ const state = {
 
 export const mutations = {
   [SET_USER] (state, user) {
-    state.user = user;
+    state.user = user
   }
 }
 

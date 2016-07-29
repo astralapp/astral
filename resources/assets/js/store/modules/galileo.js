@@ -1,7 +1,7 @@
 import {
   SET_SEARCH_QUERY,
   SET_TOKENIZED_SEARCH
-} from "../mutation-types.js";
+} from "../mutation-types.js"
 
 const state = {
   searchQuery: "",
@@ -13,13 +13,12 @@ const state = {
   }
 }
 
-
 export const mutations = {
-  [SET_SEARCH_QUERY] (state, query){
-    state.searchQuery = query;
+  [SET_SEARCH_QUERY] (state, query) {
+    state.searchQuery = query
   },
-  [SET_TOKENIZED_SEARCH] (state, obj){
-    state.tokenizedSearchQuery = obj;
+  [SET_TOKENIZED_SEARCH] (state, obj) {
+    state.tokenizedSearchQuery = obj
   }
 }
 

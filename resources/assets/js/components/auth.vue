@@ -15,25 +15,26 @@
 </template>
 <script>
   import ls from "local-storage"
+
   export default {
     name: "Auth",
-    data() {
+    data () {
       return {
         authenticated: false,
         error: ""
       }
     },
     route: {
-      data({ to }){
-        if(to.query.error){
+      data ({ to }) {
+        if (to.query.error) {
           this.authenticated = false
           this.error = "Unable to authenticate user."
         } else {
-          if(to.query.token && to.query.access_token){
+          if (to.query.token && to.query.access_token) {
             this.authenticated = true
             ls("jwt", to.query.token)
             ls("access_token", to.query.access_token)
-            setTimeout( () => {
+            setTimeout(() => {
               this.$route.router.go("/dashboard")
             }, 1)
           }
