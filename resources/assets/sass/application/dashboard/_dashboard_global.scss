@@ -285,6 +285,15 @@
     border: none;
     position: absolute; top: 0; left: 0; width: 100%;
   }
+  .repo-notes-status {
+    @include transition(opacity 250ms ease);
+    color: $green;
+    font-size: 0.85rem;
+    font-weight: bold;
+    opacity: 0;
+    position: absolute; top: 17px; right: 20px;
+    &.active { opacity: 1; }
+  }
   .CodeMirror {
     border-left: none; border-right: none; border-bottom: none;
     border-top: 1px solid rgba(#373570, 0.1);

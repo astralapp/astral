@@ -1,6 +1,7 @@
 <template>
   <div class="repo-notes">
     <textarea class="repo-note-editor" v-el:editor></textarea>
+    <div class="repo-notes-status" :class="{'active': notesSaved}">Saved</div>
   </div>
 </template>
 <script>
@@ -14,7 +15,8 @@ export default {
   data(){
     return {
       editor: null,
-      currentNotes: ""
+      currentNotes: "",
+      notesSaved: false
     }
   },
   ready(){
@@ -39,10 +41,12 @@ export default {
     }, 1000))
   },
   methods: {
-    saveNotes(){
-      if( this.currentNotes ){
-        this.$dispatch("NOTES_SAVED", this.currentNotes);
-      }
+    saveNotes (){
+      this.$dispatch("NOTES_SAVED", this.currentNotes);
+      this.notesSaved = true
+      setTimeout(() => {
+        this.notesSaved = false
+      }, 3000)
     }
   },
   events: {
