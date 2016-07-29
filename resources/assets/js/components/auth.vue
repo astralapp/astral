@@ -9,12 +9,12 @@
     <div class="auth-signIn" v-else>
       <img src="images/logo.svg" alt="Astral">
         <div class="auth-error" v-show="error != ''">{{ error }}</div>
-        <button class="auth-signInButton" @click="authorize">Sign In</button>
+        <a class="auth-signInButton" href="/api/auth">Sign In</a>
     </div>
   </div>
 </template>
 <script>
-  import ls from "local-storage";
+  import ls from "local-storage"
   export default {
     name: "Auth",
     data() {
@@ -23,39 +23,19 @@
         error: ""
       }
     },
-    methods: {
-      authorize(){
-        this.authenticated = true;
-        const left = screen.availWidth / 2 - 400;
-        const authPopup = window.open("/api/auth", "social_auth", `width=800,height=600,dialog,top=100,left=${left}`);
-        authPopup.window.focus();
-      },
-      goToDashboard(){
-        this.$route.router.go("/dashboard");
-      },
-      authFailed(){
-        this.authenticated = false;
-        this.error = "Unable to authenticate user.";
-      }
-    },
-    ready() {
-      window.goToDashboard = this.goToDashboard.bind(null);
-      window.authFailed = this.authFailed.bind(null);
-    },
     route: {
       data({ to }){
         if(to.query.error){
-          window.opener.authFailed()
-          window.close();
-        }
-        else {
+          this.authenticated = false
+          this.error = "Unable to authenticate user."
+        } else {
           if(to.query.token && to.query.access_token){
-            ls("jwt", to.query.token);
-            ls("access_token", to.query.access_token);
-            setTimeout(function(){
-              window.opener.goToDashboard()
-              window.close();
-            }, 0);
+            this.authenticated = true
+            ls("jwt", to.query.token)
+            ls("access_token", to.query.access_token)
+            setTimeout( () => {
+              this.$route.router.go("/dashboard")
+            }, 1)
           }
         }
       }
