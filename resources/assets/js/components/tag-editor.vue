@@ -31,9 +31,6 @@ export default {
   methods: {
     syncTags () {
       this.$dispatch("SYNC_TAGS", this.tagsToSync)
-    },
-    away () {
-
     }
   },
   events: {
