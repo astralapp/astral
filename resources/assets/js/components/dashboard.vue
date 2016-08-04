@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard" @click="hideUserDropdown">
+  <div class="dashboard">
     <dashboard-header></dashboard-header>
     <div class="dashboard-main">
       <dashboard-sidebar></dashboard-sidebar>
@@ -32,11 +32,6 @@ export default {
       this.fetchUser()
     } else {
       this.$route.router.go("/auth")
-    }
-  },
-  methods: {
-    hideUserDropdown () {
-      this.$broadcast("HIDE_USER_DROPDOWN")
     }
   },
   components: {

@@ -19,11 +19,21 @@ export default {
     }
   },
   ready () {
-    this.tagsToSync = this.tags
+    this.tagsToSync = this.tags.map(function (tag) {
+      return {
+        name: tag.text,
+        selected: tag.selected
+      }
+    }).filter(function (tag) {
+      return tag.selected
+    })
   },
   methods: {
     syncTags () {
       this.$dispatch("SYNC_TAGS", this.tagsToSync)
+    },
+    away () {
+
     }
   },
   events: {

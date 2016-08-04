@@ -184,7 +184,7 @@
       outline: none;
       padding: 0.58rem;
       position: relative; top: -1px;
-      .fa { margin-right: 2px; }
+      .fa { margin-right: 2px; pointer-events: none; }
       &:hover {
         box-shadow: 0 1px 1px rgba(0,0,0,0.08), inset 0 -1px 1px #eee;
       }
