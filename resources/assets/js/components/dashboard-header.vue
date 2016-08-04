@@ -3,7 +3,7 @@
     <h2>
       <span>{{ currentTagName }}</span>
     </h2>
-    <edit-tag-dropdown></edit-tag-dropdown>
+    <edit-tag-dropdown v-if="currentTagExists()"></edit-tag-dropdown>
     <div class="dashboard-searchBar">
       <label for="galileo">
         <input type="text" id="galileo" class="dashboard-telescope" placeholder="Gaze through your telescope" v-model="currentSearchQuery">
@@ -14,7 +14,7 @@
       <img :src="user.avatar_url" :alt="user.name" class="dashboard-userDropdownAvatar"/>
       <span class="dashboard-userDropdownName">{{ user.username }}</span>
       <i class="fa fa-chevron-down"></i>
-      <user-dropdown :visible="userDropdownVisible"></user-dropdown>
+      <user-dropdown :visible="userDropdownVisible" v-on-clickaway="userDropdownVisible = false"></user-dropdown>
     </div>
   </div>
 </template>
@@ -25,9 +25,11 @@ import { searchQuery } from "../store/getters/galileoGetters"
 import { setSearchQuery } from "../store/actions"
 import EditTagDropdown from "./edit-tag-dropdown.vue"
 import UserDropdown from "./user-dropdown.vue"
+import { mixin as clickaway } from "vue-clickaway"
 
 export default {
   name: "DashboardHeader",
+  mixins: [clickaway],
   data () {
     return {
       userDropdownVisible: false
@@ -56,14 +58,14 @@ export default {
       }
     }
   },
+  methods: {
+    currentTagExists () {
+      return Boolean(Object.keys(this.currentTag).length)
+    }
+  },
   components: {
     "edit-tag-dropdown": EditTagDropdown,
     "user-dropdown": UserDropdown
-  },
-  events: {
-    "HIDE_USER_DROPDOWN": function () {
-      this.userDropdownVisible = false
-    }
   }
 }
 </script>

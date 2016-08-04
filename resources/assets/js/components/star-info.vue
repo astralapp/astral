@@ -7,11 +7,11 @@
           <div class="dropdown-wrap">
             <button class="toggle-tag-editor" @click="tagEditorShowing = !tagEditorShowing"><i class="fa fa-tag"></i> Edit Tags</button>
             <div>
-              <tag-editor :tags="tagList" :class="{'active': tagEditorShowing}"></tag-editor>
+              <tag-editor :tags="tagList" :class="{'active': tagEditorShowing}" v-on-clickaway="clickedAwayFromTagEditor"></tag-editor>
             </div>
           </div>
       </div>
-      <button class="toggle-tag-editor" @click="noteEditorShowing = !noteEditorShowing"><i class="fa fa-sticky-note"></i> Notes</button>
+      <button class="toggle-notes-editor" @click="noteEditorShowing = !noteEditorShowing"><i class="fa fa-sticky-note"></i> Notes</button>
       <div class="clone-url">
         <label for="txtGitHubCloneURL" @click="focusCloneInput">Clone:</label>
         <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" @focus="focusCloneInput" readonly/>
@@ -35,9 +35,11 @@ import { tags } from "../store/getters/tagsGetters"
 import { editStarNotes, syncTags } from "../store/actions"
 import TagEditor from "./tag-editor.vue"
 import StarNotesEditor from "./star-notes-editor.vue"
+import { mixin as clickaway } from "vue-clickaway"
 
 export default {
   name: "StarInfo",
+  mixins: [clickaway],
   vuex: {
     getters: {
       readme: readme,
@@ -89,10 +91,17 @@ export default {
   methods: {
     showTagEditor () { this.tagEditorShowing = true },
     hideTagEditor () { this.tagEditorShowing = false },
+    clickedAwayFromTagEditor (e) {
+      if (!e.target.classList.contains("toggle-tag-editor")) {
+        this.hideTagEditor()
+      }
+    },
     syncTags (tags) {
-      this.sync(this.star, tags).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error")
-      })
+      if (tags.length) {
+        this.sync(this.star, tags).catch((errors) => {
+          this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error")
+        })
+      }
       this.hideTagEditor()
     },
     saveNotes (notes) {
@@ -117,6 +126,9 @@ export default {
     "STAR_CHANGED": function () {
       this.noteEditorShowing = false
       this.$broadcast("STAR_CHANGED")
+    },
+    "HIDE_TAG_DROPDOWN": function () {
+      this.tagEditorShowing = false
     }
   },
   components: {
