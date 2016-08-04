@@ -51,7 +51,7 @@ export default {
     },
     currentSearchQuery: {
       get () {
-        return this.searchQuery
+        return this.query
       },
       set (newValue) {
         this.setSearchQuery(newValue)

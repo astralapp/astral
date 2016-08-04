@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | currentTagFilter currentTag | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }">
+      <li class="repo" v-for="repo in githubStars | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" v-if="starHasCurrentTag(repo)">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
@@ -34,7 +34,6 @@ import {
   setCurrentTag
 } from "../store/actions"
 import StarInfo from "./star-info.vue"
-import "./../filters/currentTag.js"
 import "./../filters/galileo.js"
 import "./../directives/drag_and_drop.js"
 
@@ -73,6 +72,18 @@ export default {
     setTag (tag) {
       this.setCurrentTag(tag)
       this.$route.router.replace(`/dashboard/${tag.slug}`)
+    },
+    starHasCurrentTag (repo) {
+      if (!Object.keys(this.currentTag).length) {
+        return true
+      }
+      if (repo.tags.length) {
+        return ~repo.tags.map(function (tag) {
+          return tag.name
+        }).indexOf(this.currentTag.name)
+      } else {
+        return false
+      }
     }
   },
   components: {
