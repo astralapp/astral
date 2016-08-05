@@ -38,8 +38,7 @@ import {
   addTag,
   tagStar,
   reorderTags,
-  setCurrentTag,
-  resetCurrentTag
+  setCurrentTag
 } from "../store/actions"
 import "./../directives/drag_and_drop.js"
 
@@ -56,8 +55,7 @@ export default {
       addTag,
       tagStar,
       reorderTags,
-      setCurrentTag,
-      resetCurrentTag
+      setCurrentTag
     }
   },
   data () {

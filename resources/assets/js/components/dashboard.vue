@@ -46,15 +46,17 @@ export default {
   },
   route: {
     data ({ to }) {
-      if (this.$route.params.tag) {
-        const tag = this.tags.find((tag) => {
-          return tag.slug === this.$route.params.tag
-        })
-        if (tag) {
-          this.setCurrentTag(tag)
+      if (this.tags.length) {
+        if (this.$route.params.tag) {
+          const tag = this.tags.find((tag) => {
+            return tag.slug === this.$route.params.tag
+          })
+          if (tag) {
+            this.setCurrentTag(tag)
+          }
+        } else {
+          this.resetCurrentTag()
         }
-      } else {
-        this.resetCurrentTag()
       }
     }
   }

@@ -70,7 +70,6 @@ export default {
       this.$broadcast("STAR_CHANGED")
     },
     setTag (tag) {
-      this.setCurrentTag(tag)
       this.$route.router.go(`/dashboard/tag/${tag.slug}`)
     },
     starHasCurrentTag (repo) {
