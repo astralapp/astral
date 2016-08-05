@@ -71,7 +71,7 @@ export default {
     },
     setTag (tag) {
       this.setCurrentTag(tag)
-      this.$route.router.replace(`/dashboard/${tag.slug}`)
+      this.$route.router.go(`/dashboard/tag/${tag.slug}`)
     },
     starHasCurrentTag (repo) {
       if (!Object.keys(this.currentTag).length) {

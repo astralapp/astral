@@ -102,12 +102,10 @@ export default {
       this.tagStar(starData)
     },
     setTag: function (tag) {
-      this.setCurrentTag(tag)
-      this.$route.router.replace(`/dashboard/${tag.slug}`)
+      this.$route.router.go(`/dashboard/tag/${tag.slug}`)
     },
     resetTag: function () {
-      this.resetCurrentTag()
-      this.$route.router.replace("/dashboard")
+      this.$route.router.go("/dashboard")
     }
   }
 }

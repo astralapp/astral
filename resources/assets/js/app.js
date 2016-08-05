@@ -21,7 +21,7 @@ router.map({
   "/dashboard": {
     component: Dashboard
   },
-  "/dashboard/:tag": {
+  "/dashboard/tag/:tag": {
     component: Dashboard
   }
 })
@@ -31,7 +31,7 @@ router.redirect({
 })
 
 Vue.http.interceptors.push({
-  response: function (response) {
+  response (response) {
     if (response.status === 401) {
       window.location.href = "/api/auth"
     }
