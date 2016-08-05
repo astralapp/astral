@@ -38,8 +38,7 @@ import {
   addTag,
   tagStar,
   reorderTags,
-  setCurrentTag,
-  resetCurrentTag
+  setCurrentTag
 } from "../store/actions"
 import "./../directives/drag_and_drop.js"
 
@@ -56,8 +55,7 @@ export default {
       addTag,
       tagStar,
       reorderTags,
-      setCurrentTag,
-      resetCurrentTag
+      setCurrentTag
     }
   },
   data () {
@@ -102,12 +100,10 @@ export default {
       this.tagStar(starData)
     },
     setTag: function (tag) {
-      this.setCurrentTag(tag)
-      this.$route.router.replace(`/dashboard/${tag.slug}`)
+      this.$route.router.go(`/dashboard/tag/${tag.slug}`)
     },
     resetTag: function () {
-      this.resetCurrentTag()
-      this.$route.router.replace("/dashboard")
+      this.$route.router.go("/dashboard")
     }
   }
 }
