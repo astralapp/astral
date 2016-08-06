@@ -54,8 +54,12 @@ export default {
     }
   },
   ready () {
+    this.$root.$broadcast("STATUS", "Loading stars...")
     this.fetchStars()
-    this.fetchGithubStars().catch((errors) => {
+    this.fetchGithubStars().then((res) => {
+      this.$root.$broadcast("STATUS", "")
+    }).catch((errors) => {
+      this.$root.$broadcast("STATUS", "")
       this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error")
     })
   },

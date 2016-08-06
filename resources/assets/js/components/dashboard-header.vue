@@ -10,6 +10,7 @@
         <i class="fa fa-search"></i>
       </label>
     </div>
+    <div class="dashboard-status" v-show="status != ''"><div class="status-spinner"></div> {{ status }}</div>
     <div class="dashboard-userDropdown" @click.stop="userDropdownVisible = !userDropdownVisible">
       <img :src="user.avatar_url" :alt="user.name" class="dashboard-userDropdownAvatar"/>
       <span class="dashboard-userDropdownName">{{ user.username }}</span>
@@ -29,10 +30,15 @@ import { mixin as clickaway } from "vue-clickaway"
 
 export default {
   name: "DashboardHeader",
+  components: {
+    "edit-tag-dropdown": EditTagDropdown,
+    "user-dropdown": UserDropdown
+  },
   mixins: [clickaway],
   data () {
     return {
-      userDropdownVisible: false
+      userDropdownVisible: false,
+      status: ""
     }
   },
   vuex: {
@@ -63,9 +69,10 @@ export default {
       return Boolean(Object.keys(this.currentTag).length)
     }
   },
-  components: {
-    "edit-tag-dropdown": EditTagDropdown,
-    "user-dropdown": UserDropdown
+  events: {
+    "STATUS": function (message) {
+      this.status = message
+    }
   }
 }
 </script>

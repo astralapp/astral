@@ -55,12 +55,17 @@ export default {
       })
     },
     deleteCurrentTag () {
-      this.deleteTag(this.currentTag.id).then((res) => {
-        this.$root.$broadcast("NOTIFICATION", "Tag successfully deleted.")
-        this.$route.router.go("/dashboard")
-      }).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error deleting this tag.", "error")
-      })
+      if (window.confirm("Are you sure you want to delete this tag?")) {
+        this.$root.$broadcast("STATUS", `Deleting ${this.currentTag.name} tag...`)
+        this.deleteTag(this.currentTag.id).then((res) => {
+          this.$root.$broadcast("STATUS", "")
+          this.$root.$broadcast("NOTIFICATION", `${this.currentTag.name} tag successfully deleted.`)
+          this.$route.router.go("/dashboard")
+        }).catch((errors) => {
+          this.$root.$broadcast("STATUS", "")
+          this.$root.$broadcast("NOTIFICATION", "There was an error deleting this tag.", "error")
+        })
+      }
     }
   }
 }

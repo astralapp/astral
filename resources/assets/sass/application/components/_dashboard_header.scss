@@ -37,3 +37,28 @@
     z-index: 11;
   }
 }
+
+.dashboard-status {
+  color: $steel-blue;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-left: 25px;
+  .status-spinner {
+    @include size(16px);
+    animation: spin 1.2s backwards infinite linear;
+    border: 2px solid;
+    border-radius: 50%;
+    border-top-color: $steel-blue;
+    color: rgba($steel-blue, 0.5);
+    margin-right: 5px;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
