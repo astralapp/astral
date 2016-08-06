@@ -37,7 +37,8 @@ export default {
   mixins: [clickaway],
   data () {
     return {
-      userDropdownVisible: false
+      userDropdownVisible: false,
+      status: ""
     }
   },
   vuex: {
@@ -48,11 +49,6 @@ export default {
     },
     actions: {
       setSearchQuery
-    }
-  },
-  data () {
-    return {
-      status: ""
     }
   },
   computed: {

@@ -55,7 +55,7 @@ export default {
       })
     },
     deleteCurrentTag () {
-      if (confirm("Are you sure you want to delete this tag?")) {
+      if (window.confirm("Are you sure you want to delete this tag?")) {
         this.$root.$broadcast("STATUS", `Deleting ${this.currentTag.name} tag...`)
         this.deleteTag(this.currentTag.id).then((res) => {
           this.$root.$broadcast("STATUS", "")
