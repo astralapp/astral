@@ -67,4 +67,17 @@ class TagController extends Controller
             'tags' => Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get(),
         ];
     }
+
+    /**
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request, $id)
+    {
+        Tag::where('id', $id)->where('user_id', Auth::id())->delete();
+
+        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
+    }
 }

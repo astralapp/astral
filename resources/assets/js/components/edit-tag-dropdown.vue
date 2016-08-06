@@ -4,13 +4,13 @@
     <div class="dashboardHeader-editTagDropdown" v-show="tagEditorShowing" transition="dashboardHeader-editTagDropdown">
       <input type="text" v-model="currentTagField">
       <button class="btn-flat" @click="doEditTagName(currentTag.id, currentTagName)">Save</button>
-      <button class="btn-flat btn-danger">Delete Tag</button>
+      <button class="btn-flat btn-danger" @click="deleteCurrentTag">Delete Tag</button>
     </div>
   </div>
 </template>
 <script>
 import { currentTag } from "../store/getters/tagsGetters"
-import { editTagName } from "../store/actions"
+import { editTagName, deleteTag } from "../store/actions"
 import { mixin as clickaway } from "vue-clickaway"
 
 export default {
@@ -21,7 +21,8 @@ export default {
       currentTag
     },
     actions: {
-      editTagName
+      editTagName,
+      deleteTag
     }
   },
   data () {
@@ -51,6 +52,14 @@ export default {
         this.$route.router.replace(`/dashboard/${res.slug}`)
       }).catch((errors) => {
         this.$root.$broadcast("NOTIFICATION", "There was an error renaming this tag.", "error")
+      })
+    },
+    deleteCurrentTag () {
+      this.deleteTag(this.currentTag.id).then((res) => {
+        this.$root.$broadcast("NOTIFICATION", "Tag successfully deleted.")
+        this.$route.router.go("/dashboard")
+      }).catch((errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error deleting this tag.", "error")
       })
     }
   }
