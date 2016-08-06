@@ -181,6 +181,24 @@ export const editTagName = ({ dispatch, state }, tagId, name) => {
   return promise
 }
 
+export const deleteTag = ({ dispatch, state }, tagId) => {
+  const promise = new Promise((resolve, reject) => {
+    Vue.http.delete(`/api/tags/${tagId}`, null, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then((response) => {
+      fetchGithubStars({ dispatch, state })
+      fetchStars({ dispatch })
+      dispatch(types.SET_TAGS, response.data.message)
+      resolve(response.data.message)
+    }, (response) => {
+      reject(response.data.errors)
+    })
+  })
+  return promise
+}
+
 //  Stars
 export const tagStar = ({ dispatch, state }, starData) => {
   const promise = new Promise((resolve, reject) => {

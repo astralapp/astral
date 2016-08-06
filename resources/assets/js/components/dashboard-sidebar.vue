@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     noCurrentTag () {
-      return this.currentTag.id === -1
+      return !Object.keys(this.currentTag).length
     }
   },
   ready () {
