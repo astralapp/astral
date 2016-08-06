@@ -29,7 +29,6 @@ import { tokenizedSearchQuery } from "../store/getters/galileoGetters"
 import {
   fetchStars,
   fetchGithubStars,
-  fetchReadme,
   setCurrentStar,
   setCurrentTag
 } from "../store/actions"
@@ -50,7 +49,6 @@ export default {
     actions: {
       fetchStars,
       fetchGithubStars,
-      fetchReadme,
       setCurrentStar,
       setCurrentTag
     }
@@ -64,9 +62,6 @@ export default {
   methods: {
     starClicked (repo) {
       this.setCurrentStar(repo)
-      this.fetchReadme(repo.full_name).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error")
-      })
       this.$broadcast("STAR_CHANGED")
     },
     setTag (tag) {
