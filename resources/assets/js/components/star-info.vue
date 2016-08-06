@@ -17,9 +17,12 @@
         <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" @focus="focusCloneInput" readonly/>
       </div>
     </div>
-    <!-- <div class="readme-loading-overlay" ng-show="readmeLoading">
-      <spinner color="#658399"></spinner>
-    </div> -->
+    <div class="readme-error-overlay" :class="{ 'active': readmeError }">
+      Error Loading Readme
+    </div>
+    <div class="readme-loading-overlay" :class="{ 'active': readmeLoading }">
+      <img src="/images/loader1.svg" />
+    </div>
     <div class="repo-readme syntax">
       {{{ readme }}}
     </div>
@@ -32,7 +35,7 @@
 import { readme } from "../store/getters/githubGetters"
 import { stars, currentStar } from "../store/getters/starsGetters"
 import { tags } from "../store/getters/tagsGetters"
-import { editStarNotes, syncTags } from "../store/actions"
+import { editStarNotes, syncTags, fetchReadme } from "../store/actions"
 import TagEditor from "./tag-editor.vue"
 import StarNotesEditor from "./star-notes-editor.vue"
 import { mixin as clickaway } from "vue-clickaway"
@@ -49,13 +52,16 @@ export default {
     },
     actions: {
       editStarNotes,
-      sync: syncTags
+      sync: syncTags,
+      fetchReadme
     }
   },
   data () {
     return {
       tagEditorShowing: false,
       noteEditorShowing: false,
+      readmeLoading: false,
+      readmeError: false,
       currentNotes: ""
     }
   },
@@ -125,6 +131,15 @@ export default {
     },
     "STAR_CHANGED": function () {
       this.noteEditorShowing = false
+      this.readmeLoading = true
+      this.fetchReadme(this.star.full_name).then(() => {
+        this.readmeError = false
+        this.readmeLoading = false
+      }).catch((errors) => {
+        this.readmeLoading = false
+        this.readmeError = true
+        this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error")
+      })
       this.$broadcast("STAR_CHANGED")
     },
     "HIDE_TAG_DROPDOWN": function () {
