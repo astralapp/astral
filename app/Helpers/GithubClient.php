@@ -28,7 +28,7 @@ class GithubClient
     }
 
     /**
-     * @param int    $page
+     * @param int $page
      *
      * @return array
      */
@@ -46,7 +46,6 @@ class GithubClient
             $cachedStars['cached'] = (int) ceil($cachedPages / $this->starsPerPage);
 
             return $cachedStars;
-
         }
 
         $stars = $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
@@ -69,6 +68,7 @@ class GithubClient
             $starsArray['stars'] = array_merge($oldStars, $newStars);
         }
         Cache::put($cacheKey, $starsArray, $cacheExpiry);
+
         return $starsArray;
     }
 
@@ -103,7 +103,7 @@ class GithubClient
             $queryString = explode('?', $link);
             $pageCount = explode('=', $queryString[1]);
 
-            return (int)$pageCount[1];
+            return (int) $pageCount[1];
         } catch (Exception $e) {
             return 1;
         }
