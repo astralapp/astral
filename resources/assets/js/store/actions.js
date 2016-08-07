@@ -34,25 +34,37 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       }
     }).then((response) => {
       data = response.data.message
-      if (data.page_count) { dispatch(types.SET_TOTAL_PAGES, data.page_count) }
-      if (data.cached) { dispatch(types.SET_CACHED_PAGES, data.cached) }
+      if (data.page_count) {
+        dispatch(types.SET_TOTAL_PAGES, data.page_count)
+      } else {
+        dispatch(types.SET_TOTAL_PAGES, 1)
+      }
+
+      if (data.cached) {
+        dispatch(types.SET_CACHED_PAGES, data.cached)
+      } else {
+        dispatch(types.SET_CACHED_PAGES, 0)
+      }
+
+      // If the number of cached pages is equal to the total number of pages, we have all the stars cached, so we can just return them.
       if (state.github.cachedPages && state.github.cachedPages === state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars)
         resolve(data.stars)
-        return false
       } else {
+        // SCENARIO: cached pages is 5, total pages is 14
+        // 1: Set the stars to what we receieved
+        dispatch(types.SET_GITHUB_STARS, data.stars)
+        // If there's cached pages, recursively fetch the next page
         if (state.github.cachedPages) {
-          currentPage += 1
+          // Fetch the next page
+          resolve(fetchGithubStars({ dispatch, state }, (state.github.cachedPages + 1)))
         } else {
-          dispatch(types.INCREMENT_CACHED_PAGES)
+          if (page < state.github.totalPages) {
+            resolve(fetchGithubStars({ dispatch, state }, (page + 1)))
+          } else {
+            resolve(data.stars)
+          }
         }
-      }
-      if (currentPage <= state.github.totalPages) {
-        dispatch(types.SET_GITHUB_STARS, data.stars)
-        fetchGithubStars({ dispatch, state }, currentPage)
-      } else {
-        dispatch(types.SET_GITHUB_STARS, data.stars)
-        resolve(data.stars)
       }
     }, (response) => {
       reject(response.data.errors)
