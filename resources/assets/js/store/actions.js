@@ -35,8 +35,6 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       data = response.data.message
       if (data.page_count) {
         dispatch(types.SET_TOTAL_PAGES, data.page_count)
-      } else {
-        dispatch(types.SET_TOTAL_PAGES, 1)
       }
 
       if (data.cached) {

@@ -4,71 +4,72 @@ namespace Astral\Helpers;
 
 use Auth;
 use Cache;
-use GuzzleHttp\Client;
+use Github\ResultPager;
+use GrahamCampbell\GitHub\GitHubFactory;
 
 class GithubClient
 {
     /** @var int */
-    private $starsCacheExpiry = 120; //minutes
+    protected $starsCacheExpiry = 120; //minutes
 
     /** @var int */
-    private $starsPerPage = 50;
+    protected $starsPerPage = 30;
+
+    /** @var \GrahamCampbell\GitHub\GitHubFactory */
+    protected $client;
+
+    /** @var Github\ResultPager */
+    protected $paginator;
+
+    public function __construct($token)
+    {
+        $this->client = app(GitHubFactory::class)->make(['token' => $token, 'method' => 'token', 'cache' => false, 'backoff' => false]);
+        $this->paginator = new ResultPager($this->client);
+    }
 
     /**
-     * @param string $token
-     * @param int    $page
+     * @param int $page
      *
      * @return array
      */
-    public function getStars($token, $page = 1)
+    public function getStars($page = 1)
     {
         $cacheKey = $this->starsCacheKey();
         $cacheExpiry = $this->starsCacheExpiry;
         $starsArray = [];
 
-        if ($page == 1) {
-            // Theyre doing a fresh fetch so check to see if we've cached our stars already
-            if (Cache::has($cacheKey)) {
-                // Get everything currently cached
-                $cachedStars = Cache::get($cacheKey);
-                $uniqueStars = array_map('unserialize', array_unique(array_map('serialize', $cachedStars['stars'])));
-                $cachedStars['stars'] = $uniqueStars;
-                // Add a "cached" key so we can check on the front-end whether we should paginate or not. We set it to the number of pages currently cached, so we fetch only what we need in subsequent requests
-                $cachedPages = count($cachedStars['stars']);
-                $cachedStars['cached'] = (int) ceil($cachedPages / $this->starsPerPage);
+        // Check if they're doing a fresh fetch to see if we've cached our stars already
+        if ($page == 1 && Cache::has($cacheKey)) {
+            $cachedStars = Cache::get($cacheKey);
+            // Add a "cached" key so we can check on the front-end whether we should paginate or not. We set it to the number of pages currently cached, so we fetch only what we need in subsequent requests
+            $cachedPages = count($cachedStars['stars']);
+            $cachedStars['cached'] = (int) ceil($cachedPages / $this->starsPerPage);
 
-                return $cachedStars;
-            }
+            return $cachedStars;
         }
 
-        $starsUrl = 'https://api.github.com/user/starred?per_page='.$this->starsPerPage.'&page='.$page.'&access_token='.$token;
-        $client = $this->getClient();
-        $res = $client->get(
-            $starsUrl,
-            []
-        );
-        $stars = json_decode($res->getBody(), true);
+        $stars = $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
         $starsArray['stars'] = $stars;
-        if ($page == 1) {
-            $pageCount = $res->hasHeader('link') ? $this->getTotalPages($res->getHeader('link')[0]) : 1;
+        $paginationInfo = $this->paginator->getPagination();
+        if ($this->paginator->hasNext()) {
+            $pageCount = $this->getPageCountFromPaginationLink($paginationInfo['last']);
             $starsArray['page_count'] = $pageCount;
-            Cache::put($cacheKey, $starsArray, $cacheExpiry);
-
-            return $starsArray;
         } else {
+            // Fetch the last known total
+            $cachedStars = Cache::get($cacheKey);
+            $starsArray['page_count'] = $cachedStars['page_count'];
+        }
+
+        if ($page != 1) {
             $cachedStars = Cache::get($cacheKey);
             // Merge the new stars into the old ones
             $oldStars = $cachedStars['stars'];
             $newStars = $starsArray['stars'];
-            $mergedStars = array_merge($oldStars, $newStars);
-            $uniqueStars = array_map('unserialize', array_unique(array_map('serialize', $mergedStars)));
-            // Add stars to the stars key
-            $mergedStarsArray['stars'] = $uniqueStars;
-            $mergedStarsArray['page_count'] = $cachedStars['page_count'];
-            Cache::put($cacheKey, $mergedStarsArray, $cacheExpiry);
-
-            return $mergedStarsArray;
+            $starsArray['stars'] = array_merge($oldStars, $newStars);
         }
+        Cache::put($cacheKey, $starsArray, $cacheExpiry);
+
+        return $starsArray;
     }
 
     /**
@@ -80,31 +81,31 @@ class GithubClient
     }
 
     /**
+     * @param int $page
+     *
+     * @return array
+     */
+    public function getStarPaginationInfo($page = 1)
+    {
+        $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
+
+        return $this->paginator->getPagination();
+    }
+
+    /**
      * @param string $link
      *
      * @return int
      */
-    private function getTotalPages($link)
+    private function getPageCountFromPaginationLink($link)
     {
         try {
-            $linkArray = HTTPHeadersHelper::rels($link);
-            $lastRel = $linkArray['last'][0];
-            $urlParts = parse_url($lastRel);
-            $queryString = $urlParts['query'];
-            $qsArray = [];
-            parse_str($queryString, $qsArray);
+            $queryString = explode('?', $link);
+            $pageCount = explode('=', $queryString[1]);
 
-            return (int) $qsArray['page'];
+            return (int) $pageCount[1];
         } catch (Exception $e) {
             return 1;
         }
-    }
-
-    /**
-     * @return \GuzzleHttp\Client
-     */
-    private function getClient()
-    {
-        return new Client();
     }
 }
