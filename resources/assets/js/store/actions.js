@@ -25,7 +25,6 @@ export const fetchUser = ({ dispatch, state }) => {
 //  Github Stars
 export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
   const promise = new Promise((resolve, reject) => {
-    let currentPage = page
     let data = {}
     Vue.http.get(`/api/github/stars?page=${page}`, null, {
       headers: {
