@@ -53,20 +53,20 @@ class GithubClient
         $starsArray['stars'] = $stars;
         $paginationInfo = $this->paginator->getPagination();
         if ($this->paginator->hasNext()) {
-          $pageCount = $this->getPageCountFromPaginationLink($paginationInfo['last']);
-          $starsArray['page_count'] = $pageCount;
+            $pageCount = $this->getPageCountFromPaginationLink($paginationInfo['last']);
+            $starsArray['page_count'] = $pageCount;
         } else {
-          // Fetch the last known total
-          $cachedStars = Cache::get($cacheKey);
-          $starsArray['page_count'] = $cachedStars['page_count'];
+            // Fetch the last known total
+            $cachedStars = Cache::get($cacheKey);
+            $starsArray['page_count'] = $cachedStars['page_count'];
         }
 
         if ($page != 1) {
-          $cachedStars = Cache::get($cacheKey);
-          // Merge the new stars into the old ones
-          $oldStars = $cachedStars['stars'];
-          $newStars = $starsArray['stars'];
-          $starsArray['stars'] = array_merge($oldStars, $newStars);
+            $cachedStars = Cache::get($cacheKey);
+            // Merge the new stars into the old ones
+            $oldStars = $cachedStars['stars'];
+            $newStars = $starsArray['stars'];
+            $starsArray['stars'] = array_merge($oldStars, $newStars);
         }
         Cache::put($cacheKey, $starsArray, $cacheExpiry);
         return $starsArray;
@@ -87,9 +87,9 @@ class GithubClient
      */
     public function getStarPaginationInfo($page = 1)
     {
-      // $stars = $this->client->me()->starring()->all($page);
-      $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
-      return $this->paginator->getPagination();
+        $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
+
+        return $this->paginator->getPagination();
     }
 
     /**
@@ -100,10 +100,10 @@ class GithubClient
     private function getPageCountFromPaginationLink($link)
     {
         try {
-          $queryString = explode('?', $link);
-          $pageCount = explode('=', $queryString[1]);
+            $queryString = explode('?', $link);
+            $pageCount = explode('=', $queryString[1]);
 
-          return (int)$pageCount[1];
+            return (int)$pageCount[1];
         } catch (Exception $e) {
             return 1;
         }
