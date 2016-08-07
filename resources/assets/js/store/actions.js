@@ -50,12 +50,8 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
         dispatch(types.SET_GITHUB_STARS, data.stars)
         resolve(data.stars)
       } else {
-        // SCENARIO: cached pages is 5, total pages is 14
-        // 1: Set the stars to what we receieved
         dispatch(types.SET_GITHUB_STARS, data.stars)
-        // If there's cached pages, recursively fetch the next page
         if (state.github.cachedPages) {
-          // Fetch the next page
           resolve(fetchGithubStars({ dispatch, state }, (state.github.cachedPages + 1)))
         } else {
           if (page < state.github.totalPages) {
