@@ -97,7 +97,7 @@ class StarController extends Controller
         $star = Star::withRepoId($repo['id'])->first();
         if (! $star) {
             $star = new Star();
-            $star->attachRepoInfo($repo['id'], $repo['full_name'])
+            $star->attachRepoInfo($repo['id'], $repo['full_name']);
             $star->save();
         }
         $star->notes = $text;
