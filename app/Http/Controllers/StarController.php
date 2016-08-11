@@ -38,9 +38,7 @@ class StarController extends Controller
             $star->save();
         } else {
             $star = new Star();
-            $star->repo_id = $star_id;
-            $star->repo_name = $star_name;
-            $star->save();
+            $star->attachRepoInfo($star_id, $star_name);
             $star->tags()->attach($tag_id);
         }
 
@@ -98,7 +96,6 @@ class StarController extends Controller
         if (! $star) {
             $star = new Star();
             $star->attachRepoInfo($repo['id'], $repo['full_name']);
-            $star->save();
         }
         $star->notes = $text;
         $star->save();

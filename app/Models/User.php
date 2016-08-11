@@ -33,5 +33,6 @@ class User extends Authenticatable
             $this->name = $githubUser->getName();
         }
         $this->avatar_url = $githubUser->getAvatar();
+        $this->save();
     }
 }

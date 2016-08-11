@@ -43,12 +43,10 @@ class AuthController extends Controller
         // If the user exists, just update fields that they may have changed in their Github settings
         if (! is_null($user)) {
             $user->mapGithubUser($githubUser);
-            $user->save();
         } // If no user was found, create a new one
         else {
             $user = new User();
             $user->mapGithubUser($githubUser);
-            $user->save();
         }
         $jwt = JWTAuth::fromUser($user);
 
