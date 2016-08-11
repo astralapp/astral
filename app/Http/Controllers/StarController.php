@@ -32,7 +32,7 @@ class StarController extends Controller
         $star_id = $request->input('repoId');
         $star_name = $request->input('repoName');
         $tag_id = $request->input('tagId');
-        $star = Star::withRepoId($repo['id'])->first();
+        $star = Star::withRepoId($star_id)->first();
         if (! is_null($star)) {
             $star->tags()->sync([$tag_id], false);
             $star->save();

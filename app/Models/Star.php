@@ -37,7 +37,7 @@ class Star extends Model
     {
         $this->repo_id = $id;
         $this->repo_name = $name;
-        $this-save();
+        $this->save();
     }
 
     /**

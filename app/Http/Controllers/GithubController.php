@@ -27,7 +27,7 @@ class GithubController extends Controller
         $githubClient = new GithubClient($access_token);
         $stars = $githubClient->getStars($page);
 
-        return mapStarsToRepos($stars);
+        return $this->mapStarsToRepos($stars);
     }
 
     /**
