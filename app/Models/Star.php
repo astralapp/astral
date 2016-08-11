@@ -3,6 +3,7 @@
 namespace Astral\Models;
 
 use Auth;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use JWTAuth;
 
@@ -27,6 +28,37 @@ class Star extends Model
         return $this->belongsToMany('Astral\Models\Tag');
     }
 
+    public function removeAllTags()
+    {
+        $this->tags()->sync([]);
+    }
+
+    public function attachRepoInfo($id, $name)
+    {
+        $this->repo_id = $id;
+        $this->repo_name = $name;
+    }
+
+    /**
+     * Scope for stars belonging to the user with a github repo id.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithRepoId($query, $id)
+    {
+        return $query->where('repo_id', $id)->where('user_id', Auth::id());
+    }
+
+    /**
+     * Scope for stars belonging to the user with all its tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithTags($query)
+    {
+        $query->with('tags')->where('user_id', Auth::id());
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -42,7 +74,7 @@ class Star extends Model
         });
 
         static::deleting(function ($star) {
-            \DB::table('star_tag')->where('star_id', $star->id)->delete();
+            DB::table('star_tag')->where('star_id', $star->id)->delete();
         });
     }
 }

@@ -24,4 +24,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('Astral\Models\Tag');
     }
+
+    public function mapGithubUser($githubUser)
+    {
+        $this->username = $githubUser->getNickname();
+        $this->github_id = $githubUser->getId();
+        if ($githubUser->getName()) {
+            $this->name = $githubUser->getName();
+        }
+        $this->avatar_url = $githubUser->getAvatar();
+    }
 }

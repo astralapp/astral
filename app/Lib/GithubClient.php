@@ -1,6 +1,6 @@
 <?php
 
-namespace Astral\Helpers;
+namespace Astral\Lib;
 
 use Auth;
 use Cache;
@@ -85,7 +85,7 @@ class GithubClient
      *
      * @return array
      */
-    public function getStarPaginationInfo($page = 1)
+    private function getStarPaginationInfo($page = 1)
     {
         $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
 

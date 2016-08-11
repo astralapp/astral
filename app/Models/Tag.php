@@ -17,8 +17,11 @@ class Tag extends Model
     /** @var array */
     protected $fillable = ['name', 'description'];
 
-    /** @var array */
+    /** @var string */
     protected $table = 'tags';
+
+    /** @var array */
+    protected $appends = ['starCount'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -44,6 +47,53 @@ class Tag extends Model
     public function getIdAttribute($value)
     {
         return (int) $value;
+    }
+
+    public function starCount()
+    {
+        return $this->belongsToMany('Astral\Models\Star')
+        ->selectRaw('count(stars.id) as aggregate')
+        ->groupBy('tag_id');
+    }
+
+    public function getStarCountAttribute()
+    {
+        if (!array_key_exists('starCount', $this->relations)) {
+            $this->load('starCount');
+        }
+        $related = $this->getRelation('starCount')->first();
+
+        return ($related) ? $related->aggregate : 0;
+    }
+
+    /**
+     * Scope for tags belonging to the user with all its stars.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithStars($query)
+    {
+        $query->with('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+    }
+
+    /**
+     * Scope for tags belonging to the user with the count of its stars.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithStarCount($query)
+    {
+        $query->with('starCount')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+    }
+
+    /**
+     * Scope for tags belonging to the user with a given name.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereName($query, $name)
+    {
+        $query->where('name', $name)->where('user_id', Auth::id());
     }
 
     protected static function boot()

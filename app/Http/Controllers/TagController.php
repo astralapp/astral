@@ -18,7 +18,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
+        return Tag::with('starCount')->get();
     }
 
     /**
@@ -30,7 +30,7 @@ class TagController extends Controller
     {
         $tag = Tag::create($request->only('name', 'description'));
 
-        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
+        return Tag::with('starCount')->get();
     }
 
     /**
@@ -47,7 +47,7 @@ class TagController extends Controller
             $tag->save();
         }
 
-        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
+        return Tag::with('starCount')->get();
     }
 
     /**
@@ -64,7 +64,7 @@ class TagController extends Controller
 
         return [
             'tag' => $tag,
-            'tags' => Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get(),
+            'tags' => return Tag::with('starCount')->get(),
         ];
     }
 
@@ -78,6 +78,6 @@ class TagController extends Controller
     {
         Tag::where('id', $id)->where('user_id', Auth::id())->delete();
 
-        return Tag::with('stars.tags')->where('user_id', Auth::id())->orderBy('sort_order', 'asc')->get();
+        return Tag::with('starCount')->get();
     }
 }
