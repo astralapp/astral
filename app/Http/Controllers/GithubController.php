@@ -48,6 +48,6 @@ class GithubController extends Controller
             }
         }
 
-        return $stars
+        return $stars;
     }
 }

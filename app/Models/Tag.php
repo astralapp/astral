@@ -58,7 +58,7 @@ class Tag extends Model
 
     public function getStarCountAttribute()
     {
-        if (!array_key_exists('starCount', $this->relations)) {
+        if (! array_key_exists('starCount', $this->relations)) {
             $this->load('starCount');
         }
         $related = $this->getRelation('starCount')->first();

@@ -45,7 +45,7 @@ class StarController extends Controller
         }
 
         return [
-            'stars' => return Star::withTags()->get();,
+            'stars' => Star::withTags()->get(),
             'tags' => Tag::withStars()->get(),
         ];
     }
