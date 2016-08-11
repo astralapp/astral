@@ -12,7 +12,9 @@
         "guzzlehttp/guzzle": "~6.0",
         "laravel/socialite": "^2.0",
         "mistic100/randomcolor": "^1.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "php-http/guzzle6-adapter": "^1.1",
+        "graham-campbell/github": "^4.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

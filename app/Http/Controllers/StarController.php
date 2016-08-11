@@ -32,21 +32,19 @@ class StarController extends Controller
         $star_id = $request->input('repoId');
         $star_name = $request->input('repoName');
         $tag_id = $request->input('tagId');
-        $star = Star::where('repo_id', $star_id)->where('user_id', Auth::id())->first();
+        $star = Star::withRepoId($star_id)->first();
         if (! is_null($star)) {
             $star->tags()->sync([$tag_id], false);
             $star->save();
         } else {
             $star = new Star();
-            $star->repo_id = $star_id;
-            $star->repo_name = $star_name;
-            $star->save();
+            $star->attachRepoInfo($star_id, $star_name);
             $star->tags()->attach($tag_id);
         }
 
         return [
-            'stars' => Star::with('tags')->where('user_id', Auth::id())->get(),
-            'tags' => Tag::with('stars')->where('user_id', Auth::user()->id)->orderBy('sort_order', 'asc')->get(),
+            'stars' => Star::withTags()->get(),
+            'tags' => Tag::withStars()->get(),
         ];
     }
 
@@ -59,20 +57,19 @@ class StarController extends Controller
     {
         $repo = $request->input('star');
         $tags = $request->input('tags');
-        $star = Star::where('repo_id', $repo['id'])->where('user_id', Auth::id())->first();
+        $star = Star::withRepoId($repo['id'])->first();
         if (! $star) {
             $star = new Star();
-            $star->repo_id = $repo['id'];
-            $star->repo_name = $repo['full_name'];
+            $star->attachRepoInfo($repo['id'], $repo['full_name']);
             $star->save();
         }
         $tagIds = [];
         if (empty($tags)) {
-            $star->tags()->sync([]);
+            $star->removeAllTags();
         } else {
             foreach ($tags as $tag) {
                 $tagName = strtolower($tag['name']);
-                $userTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->first();
+                $userTag = Tag::whereName($tagName)->first();
                 if (! $userTag) {
                     $userTag = new Tag();
                     $userTag->name = $tag['name'];
@@ -83,7 +80,7 @@ class StarController extends Controller
             }
         }
 
-        return Star::with('tags')->where('user_id', Auth::id())->get();
+        return Star::withTags()->get();
     }
 
     /**
@@ -95,16 +92,14 @@ class StarController extends Controller
     {
         $repo = $request->input('star');
         $text = $request->input('text');
-        $star = Star::where('repo_id', $repo['id'])->where('user_id', Auth::id())->first();
+        $star = Star::withRepoId($repo['id'])->first();
         if (! $star) {
             $star = new Star();
-            $star->repo_id = $repo['id'];
-            $star->repo_name = $repo['full_name'];
-            $star->save();
+            $star->attachRepoInfo($repo['id'], $repo['full_name']);
         }
         $star->notes = $text;
         $star->save();
 
-        return Star::with('tags')->where('user_id', Auth::id())->get();
+        return Star::withTags()->get();
     }
 }

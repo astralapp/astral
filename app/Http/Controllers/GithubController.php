@@ -2,7 +2,7 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Helpers\GithubClient;
+use Astral\Lib\GithubClient;
 use Astral\Models\Star;
 use Auth;
 use Illuminate\Http\Request;
@@ -20,11 +20,23 @@ class GithubController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getStars(Request $request, GithubClient $client)
+    public function getStars(Request $request)
     {
         $page = (int) $request->input('page', 1);
         $access_token = $request->header('Access-Token');
-        $stars = $client->getStars($access_token, $page);
+        $githubClient = new GithubClient($access_token);
+        $stars = $githubClient->getStars($page);
+
+        return $this->mapStarsToRepos($stars);
+    }
+
+    /**
+     * @param array $stars
+     *
+     * @return array
+     */
+    private function mapStarsToRepos($stars)
+    {
         for ($i = 0; $i <= count($stars['stars']) - 1; ++$i) {
             $userStar = Star::with('tags')->where('user_id', Auth::id())->where(
                 'repo_id', $stars['stars'][$i]['id']
