@@ -49,23 +49,6 @@ class Tag extends Model
         return (int) $value;
     }
 
-    public function starCount()
-    {
-        return $this->belongsToMany('Astral\Models\Star')
-        ->selectRaw('count(stars.id) as aggregate')
-        ->groupBy('tag_id');
-    }
-
-    public function getStarCountAttribute()
-    {
-        if (! array_key_exists('starCount', $this->relations)) {
-            $this->load('starCount');
-        }
-        $related = $this->getRelation('starCount')->first();
-
-        return ($related) ? $related->aggregate : 0;
-    }
-
     /**
      * Scope for tags belonging to the user with all its stars.
      *
@@ -83,7 +66,7 @@ class Tag extends Model
      */
     public function scopeWithStarCount($query)
     {
-        $query->with('starCount')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+        $query->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }
 
     /**

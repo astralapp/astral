@@ -26,7 +26,7 @@
       <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStarWithData" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
-        <span class="tagged-count" v-if="tag.starCount > 0">{{tag.starCount}}</span>
+        <span class="tagged-count" v-if="tag.stars_count > 0">{{tag.stars_count}}</span>
       </li>
     </ul>
   </div>
