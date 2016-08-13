@@ -127,6 +127,7 @@
       }
       .tag-name {
         flex-grow: 1;
+        pointer-events: none;
       }
       .tagged-count {
         background: rgba(#fff, 0.1);
@@ -137,6 +138,7 @@
         font-weight: bold;
         line-height: 0.6rem;
         padding: 0.3rem 0.7rem;
+        pointer-events: none;
       }
     }
   }

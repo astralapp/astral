@@ -3,7 +3,7 @@
     <div class="settingsPanel-panel">
       <div class="settingsPanel-header">
         <h3>Settings</h3>
-        <button class="settingsPanel-closePanel" @click="closePanel">&times;</button>
+        <button class="settingsPanel-closePanel" @click="closePanel"><span>&times;</span></button>
       </div>
       <div class="settingsPanel-panelContent">
         <div class="settingsPanel-row">

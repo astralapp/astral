@@ -51,6 +51,11 @@ export default {
     } else {
       this.$route.router.go("/auth")
     }
+    window.addEventListener("keyup", (e) => {
+      if (e.keyCode === 27) {
+        this.$root.$broadcast("HIDE_SETTINGS_PANEL")
+      }
+    })
   },
   events: {
     "SHOW_SETTINGS_PANEL": function () {

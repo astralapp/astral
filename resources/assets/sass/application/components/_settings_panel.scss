@@ -32,17 +32,25 @@
     width: 500px;
   }
   &-header {
-    padding: 12px 20px;
+    height: 60px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    h3 {
+      margin: 0;
+    }
     .settingsPanel-closePanel {
+      transition: color 250ms linear;
       @include size(25px);
       appearance: none;
       border: none;
       background: none;
-      color: $dark-steel;
+      color: #666;
       font-size: 1.3rem;
+      outline: none;
+      > span { position: relative; top: -2px; }
+      &:hover { color: #444; }
     }
   }
   &-panelContent {

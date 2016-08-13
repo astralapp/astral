@@ -53,7 +53,7 @@ class Tag extends Model
      */
     public function scopeWithStars($query)
     {
-        $query->with('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+        $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }
 
     /**
