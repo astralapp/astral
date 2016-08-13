@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard">
+    <settings-panel :class="{'active': settingsPanelShowing}"></settings-panel>
     <dashboard-header></dashboard-header>
     <div class="dashboard-main">
       <dashboard-sidebar></dashboard-sidebar>
@@ -13,6 +14,7 @@ import ls from "local-storage"
 import { user } from "../store/getters/userGetters"
 import { tags } from "../store/getters/tagsGetters"
 import { fetchUser, setCurrentTag, resetCurrentTag } from "../store/actions"
+import SettingsPanel from "./settings-panel.vue"
 import DashboardHeader from "./dashboard-header.vue"
 import DashboardSidebar from "./dashboard-sidebar.vue"
 import StarList from "./dashboard-star-list.vue"
@@ -21,6 +23,7 @@ import Notifier from "./notifier.vue"
 export default {
   name: "Dashboard",
   components: {
+    "settings-panel": SettingsPanel,
     "dashboard-header": DashboardHeader,
     "dashboard-sidebar": DashboardSidebar,
     "star-list": StarList,
@@ -37,11 +40,24 @@ export default {
       resetCurrentTag
     }
   },
+  data() {
+    return {
+      settingsPanelShowing: false
+    }
+  },
   ready () {
     if (ls("jwt")) {
       this.fetchUser()
     } else {
       this.$route.router.go("/auth")
+    }
+  },
+  events: {
+    "SHOW_SETTINGS_PANEL": function () {
+      this.settingsPanelShowing = true
+    },
+    "HIDE_SETTINGS_PANEL": function () {
+      this.settingsPanelShowing = false
     }
   },
   route: {

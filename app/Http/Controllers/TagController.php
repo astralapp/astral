@@ -18,7 +18,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return Tag::with('starCount')->get();
+        return Tag::withStarCount()->get();
     }
 
     /**
@@ -30,7 +30,7 @@ class TagController extends Controller
     {
         $tag = Tag::create($request->only('name', 'description'));
 
-        return Tag::with('starCount')->get();
+        return Tag::withStarCount()->get();
     }
 
     /**
@@ -47,7 +47,7 @@ class TagController extends Controller
             $tag->save();
         }
 
-        return Tag::with('starCount')->get();
+        return Tag::withStarCount()->get();
     }
 
     /**
@@ -78,6 +78,6 @@ class TagController extends Controller
     {
         Tag::where('id', $id)->where('user_id', Auth::id())->delete();
 
-        return Tag::with('starCount')->get();
+        return Tag::withStarCount()->get();
     }
 }

@@ -20,9 +20,6 @@ class Tag extends Model
     /** @var string */
     protected $table = 'tags';
 
-    /** @var array */
-    protected $appends = ['starCount'];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
