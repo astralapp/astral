@@ -9,6 +9,9 @@ class User extends Authenticatable
     /** @var string */
     protected $table = 'users';
 
+    /** @var array */
+    protected $fillable = ['github_id', 'name', 'username', 'avatar_url', 'autotag'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

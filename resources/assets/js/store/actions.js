@@ -22,6 +22,22 @@ export const fetchUser = ({ dispatch, state }) => {
   return promise
 }
 
+export const setUserAutoTag = ({ dispatch }, prefState) => {
+  const promise = new Promise((resolve, reject) => {
+    Vue.http.post("/api/auth/user/autotag", { state: prefState }, {
+      headers: {
+        "Authorization": `Bearer ${ls("jwt")}`
+      }
+    }).then((response) => {
+      dispatch(types.SET_USER, response.data.message)
+      resolve(response.data.message)
+    }, (response) => {
+      reject(response.data.errors)
+    })
+  })
+  return promise
+}
+
 //  Github Stars
 export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
   const promise = new Promise((resolve, reject) => {
@@ -33,29 +49,30 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
       }
     }).then((response) => {
       data = response.data.message
-      if (data.page_count) {
-        dispatch(types.SET_TOTAL_PAGES, data.page_count)
+      dispatch(types.SET_TAGS, data.tags)
+      if (data.stars.page_count) {
+        dispatch(types.SET_TOTAL_PAGES, data.stars.page_count)
       }
 
-      if (data.cached) {
-        dispatch(types.SET_CACHED_PAGES, data.cached)
+      if (data.stars.cached) {
+        dispatch(types.SET_CACHED_PAGES, data.stars.cached)
       } else {
         dispatch(types.SET_CACHED_PAGES, 0)
       }
 
       // If the number of cached pages is equal to the total number of pages, we have all the stars cached, so we can just return them.
       if (state.github.cachedPages && state.github.cachedPages === state.github.totalPages) {
-        dispatch(types.SET_GITHUB_STARS, data.stars)
-        resolve(data.stars)
+        dispatch(types.SET_GITHUB_STARS, data.stars.stars)
+        resolve(data.stars.stars)
       } else {
-        dispatch(types.SET_GITHUB_STARS, data.stars)
+        dispatch(types.SET_GITHUB_STARS, data.stars.stars)
         if (state.github.cachedPages) {
           resolve(fetchGithubStars({ dispatch, state }, (state.github.cachedPages + 1)))
         } else {
           if (page < state.github.totalPages) {
             resolve(fetchGithubStars({ dispatch, state }, (page + 1)))
           } else {
-            resolve(data.stars)
+            resolve(data.stars.stars)
           }
         }
       }
@@ -157,8 +174,8 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
       }
     }).then((response) => {
       fetchGithubStars({ dispatch, state })
-      dispatch(types.SET_STARS, response.data.message)
-      fetchTags({ dispatch })
+      dispatch(types.SET_STARS, response.data.message.stars)
+      dispatch(types.SET_TAGS, response.data.message.tags)
       resolve(response.data.message)
     }, (response) => {
       reject(response.data.errors)

@@ -11,9 +11,17 @@
             Auto-Tag by Language
           </div>
           <div class="settingsPanel-settingControl">
-            <toggle-switch :checked.sync="languageAutotag" key="languageAutotag"></toggle-switch>
+            <toggle-switch :checked="user.autotag" key="languageAutotag" :change="setUserAutoTagPref"></toggle-switch>
           </div>
         </div>
+        <!-- <div class="settingsPanel-row">
+          <div class="settingsPanel-settingName">
+            Use Night Theme&nbsp;&nbsp;<i class="fa fa-moon-o"></i>
+          </div>
+          <div class="settingsPanel-settingControl">
+            <toggle-switch :checked.sync="nightTheme" key="nightTheme"></toggle-switch>
+          </div>
+        </div> -->
         <div class="settingsPanel-row">
           <div class="settingsPanel-settingName">
             Export Stars As JSON
@@ -30,18 +38,22 @@
   </div>
 </template>
 <script>
+import { user } from "../store/getters/userGetters"
+import { setUserAutoTag } from "../store/actions"
 import ToggleSwitch from "./toggle-switch.vue"
 export default {
   name: "SettingsPanel",
   components: {
     "toggle-switch": ToggleSwitch
   },
-  data() {
-    return {
-      languageAutotag: true
-    }
+  vuex: {
+    getters: { user },
+    actions: { setUserAutoTag }
   },
   methods: {
+    setUserAutoTagPref (e) {
+      this.setUserAutoTag(e.target.checked)
+    },
     closePanel () {
       this.$root.$broadcast("HIDE_SETTINGS_PANEL")
     }

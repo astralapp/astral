@@ -22,6 +22,7 @@
   </div>
 </template>
 <script>
+import { user } from "../store/getters/userGetters"
 import { githubStars } from "../store/getters/githubGetters"
 import { stars, currentStar } from "../store/getters/starsGetters"
 import { currentTag } from "../store/getters/tagsGetters"
@@ -40,6 +41,7 @@ export default {
   name: "StarList",
   vuex: {
     getters: {
+      user,
       githubStars,
       currentTag,
       currentStar,

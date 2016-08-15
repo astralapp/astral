@@ -40,7 +40,7 @@ export default {
       resetCurrentTag
     }
   },
-  data() {
+  data () {
     return {
       settingsPanelShowing: false
     }

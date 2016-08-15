@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['only' => ['fetchUser']]);
+        $this->middleware('jwt.auth', ['only' => ['fetchUser', 'setAutotag']]);
     }
 
     /**
@@ -59,6 +59,15 @@ class AuthController extends Controller
     public function fetchUser()
     {
         return Auth::user();
+    }
+
+    public function setAutotag(Request $request)
+    {
+      $state = (int)$request->input('state');
+      $user = Auth::user();
+      $user->autotag = $state;
+      $user->save();
+      return Auth::user();
     }
 
     public function logout()
