@@ -3,9 +3,11 @@
 namespace Astral\Http\Controllers;
 
 use Astral\Models\User;
+use Astral\Models\Star;
 use Auth;
 use JWTAuth;
 use Socialite;
+use Storage;
 use Log;
 use Illuminate\Http\Request;
 
@@ -13,7 +15,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['only' => ['fetchUser', 'setAutotag']]);
+        $this->middleware('jwt.auth', ['only' => ['fetchUser', 'setAutotag', 'exportData']]);
     }
 
     /**
@@ -68,6 +70,14 @@ class AuthController extends Controller
       $user->autotag = $state;
       $user->save();
       return Auth::user();
+    }
+
+    public function exportData() {
+        $stars = Star::withTags()->get()->reverse()->toJson();
+        $path = Auth::user()->username."_astral_data.json";
+        Storage::disk('public')->put($path, $stars);
+
+        return response()->download(public_path().'/storage/'.$path)->deleteFileAfterSend(true);
     }
 
     public function logout()

@@ -10,6 +10,9 @@
           <div class="settingsPanel-settingName">
             Auto-Tag by Language
           </div>
+          <!-- <div class="settingsPanel-settingDescription">
+            Automatically adds a tag based on the repo's base language.
+          </div> -->
           <div class="settingsPanel-settingControl">
             <toggle-switch :checked="user.autotag" key="languageAutotag" :change="setUserAutoTagPref"></toggle-switch>
           </div>
@@ -27,7 +30,7 @@
             Export Stars As JSON
           </div>
           <div class="settingsPanel-settingControl">
-            <button class="btn-flat">Export</button>
+            <a :href="exportUrl" target="_blank" rel="noopener" class="btn-flat">Export</a>
           </div>
         </div>
       </div>
@@ -38,6 +41,7 @@
   </div>
 </template>
 <script>
+import ls from "local-storage"
 import { user } from "../store/getters/userGetters"
 import { setUserAutoTag } from "../store/actions"
 import ToggleSwitch from "./toggle-switch.vue"
@@ -49,6 +53,11 @@ export default {
   vuex: {
     getters: { user },
     actions: { setUserAutoTag }
+  },
+  data () {
+    return {
+      exportUrl: `/api/auth/user/exportData?token=${ls("jwt")}`
+    }
   },
   methods: {
     setUserAutoTagPref (e) {
