@@ -44,6 +44,6 @@ class AddTagSlugs extends Command
             $bar->advance();
         }
         $bar->finish();
-        $this->info('Slugs successfully added to '.count($tags).' tags.');
+        $this->info(PHP_EOL.'Slugs successfully added to '.count($tags).' tags.'.PHP_EOL);
     }
 }

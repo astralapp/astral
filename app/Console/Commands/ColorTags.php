@@ -45,6 +45,6 @@ class ColorTags extends Command
             $bar->advance();
         }
         $bar->finish();
-        $this->info('Colors successfully added to '.count($tags).' tags.');
+        $this->info(PHP_EOL.'Colors successfully added to '.count($tags).' tags.'.PHP_EOL);
     }
 }
