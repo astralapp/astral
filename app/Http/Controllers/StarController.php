@@ -80,7 +80,10 @@ class StarController extends Controller
             }
         }
 
-        return Star::withTags()->get();
+        return [
+            'stars' => Star::withTags()->get(),
+            'tags' => Tag::withStars()->get(),
+        ];
     }
 
     public function autotag(Request $request)

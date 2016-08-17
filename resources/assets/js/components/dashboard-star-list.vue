@@ -68,7 +68,7 @@ export default {
   methods: {
     starClicked (repo) {
       this.setCurrentStar(repo)
-      this.$broadcast("STAR_CHANGED")
+      this.$root.$broadcast("STAR_CHANGED")
     },
     setTag (tag) {
       this.$route.router.go(`/dashboard/tag/${tag.slug}`)

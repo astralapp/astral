@@ -104,7 +104,9 @@ export default {
     },
     syncTags (tags) {
       if (tags.length) {
-        this.sync(this.star, tags).catch((errors) => {
+        this.sync(this.star, tags).then((res) => {
+          this.$root.$broadcast("NOTIFICATION", `Tags for ${this.star.full_name} updated.`)
+        }).catch((errors) => {
           this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error")
         })
       }

@@ -2,8 +2,8 @@
   <div class="dashboard-editTagTrigger" @click.self="tagEditorShowing = !tagEditorShowing" v-on-clickaway="tagEditorShowing = false">
     <i class="fa fa-cog"></i>
     <div class="dashboardHeader-editTagDropdown" v-show="tagEditorShowing" transition="dashboardHeader-editTagDropdown">
-      <input type="text" v-model="currentTagField">
-      <button class="btn-flat" @click="doEditTagName(currentTag.id, currentTagName)">Save</button>
+      <input type="text" :value="currentTag.name" v-el:tag-name>
+      <button class="btn-flat" @click="doEditTagName(currentTag.id)">Save</button>
       <button class="btn-flat btn-danger" @click="deleteCurrentTag">Delete Tag</button>
     </div>
   </div>
@@ -31,28 +31,20 @@ export default {
       tagEditorShowing: false
     }
   },
-  computed: {
-    currentTagField: {
-      get () {
-        if (this.currentTagName.replace(/\s/g, "") === "") {
-          return this.currentTag.name
-        } else {
-          return this.currentTagName
-        }
-      },
-      set (newValue) {
-        this.currentTagName = newValue
-      }
-    }
-  },
   methods: {
-    doEditTagName (id, name) {
-      this.editTagName(id, name).then((res) => {
-        this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`)
-        this.$route.router.replace(`/dashboard/${res.slug}`)
-      }).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error renaming this tag.", "error")
-      })
+    doEditTagName (id) {
+      const name = this.$els.tagName.value
+      if (name.replace(/\s/g, "") === "") {
+        window.alert("Tag name can't be blank.")
+        this.$els.tagName.value = this.currentTag.name
+      } else {
+        this.editTagName(id, name).then((res) => {
+          this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`)
+          this.$route.router.replace(`/dashboard/tag/${res.slug}`)
+        }).catch((errors) => {
+          this.$root.$broadcast("NOTIFICATION", "There was an error renaming this tag.", "error")
+        })
+      }
     },
     deleteCurrentTag () {
       if (window.confirm("Are you sure you want to delete this tag?")) {

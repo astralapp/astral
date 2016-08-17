@@ -7,8 +7,14 @@
     @include size( $dashboard-sidebar-width 60px );
     padding: 0 20px;
     background: $primary;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     text-align: left;
     position: fixed; top: 0; left: 0;
+    img {
+      width: 65%;
+    }
     h3 {
       color: #fff;
       font-weight: 600;

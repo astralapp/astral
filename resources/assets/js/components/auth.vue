@@ -7,9 +7,9 @@
       <div class="auth-pulser"></div>
     </div>
     <div class="auth-signIn" v-else>
-      <img src="images/logo.svg" alt="Astral">
-        <div class="auth-error" v-show="error != ''">{{ error }}</div>
-        <a class="auth-signInButton" href="/api/auth">Sign In</a>
+      <img src="/images/logo.svg" alt="Astral">
+      <div class="auth-error" v-show="error != ''">{{ error }}</div>
+      <a class="auth-signInButton" href="/api/auth">Sign In</a>
     </div>
   </div>
 </template>

@@ -64,7 +64,7 @@ class TagController extends Controller
 
         return [
             'tag' => $tag,
-            'tags' => Tag::with('starCount')->get(),
+            'tags' => Tag::withStarCount()->get(),
         ];
     }
 
