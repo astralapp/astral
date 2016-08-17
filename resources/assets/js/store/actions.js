@@ -184,6 +184,10 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
   return promise
 }
 
+export const setTagFilter = ({ dispatch }, filter) => {
+  dispatch(types.SET_TAG_FILTER, filter)
+}
+
 export const editTagName = ({ dispatch, state }, tagId, name) => {
   const promise = new Promise((resolve, reject) => {
     Vue.http.put(`/api/tags/${tagId}`, { "name": name }, {

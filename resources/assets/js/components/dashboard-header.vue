@@ -21,7 +21,7 @@
 </template>
 <script>
 import { user } from "../store/getters/userGetters"
-import { currentTag } from "../store/getters/tagsGetters"
+import { currentTag, tagFilter } from "../store/getters/tagsGetters"
 import { searchQuery } from "../store/getters/galileoGetters"
 import { setSearchQuery } from "../store/actions"
 import EditTagDropdown from "./edit-tag-dropdown.vue"
@@ -46,6 +46,7 @@ export default {
     getters: {
       user: user,
       currentTag: currentTag,
+      tagFilter,
       query: searchQuery
     },
     actions: {
@@ -57,7 +58,7 @@ export default {
       if (Object.keys(this.currentTag).length) {
         return this.currentTag.name
       } else {
-        return this.viewingUntagged ? "Untagged" : "All Stars"
+        return this.tagFilter === "UNTAGGED" ? "Untagged" : "All Stars"
       }
     },
     currentSearchQuery: {

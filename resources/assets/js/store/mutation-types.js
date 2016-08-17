@@ -14,6 +14,7 @@ export const SET_TAGS = "SET_TAGS"
 export const ADD_TAG = "ADD_TAG"
 export const REMOVE_TAG = "REMOVE_TAG"
 export const RESET_NEW_TAG = "RESET_NEW_TAG"
+export const SET_TAG_FILTER = "SET_TAG_FILTER"
 export const SET_CURRENT_TAG = "SET_CURRENT_TAG"
 export const RESET_CURRENT_TAG = "RESET_CURRENT_TAG"
 

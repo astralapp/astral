@@ -7,8 +7,8 @@
       <h3 class="sidebar-header-text">Stars</h3>
     </div>
     <ul class="dashboard-list sidebar-stars">
-      <li class="all-stars dashboard-list-item" @click="resetTag" :class="{ 'selected': noCurrentTag && !viewingUntagged }"><i class="fa fa-inbox"></i> All Stars</li>
-      <li class="untagged-stars dashboard-list-item" @click="showUntagged" :class="{ 'selected': viewingUntagged }"><i class="fa fa-star-o"></i> Untagged Stars</li>
+      <li class="all-stars dashboard-list-item" @click="resetTag" :class="{ 'selected': tagFilter == 'ALL' }"><i class="fa fa-inbox"></i> All Stars</li>
+      <li class="untagged-stars dashboard-list-item" @click="showUntagged" :class="{ 'selected': tagFilter == 'UNTAGGED' }"><i class="fa fa-star-o"></i> Untagged Stars</li>
     </ul>
     <div class="sidebar-header tags-header">
       <h3 class="sidebar-header-text">Tags</h3>
@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { newTag, tags, currentTag } from "../store/getters/tagsGetters"
+import { newTag, tags, currentTag, tagFilter } from "../store/getters/tagsGetters"
 import {
   fetchTags,
   addTag,
@@ -48,7 +48,8 @@ export default {
     getters: {
       newTag,
       tags,
-      currentTag
+      currentTag,
+      tagFilter
     },
     actions: {
       fetchTags,
@@ -60,13 +61,7 @@ export default {
   },
   data () {
     return {
-      addTagFormShowing: false,
-      viewingUntagged: false
-    }
-  },
-  computed: {
-    noCurrentTag () {
-      return !Object.keys(this.currentTag).length
+      addTagFormShowing: false
     }
   },
   ready () {
@@ -111,11 +106,6 @@ export default {
     },
     showUntagged () {
       this.$route.router.go("/dashboard/untagged")
-    }
-  },
-  events: {
-    "IS_VIEWING_UNTAGGED": function (isViewing) {
-      this.viewingUntagged = isViewing
     }
   }
 }

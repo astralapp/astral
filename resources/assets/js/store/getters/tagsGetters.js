@@ -9,3 +9,7 @@ export const newTag = state => {
 export const currentTag = state => {
   return state.tags.currentTag
 }
+
+export const tagFilter = state => {
+  return state.tags.tagFilter
+}

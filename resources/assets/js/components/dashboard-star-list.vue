@@ -25,7 +25,7 @@
 import { user } from "../store/getters/userGetters"
 import { githubStars } from "../store/getters/githubGetters"
 import { stars, currentStar } from "../store/getters/starsGetters"
-import { currentTag } from "../store/getters/tagsGetters"
+import { currentTag, tagFilter } from "../store/getters/tagsGetters"
 import { tokenizedSearchQuery } from "../store/getters/galileoGetters"
 import {
   fetchStars,
@@ -47,6 +47,7 @@ export default {
       user,
       githubStars,
       currentTag,
+      tagFilter,
       currentStar,
       stars,
       searchQuery: tokenizedSearchQuery
@@ -56,11 +57,6 @@ export default {
       fetchGithubStars,
       setCurrentStar,
       setCurrentTag
-    }
-  },
-  data () {
-    return {
-      viewingUntagged: false
     }
   },
   ready () {
@@ -83,7 +79,7 @@ export default {
     },
     starHasCurrentTag (repo) {
       if (!Object.keys(this.currentTag).length) {
-        if (this.viewingUntagged) {
+        if (this.tagFilter === "UNTAGGED") {
           return repo.tags.length === 0
         } else {
           return true
@@ -96,11 +92,6 @@ export default {
       } else {
         return false
       }
-    }
-  },
-  events: {
-    "IS_VIEWING_UNTAGGED": function (isViewing) {
-      this.viewingUntagged = isViewing
     }
   }
 }

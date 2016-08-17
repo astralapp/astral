@@ -13,7 +13,12 @@
 import ls from "local-storage"
 import { user } from "../store/getters/userGetters"
 import { tags } from "../store/getters/tagsGetters"
-import { fetchUser, setCurrentTag, resetCurrentTag } from "../store/actions"
+import {
+  fetchUser,
+  setCurrentTag,
+  resetCurrentTag,
+  setTagFilter
+} from "../store/actions"
 import SettingsPanel from "./settings-panel.vue"
 import DashboardHeader from "./dashboard-header.vue"
 import DashboardSidebar from "./dashboard-sidebar.vue"
@@ -37,6 +42,7 @@ export default {
     actions: {
       fetchUser,
       setCurrentTag,
+      setTagFilter,
       resetCurrentTag
     }
   },
@@ -69,10 +75,8 @@ export default {
     data ({ to }) {
       if (this.$route.path.match(/^\/dashboard\/untagged/g) !== null) {
         this.resetCurrentTag()
-        this.$root.$broadcast("IS_VIEWING_UNTAGGED", true)
+        this.setTagFilter("UNTAGGED")
         return true
-      } else {
-        this.$root.$broadcast("IS_VIEWING_UNTAGGED", false)
       }
       if (this.tags.length) {
         if (this.$route.params.tag) {
@@ -80,9 +84,11 @@ export default {
             return tag.slug === this.$route.params.tag
           })
           if (tag) {
+            this.setTagFilter("TAG")
             this.setCurrentTag(tag)
           }
         } else {
+          this.setTagFilter("ALL")
           this.resetCurrentTag()
         }
       }

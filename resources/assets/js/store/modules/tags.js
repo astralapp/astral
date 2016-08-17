@@ -2,6 +2,7 @@ import {
   SET_NEW_TAG,
   SET_TAGS,
   RESET_NEW_TAG,
+  SET_TAG_FILTER,
   SET_CURRENT_TAG,
   RESET_CURRENT_TAG
 } from "../mutation-types.js"
@@ -12,7 +13,8 @@ const state = {
     description: ""
   },
   tags: [],
-  currentTag: {}
+  currentTag: {},
+  tagFilter: "ALL"
 }
 
 export const mutations = {
@@ -24,6 +26,9 @@ export const mutations = {
   },
   [RESET_NEW_TAG] (state) {
     state.newTag = Object.assign({}, state.newTag, { name: "", description: "" })
+  },
+  [SET_TAG_FILTER] (state, filter) {
+    state.tagFilter = filter
   },
   [SET_CURRENT_TAG] (state, tag) {
     state.currentTag = Object.assign({}, state.currentTag, tag)
