@@ -38,7 +38,8 @@ export default {
   data () {
     return {
       userDropdownVisible: false,
-      status: ""
+      status: "",
+      viewingUntagged: false
     }
   },
   vuex: {
@@ -53,7 +54,11 @@ export default {
   },
   computed: {
     currentTagName () {
-      return Object.keys(this.currentTag).length ? this.currentTag.name : "All Stars"
+      if (Object.keys(this.currentTag).length) {
+        return this.currentTag.name
+      } else {
+        return this.viewingUntagged ? "Untagged" : "All Stars"
+      }
     },
     currentSearchQuery: {
       get () {
@@ -72,6 +77,9 @@ export default {
   events: {
     "STATUS": function (message) {
       this.status = message
+    },
+    "IS_VIEWING_UNTAGGED": function (isViewing) {
+      this.viewingUntagged = isViewing
     }
   }
 }

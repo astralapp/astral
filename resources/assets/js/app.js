@@ -21,6 +21,9 @@ router.map({
   "/dashboard": {
     component: Dashboard
   },
+  "/dashboard/untagged": {
+    component: Dashboard
+  },
   "/dashboard/tag/:tag": {
     component: Dashboard
   }

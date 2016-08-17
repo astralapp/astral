@@ -67,6 +67,13 @@ export default {
   },
   route: {
     data ({ to }) {
+      if (this.$route.path.match(/^\/dashboard\/untagged/g) !== null) {
+        this.resetCurrentTag()
+        this.$root.$broadcast("IS_VIEWING_UNTAGGED", true)
+        return true
+      } else {
+        this.$root.$broadcast("IS_VIEWING_UNTAGGED", false)
+      }
       if (this.tags.length) {
         if (this.$route.params.tag) {
           const tag = this.tags.find((tag) => {

@@ -39,6 +39,9 @@ import "./../directives/drag_and_drop.js"
 
 export default {
   name: "StarList",
+  components: {
+    "star-info": StarInfo
+  },
   vuex: {
     getters: {
       user,
@@ -53,6 +56,11 @@ export default {
       fetchGithubStars,
       setCurrentStar,
       setCurrentTag
+    }
+  },
+  data () {
+    return {
+      viewingUntagged: false
     }
   },
   ready () {
@@ -75,7 +83,11 @@ export default {
     },
     starHasCurrentTag (repo) {
       if (!Object.keys(this.currentTag).length) {
-        return true
+        if (this.viewingUntagged) {
+          return repo.tags.length === 0
+        } else {
+          return true
+        }
       }
       if (repo.tags.length) {
         return ~repo.tags.map(function (tag) {
@@ -86,8 +98,10 @@ export default {
       }
     }
   },
-  components: {
-    "star-info": StarInfo
+  events: {
+    "IS_VIEWING_UNTAGGED": function (isViewing) {
+      this.viewingUntagged = isViewing
+    }
   }
 }
 </script>

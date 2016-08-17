@@ -7,8 +7,8 @@
       <h3 class="sidebar-header-text">Stars</h3>
     </div>
     <ul class="dashboard-list sidebar-stars">
-      <li class="all-stars dashboard-list-item" @click="resetTag" :class="{ 'selected': noCurrentTag }"><i class="fa fa-inbox"></i> All Stars</li>
-      <li class="untagged-stars dashboard-list-item"><i class="fa fa-star-o"></i> Untagged Stars</li>
+      <li class="all-stars dashboard-list-item" @click="resetTag" :class="{ 'selected': noCurrentTag && !viewingUntagged }"><i class="fa fa-inbox"></i> All Stars</li>
+      <li class="untagged-stars dashboard-list-item" @click="showUntagged" :class="{ 'selected': viewingUntagged }"><i class="fa fa-star-o"></i> Untagged Stars</li>
     </ul>
     <div class="sidebar-header tags-header">
       <h3 class="sidebar-header-text">Tags</h3>
@@ -60,7 +60,8 @@ export default {
   },
   data () {
     return {
-      addTagFormShowing: false
+      addTagFormShowing: false,
+      viewingUntagged: false
     }
   },
   computed: {
@@ -104,6 +105,17 @@ export default {
     },
     resetTag: function () {
       this.$route.router.go("/dashboard")
+    },
+    viewingUntagged () {
+      return window.location.pathname.match(/^\/dashboard\/untagged/g) !== null
+    },
+    showUntagged () {
+      this.$route.router.go("/dashboard/untagged")
+    }
+  },
+  events: {
+    "IS_VIEWING_UNTAGGED": function (isViewing) {
+      this.viewingUntagged = isViewing
     }
   }
 }
