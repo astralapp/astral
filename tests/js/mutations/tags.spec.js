@@ -3,6 +3,7 @@ const {
   SET_NEW_TAG,
   SET_TAGS,
   RESET_NEW_TAG,
+  SET_TAG_FILTER,
   SET_CURRENT_TAG,
   RESET_CURRENT_TAG
 } = mutations;
@@ -47,5 +48,10 @@ describe("Tag Mutations", () => {
     const state = { currentTag: currentTag }
     RESET_CURRENT_TAG(state);
     expect(state.currentTag).toEqual({});
+  });
+  it("can set the tag filter mode", () => {
+    const state = { tagFilter: "ALL" };
+    SET_TAG_FILTER(state, "UNTAGGED");
+    expect(state.tagFilter).toEqual("UNTAGGED");
   });
 });
