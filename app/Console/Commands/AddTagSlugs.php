@@ -36,7 +36,7 @@ class AddTagSlugs extends Command
      */
     public function handle()
     {
-        $tags = Tag::whereNull('slug')->get();
+        $tags = Tag::whereNull('slug')->orWhere('slug', '')->get();
         $bar = $this->output->createProgressBar(count($tags));
         foreach ($tags as $tag) {
             $tag->slug = str_slug($tag->name);
