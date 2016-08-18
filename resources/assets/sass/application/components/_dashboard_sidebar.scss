@@ -1,3 +1,4 @@
+@import "application/components/sort_tags_dropdown";
 .dashboard-sidebar {
   background: $dark-blue;
   overflow-y: auto; overflow-x: hidden;
@@ -39,6 +40,9 @@
         font-size: 0;
         height: 100%;
         position: relative;
+        .sidebar-sortDropdown {
+          display: inline-block;
+        }
         .tag-button-group-item {
           @include transition ( all 200ms linear );
           @include appearance(none);
@@ -51,6 +55,10 @@
           height: 100%;
           outline: none;
           padding: 0 15px;
+          i.fa {
+            margin-right: 2px;
+            pointer-events: none;
+          }
           &:hover {
             background: rgba(#fff, 0.03);
             color: rgba(#fff, 0.85);

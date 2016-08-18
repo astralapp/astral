@@ -13,9 +13,11 @@
     <div class="sidebar-header tags-header">
       <h3 class="sidebar-header-text">Tags</h3>
       <div class="tag-button-group">
-        <button class="tag-button-group-item" @click="addTagFormShowing = !addTagFormShowing">Add</button>
-        <button class="tag-button-group-item">Edit</button>
-        <button class="tag-button-group-item">Sort</button>
+        <button class="tag-button-group-item" @click="addTagFormShowing = !addTagFormShowing"><i class="fa fa-plus-circle"></i> Add</button>
+        <div class="sidebar-sortDropdown">
+          <button class="tag-button-group-item" @click.stop="sortTagsDropdownVisible = !sortTagsDropdownVisible"><i class="fa fa-sort"></i> Sort</button>
+          <sort-tags-dropdown :visible="sortTagsDropdownVisible" v-on-clickaway="sortTagsDropdownVisible = false"></sort-tags-dropdown>
+        </div>
       </div>
     </div>
     <form class="tag-form" v-show="addTagFormShowing" @submit.prevent="doAddTag()">
@@ -41,9 +43,16 @@ import {
   setCurrentTag
 } from "../store/actions"
 import "./../directives/drag_and_drop.js"
+import { orderBy } from "lodash"
+import { mixin as clickaway } from "vue-clickaway"
+import SortTagsDropdown from "./sort-tags-dropdown.vue"
 
 export default {
   name: "DashboardSidebar",
+  components: {
+    "sort-tags-dropdown": SortTagsDropdown
+  },
+  mixins: [clickaway],
   vuex: {
     getters: {
       newTag,
@@ -61,7 +70,8 @@ export default {
   },
   data () {
     return {
-      addTagFormShowing: false
+      addTagFormShowing: false,
+      sortTagsDropdownVisible: false
     }
   },
   ready () {
@@ -106,6 +116,37 @@ export default {
     },
     showUntagged () {
       this.$route.router.go("/dashboard/untagged")
+    }
+  },
+  events: {
+    "TAGS_SORTED": function(sorter) {
+      this.sortTagsDropdownVisible = false
+      let sortedTags = []
+      let sortMap = []
+      switch (sorter) {
+        case "ALPHA_ASC":
+          sortedTags = orderBy(this.tags, ['name'], ['asc'])
+          break
+        case "ALPHA_DESC":
+          sortedTags = orderBy(this.tags, ['name'], ['desc'])
+          break
+        case "STARS_ASC":
+          sortedTags = orderBy(this.tags, ['stars_count'], ['asc'])
+          break
+        case "STARS_DESC":
+          sortedTags = orderBy(this.tags, ['stars_count'], ['desc'])
+          break
+        default:
+          sortedTags = orderBy(this.tags, ['name'], ['asc'])
+          break
+      }
+      sortMap = sortedTags.map((tag, index) => {
+        return {
+          id: tag.id,
+          sort_order: index
+        }
+      })
+      this.reorderTags(sortMap)
     }
   }
 }
