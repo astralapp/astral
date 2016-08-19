@@ -119,25 +119,25 @@ export default {
     }
   },
   events: {
-    "TAGS_SORTED": function(sorter) {
+    "TAGS_SORTED": function (sorter) {
       this.sortTagsDropdownVisible = false
       let sortedTags = []
       let sortMap = []
       switch (sorter) {
         case "ALPHA_ASC":
-          sortedTags = orderBy(this.tags, ['name'], ['asc'])
+          sortedTags = orderBy(this.tags, ["name"], ["asc"])
           break
         case "ALPHA_DESC":
-          sortedTags = orderBy(this.tags, ['name'], ['desc'])
+          sortedTags = orderBy(this.tags, ["name"], ["desc"])
           break
         case "STARS_ASC":
-          sortedTags = orderBy(this.tags, ['stars_count'], ['asc'])
+          sortedTags = orderBy(this.tags, ["stars_count"], ["asc"])
           break
         case "STARS_DESC":
-          sortedTags = orderBy(this.tags, ['stars_count'], ['desc'])
+          sortedTags = orderBy(this.tags, ["stars_count"], ["desc"])
           break
         default:
-          sortedTags = orderBy(this.tags, ['name'], ['asc'])
+          sortedTags = orderBy(this.tags, ["name"], ["asc"])
           break
       }
       sortMap = sortedTags.map((tag, index) => {

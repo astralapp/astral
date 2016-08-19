@@ -24,11 +24,12 @@ class GithubController extends Controller
     public function getStars(Request $request)
     {
         $page = (int) $request->input('page', 1);
+        $autotag = (bool) $request->input('autotag');
         $access_token = $request->header('Access-Token');
         $githubClient = new GithubClient($access_token);
         $stars = $githubClient->getStars($page);
 
-        return $this->mapStarsToRepos($stars);
+        return $this->mapStarsToRepos($stars, $autotag);
     }
 
     /**
@@ -36,7 +37,7 @@ class GithubController extends Controller
      *
      * @return array
      */
-    private function mapStarsToRepos($stars)
+    private function mapStarsToRepos($stars, $autotag)
     {
         for ($i = 0; $i <= count($stars['stars']) - 1; ++$i) {
             // Current Repo in loop
@@ -44,7 +45,7 @@ class GithubController extends Controller
             // User star with repo id
             $star = Star::withRepoId($repo['id'])->first();
             // If user has autotag turned on and the repo has a language set
-            if (Auth::user()->autotag && $repo['language']) {
+            if ($autotag && Auth::user()->autotag && $repo['language']) {
               // If no star, create one first
               if (! $star) {
                   $star = new Star();
@@ -60,13 +61,10 @@ class GithubController extends Controller
                   $userTag->name = $repo['language'];
                   $userTag->save();
               }
-              $star->tags()->sync([$userTag->id]);
+              $star->tags()->sync([$userTag->id], false);
             }
-            $userStar = Star::with('tags')->where('user_id', Auth::id())->where(
-                'repo_id', $stars['stars'][$i]['id']
-            )->first();
-            if ($userStar) {
-                $stars['stars'][$i]['tags'] = $userStar->tags;
+            if ($star) {
+                $stars['stars'][$i]['tags'] = $star->tags;
             } else {
                 $stars['stars'][$i]['tags'] = [];
             }

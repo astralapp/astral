@@ -16,7 +16,10 @@ Vue.directive("tag-select", {
         placeholder: "Add a tag"
       }).on("change", function () {
         const tagData = $(this).select2("data").map(function (tag) {
-          return { name: tag.text }
+          return {
+            name: tag.text,
+            selected: true
+          }
         })
         self.vm.$dispatch("CURRENT_TAGS_CHANGED", tagData)
       })

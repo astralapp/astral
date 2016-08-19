@@ -80,10 +80,10 @@ export default {
     },
     tagList () {
       return this.tags.map((tag) => {
-        let isSelected = false
-        if (this.userStar && this.userStar.tags) {
-          isSelected = this.userStar.tags.map(function (tag) {
-            return tag.id
+        var isSelected = false
+        if (this.userStar && this.star.tags.length) {
+          isSelected = this.star.tags.map(function (starTag) {
+            return starTag.id
           }).indexOf(tag.id) > -1
         }
         return {
@@ -98,7 +98,7 @@ export default {
     showTagEditor () { this.tagEditorShowing = true },
     hideTagEditor () { this.tagEditorShowing = false },
     clickedAwayFromTagEditor (e) {
-      if (!e.target.classList.contains("toggle-tag-editor")) {
+      if (!e.target.classList.contains("toggle-tag-editor") && !e.target.classList.contains("select2-selection__choice__remove")) {
         this.hideTagEditor()
       }
     },

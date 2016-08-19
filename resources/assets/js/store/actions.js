@@ -39,10 +39,10 @@ export const setUserAutoTag = ({ dispatch }, prefState) => {
 }
 
 //  Github Stars
-export const fetchGithubStars = ({ dispatch, state, actions }, page = 1) => {
+export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag = 1) => {
   const promise = new Promise((resolve, reject) => {
     let data = {}
-    Vue.http.get(`/api/github/stars?page=${page}`, null, {
+    Vue.http.get(`/api/github/stars?page=${page}&autotag=${autotag}`, null, {
       headers: {
         "Authorization": `Bearer ${ls("jwt")}`,
         "Access-Token": ls("access_token")
@@ -173,7 +173,7 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
+      fetchGithubStars({ dispatch, state }, 1, 0)
       dispatch(types.SET_STARS, response.data.message.stars)
       dispatch(types.SET_TAGS, response.data.message.tags)
       resolve(response.data.message)
