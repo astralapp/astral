@@ -28,6 +28,9 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'bail|required|alpha_dash|unique:tags,name,NULL,id,user_id,'.Auth::id()
+        ]);
         $tag = Tag::create($request->only('name', 'description'));
 
         return Tag::withStarCount()->get();
@@ -58,6 +61,9 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'bail|required|alpha_dash|unique:tags,name,NULL,id,user_id,'.Auth::id()
+        ]);
         $tag = Tag::where('id', $id)->where('user_id', Auth::id())->first();
         $tag->name = $request->input('name');
         $tag->save();

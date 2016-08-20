@@ -16,7 +16,7 @@ export const fetchUser = ({ dispatch, state }) => {
       dispatch(types.SET_USER, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -32,7 +32,7 @@ export const setUserAutoTag = ({ dispatch }, prefState) => {
       dispatch(types.SET_USER, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -77,7 +77,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         }
       }
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -98,7 +98,7 @@ export const fetchReadme = ({ dispatch }, name) => {
         resolve(renderedReadme)
       })
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -119,7 +119,7 @@ export const fetchTags = ({ dispatch }) => {
       dispatch(types.SET_TAGS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -135,7 +135,7 @@ export const reorderTags = ({ dispatch }, sortMap) => {
       dispatch(types.SET_TAGS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -152,7 +152,7 @@ export const addTag = ({ dispatch, state }) => {
       dispatch(types.RESET_NEW_TAG)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -178,7 +178,7 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
       dispatch(types.SET_TAGS, response.data.message.tags)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -201,7 +201,7 @@ export const editTagName = ({ dispatch, state }, tagId, name) => {
       setCurrentTag({ dispatch }, response.data.message.tag)
       resolve(response.data.message.tag)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -219,7 +219,7 @@ export const deleteTag = ({ dispatch, state }, tagId) => {
       dispatch(types.SET_TAGS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -238,7 +238,7 @@ export const tagStar = ({ dispatch, state }, starData) => {
       dispatch(types.SET_STARS, response.data.message.stars)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -254,7 +254,7 @@ export const fetchStars = ({ dispatch }) => {
       dispatch(types.SET_STARS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise
@@ -270,7 +270,7 @@ export const editStarNotes = ({ dispatch }, star, text) => {
       dispatch(types.SET_STARS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data.errors)
+      reject(response.data)
     })
   })
   return promise

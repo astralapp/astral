@@ -94,7 +94,11 @@ export default {
       this.addTag().then(() => {
         this.$root.$broadcast("NOTIFICATION", `${newTagName} was created successfully.`)
       }).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error creating this tag.", "error")
+        if (errors.name){
+          this.$root.$broadcast("NOTIFICATION", errors.name[0], "error")
+        } else {
+          this.$root.$broadcast("NOTIFICATION", "There was an error creating this tag.", "error")
+        }
       })
     },
     tagStarWithData: function (data, scope) {
