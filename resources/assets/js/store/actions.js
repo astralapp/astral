@@ -2,6 +2,7 @@ import Vue from "vue"
 import VueResource from "vue-resource"
 import ls from "local-storage"
 import * as types from "./mutation-types.js"
+import { Base64 } from "js-base64"
 
 Vue.use(VueResource)
 
@@ -87,7 +88,7 @@ export const fetchReadme = ({ dispatch }, name) => {
   const accessToken = ls("access_token")
   const promise = new Promise((resolve, reject) => {
     Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((response) => {
-      const readme = decodeURIComponent(escape(window.atob(response.data.content)))
+      const readme = Base64.decode(response.data.content)
       Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
         headers: {
           "Content-Type": "text/plain"
