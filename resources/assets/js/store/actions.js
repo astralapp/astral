@@ -87,7 +87,7 @@ export const fetchReadme = ({ dispatch }, name) => {
   const accessToken = ls("access_token")
   const promise = new Promise((resolve, reject) => {
     Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((response) => {
-      const readme = window.atob(response.data.content)
+      const readme = decodeURIComponent(escape(window.atob(response.data.content)))
       Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
         headers: {
           "Content-Type": "text/plain"
