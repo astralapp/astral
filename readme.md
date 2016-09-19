@@ -58,6 +58,7 @@ This is the repository for Astral v2. It is currently still in early development
 #### With Docker using Laradock
 
 - Fork this repository, clone it recursively including submodules, and `cd` into `laradock` folder
+- Enable Node at docker-compose.yml swithching `INSTALL_NODE=false` to `INSTALL_NODE=true` 
 - Execute Docker Compose: `docker-compose up -d nginx mysql redis`
 - Run a terminal inside workspace container: `docker-compose exec workspace bash`
 - Change to `laradock` user: `su laradock`
