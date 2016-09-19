@@ -17,6 +17,8 @@ This is the repository for Astral v2. It is currently still in early development
 
 ### Getting up and running
 
+#### With Homestead
+
 - Fork this repository, clone it, and `cd` into it
 - Install the front-end dependencies: `npm install`
 - Install the PHP dependenices: `composer install`
@@ -47,6 +49,26 @@ This is the repository for Astral v2. It is currently still in early development
 	```
 	$ homestead ssh
 	$ cd astral
+	$ php artisan migrate
+	$ php artisan key:generate
+	```
+
+- Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and bask in its glory!
+
+#### With Docker using Laradock
+
+- Fork this repository, clone it recursively including submodules, and `cd` into `laradock` folder
+- Execute Docker Compose: `docker-compose up -d nginx mysql redis`
+- Run a terminal inside workspace container: `docker-compose exec workspace bash`
+- Change to `laradock` user: `su laradock`
+- Install the front-end dependencies: `npm install`
+- Install the PHP dependenices: `composer install` and exit container
+- Add the local development domain to your hosts file: `your_ip  astralapp.app`
+- Create a new [OAuth Application](https://github.com/settings/developers), and grab the keys it gives you
+- Copy the `.env.example` file and rename it to `.env`. Add your GitHub keys to it
+- Run a terminal into your `workspace` container again, migrate the DB, and generate a new app key
+
+	```
 	$ php artisan migrate
 	$ php artisan key:generate
 	```
