@@ -71,7 +71,7 @@ This is the repository for Astral v2. It is currently still in early development
 	```
 	$ php artisan migrate
 	$ php artisan key:generate
-
+	```
 
 - Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and bask in its glory!
 
