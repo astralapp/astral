@@ -1,16 +1,15 @@
 var gulp = require("gulp");
-var sass = require("gulp-sass");
-var autoprefixer = require("gulp-autoprefixer");
 var notify = require("gulp-notify");
 var Server = require("karma").Server;
 var bourbon = require("node-bourbon");
 var elixir = require("laravel-elixir");
-var vueify = require('laravel-elixir-vueify');
+require("laravel-elixir-browserify-official");
+require("laravel-elixir-vueify");
 
 elixir(function(mix) {
     mix
     .browserify("app.js", "./public/js/app.bundle.js")
-    .sass("app.scss", null, { includePaths: require("node-bourbon").includePaths, quiet: true})
+    .sass("app.scss", null, null, { includePaths: bourbon.includePaths, quiet: true})
     .version(["js/app.bundle.js", "css/app.css"]);
 });
 
