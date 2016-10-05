@@ -20,7 +20,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('auth', 'AuthController@redirectToProvider');
         Route::get('auth/callback', 'AuthController@handleProviderCallback');
         Route::group(['middleware' => 'throttle:1,2'], function () {
-          Route::get('auth/user/exportData', 'AuthController@exportData');
+            Route::get('auth/user/exportData', 'AuthController@exportData');
         });
     });
 

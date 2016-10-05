@@ -65,16 +65,18 @@ class AuthController extends Controller
 
     public function setAutotag(Request $request)
     {
-      $state = (int)$request->input('state');
-      $user = Auth::user();
-      $user->autotag = $state;
-      $user->save();
-      return Auth::user();
+        $state = (int)$request->input('state');
+        $user = Auth::user();
+        $user->autotag = $state;
+        $user->save();
+
+        return Auth::user();
     }
 
-    public function exportData() {
+    public function exportData()
+    {
         $stars = Star::withTags()->get()->reverse()->toJson();
-        $path = Auth::user()->username."_astral_data.json";
+        $path = Auth::user()->username.'_astral_data.json';
         Storage::disk('public')->put($path, $stars);
 
         return response()->download(public_path().'/storage/'.$path)->deleteFileAfterSend(true);
