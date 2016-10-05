@@ -88,7 +88,14 @@ export const fetchReadme = ({ dispatch }, name) => {
   const accessToken = ls("access_token")
   const promise = new Promise((resolve, reject) => {
     Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((response) => {
-      const readme = Base64.decode(response.data.content)
+      let readme = Base64.decode(response.data.content)
+
+      const branch = response.data.url.split('?ref=')[1]
+      const regex = /(!\[.*\])\(\/?(?!(http:\/\/)|(https:\/\/)|(\/))(.*)\)/igm
+      const replace_with = `$1(https://github.com/${name}/blob/${branch}/$5?raw=true)`
+
+      readme = readme.replace(regex, replace_with)
+
       Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
         headers: {
           "Content-Type": "text/plain"
