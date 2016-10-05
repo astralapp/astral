@@ -65,7 +65,7 @@ class AuthController extends Controller
 
     public function setAutotag(Request $request)
     {
-        $state = (int)$request->input('state');
+        $state = (int) $request->input('state');
         $user = Auth::user();
         $user->autotag = $state;
         $user->save();
