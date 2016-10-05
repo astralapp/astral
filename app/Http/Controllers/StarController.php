@@ -88,26 +88,27 @@ class StarController extends Controller
 
     public function autotag(Request $request)
     {
-      $repos = $request->input('repos');
-      if (count($repos) == 0){
-          return true;
-      }
-      foreach($repos as $repo) {
-          if ($repo['language']) {
-              $languageTag = [['name' => $repo['language']]];
-              $requestData = [
-                'star' => $repo,
-                'tags' => $languageTag,
-              ];
-              $syncRequest = Request::create( '/api/stars/syncTags', 'POST', $requestData );
-              $syncRequest->headers->set('Authorization', 'Bearer '.$request->header('Authorization'));
-              app()->handle($syncRequest);
-          }
-      }
-      return [
-          'stars' => Star::withTags()->get(),
-          'tags' => Tag::withStarCount()->get(),
-      ];
+        $repos = $request->input('repos');
+        if (count($repos) == 0) {
+            return true;
+        }
+        foreach ($repos as $repo) {
+            if ($repo['language']) {
+                $languageTag = [['name' => $repo['language']]];
+                $requestData = [
+                  'star' => $repo,
+                  'tags' => $languageTag,
+                ];
+                $syncRequest = Request::create('/api/stars/syncTags', 'POST', $requestData);
+                $syncRequest->headers->set('Authorization', 'Bearer '.$request->header('Authorization'));
+                app()->handle($syncRequest);
+            }
+        }
+
+        return [
+            'stars' => Star::withTags()->get(),
+            'tags' => Tag::withStarCount()->get(),
+        ];
     }
 
     /**

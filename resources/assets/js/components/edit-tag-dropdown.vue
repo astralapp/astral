@@ -2,7 +2,7 @@
   <div class="dashboard-editTagTrigger" @click.self="tagEditorShowing = !tagEditorShowing" v-on-clickaway="tagEditorShowing = false">
     <i class="fa fa-cog"></i>
     <div class="dashboardHeader-editTagDropdown" v-show="tagEditorShowing" transition="dashboardHeader-editTagDropdown">
-      <input type="text" :value="currentTag.name">
+      <input type="text" :value="currentTag.name" v-el:tag-name>
       <button class="btn-flat" @click="doEditTagName(currentTag.id)">Save</button>
       <button class="btn-flat btn-danger" @click="deleteCurrentTag">Delete Tag</button>
     </div>
@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     doEditTagName (id) {
+      const name = this.$els.tagName.value
       this.editTagName(id, name).then((res) => {
         this.$root.$broadcast("NOTIFICATION", `Tag renamed to ${name}.`)
         this.$route.router.replace(`/dashboard/tag/${res.slug}`)

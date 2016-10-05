@@ -203,7 +203,7 @@ export const editTagName = ({ dispatch, state }, tagId, name) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
+      fetchGithubStars({ dispatch, state }, 1, 0)
       fetchStars({ dispatch })
       dispatch(types.SET_TAGS, response.data.message.tags)
       setCurrentTag({ dispatch }, response.data.message.tag)
@@ -222,7 +222,7 @@ export const deleteTag = ({ dispatch, state }, tagId) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
+      fetchGithubStars({ dispatch, state }, 1, 0)
       fetchStars({ dispatch })
       dispatch(types.SET_TAGS, response.data.message)
       resolve(response.data.message)
