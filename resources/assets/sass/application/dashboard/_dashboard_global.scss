@@ -267,6 +267,24 @@
   .readme-error-overlay {
     background: #fff;
   }
+  .readme-notfound-overlay {
+    @include size( 100% );
+    transition: opacity 250ms ease;
+    background: rgba(#fff, 0.9);
+    color: $steel-blue;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute; top: 45px; left: 0;
+    z-index: 99;
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
   .repo-readme {
     font-size: 0.9rem;
     line-height: 1.5;

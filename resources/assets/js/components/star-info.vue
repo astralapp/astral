@@ -20,6 +20,9 @@
     <div class="readme-error-overlay" :class="{ 'active': readmeError }">
       Error Loading Readme
     </div>
+    <div class="readme-notfound-overlay" :class="{ 'active': readmeNotFound }">
+      Readme not found
+    </div>
     <div class="readme-loading-overlay" :class="{ 'active': readmeLoading }">
       <img src="/images/loader1.svg" />
     </div>
@@ -62,6 +65,7 @@ export default {
       noteEditorShowing: false,
       readmeLoading: false,
       readmeError: false,
+      readmeNotFound: false,
       currentNotes: ""
     }
   },
@@ -137,10 +141,15 @@ export default {
       this.fetchReadme(this.star.full_name).then(() => {
         this.readmeError = false
         this.readmeLoading = false
+        this.readmeNotFound = false
       }).catch((errors) => {
+        if(errors.message == "Not Found") {
+            this.readmeNotFound = true
+        } else {
+            this.readmeError = true
+            this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error")
+        }
         this.readmeLoading = false
-        this.readmeError = true
-        this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error")
       })
       this.$broadcast("STAR_CHANGED")
     },
