@@ -7,7 +7,6 @@
     margin: 0;
     opacity: 0;
     visibility: hidden;
-    will-change: transform, opacity;
     &.active {
       @include transform( translate(-50%, 2px) scale(1));
       opacity: 1;
