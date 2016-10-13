@@ -54,6 +54,6 @@ class FixTagSlugs extends Command
 
         $bar->finish();
 
-        $this->info(PHP_EOL . "All slugs have been successfully fixed." . PHP_EOL);
+        $this->info(PHP_EOL.'All slugs have been successfully fixed.'.PHP_EOL);
     }
 }
