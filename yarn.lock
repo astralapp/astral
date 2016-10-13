@@ -299,7 +299,7 @@ babel-code-frame@^6.16.0:
     esutils "^2.0.2"
     js-tokens "^2.0.0"
 
-babel-core@^6.0.14, babel-core@^6.16.0, babel-core@^6.9.0:
+babel-core@^6.0.14, babel-core@^6.16.0, babel-core@^6.3.26, babel-core@^6.9.0:
   version "6.17.0"
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-6.17.0.tgz#6c4576447df479e241e58c807e4bc7da4db7f425"
   dependencies:
@@ -663,7 +663,7 @@ babel-plugin-transform-regenerator@^6.16.0:
     babel-types "^6.16.0"
     private "~0.1.5"
 
-babel-plugin-transform-runtime@^6.9.0:
+babel-plugin-transform-runtime@^6.3.13, babel-plugin-transform-runtime@^6.9.0:
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-runtime/-/babel-plugin-transform-runtime-6.15.0.tgz#3d75b4d949ad81af157570273846fb59aeb0d57c"
   dependencies:
@@ -676,7 +676,7 @@ babel-plugin-transform-strict-mode@^6.8.0:
     babel-runtime "^6.0.0"
     babel-types "^6.8.0"
 
-babel-preset-es2015@^6.9.0:
+babel-preset-es2015@^6.3.13, babel-preset-es2015@^6.9.0:
   version "6.16.0"
   resolved "https://registry.yarnpkg.com/babel-preset-es2015/-/babel-preset-es2015-6.16.0.tgz#59acecd1efbebaf48f89404840f2fe78c4d2ad5c"
   dependencies:
@@ -3657,6 +3657,19 @@ laravel-elixir-browserify-official@^0.1.3:
     vinyl-source-stream "^1.1.0"
     watchify "^3.7.0"
 
+laravel-elixir-vueify:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/laravel-elixir-vueify/-/laravel-elixir-vueify-2.0.0.tgz#0c6218e8bd647c7e3db373cd03a981c57c12a868"
+  dependencies:
+    babel-core "^6.3.26"
+    babel-plugin-transform-runtime "^6.3.13"
+    babel-preset-es2015 "^6.3.13"
+    babel-runtime "^6.0.0"
+    vue "^1.0.20"
+    vue-hot-reload-api "^1.2.2"
+    vueify "^8.3.0"
+    vueify-insert-css "^1.0.0"
+
 laravel-elixir@^6.0.0-11:
   version "6.0.0-11"
   resolved "https://registry.yarnpkg.com/laravel-elixir/-/laravel-elixir-6.0.0-11.tgz#107c6be07d2e8f10612bf656d7ded51355a8f59b"
@@ -6228,7 +6241,7 @@ vue-clickaway@^1.1.1:
   dependencies:
     loose-envify "^1.2.0"
 
-vue-hot-reload-api@^1.3.2:
+vue-hot-reload-api@^1.2.2, vue-hot-reload-api@^1.3.2:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-1.3.3.tgz#54d22d83786a878493f639cc76bca7992a23be46"
 
@@ -6250,13 +6263,17 @@ vue-template-validator@^1.0.1:
   dependencies:
     chalk "^1.1.1"
 
-vue@^1.0.19:
+vue@^1.0.19, vue@^1.0.20:
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/vue/-/vue-1.0.28.tgz#ed2ff07b200bde15c87a90ef8727ceea7d38567d"
   dependencies:
     envify "^3.4.0"
 
-vueify@^8.7.0:
+vueify-insert-css@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vueify-insert-css/-/vueify-insert-css-1.0.0.tgz#57e5d791907e8c9d87ae6de099a2174bd0a7f990"
+
+vueify@^8.3.0, vueify@^8.7.0:
   version "8.7.0"
   resolved "https://registry.yarnpkg.com/vueify/-/vueify-8.7.0.tgz#3264eb39562b1e16d8a7689b187673b3c5811e3e"
   dependencies:
