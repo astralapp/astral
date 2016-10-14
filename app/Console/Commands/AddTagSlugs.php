@@ -2,6 +2,7 @@
 
 namespace Astral\Console\Commands;
 
+use Astral\TagSlugger;
 use Illuminate\Console\Command;
 use Astral\Models\Tag;
 
@@ -39,7 +40,7 @@ class AddTagSlugs extends Command
         $tags = Tag::whereNull('slug')->orWhere('slug', '')->get();
         $bar = $this->output->createProgressBar(count($tags));
         foreach ($tags as $tag) {
-            $tag->slug = str_slug($tag->name);
+            $tag->slug = (new TagSlugger($tag->name))->fix();
             $tag->save();
             $bar->advance();
         }
