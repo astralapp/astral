@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-repos">
     <ul class="repos">
-      <li class="repo" v-for="repo in githubStars | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" v-if="starHasCurrentTag(repo)">
+      <li class="repo" v-for="repo in starsWithCurrentTag | galileo" track-by="id" v-draggable="repo" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }">
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
@@ -12,7 +12,7 @@
         <div class="repo-stats">
           <div class="repo-stat stars"><i class="fa fa-star"></i> {{* repo.stargazers_count }}</div>
           <div class="repo-stat forks"><i class="fa fa-code-fork"></i> {{* repo.forks_count }}</div>
-          <div class="repo-stat link"><a href="{{* repo.html_url }}" target="_blank">View on GitHub</a></div>
+          <div class="repo-stat link"><a href="{{* repo.html_url }}" target="_blank" @click.stop>View on GitHub</a></div>
         </div>
       </li>
     </ul>
@@ -59,6 +59,11 @@ export default {
       setCurrentTag
     }
   },
+  computed: {
+    starsWithCurrentTag() {
+      return this.githubStars.filter(this.starHasCurrentTag)
+    }
+  },
   ready () {
     this.$root.$broadcast("STATUS", "Loading stars...")
     this.fetchStars()
@@ -71,6 +76,9 @@ export default {
   },
   methods: {
     starClicked (repo) {
+      if (repo.id === this.currentStar.id) {
+        return false
+      }
       this.setCurrentStar(repo)
       this.$root.$broadcast("STAR_CHANGED")
     },
