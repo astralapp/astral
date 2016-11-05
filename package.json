@@ -3,7 +3,13 @@
   "private": true,
   "scripts": {
     "test": "karma start --singleRun=true",
-    "lint": "eslint resources/assets/js --ext='.js,.vue'"
+    "lint": "eslint resources/assets/js --ext='.js,.vue'",
+    "clean": "rm -f public/build/css/* public/build/js/* public/build/rev-manifest.json",
+    "build": "gulp",
+    "build-prod": "npm run clean && gulp --production",
+    "watch-build": "gulp watch",
+    "clean-deps": "rm -rf node_modules",
+    "reinstall-deps": "npm run clean-deps && yarn"
   },
   "dependencies": {
     "dragula": "^3.6.3",
