@@ -24,7 +24,6 @@
   z-index: 999;
   padding: 10px;
   width: 200px;
-  will-change: transform, opacity;
   &::before {
     @include transform( translateX(-50%) rotate(45deg) );
     @include size( 12px );

@@ -44,7 +44,6 @@
   transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
   transform: translate3d(0, 0, 0);
   opacity: 1;
-  will-change: transform, opacity;
 }
 .dashboard-notifier-enter, .dashboard-notifier-leave {
   transform: translate3d(40px, 0, 0);
