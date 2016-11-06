@@ -270,7 +270,7 @@
   .readme-notfound-overlay {
     @include size( 100% );
     transition: opacity 250ms ease;
-    background: rgba(#fff, 0.9);
+    background: #fff;
     color: $steel-blue;
     display: flex;
     align-items: center;
