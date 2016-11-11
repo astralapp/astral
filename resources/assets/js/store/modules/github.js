@@ -1,4 +1,5 @@
 import {
+  APPEND_GITHUB_STARS,
   SET_GITHUB_STARS,
   SET_TOTAL_PAGES,
   SET_CACHED_PAGES,
@@ -14,6 +15,9 @@ const state = {
 }
 
 export const mutations = {
+  [APPEND_GITHUB_STARS] (state, stars) {
+    state.githubStars = state.githubStars.concat(stars)
+  },
   [SET_GITHUB_STARS] (state, stars) {
     state.githubStars = stars
   },
