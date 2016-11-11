@@ -28,7 +28,7 @@ class GithubController extends Controller
         $access_token = $request->header('Access-Token');
         $githubClient = new GithubClient($access_token);
         $stars = $githubClient->getStars($page);
-        // \Log::info($stars);
+
         return $this->mapStarsToRepos($stars, $autotag);
     }
 
