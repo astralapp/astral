@@ -66,7 +66,6 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         dispatch(types.SET_GITHUB_STARS, data.stars.stars)
         resolve(data.stars.stars)
       } else {
-        console.log(data.stars.stars);
         dispatch(types.APPEND_GITHUB_STARS, data.stars.stars)
         if (state.github.cachedPages) {
           resolve(fetchGithubStars({ dispatch, state }, (state.github.cachedPages + 1)))
