@@ -17,7 +17,7 @@ export const fetchUser = ({ dispatch, state }) => {
       dispatch(types.SET_USER, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data)
+      reject(response)
     })
   })
   return promise
@@ -40,15 +40,19 @@ export const setUserAutoTag = ({ dispatch }, prefState) => {
 }
 
 //  Github Stars
-export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag = 1) => {
+export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag = 1, refresh = false) => {
   const promise = new Promise((resolve, reject) => {
     let data = {}
-    Vue.http.get(`/api/github/stars?page=${page}&autotag=${autotag}`, null, {
+    const url = refresh ? `/api/github/stars/refresh` : `/api/github/stars?page=${page}&autotag=${autotag}`
+    Vue.http.get(url, null, {
       headers: {
         "Authorization": `Bearer ${ls("jwt")}`,
         "Access-Token": ls("access_token")
       }
     }).then((response) => {
+      if (refresh) {
+        dispatch(types.SET_GITHUB_STARS, [])
+      }
       data = response.data.message
       dispatch(types.SET_TAGS, data.tags)
       if (data.stars.page_count) {
@@ -78,7 +82,9 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         }
       }
     }, (response) => {
-      reject(response.data)
+      const headers = response.headers()
+      const res = Object.assign({}, { response: response, headers: headers })
+      reject(JSON.stringify(res))
     })
   })
   return promise

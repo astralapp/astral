@@ -5,6 +5,9 @@
     </div>
     <div class="sidebar-header">
       <h3 class="sidebar-header-text">Stars</h3>
+      <div class="sidebar-header-control">
+        <button class="refresh-stars" :class="{ 'active': refreshingStars }" @click="refreshStars"><i class="fa fa-refresh"></i></button>
+      </div>
     </div>
     <ul class="dashboard-list sidebar-stars">
       <li class="all-stars dashboard-list-item" @click="resetTag" :class="{ 'selected': tagFilter == 'ALL' }"><i class="fa fa-inbox"></i> All Stars</li>
@@ -37,6 +40,7 @@
 import { newTag, tags, currentTag, tagFilter } from "../store/getters/tagsGetters"
 import {
   fetchTags,
+  fetchGithubStars,
   addTag,
   tagStar,
   reorderTags,
@@ -62,6 +66,7 @@ export default {
     },
     actions: {
       fetchTags,
+      fetchGithubStars,
       addTag,
       tagStar,
       reorderTags,
@@ -71,7 +76,8 @@ export default {
   data () {
     return {
       addTagFormShowing: false,
-      sortTagsDropdownVisible: false
+      sortTagsDropdownVisible: false,
+      refreshingStars: false,
     }
   },
   ready () {
@@ -120,6 +126,27 @@ export default {
     },
     showUntagged () {
       this.$route.router.go("/dashboard/untagged")
+    },
+    refreshStars () {
+      this.$root.$broadcast("STATUS", "Loading stars...")
+      this.refreshingStars = true
+      this.fetchGithubStars(1, 1, true).then((res) => {
+        this.refreshingStars = false
+        this.$root.$broadcast("STATUS", "")
+      }).catch((error) => {
+        error = JSON.parse(error)
+        this.refreshingStars = false
+        this.$root.$broadcast("STATUS", "")
+        // Check if user is throttled
+        if (error.response.status === 429) {
+          const secondsRemaining = parseInt(error.headers["retry-after"], 10)
+          const time = secondsRemaining >= 60 ? `${Math.round(secondsRemaining / 60)} minute(s)` : `${secondsRemaining} second(s)`
+
+          this.$root.$broadcast("NOTIFICATION", `You can only refresh your stars from GitHub once every 5 minutes. Please wait ${time}, and try again.`, "error", 7000)
+        } else {
+          this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error")
+        }
+      })
     }
   },
   events: {
