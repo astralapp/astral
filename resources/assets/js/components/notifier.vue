@@ -21,12 +21,12 @@ export default {
     }
   },
   methods: {
-    showNotifier () {
+    showNotifier (duration = 3000) {
       this.show = true
       clearTimeout(this._timeout)
       this._timeout = setTimeout(() => {
         this.show = false
-      }, parseInt(this.timeout, 10) + 500)
+      }, parseInt(duration, 10) + 500)
     },
     hideNotifier () {
       clearTimeout(this._timeout)
@@ -34,10 +34,10 @@ export default {
     }
   },
   events: {
-    "NOTIFICATION": function (message, mode = "success") {
+    "NOTIFICATION": function (message, mode = "success", duration = 3000) {
       this.message = message
       this.mode = mode
-      this.showNotifier()
+      this.showNotifier(duration)
     }
   }
 }

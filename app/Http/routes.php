@@ -29,6 +29,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('auth/user', 'AuthController@fetchUser');
         Route::post('auth/user/autotag', 'AuthController@setAutotag');
         Route::get('github/stars', 'GithubController@getStars');
+        Route::get('github/stars/refresh', 'GithubController@refreshStars')->middleware('throttle:1,5');
 
         Route::resource('tags', 'TagController');
         Route::post('tags/reorder', 'TagController@reorder');
