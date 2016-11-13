@@ -3,11 +3,16 @@ export const SET_USER = "SET_USER"
 
 //  Github Stars
 export const SET_GITHUB_STARS = "SET_GITHUB_STARS"
+export const SET_REPO_TAGS = "SET_REPO_TAGS"
+export const SET_REPO_NOTES = "SET_REPO_NOTES"
+export const SET_CURRENT_STAR = "SET_CURRENT_STAR"
 export const APPEND_GITHUB_STARS = "APPEND_GITHUB_STARS"
 export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES"
 export const SET_CACHED_PAGES = "SET_CACHED_PAGES"
 export const INCREMENT_CACHED_PAGES = "INCREMENT_CACHED_PAGES"
 export const SET_README = "SET_README"
+export const REMOVE_TAG_FROM_STARS = "REMOVE_TAG_FROM_STARS"
+export const EDIT_TAG_NAMES_ON_STARS = "EDIT_TAG_NAMES_ON_STARS"
 
 //  Tags
 export const SET_NEW_TAG = "SET_NEW_TAG"
@@ -19,9 +24,6 @@ export const SET_TAG_FILTER = "SET_TAG_FILTER"
 export const SET_CURRENT_TAG = "SET_CURRENT_TAG"
 export const RESET_CURRENT_TAG = "RESET_CURRENT_TAG"
 
-//  Stars
-export const SET_STARS = "SET_STARS"
-export const SET_CURRENT_STAR = "SET_CURRENT_STAR"
 
 //  Galileo
 export const SET_SEARCH_QUERY = "SET_SEARCH_QUERY"

@@ -33,7 +33,7 @@ class TagController extends Controller
         ]);
         $tag = Tag::create($request->only('name', 'description'));
 
-        return Tag::withStarCount()->get();
+        return $tag;
     }
 
     /**

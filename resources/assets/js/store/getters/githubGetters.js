@@ -5,3 +5,7 @@ export const githubStars = state => {
 export const readme = state => {
   return state.github.readme
 }
+
+export const currentStar = state => {
+  return state.github.currentStar
+}

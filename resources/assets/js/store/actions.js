@@ -54,7 +54,6 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         dispatch(types.SET_GITHUB_STARS, [])
       }
       data = response.data.message
-      dispatch(types.SET_TAGS, data.tags)
       if (data.stars.page_count) {
         dispatch(types.SET_TOTAL_PAGES, data.stars.page_count)
       }
@@ -162,7 +161,7 @@ export const addTag = ({ dispatch, state }) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      dispatch(types.SET_TAGS, response.data.message)
+      dispatch(types.ADD_TAG, response.data.message)
       dispatch(types.RESET_NEW_TAG)
       resolve(response.data.message)
     }, (response) => {
@@ -187,8 +186,8 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state }, 1, 0)
-      dispatch(types.SET_STARS, response.data.message.stars)
+      dispatch(types.SET_CURRENT_STAR, state.github.githubStars.find(repo => repo.id === response.data.message.star.repo_id))
+      dispatch(types.SET_REPO_TAGS, response.data.message.star.repo_id, response.data.message.star.tags)
       dispatch(types.SET_TAGS, response.data.message.tags)
       resolve(response.data.message)
     }, (response) => {
@@ -209,11 +208,12 @@ export const editTagName = ({ dispatch, state }, tagId, name) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state }, 1, 0)
-      fetchStars({ dispatch })
       dispatch(types.SET_TAGS, response.data.message.tags)
       setCurrentTag({ dispatch }, response.data.message.tag)
-      resolve(response.data.message.tag)
+      setTimeout(() => {
+        dispatch(types.EDIT_TAG_NAMES_ON_STARS, tagId, response.data.message.tag)
+        resolve(response.data.message.tag)
+      }, 0)
     }, (response) => {
       reject(response.data)
     })
@@ -228,8 +228,7 @@ export const deleteTag = ({ dispatch, state }, tagId) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state }, 1, 0)
-      fetchStars({ dispatch })
+      dispatch(types.REMOVE_TAG_FROM_STARS, tagId)
       dispatch(types.SET_TAGS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
@@ -247,25 +246,9 @@ export const tagStar = ({ dispatch, state }, starData) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
+      dispatch(types.SET_CURRENT_STAR, state.github.githubStars.find(repo => repo.id === response.data.message.star.repo_id))
       dispatch(types.SET_TAGS, response.data.message.tags)
-      dispatch(types.SET_STARS, response.data.message.stars)
-      resolve(response.data.message)
-    }, (response) => {
-      reject(response.data)
-    })
-  })
-  return promise
-}
-
-export const fetchStars = ({ dispatch }) => {
-  const promise = new Promise((resolve, reject) => {
-    Vue.http.get("/api/stars", null, {
-      headers: {
-        "Authorization": `Bearer ${ls("jwt")}`
-      }
-    }).then((response) => {
-      dispatch(types.SET_STARS, response.data.message)
+      dispatch(types.SET_REPO_TAGS, response.data.message.star.repo_id, response.data.message.star.tags)
       resolve(response.data.message)
     }, (response) => {
       reject(response.data)
@@ -281,7 +264,7 @@ export const editStarNotes = ({ dispatch }, star, text) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      dispatch(types.SET_STARS, response.data.message)
+      dispatch(types.SET_REPO_NOTES, response.data.message.repo_id, response.data.message.notes)
       resolve(response.data.message)
     }, (response) => {
       reject(response.data)
@@ -307,16 +290,10 @@ export const setSearchQuery = ({ dispatch }, query) => {
   }).map((s) => {
     return s.toLowerCase()
   })
-  const languages = searchArray.filter((s) => {
-    return s[0] === "@"
-  }).map((s) => {
-    return s.toLowerCase()
-  })
   const tokenizedQuery = {
     "query": query,
     "tags": tags,
-    "strings": strings,
-    "languages": languages
+    "strings": strings
   }
   dispatch(types.SET_TOKENIZED_SEARCH, tokenizedQuery)
 }

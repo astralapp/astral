@@ -43,8 +43,8 @@ class StarController extends Controller
         }
 
         return [
-            'stars' => Star::withTags()->get(),
-            'tags' => Tag::withStars()->get(),
+            'star' => Star::withTags()->where('id', $star->id)->first(),
+            'tags' => Tag::withStarCount()->get(),
         ];
     }
 
@@ -81,7 +81,7 @@ class StarController extends Controller
         }
 
         return [
-            'stars' => Star::withTags()->get(),
+            'star' => Star::withTags()->where('id', $star->id)->first(),
             'tags' => Tag::withStars()->get(),
         ];
     }
@@ -128,6 +128,6 @@ class StarController extends Controller
         $star->notes = $text;
         $star->save();
 
-        return Star::withTags()->get();
+        return $star;
     }
 }

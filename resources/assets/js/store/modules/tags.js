@@ -1,4 +1,5 @@
 import {
+  ADD_TAG,
   SET_NEW_TAG,
   SET_TAGS,
   RESET_NEW_TAG,
@@ -18,6 +19,9 @@ const state = {
 }
 
 export const mutations = {
+  [ADD_TAG] (state, tag) {
+    state.tags = state.tags.concat([tag])
+  },
   [SET_NEW_TAG] (state, tag) {
     state.newTag = Object.assign({}, state.newTag, tag)
   },

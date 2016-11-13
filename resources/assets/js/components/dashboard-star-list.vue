@@ -23,12 +23,10 @@
 </template>
 <script>
 import { user } from "../store/getters/userGetters"
-import { githubStars } from "../store/getters/githubGetters"
-import { stars, currentStar } from "../store/getters/starsGetters"
+import { githubStars, currentStar } from "../store/getters/githubGetters"
 import { currentTag, tagFilter } from "../store/getters/tagsGetters"
 import { tokenizedSearchQuery } from "../store/getters/galileoGetters"
 import {
-  fetchStars,
   fetchGithubStars,
   setCurrentStar,
   setCurrentTag
@@ -49,11 +47,9 @@ export default {
       currentTag,
       tagFilter,
       currentStar,
-      stars,
       searchQuery: tokenizedSearchQuery
     },
     actions: {
-      fetchStars,
       fetchGithubStars,
       setCurrentStar,
       setCurrentTag
@@ -66,7 +62,6 @@ export default {
   },
   ready () {
     this.$root.$broadcast("STATUS", "Loading stars...")
-    this.fetchStars()
     this.fetchGithubStars().then((res) => {
       this.$root.$broadcast("STATUS", "")
     }).catch((errors) => {

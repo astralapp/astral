@@ -73,14 +73,15 @@ class GithubController extends Controller
             }
             if ($star) {
                 $stars['stars'][$i]['tags'] = $star->tags;
+                $stars['stars'][$i]['notes'] = $star->notes;
             } else {
                 $stars['stars'][$i]['tags'] = [];
+                $stars['stars'][$i]['notes'] = '';
             }
         }
 
         return [
             'stars' => $stars,
-            'tags' => Tag::withStars()->get(),
         ];
     }
 }

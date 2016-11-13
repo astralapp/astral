@@ -1,8 +1,7 @@
 <template>
   <div class="dashboard-repo-details">
-    <!-- <div class="empty-placeholder" v-show="star.hasOwnProperty('id') && !readme" v-show="!readme">No Readme For {{ star.full_name }}</div> -->
-    <div class="empty-placeholder" v-show="!star.hasOwnProperty('id')">No Repo Selected</div>
-    <div class="manage-star" v-if="star.hasOwnProperty('id')">
+    <div class="empty-placeholder" v-show="!currentStar.hasOwnProperty('id')">No Repo Selected</div>
+    <div class="manage-star" v-if="currentStar.hasOwnProperty('id')">
       <div class="edit-star-tags">
           <div class="dropdown-wrap">
             <button class="toggle-tag-editor" @click="tagEditorShowing = !tagEditorShowing"><i class="fa fa-tag"></i> Edit Tags</button>
@@ -14,7 +13,7 @@
       <button class="toggle-notes-editor" @click="noteEditorShowing = !noteEditorShowing"><i class="fa fa-sticky-note"></i> Notes</button>
       <div class="clone-url">
         <label for="txtGitHubCloneURL" @click="focusCloneInput">Clone:</label>
-        <input type="text" id="txtGitHubCloneURL" :value="star.ssh_url" @focus="focusCloneInput" readonly/>
+        <input type="text" id="txtGitHubCloneURL" :value="currentStar.ssh_url" @focus="focusCloneInput" readonly/>
       </div>
     </div>
     <div class="readme-error-overlay" :class="{ 'active': readmeError }">
@@ -30,13 +29,12 @@
       {{{ readme }}}
     </div>
     <div>
-      <star-notes-editor :notes="notes" v-if="star.hasOwnProperty('id') && noteEditorShowing"></star-notes-editor>
+      <star-notes-editor :notes="notes" v-if="currentStar.hasOwnProperty('id') && noteEditorShowing"></star-notes-editor>
     </div>
   </div>
 </template>
 <script>
-import { readme } from "../store/getters/githubGetters"
-import { stars, currentStar } from "../store/getters/starsGetters"
+import { readme, currentStar } from "../store/getters/githubGetters"
 import { tags } from "../store/getters/tagsGetters"
 import { editStarNotes, syncTags, fetchReadme } from "../store/actions"
 import TagEditor from "./tag-editor.vue"
@@ -48,10 +46,9 @@ export default {
   mixins: [clickaway],
   vuex: {
     getters: {
-      readme: readme,
-      stars: stars,
-      star: currentStar,
-      tags: tags
+      readme,
+      currentStar,
+      tags
     },
     actions: {
       editStarNotes,
@@ -71,22 +68,17 @@ export default {
   },
   computed: {
     notes () {
-      if (this.userStar && this.userStar.hasOwnProperty("id")) {
-        return this.userStar.notes
+      if (this.currentStar && this.currentStar.hasOwnProperty("id")) {
+        return this.currentStar.notes
       } else {
         return ""
       }
     },
-    userStar () {
-      return this.stars.filter((star) => {
-        return this.star.id === star.repo_id
-      })[0]
-    },
     tagList () {
       return this.tags.map((tag) => {
         var isSelected = false
-        if (this.userStar && this.star.tags.length) {
-          isSelected = this.star.tags.map(function (starTag) {
+        if (this.currentStar.tags.length) {
+          isSelected = this.currentStar.tags.map(function (starTag) {
             return starTag.id
           }).indexOf(tag.id) > -1
         }
@@ -107,17 +99,15 @@ export default {
       }
     },
     syncTags (tags) {
-      if (tags.length) {
-        this.sync(this.star, tags).then((res) => {
-          this.$root.$broadcast("NOTIFICATION", `Tags for ${this.star.full_name} updated.`)
-        }).catch((errors) => {
-          this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error")
-        })
-      }
+      this.sync(this.currentStar, tags).then((res) => {
+        this.$root.$broadcast("NOTIFICATION", `Tags for ${this.currentStar.full_name} updated.`)
+      }).catch((errors) => {
+        this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error")
+      })
       this.hideTagEditor()
     },
     saveNotes (notes) {
-      this.editStarNotes(this.star, notes).catch((errors) => {
+      this.editStarNotes(this.currentStar, notes).catch((errors) => {
         this.$root.$broadcast("NOTIFICATION", "There was an error saving your notes for this star.", "error")
       })
     },
@@ -138,7 +128,7 @@ export default {
     "STAR_CHANGED": function () {
       this.noteEditorShowing = false
       this.readmeLoading = true
-      this.fetchReadme(this.star.full_name).then(() => {
+      this.fetchReadme(this.currentStar.full_name).then(() => {
         this.readmeError = false
         this.readmeLoading = false
         this.readmeNotFound = false
