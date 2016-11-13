@@ -35,6 +35,7 @@
     "babel-runtime": "^6.9.0",
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
+    "browserify-hmr": "^0.3.5",
     "eslint": "^3.1.1",
     "eslint-config-vue": "^1.0.3",
     "eslint-plugin-vue": "^0.1.1",
@@ -43,6 +44,7 @@
     "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.1.1",
     "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.19",
     "karma-browserify": "^4.4.2",
@@ -55,8 +57,9 @@
     "node-bourbon": "^4.2.3",
     "phantomjs": "^1.9.19",
     "stream-browserify": "^2.0.1",
-    "vue-hot-reload-api": "^2.0.6",
+    "vue-hot-reload-api": "^1.2.0",
     "vueify": "^8.7.0",
+    "vueify-insert-css": "^1.0.0",
     "watchify": "^3.7.0"
   }
 }

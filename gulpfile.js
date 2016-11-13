@@ -3,8 +3,20 @@ var notify = require("gulp-notify");
 var Server = require("karma").Server;
 var bourbon = require("node-bourbon");
 var elixir = require("laravel-elixir");
+var gutils = require('gulp-util');
+
 require("laravel-elixir-browserify-official");
 require("laravel-elixir-vueify");
+
+var b = elixir.config.js.browserify;
+
+if (gutils.env._.indexOf("watch") > -1) {
+    b.plugins.push({
+        name: "browserify-hmr",
+        options : {}
+    });
+}
+
 
 elixir(function(mix) {
     mix
