@@ -30,7 +30,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Astral\Http\Middleware\VerifyCsrfToken::class,
+//            \Astral\Http\Middleware\VerifyCsrfToken::class,
         ],
 
         'api' => [
