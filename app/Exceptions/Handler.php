@@ -68,6 +68,7 @@ class Handler extends ExceptionHandler
 
         return parent::render($request, $e);
     }
+
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
