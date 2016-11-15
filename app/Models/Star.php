@@ -57,7 +57,7 @@ class Star extends Model
      */
     public function scopeWithTags($query)
     {
-        $query->with('tags')->where('user_id', Auth::id());
+        return $query->with('tags')->where('user_id', Auth::id());
     }
 
     protected static function boot()
