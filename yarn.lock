@@ -6458,6 +6458,10 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
+vue-animated-list:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vue-animated-list/-/vue-animated-list-1.0.2.tgz#b501316450767f63c2f867980a01201899410a10"
+
 vue-clickaway@^1.1.1:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/vue-clickaway/-/vue-clickaway-1.1.5.tgz#8233162164388953af28929ee9d85195bbc04d22"

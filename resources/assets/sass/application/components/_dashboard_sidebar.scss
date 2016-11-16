@@ -162,11 +162,39 @@
         color: #fff;
       }
     }
+    &.sidebar-tags {
+      position: relative;
+      .no-tags {
+        border-top: 1px solid rgba(#fff, 0.08);
+        color: rgba(#fff, 0.85);
+        display: flex; justify-content: center; align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+        text-align: center;
+        .fa {
+          font-size: 10rem;
+        }
+      }
+    }
     &.sidebar-tags .tag {
+      &.tag-transition {
+        transition: all 250ms ease;
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+      &.tag-enter, &.tag-leave {
+        transform: translate3d(-100%, 0, 0);
+        opacity: 0;
+      }
+      &.tag-move {
+         transition: transform .5s cubic-bezier(.55,0,.1,1);
+      }
       &.dragging {
         background: $primary;
         color: #fff;
       }
+      &.gu-mirror { transition: none!important; }
       .tag-name {
         flex-grow: 1;
         pointer-events: none;

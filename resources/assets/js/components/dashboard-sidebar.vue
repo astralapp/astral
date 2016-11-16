@@ -28,7 +28,11 @@
       <button type="submit">Save</button>
     </form>
     <ul class="dashboard-list sidebar-tags" v-sortable="tags" sort="reorderTags">
-      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStarWithData" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }">
+      <!-- <div class="no-tags" v-show="tags.length == 0">
+        <i class="fa fa-tag"></i>
+        <p>You haven't added any tags yet!</p>
+      </div> -->
+      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStarWithData" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }" transition="tag">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
         <span class="tagged-count" v-if="tag.stars_count > 0">{{ tag.stars_count }}</span>
@@ -37,6 +41,8 @@
   </div>
 </template>
 <script>
+import Vue from "vue"
+import VueAnimatedList from "vue-animated-list"
 import { newTag, tags, currentTag, tagFilter } from "../store/getters/tagsGetters"
 import {
   fetchTags,
@@ -50,6 +56,8 @@ import "./../directives/drag_and_drop.js"
 import { orderBy } from "lodash"
 import { mixin as clickaway } from "vue-clickaway"
 import SortTagsDropdown from "./sort-tags-dropdown.vue"
+
+Vue.use(VueAnimatedList)
 
 export default {
   name: "DashboardSidebar",
