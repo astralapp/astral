@@ -105,7 +105,7 @@
       list-style-type: none;
       margin: 8px 0 3px 0; padding: 0;
       li {
-        @include transition ( background 150ms linear );
+        transition: background 150ms linear;
         background: lighten($dark-blue, 30%);
         border-radius: 20px;
         color: #fff;
@@ -117,6 +117,18 @@
         margin-right: 3px;
         padding: 3px 8px;
         &:hover { background: lighten($dark-blue, 15%); }
+        &.star-tag-transition {
+          transition: all 250ms ease;
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+        }
+        &.star-tag-enter, &.star-tag-leave {
+          transform: translate3d(0, 5px, 0);
+          opacity: 0;
+        }
+        &.star-tag-move {
+           transition: transform .5s cubic-bezier(.55,0,.1,1);
+        }
       }
     }
     .repo-stats {

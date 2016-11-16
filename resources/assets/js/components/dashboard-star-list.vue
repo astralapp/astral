@@ -5,7 +5,7 @@
         <h3 class="repo-name">{{* repo.full_name }}</h3>
         <div class="repo-description">{{* repo.description }}</div>
         <ul class="repo-tags">
-          <li v-for="tag in repo.tags" track-by="slug" @click.stop="setTag(tag)">
+          <li v-for="tag in repo.tags" track-by="slug" @click.stop="setTag(tag)" transition="star-tag" stagger="100">
             {{ tag.name }}
           </li>
         </ul>
