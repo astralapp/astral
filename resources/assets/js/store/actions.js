@@ -54,6 +54,7 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         dispatch(types.SET_GITHUB_STARS, [])
       }
       data = response.data.message
+      console.log(data.stars.stars);
       if (data.stars.page_count) {
         dispatch(types.SET_TOTAL_PAGES, data.stars.page_count)
       }
@@ -67,9 +68,11 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
       // If the number of cached pages is equal to the total number of pages, we have all the stars cached, so we can just return them.
       if (state.github.cachedPages && state.github.cachedPages === state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars.stars)
+        dispatch(types.SET_TAGS, data.tags)
         resolve(data.stars.stars)
       } else {
         dispatch(types.APPEND_GITHUB_STARS, data.stars.stars)
+        dispatch(types.SET_TAGS, data.tags)
         if (state.github.cachedPages) {
           resolve(fetchGithubStars({ dispatch, state }, (state.github.cachedPages + 1)))
         } else {

@@ -82,6 +82,7 @@ class GithubController extends Controller
 
         return [
             'stars' => $stars,
+            'tags' => Tag::withStarCount()->get(),
         ];
     }
 }
