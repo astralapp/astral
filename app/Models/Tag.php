@@ -54,7 +54,7 @@ class Tag extends Model
      */
     public function scopeWithStars($query)
     {
-        $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+        return $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -64,7 +64,7 @@ class Tag extends Model
      */
     public function scopeWithStarCount($query)
     {
-        $query->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+        return $query->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -74,7 +74,7 @@ class Tag extends Model
      */
     public function scopeWhereName($query, $name)
     {
-        $query->where('name', $name)->where('user_id', Auth::id());
+        return $query->where('name', $name)->where('user_id', Auth::id());
     }
 
     protected static function boot()
