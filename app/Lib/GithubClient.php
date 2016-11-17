@@ -51,8 +51,8 @@ class GithubClient
         }
 
         $stars = $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
-        $normalizedStars = array_map(function($star) {
-          return array_only($star, ['description', 'full_name', 'id', 'stargazers_count', 'forks_count', 'html_url', 'ssh_url', 'language']);
+        $normalizedStars = array_map(function ($star) {
+            return array_only($star, ['description', 'full_name', 'id', 'stargazers_count', 'forks_count', 'html_url', 'ssh_url', 'language']);
         }, $stars);
         $starsArray['stars'] = $normalizedStars;
         $starsReceieved['stars'] = $normalizedStars;
