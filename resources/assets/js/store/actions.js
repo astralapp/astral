@@ -54,7 +54,6 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         dispatch(types.SET_GITHUB_STARS, [])
       }
       data = response.data.message
-      console.log(data.stars.stars);
       if (data.stars.page_count) {
         dispatch(types.SET_TOTAL_PAGES, data.stars.page_count)
       }
