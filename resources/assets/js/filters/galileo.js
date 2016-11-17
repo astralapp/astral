@@ -10,7 +10,7 @@ Vue.filter("galileo", function (value) {
 
   //  Begin the filter process
   return value.filter((repo) => {
-    const searchText = `${repo.full_name} ${repo.hasOwnProperty("description") ? repo.description : ""}`.toLowerCase()
+    const searchText = `${repo.full_name} ${repo.hasOwnProperty("description") ? repo.description : ""} ${repo.notes}`.toLowerCase()
     if (query.tags.length) {
       // Intersect repo tags with query tags to ensure repo contains all tags in query
       const tagNames = repo.tags.map(tag => tag.name.toLowerCase())
