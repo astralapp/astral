@@ -12,7 +12,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'Astral\Model' => 'App\Policies\ModelPolicy',
+        'Astral\Model' => 'Astral\Policies\ModelPolicy',
     ];
 
     /**
