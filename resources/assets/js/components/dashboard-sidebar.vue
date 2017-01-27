@@ -89,22 +89,22 @@ export default {
     }
   },
   created () {
-    this.$refs.tag.addEventListener("dragover", function (e) {
+    this.$refs.tag.addEventListener('dragover', function (e) {
       e.preventDefault()
       e.stopPropagation()
-      e.target.classList.add("dragging")
+      e.target.classList.add('dragging')
     }, false)
-    this.$refs.tag.addEventListener("dragleave", function (e) {
+    this.$refs.tag.addEventListener('dragleave', function (e) {
       e.preventDefault()
       e.stopPropagation()
-      e.target.classList.remove("dragging")
+      e.target.classList.remove('dragging')
     }, false)
-    this.$refs.tag.addEventListener("drop", (e) => {
-      const dropData = JSON.parse(e.dataTransfer.getData("text"))
+    this.$refs.tag.addEventListener('drop', (e) => {
+      const dropData = JSON.parse(e.dataTransfer.getData('text'))
       const tagId = e.currentTarget.dataset.id
       e.preventDefault()
       e.stopPropagation()
-      e.target.classList.remove("dragging")
+      e.target.classList.remove('dragging')
       this.tagStarWithData(dropData, tagId)
     }, false)
 
