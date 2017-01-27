@@ -18,7 +18,7 @@
         "mistic100/randomcolor": "^1.0",
         "doctrine/dbal": "^2.5",
         "php-http/guzzle6-adapter": "^1.1",
-        "graham-campbell/github": "^4.4",
+        "graham-campbell/github": "^5.0",
         "laravel/tinker": "~1.0"
     },
     "require-dev": {
