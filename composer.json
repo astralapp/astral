@@ -14,7 +14,7 @@
         "laravelcollective/html": "5.4.*",
         "tymon/jwt-auth": "dev-master",
         "guzzlehttp/guzzle": "~6.0",
-        "laravel/socialite": "^2.0",
+        "laravel/socialite": "^3.0",
         "mistic100/randomcolor": "^1.0",
         "doctrine/dbal": "^2.5",
         "php-http/guzzle6-adapter": "^1.1",
