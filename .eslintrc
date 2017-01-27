@@ -1,7 +1,4 @@
 {
   "plugins": ["vue"],
-  "extends": "vue",
-  "rules": {
-    "quotes": [2, "double"]
-  }
+  "extends": "vue"
 }

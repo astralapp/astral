@@ -14,28 +14,28 @@
   </div>
 </template>
 <script>
-  import ls from "local-storage"
+  import ls from 'local-storage'
 
   export default {
-    name: "Auth",
+    name: 'Auth',
     data () {
       return {
         authenticated: false,
-        error: ""
+        error: ''
       }
     },
     route: {
       data ({ to }) {
         if (to.query.error) {
           this.authenticated = false
-          this.error = "Unable to authenticate user."
+          this.error = 'Unable to authenticate user.'
         } else {
           if (to.query.token && to.query.access_token) {
             this.authenticated = true
-            ls("jwt", to.query.token)
-            ls("access_token", to.query.access_token)
+            ls('jwt', to.query.token)
+            ls('access_token', to.query.access_token)
             setTimeout(() => {
-              this.$route.router.go("/dashboard")
+              this.$route.router.push('/dashboard')
             }, 1)
           }
         }

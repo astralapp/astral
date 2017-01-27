@@ -1,47 +1,44 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import VueResource from "vue-resource"
-import App from "./components/app.vue"
-import Auth from "./components/auth.vue"
-import Dashboard from "./components/dashboard.vue"
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
+import App from './components/app.vue'
+import Auth from './components/auth.vue'
+import Dashboard from './components/dashboard.vue'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  hashbang: false,
-  history: true
-})
-
-router.map({
-  "/auth": {
-    name: "auth",
-    component: Auth
-  },
-  "/dashboard": {
-    component: Dashboard
-  },
-  "/dashboard/untagged": {
-    component: Dashboard
-  },
-  "/dashboard/tag/:tag": {
-    component: Dashboard
-  }
-})
-
-router.redirect({
-  "/": "/auth"
+  mode: 'history',
+  routes: [
+    { path: '/auth', component: Auth },
+    { path: '/dashboard', component: Dashboard },
+    { path: '/dashboard/untagged', component: Dashboard },
+    { path: '/dashboard/tag/:tag', component: Dashboard },
+    { path: '/', redirect: '/auth' }
+  ]
 })
 
 Vue.http.interceptors.push({
   response (response) {
     if (response.status === 401) {
-      window.location.href = "/api/auth"
+      window.location.href = '/api/auth'
     }
     return response
   }
 })
 
-Vue.config.debug = true
+Object.defineProperty(Vue.prototype, '$bus', {
+  get() {
+    return this.$root.bus
+  }
+})
 
-router.start(App, "#app")
+const  bus = new Vue({})
+
+new Vue({
+  el: '#app',
+  router: router,
+  data: { bus: bus },
+  render: h => h('app')
+})

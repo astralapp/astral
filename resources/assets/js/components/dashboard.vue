@@ -10,29 +10,29 @@
   </div>
 </template>
 <script>
-import ls from "local-storage"
-import { user } from "../store/getters/userGetters"
-import { tags } from "../store/getters/tagsGetters"
+import ls from 'local-storage'
+import { user } from '../store/getters/userGetters'
+import { tags } from '../store/getters/tagsGetters'
 import {
   fetchUser,
   setCurrentTag,
   resetCurrentTag,
   setTagFilter
-} from "../store/actions"
-import SettingsPanel from "./settings-panel.vue"
-import DashboardHeader from "./dashboard-header.vue"
-import DashboardSidebar from "./dashboard-sidebar.vue"
-import StarList from "./dashboard-star-list.vue"
-import Notifier from "./notifier.vue"
+} from '../store/actions'
+import SettingsPanel from './settings-panel.vue'
+import DashboardHeader from './dashboard-header.vue'
+import DashboardSidebar from './dashboard-sidebar.vue'
+import StarList from './dashboard-star-list.vue'
+import Notifier from './notifier.vue'
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components: {
-    "settings-panel": SettingsPanel,
-    "dashboard-header": DashboardHeader,
-    "dashboard-sidebar": DashboardSidebar,
-    "star-list": StarList,
-    "notifier": Notifier
+    'settings-panel': SettingsPanel,
+    'dashboard-header': DashboardHeader,
+    'dashboard-sidebar': DashboardSidebar,
+    'star-list': StarList,
+    'notifier': Notifier
   },
   vuex: {
     getters: {
@@ -51,23 +51,23 @@ export default {
       settingsPanelShowing: false
     }
   },
-  ready () {
-    if (ls("jwt")) {
+  created () {
+    if (ls('jwt')) {
       this.fetchUser()
     } else {
-      this.$route.router.go("/auth")
+      this.$route.router.push('/auth')
     }
-    window.addEventListener("keyup", (e) => {
+    window.addEventListener('keyup', (e) => {
       if (e.keyCode === 27) {
-        this.$root.$broadcast("HIDE_SETTINGS_PANEL")
+        this.$bus.$emit('HIDE_SETTINGS_PANEL')
       }
     })
   },
   events: {
-    "SHOW_SETTINGS_PANEL": function () {
+    'SHOW_SETTINGS_PANEL': function () {
       this.settingsPanelShowing = true
     },
-    "HIDE_SETTINGS_PANEL": function () {
+    'HIDE_SETTINGS_PANEL': function () {
       this.settingsPanelShowing = false
     }
   },
@@ -75,7 +75,7 @@ export default {
     data ({ to }) {
       if (this.$route.path.match(/^\/dashboard\/untagged/g) !== null) {
         this.resetCurrentTag()
-        this.setTagFilter("UNTAGGED")
+        this.setTagFilter('UNTAGGED')
         return true
       }
       if (this.tags.length) {
@@ -84,11 +84,11 @@ export default {
             return tag.slug === this.$route.params.tag
           })
           if (tag) {
-            this.setTagFilter("TAG")
+            this.setTagFilter('TAG')
             this.setCurrentTag(tag)
           }
         } else {
-          this.setTagFilter("ALL")
+          this.setTagFilter('ALL')
           this.resetCurrentTag()
         }
       }

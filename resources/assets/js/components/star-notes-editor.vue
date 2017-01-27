@@ -1,28 +1,28 @@
 <template>
   <div class="repo-notes">
-    <textarea class="repo-note-editor" v-el:editor></textarea>
+    <textarea class="repo-note-editor" ref="editor"></textarea>
     <div class="repo-notes-status" :class="{'active': notesSaved}">Saved</div>
   </div>
 </template>
 <script>
-import Vue from "vue"
-import SimpleMDE from "simplemde"
-import { debounce } from "lodash"
-import "highlight.js"
+import Vue from 'vue'
+import SimpleMDE from 'simplemde'
+import { debounce } from 'lodash'
+import 'highlight.js'
 
 export default {
-  name: "StarNotesEditor",
-  props: ["notes"],
+  name: 'StarNotesEditor',
+  props: ['notes'],
   data () {
     return {
       editor: null,
-      currentNotes: "",
+      currentNotes: '',
       notesSaved: false
     }
   },
-  ready () {
+  created () {
     this.editor = new SimpleMDE({
-      element: this.$els.editor,
+      element: this.$refs.editor,
       initialValue: this.notes,
       forceSync: true,
       autoDownloadFontAwesome: false,
@@ -30,11 +30,11 @@ export default {
         codeSyntaxHighlighting: true
       },
       spellChecker: false,
-      hideIcons: ["side-by-side", "guide"],
-      showIcons: ["code"],
+      hideIcons: ['side-by-side', 'guide'],
+      showIcons: ['code'],
       status: false
     })
-    this.editor.codemirror.on("change", debounce(() => {
+    this.editor.codemirror.on('change', debounce(() => {
       this.currentNotes = this.editor.value()
       Vue.nextTick(() => {
         this.saveNotes()
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     saveNotes () {
-      this.$dispatch("NOTES_SAVED", this.currentNotes)
+      this.$bus.$emit('NOTES_SAVED', this.currentNotes)
       this.notesSaved = true
       setTimeout(() => {
         this.notesSaved = false
@@ -51,7 +51,7 @@ export default {
     }
   },
   events: {
-    "STAR_CHANGED": function () {
+    'STAR_CHANGED': function () {
       //  Set new notes
       Vue.nextTick(() => {
         this.editor.value(this.notes)

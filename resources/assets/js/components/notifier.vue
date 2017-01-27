@@ -1,24 +1,36 @@
 <template>
-  <div :class="'dashboard-notifier dashboard-notifier-' + mode" v-show="show" transition="dashboard-notifier">
-    <div class="dashboard-notifierInner">
-      <div class="dashboard-notifierMessage">
-      {{ message }}
+  <transition name="dashboard-notifier">
+    <div :class="'dashboard-notifier dashboard-notifier-' + mode" v-show="show">
+      <div class="dashboard-notifierInner">
+        <div class="dashboard-notifierMessage">
+        {{ message }}
+        </div>
+        <div class="dashboard-dismissNotifier" @click="hideNotifier()">&times;</div>
       </div>
-      <div class="dashboard-dismissNotifier" @click="hideNotifier()">&times;</div>
     </div>
-  </div>
+  </transition>
 </template>
 <script>
+import Vue from 'vue'
 export default {
-  name: "Notifier",
-  props: ["timeout"],
+  name: 'Notifier',
+  props: ['timeout'],
   data () {
     return {
       _timeout: null,
       show: false,
-      mode: "success",
-      message: ""
+      mode: 'success',
+      message: ''
     }
+  },
+  created () {
+    this.$bus.$on('NOTIFICATION', (message, mode = 'success', duration = '3000') => {
+      this.message = message
+      this.mode = mode
+      Vue.nextTick(() => {
+        this.showNotifier(duration)
+      })
+    })
   },
   methods: {
     showNotifier (duration = 3000) {
@@ -33,12 +45,5 @@ export default {
       this.show = false
     }
   },
-  events: {
-    "NOTIFICATION": function (message, mode = "success", duration = 3000) {
-      this.message = message
-      this.mode = mode
-      this.showNotifier(duration)
-    }
-  }
 }
 </script>

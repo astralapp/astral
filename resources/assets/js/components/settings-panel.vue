@@ -22,7 +22,7 @@
             Use Night Theme&nbsp;&nbsp;<i class="fa fa-moon-o"></i>
           </div>
           <div class="settingsPanel-settingControl">
-            <toggle-switch :checked.sync="nightTheme" key="nightTheme"></toggle-switch>
+            <toggle-switch :checked="nightTheme" key="nightTheme" :change=""></toggle-switch>
           </div>
         </div> -->
         <div class="settingsPanel-row">
@@ -41,14 +41,14 @@
   </div>
 </template>
 <script>
-import ls from "local-storage"
-import { user } from "../store/getters/userGetters"
-import { setUserAutoTag } from "../store/actions"
-import ToggleSwitch from "./toggle-switch.vue"
+import ls from 'local-storage'
+import { user } from '../store/getters/userGetters'
+import { setUserAutoTag } from '../store/actions'
+import ToggleSwitch from './toggle-switch.vue'
 export default {
-  name: "SettingsPanel",
+  name: 'SettingsPanel',
   components: {
-    "toggle-switch": ToggleSwitch
+    'toggle-switch': ToggleSwitch
   },
   vuex: {
     getters: { user },
@@ -56,7 +56,7 @@ export default {
   },
   data () {
     return {
-      exportUrl: `/api/auth/user/exportData?token=${ls("jwt")}`
+      exportUrl: `/api/auth/user/exportData?token=${ls('jwt')}`
     }
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
       this.setUserAutoTag(e.target.checked)
     },
     closePanel () {
-      this.$root.$broadcast("HIDE_SETTINGS_PANEL")
+      this.$bus.$emit('HIDE_SETTINGS_PANEL')
     }
   }
 }

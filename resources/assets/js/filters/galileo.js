@@ -1,8 +1,7 @@
 import Vue from "vue"
 import { intersection } from "lodash"
 
-Vue.filter("galileo", function (value) {
-  const query = this.searchQuery
+export default function (value, query) {
   //  If there's no query return all items
   if (query.query.replace(/\s/g, "") === "") {
     return value
@@ -22,4 +21,4 @@ Vue.filter("galileo", function (value) {
       return ~searchText.indexOf(query.strings.join(" ").toLowerCase())
     }
   })
-})
+}

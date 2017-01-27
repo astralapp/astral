@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view transition="router"></router-view>
+    <transition name="router" appear><router-view></router-view></transition>
   </div>
 </template>
 <script>

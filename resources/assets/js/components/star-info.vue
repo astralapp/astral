@@ -25,24 +25,22 @@
     <div class="readme-loading-overlay" :class="{ 'active': readmeLoading }">
       <img src="/images/loader1.svg" />
     </div>
-    <div class="repo-readme syntax">
-      {{{ readme }}}
-    </div>
+    <div class="repo-readme syntax" v-html="readme"></div>
     <div>
       <star-notes-editor :notes="notes" v-if="currentStar.hasOwnProperty('id') && noteEditorShowing"></star-notes-editor>
     </div>
   </div>
 </template>
 <script>
-import { readme, currentStar } from "../store/getters/githubGetters"
-import { tags } from "../store/getters/tagsGetters"
-import { editStarNotes, syncTags, fetchReadme } from "../store/actions"
-import TagEditor from "./tag-editor.vue"
-import StarNotesEditor from "./star-notes-editor.vue"
-import { mixin as clickaway } from "vue-clickaway"
+import { readme, currentStar } from '../store/getters/githubGetters'
+import { tags } from '../store/getters/tagsGetters'
+import { editStarNotes, syncTags, fetchReadme } from '../store/actions'
+import TagEditor from './tag-editor.vue'
+import StarNotesEditor from './star-notes-editor.vue'
+import { mixin as clickaway } from 'vue-clickaway'
 
 export default {
-  name: "StarInfo",
+  name: 'StarInfo',
   mixins: [clickaway],
   vuex: {
     getters: {
@@ -63,15 +61,15 @@ export default {
       readmeLoading: false,
       readmeError: false,
       readmeNotFound: false,
-      currentNotes: ""
+      currentNotes: ''
     }
   },
   computed: {
     notes () {
-      if (this.currentStar && this.currentStar.hasOwnProperty("id")) {
+      if (this.currentStar && this.currentStar.hasOwnProperty('id')) {
         return this.currentStar.notes
       } else {
-        return ""
+        return ''
       }
     },
     tagList () {
@@ -94,38 +92,38 @@ export default {
     showTagEditor () { this.tagEditorShowing = true },
     hideTagEditor () { this.tagEditorShowing = false },
     clickedAwayFromTagEditor (e) {
-      if (!e.target.classList.contains("toggle-tag-editor") && !e.target.classList.contains("select2-selection__choice__remove")) {
+      if (!e.target.classList.contains('toggle-tag-editor') && !e.target.classList.contains('select2-selection__choice__remove')) {
         this.hideTagEditor()
       }
     },
     syncTags (tags) {
       this.sync(this.currentStar, tags).then((res) => {
-        this.$root.$broadcast("NOTIFICATION", `Tags for ${this.currentStar.full_name} updated.`)
+        this.$bus.$emit('NOTIFICATION', `Tags for ${this.currentStar.full_name} updated.`)
       }).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error saving these tags.", "error")
+        this.$bus.$emit('NOTIFICATION', 'There was an error saving these tags.', 'error')
       })
       this.hideTagEditor()
     },
     saveNotes (notes) {
       this.editStarNotes(this.currentStar, notes).catch((errors) => {
-        this.$root.$broadcast("NOTIFICATION", "There was an error saving your notes for this star.", "error")
+        this.$bus.$emit('NOTIFICATION', 'There was an error saving your notes for this star.', 'error')
       })
     },
     focusCloneInput () {
       setTimeout(() => {
-        document.getElementById("txtGitHubCloneURL").focus()
-        document.getElementById("txtGitHubCloneURL").select()
+        document.getElementById('txtGitHubCloneURL').focus()
+        document.getElementById('txtGitHubCloneURL').select()
       }, 0)
     }
   },
   events: {
-    "SYNC_TAGS": function (tags) {
+    'SYNC_TAGS': function (tags) {
       this.syncTags(tags)
     },
-    "NOTES_SAVED": function (notes) {
+    'NOTES_SAVED': function (notes) {
       this.saveNotes(notes)
     },
-    "STAR_CHANGED": function () {
+    'STAR_CHANGED': function () {
       this.noteEditorShowing = false
       this.readmeLoading = true
       this.fetchReadme(this.currentStar.full_name).then(() => {
@@ -133,23 +131,23 @@ export default {
         this.readmeLoading = false
         this.readmeNotFound = false
       }).catch((errors) => {
-        if(errors.message == "Not Found") {
+        if(errors.message == 'Not Found') {
             this.readmeNotFound = true
         } else {
             this.readmeError = true
-            this.$root.$broadcast("NOTIFICATION", "Unable to fetch readme from GitHub.", "error")
+            this.$bus.$emit('NOTIFICATION', 'Unable to fetch readme from GitHub.', 'error')
         }
         this.readmeLoading = false
       })
-      this.$broadcast("STAR_CHANGED")
+      this.$bus.$emit('STAR_CHANGED')
     },
-    "HIDE_TAG_DROPDOWN": function () {
+    'HIDE_TAG_DROPDOWN': function () {
       this.tagEditorShowing = false
     }
   },
   components: {
-    "tag-editor": TagEditor,
-    "star-notes-editor": StarNotesEditor
+    'tag-editor': TagEditor,
+    'star-notes-editor': StarNotesEditor
   }
 }
 </script>
