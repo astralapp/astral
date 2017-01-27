@@ -27,12 +27,12 @@
       <input type="text" name="name" v-model="newTag.name" placeholder="Tag name">
       <button type="submit">Save</button>
     </form>
-    <transition-group name="tag" tag="ul" class="dashboard-list sidebar-tags" v-sortable="tags" sort="reorderTags">
+    <transition-group name="tag" tag="ul" class="dashboard-list sidebar-tags" ref="tags-list">
       <!-- <div class="no-tags" v-show="tags.length == 0">
         <i class="fa fa-tag"></i>
         <p>You haven't added any tags yet!</p>
       </div> -->
-      <li class="dashboard-list-item tag" v-for="tag in tags" :key="tag.id" v-dropzone="tagStarWithData" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }" ref="tag">
+      <li class="dashboard-list-item tag" v-for="tag in tags" :key="tag.id" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }" ref="tag">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
         <span class="tagged-count" v-if="tag.stars_count > 0">{{ tag.stars_count }}</span>
@@ -52,9 +52,9 @@ import {
   reorderTags,
   setCurrentTag
 } from '../store/actions'
-import './../directives/drag_and_drop.js'
 import { orderBy } from 'lodash'
 import { mixin as clickaway } from 'vue-clickaway'
+import dragula from 'dragula'
 import SortTagsDropdown from './sort-tags-dropdown.vue'
 
 Vue.use(VueAnimatedList)
@@ -86,9 +86,23 @@ export default {
       addTagFormShowing: false,
       sortTagsDropdownVisible: false,
       refreshingStars: false,
+      drake: null
     }
   },
   created () {
+    let sortMap = []
+    if (!this.drake) {
+      this.drake = dragula([this.$refs.tagList]).on('drop', (el, target, source, sibling) => {
+        sortMap = [].slice.call(source.children).map(function (el, index) {
+          return {
+            id: el.dataset.id,
+            sort_order: index
+          }
+        })
+        this.reorderTags(sortMap)
+      })
+    }
+
     this.$refs.tag.addEventListener('dragover', function (e) {
       e.preventDefault()
       e.stopPropagation()
@@ -120,6 +134,9 @@ export default {
     }).catch((errors) => {
       this.$bus.$emit('NOTIFICATION', 'There was an error fetching your tags.', 'error')
     })
+  },
+  destroyed () {
+    this.drake.destroy()
   },
   methods: {
     doAddTag: function () {
