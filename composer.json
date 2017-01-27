@@ -11,8 +11,8 @@
     "require": {
         "php": ">=5.6.4",
         "laravel/framework": "5.4.*",
-        "tymon/jwt-auth": "0.5.*",
         "laravelcollective/html": "5.4.*",
+        "tymon/jwt-auth": "dev-master",
         "guzzlehttp/guzzle": "~6.0",
         "laravel/socialite": "^2.0",
         "mistic100/randomcolor": "^1.0",
