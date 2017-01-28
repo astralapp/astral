@@ -17,7 +17,7 @@ class Star extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Astral\Models\User');
+        return $this->belongsTo(\Astral\Models\User::class);
     }
 
     /**
@@ -25,7 +25,7 @@ class Star extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('Astral\Models\Tag');
+        return $this->belongsToMany(\Astral\Models\Tag::class);
     }
 
     public function removeAllTags()
