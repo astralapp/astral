@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "dragula": "^3.6.3",
+    "es6-promise": "^4.0.5",
     "highlight.js": "^9.5.0",
     "jquery": "^2.2.0",
     "js-base64": "^2.1.9",

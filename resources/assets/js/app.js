@@ -4,6 +4,7 @@ import VueResource from 'vue-resource'
 import App from './components/app.vue'
 import Auth from './components/auth.vue'
 import Dashboard from './components/dashboard.vue'
+import store from './store'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -38,7 +39,8 @@ const  bus = new Vue({})
 
 new Vue({
   el: '#app',
-  router: router,
+  router,
+  store,
   data: { bus: bus },
-  render: h => h('app')
+  render: h => h(App)
 })
