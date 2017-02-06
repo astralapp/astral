@@ -105,7 +105,7 @@
       list-style-type: none;
       margin: 8px 0 3px 0; padding: 0;
       li {
-        @include transition ( background 150ms linear );
+        transition: background 150ms linear;
         background: lighten($dark-blue, 30%);
         border-radius: 20px;
         color: #fff;
@@ -117,6 +117,18 @@
         margin-right: 3px;
         padding: 3px 8px;
         &:hover { background: lighten($dark-blue, 15%); }
+        &.star-tag-transition {
+          transition: all 250ms ease;
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+        }
+        &.star-tag-enter, &.star-tag-leave {
+          transform: translate3d(0, 5px, 0);
+          opacity: 0;
+        }
+        &.star-tag-move {
+           transition: transform .5s cubic-bezier(.55,0,.1,1);
+        }
       }
     }
     .repo-stats {
@@ -266,6 +278,24 @@
   }
   .readme-error-overlay {
     background: #fff;
+  }
+  .readme-notfound-overlay {
+    @include size( 100% );
+    transition: opacity 250ms ease;
+    background: #fff;
+    color: $steel-blue;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute; top: 45px; left: 0;
+    z-index: 98;
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
   .repo-readme {
     font-size: 0.9rem;

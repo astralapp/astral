@@ -20,7 +20,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('auth', 'AuthController@redirectToProvider');
         Route::get('auth/callback', 'AuthController@handleProviderCallback');
         Route::group(['middleware' => 'throttle:1,2'], function () {
-          Route::get('auth/user/exportData', 'AuthController@exportData');
+            Route::get('auth/user/exportData', 'AuthController@exportData');
         });
     });
 
@@ -29,6 +29,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('auth/user', 'AuthController@fetchUser');
         Route::post('auth/user/autotag', 'AuthController@setAutotag');
         Route::get('github/stars', 'GithubController@getStars');
+        Route::get('github/stars/refresh', 'GithubController@refreshStars')->middleware('throttle:1,5');
 
         Route::resource('tags', 'TagController');
         Route::post('tags/reorder', 'TagController@reorder');

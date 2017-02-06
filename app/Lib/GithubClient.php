@@ -37,6 +37,8 @@ class GithubClient
         $cacheKey = $this->starsCacheKey();
         $cacheExpiry = $this->starsCacheExpiry;
         $starsArray = [];
+        $starsReceieved = [];
+        $normalizedStars = [];
 
         // Check if they're doing a fresh fetch to see if we've cached our stars already
         if ($page == 1 && Cache::has($cacheKey)) {
@@ -49,15 +51,21 @@ class GithubClient
         }
 
         $stars = $this->paginator->fetch($this->client->me()->starring(), 'all', [$page]);
-        $starsArray['stars'] = $stars;
+        $normalizedStars = array_map(function ($star) {
+            return array_only($star, ['description', 'full_name', 'id', 'stargazers_count', 'forks_count', 'html_url', 'ssh_url', 'language']);
+        }, $stars);
+        $starsArray['stars'] = $normalizedStars;
+        $starsReceieved['stars'] = $normalizedStars;
         $paginationInfo = $this->paginator->getPagination();
         if ($this->paginator->hasNext()) {
             $pageCount = $this->getPageCountFromPaginationLink($paginationInfo['last']);
             $starsArray['page_count'] = $pageCount;
+            $starsReceieved['page_count'] = $pageCount;
         } else {
             // Fetch the last known total
             $cachedStars = Cache::get($cacheKey);
             $starsArray['page_count'] = $cachedStars['page_count'];
+            $starsReceieved['page_count'] = $cachedStars['page_count'];
         }
 
         if ($page != 1) {
@@ -69,7 +77,7 @@ class GithubClient
         }
         Cache::put($cacheKey, $starsArray, $cacheExpiry);
 
-        return $starsArray;
+        return $starsReceieved;
     }
 
     /**

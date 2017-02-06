@@ -3,9 +3,11 @@
 namespace Astral\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
     /** @var string */
     protected $table = 'users';
 
@@ -17,7 +19,7 @@ class User extends Authenticatable
      */
     public function stars()
     {
-        return $this->hasMany('Astral\Models\Star');
+        return $this->hasMany(\Astral\Models\Star::class);
     }
 
     /**
@@ -25,7 +27,7 @@ class User extends Authenticatable
      */
     public function tags()
     {
-        return $this->hasMany('Astral\Models\Tag');
+        return $this->hasMany(\Astral\Models\Tag::class);
     }
 
     public function mapGithubUser($githubUser)

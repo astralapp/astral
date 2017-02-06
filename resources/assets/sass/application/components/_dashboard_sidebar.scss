@@ -1,4 +1,8 @@
 @import "application/components/sort_tags_dropdown";
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
 .dashboard-sidebar {
   background: $dark-blue;
   overflow-y: auto; overflow-x: hidden;
@@ -25,14 +29,37 @@
   }
   .sidebar-header {
     color: rgba(#fff, 0.3);
+    display: flex; align-items: center;
     font-size: 0.7rem;
     font-weight: bold;
     height: 42px;
-    line-height: 44px;
     overflow: hidden;
     padding: 0 0 0 20px;
     position: relative;
     text-transform: uppercase;
+    .sidebar-header-control {
+      margin-left: auto; margin-right: 12px;
+      .refresh-stars {
+        transition: background 250ms ease;
+        appearance: none;
+        background: rgba(#fff, 0.1);
+        border-radius: 50%;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 0.6rem;
+        font-weight: bold;
+        line-height: 0.6rem;
+        outline: none;
+        padding: 0.45rem;
+        &:hover { background: rgba(#fff, 0.2); }
+        &.active {
+          animation: spin 750ms linear 0s infinite;
+          opacity: 0.75;
+          pointer-events: none;
+        }
+      }
+    }
     &.tags-header {
       overflow: visible;
       .tag-button-group {
@@ -42,6 +69,7 @@
         position: relative;
         .sidebar-sortDropdown {
           display: inline-block;
+          height: 100%;
         }
         .tag-button-group-item {
           @include transition ( all 200ms linear );
@@ -68,8 +96,8 @@
     }
     .sidebar-header-text {
       display: inline-block;
+      flex-grow: 1;
       margin: 0;
-      position: relative; top: -2px;
     }
   }
   .tag-form {
@@ -134,11 +162,39 @@
         color: #fff;
       }
     }
+    &.sidebar-tags {
+      position: relative;
+      .no-tags {
+        border-top: 1px solid rgba(#fff, 0.08);
+        color: rgba(#fff, 0.85);
+        display: flex; justify-content: center; align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+        text-align: center;
+        .fa {
+          font-size: 10rem;
+        }
+      }
+    }
     &.sidebar-tags .tag {
+      &.tag-transition {
+        transition: all 250ms ease;
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+      &.tag-enter, &.tag-leave {
+        transform: translate3d(-100%, 0, 0);
+        opacity: 0;
+      }
+      &.tag-move {
+         transition: transform .5s cubic-bezier(.55,0,.1,1);
+      }
       &.dragging {
         background: $primary;
         color: #fff;
       }
+      &.gu-mirror { transition: none!important; }
       .tag-name {
         flex-grow: 1;
         pointer-events: none;

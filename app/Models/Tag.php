@@ -2,6 +2,7 @@
 
 namespace Astral\Models;
 
+use Astral\TagSlugger;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use JWTAuth;
@@ -25,7 +26,7 @@ class Tag extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Astral\Models\User');
+        return $this->belongsTo(\Astral\Models\User::class);
     }
 
     /**
@@ -33,7 +34,7 @@ class Tag extends Model
      */
     public function stars()
     {
-        return $this->belongsToMany('Astral\Models\Star');
+        return $this->belongsToMany(\Astral\Models\Star::class);
     }
 
     /**
@@ -53,7 +54,7 @@ class Tag extends Model
      */
     public function scopeWithStars($query)
     {
-        $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+        return $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -63,7 +64,7 @@ class Tag extends Model
      */
     public function scopeWithStarCount($query)
     {
-        $query->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
+        return $query->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -73,7 +74,7 @@ class Tag extends Model
      */
     public function scopeWhereName($query, $name)
     {
-        $query->where('name', $name)->where('user_id', Auth::id());
+        return $query->where('name', $name)->where('user_id', Auth::id());
     }
 
     protected static function boot()
@@ -84,11 +85,11 @@ class Tag extends Model
             JWTAuth::parseToken()->authenticate();
             $tag->user_id = Auth::id();
             $tag->sort_order = self::where('user_id', Auth::id())->count();
-            $tag->slug = str_slug($tag->name);
+            $tag->slug = (new TagSlugger($tag->name))->fix();
         });
 
         static::saving(function ($tag) {
-            $tag->slug = str_slug($tag->name);
+            $tag->slug = (new TagSlugger($tag->name))->fix();
         });
     }
 }

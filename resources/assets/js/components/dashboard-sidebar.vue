@@ -5,6 +5,9 @@
     </div>
     <div class="sidebar-header">
       <h3 class="sidebar-header-text">Stars</h3>
+      <div class="sidebar-header-control">
+        <button class="refresh-stars" :class="{ 'active': refreshingStars }" @click="refreshStars"><i class="fa fa-refresh"></i></button>
+      </div>
     </div>
     <ul class="dashboard-list sidebar-stars">
       <li class="all-stars dashboard-list-item" @click="resetTag" :class="{ 'selected': tagFilter == 'ALL' }"><i class="fa fa-inbox"></i> All Stars</li>
@@ -25,7 +28,11 @@
       <button type="submit">Save</button>
     </form>
     <ul class="dashboard-list sidebar-tags" v-sortable="tags" sort="reorderTags">
-      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStarWithData" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }">
+      <!-- <div class="no-tags" v-show="tags.length == 0">
+        <i class="fa fa-tag"></i>
+        <p>You haven't added any tags yet!</p>
+      </div> -->
+      <li class="dashboard-list-item tag" v-for="tag in tags" track-by="id" v-dropzone="tagStarWithData" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }" transition="tag">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
         <span class="tagged-count" v-if="tag.stars_count > 0">{{ tag.stars_count }}</span>
@@ -34,9 +41,12 @@
   </div>
 </template>
 <script>
+import Vue from "vue"
+import VueAnimatedList from "vue-animated-list"
 import { newTag, tags, currentTag, tagFilter } from "../store/getters/tagsGetters"
 import {
   fetchTags,
+  fetchGithubStars,
   addTag,
   tagStar,
   reorderTags,
@@ -46,6 +56,8 @@ import "./../directives/drag_and_drop.js"
 import { orderBy } from "lodash"
 import { mixin as clickaway } from "vue-clickaway"
 import SortTagsDropdown from "./sort-tags-dropdown.vue"
+
+Vue.use(VueAnimatedList)
 
 export default {
   name: "DashboardSidebar",
@@ -62,6 +74,7 @@ export default {
     },
     actions: {
       fetchTags,
+      fetchGithubStars,
       addTag,
       tagStar,
       reorderTags,
@@ -71,7 +84,8 @@ export default {
   data () {
     return {
       addTagFormShowing: false,
-      sortTagsDropdownVisible: false
+      sortTagsDropdownVisible: false,
+      refreshingStars: false,
     }
   },
   ready () {
@@ -120,6 +134,27 @@ export default {
     },
     showUntagged () {
       this.$route.router.go("/dashboard/untagged")
+    },
+    refreshStars () {
+      this.$root.$broadcast("STATUS", "Loading stars...")
+      this.refreshingStars = true
+      this.fetchGithubStars(1, 1, true).then((res) => {
+        this.refreshingStars = false
+        this.$root.$broadcast("STATUS", "")
+      }).catch((error) => {
+        error = JSON.parse(error)
+        this.refreshingStars = false
+        this.$root.$broadcast("STATUS", "")
+        // Check if user is throttled
+        if (error.response.status === 429) {
+          const secondsRemaining = parseInt(error.headers["retry-after"], 10)
+          const time = secondsRemaining >= 60 ? `${Math.round(secondsRemaining / 60)} minute(s)` : `${secondsRemaining} second(s)`
+
+          this.$root.$broadcast("NOTIFICATION", `You can only refresh your stars from GitHub once every 5 minutes. Please wait ${time}, and try again.`, "error", 7000)
+        } else {
+          this.$root.$broadcast("NOTIFICATION", "There was an error fetching your stars from GitHub.", "error")
+        }
+      })
     }
   },
   events: {

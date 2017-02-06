@@ -1,5 +1,6 @@
 import { mutations } from "../../../resources/assets/js/store/modules/github.js";
 const {
+  APPEND_GITHUB_STARS,
   SET_GITHUB_STARS,
   SET_TOTAL_PAGES,
   SET_CACHED_PAGES,
@@ -17,6 +18,21 @@ describe("GitHub Star Mutations", () => {
     const state = {};
     SET_GITHUB_STARS(state, stars);
     expect(state.githubStars).toEqual(stars);
+  });
+  it("can append new GitHub stars", () => {
+    const stars = [
+      {id: 56919458, name: "vue-multiselect"},
+      {id: 58734906, name: "vue-jwt-auth"},
+      {id: 58905085, name: "bideo.js"},
+    ];
+    const newStars = [
+      {id: 38582384, name: "vuex-assert"},
+      {id: 92783554, name: "onfontready"},
+      {id: 10549354, name: "vue-flatpickr"},
+    ];
+    const state = {githubStars: stars};
+    APPEND_GITHUB_STARS(state, newStars);
+    expect(state.githubStars).toEqual(stars.concat(newStars));
   });
   it("can set the total number of pages in the api pagination response", () => {
     const state = {};

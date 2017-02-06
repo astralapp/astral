@@ -3,7 +3,13 @@
   "private": true,
   "scripts": {
     "test": "karma start --singleRun=true",
-    "lint": "eslint resources/assets/js --ext='.js,.vue'"
+    "lint": "eslint resources/assets/js --ext='.js,.vue'",
+    "clean": "rm -f public/build/css/* public/build/js/* public/build/rev-manifest.json",
+    "build": "gulp",
+    "build-prod": "npm run clean && gulp --production",
+    "watch-build": "gulp watch",
+    "clean-deps": "rm -rf node_modules",
+    "reinstall-deps": "npm run clean-deps && yarn"
   },
   "dependencies": {
     "dragula": "^3.6.3",
@@ -16,6 +22,7 @@
     "select2": "^4.0.1",
     "simplemde": "^1.11.2",
     "vue": "^1.0.19",
+    "vue-animated-list": "^1.0.2",
     "vue-clickaway": "^1.1.1",
     "vue-resource": "^0.6.1",
     "vue-router": "^0.7.8",
@@ -29,6 +36,7 @@
     "babel-runtime": "^6.9.0",
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
+    "browserify-hmr": "^0.3.5",
     "eslint": "^3.1.1",
     "eslint-config-vue": "^1.0.3",
     "eslint-plugin-vue": "^0.1.1",
@@ -37,19 +45,22 @@
     "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.1.1",
     "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.19",
     "karma-browserify": "^4.4.2",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-spec-reporter": "0.0.23",
-    "laravel-elixir": "^6.0.0-2",
-    "laravel-elixir-vueify": "^1.0.3",
+    "laravel-elixir": "^6.0.0-11",
+    "laravel-elixir-browserify-official": "^0.1.3",
+    "laravel-elixir-vueify": "^2.0.0",
     "node-bourbon": "^4.2.3",
     "phantomjs": "^1.9.19",
     "stream-browserify": "^2.0.1",
-    "vue-hot-reload-api": "^2.0.5",
+    "vue-hot-reload-api": "^1.2.0",
     "vueify": "^8.7.0",
+    "vueify-insert-css": "^1.0.0",
     "watchify": "^3.7.0"
   }
 }

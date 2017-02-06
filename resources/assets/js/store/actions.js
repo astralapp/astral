@@ -17,7 +17,7 @@ export const fetchUser = ({ dispatch, state }) => {
       dispatch(types.SET_USER, response.data.message)
       resolve(response.data.message)
     }, (response) => {
-      reject(response.data)
+      reject(response)
     })
   })
   return promise
@@ -40,17 +40,20 @@ export const setUserAutoTag = ({ dispatch }, prefState) => {
 }
 
 //  Github Stars
-export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag = 1) => {
+export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag = 1, refresh = false) => {
   const promise = new Promise((resolve, reject) => {
     let data = {}
-    Vue.http.get(`/api/github/stars?page=${page}&autotag=${autotag}`, null, {
+    const url = refresh ? `/api/github/stars/refresh` : `/api/github/stars?page=${page}&autotag=${autotag}`
+    Vue.http.get(url, null, {
       headers: {
         "Authorization": `Bearer ${ls("jwt")}`,
         "Access-Token": ls("access_token")
       }
     }).then((response) => {
+      if (refresh) {
+        dispatch(types.SET_GITHUB_STARS, [])
+      }
       data = response.data.message
-      dispatch(types.SET_TAGS, data.tags)
       if (data.stars.page_count) {
         dispatch(types.SET_TOTAL_PAGES, data.stars.page_count)
       }
@@ -64,9 +67,11 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
       // If the number of cached pages is equal to the total number of pages, we have all the stars cached, so we can just return them.
       if (state.github.cachedPages && state.github.cachedPages === state.github.totalPages) {
         dispatch(types.SET_GITHUB_STARS, data.stars.stars)
+        dispatch(types.SET_TAGS, data.tags)
         resolve(data.stars.stars)
       } else {
-        dispatch(types.SET_GITHUB_STARS, data.stars.stars)
+        dispatch(types.APPEND_GITHUB_STARS, data.stars.stars)
+        dispatch(types.SET_TAGS, data.tags)
         if (state.github.cachedPages) {
           resolve(fetchGithubStars({ dispatch, state }, (state.github.cachedPages + 1)))
         } else {
@@ -78,7 +83,9 @@ export const fetchGithubStars = ({ dispatch, state, actions }, page = 1, autotag
         }
       }
     }, (response) => {
-      reject(response.data)
+      const headers = response.headers()
+      const res = Object.assign({}, { response: response, headers: headers })
+      reject(JSON.stringify(res))
     })
   })
   return promise
@@ -88,7 +95,14 @@ export const fetchReadme = ({ dispatch }, name) => {
   const accessToken = ls("access_token")
   const promise = new Promise((resolve, reject) => {
     Vue.http.get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((response) => {
-      const readme = Base64.decode(response.data.content)
+      let readme = Base64.decode(response.data.content)
+
+      const branch = response.data.url.split('?ref=')[1]
+      const regex = /(!\[.*\])\(\/?(?!(http:\/\/)|(https:\/\/)|(\/))(.*)\)/igm
+      const replace_with = `$1(https://github.com/${name}/blob/${branch}/$5?raw=true)`
+
+      readme = readme.replace(regex, replace_with)
+
       Vue.http.post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, {
         headers: {
           "Content-Type": "text/plain"
@@ -149,7 +163,7 @@ export const addTag = ({ dispatch, state }) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      dispatch(types.SET_TAGS, response.data.message)
+      dispatch(types.ADD_TAG, response.data.message)
       dispatch(types.RESET_NEW_TAG)
       resolve(response.data.message)
     }, (response) => {
@@ -174,8 +188,8 @@ export const syncTags = ({ dispatch, state }, repo, tags) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state }, 1, 0)
-      dispatch(types.SET_STARS, response.data.message.stars)
+      dispatch(types.SET_CURRENT_STAR, state.github.githubStars.find(repo => repo.id === response.data.message.star.repo_id))
+      dispatch(types.SET_REPO_TAGS, response.data.message.star.repo_id, response.data.message.star.tags)
       dispatch(types.SET_TAGS, response.data.message.tags)
       resolve(response.data.message)
     }, (response) => {
@@ -196,11 +210,12 @@ export const editTagName = ({ dispatch, state }, tagId, name) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
-      fetchStars({ dispatch })
       dispatch(types.SET_TAGS, response.data.message.tags)
       setCurrentTag({ dispatch }, response.data.message.tag)
-      resolve(response.data.message.tag)
+      setTimeout(() => {
+        dispatch(types.EDIT_TAG_NAMES_ON_STARS, tagId, response.data.message.tag)
+        resolve(response.data.message.tag)
+      }, 0)
     }, (response) => {
       reject(response.data)
     })
@@ -215,8 +230,7 @@ export const deleteTag = ({ dispatch, state }, tagId) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
-      fetchStars({ dispatch })
+      dispatch(types.REMOVE_TAG_FROM_STARS, tagId)
       dispatch(types.SET_TAGS, response.data.message)
       resolve(response.data.message)
     }, (response) => {
@@ -234,25 +248,9 @@ export const tagStar = ({ dispatch, state }, starData) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      fetchGithubStars({ dispatch, state })
+      dispatch(types.SET_CURRENT_STAR, state.github.githubStars.find(repo => repo.id === response.data.message.star.repo_id))
       dispatch(types.SET_TAGS, response.data.message.tags)
-      dispatch(types.SET_STARS, response.data.message.stars)
-      resolve(response.data.message)
-    }, (response) => {
-      reject(response.data)
-    })
-  })
-  return promise
-}
-
-export const fetchStars = ({ dispatch }) => {
-  const promise = new Promise((resolve, reject) => {
-    Vue.http.get("/api/stars", null, {
-      headers: {
-        "Authorization": `Bearer ${ls("jwt")}`
-      }
-    }).then((response) => {
-      dispatch(types.SET_STARS, response.data.message)
+      dispatch(types.SET_REPO_TAGS, response.data.message.star.repo_id, response.data.message.star.tags)
       resolve(response.data.message)
     }, (response) => {
       reject(response.data)
@@ -268,7 +266,7 @@ export const editStarNotes = ({ dispatch }, star, text) => {
         "Authorization": `Bearer ${ls("jwt")}`
       }
     }).then((response) => {
-      dispatch(types.SET_STARS, response.data.message)
+      dispatch(types.SET_REPO_NOTES, response.data.message.repo_id, response.data.message.notes)
       resolve(response.data.message)
     }, (response) => {
       reject(response.data)
@@ -294,16 +292,10 @@ export const setSearchQuery = ({ dispatch }, query) => {
   }).map((s) => {
     return s.toLowerCase()
   })
-  const languages = searchArray.filter((s) => {
-    return s[0] === "@"
-  }).map((s) => {
-    return s.toLowerCase()
-  })
   const tokenizedQuery = {
     "query": query,
     "tags": tags,
-    "strings": strings,
-    "languages": languages
+    "strings": strings
   }
   dispatch(types.SET_TOKENIZED_SEARCH, tokenizedQuery)
 }

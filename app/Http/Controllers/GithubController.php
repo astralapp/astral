@@ -6,6 +6,7 @@ use Astral\Lib\GithubClient;
 use Astral\Models\Star;
 use Astral\Models\Tag;
 use Auth;
+use Cache;
 use Illuminate\Http\Request;
 
 class GithubController extends Controller
@@ -32,6 +33,13 @@ class GithubController extends Controller
         return $this->mapStarsToRepos($stars, $autotag);
     }
 
+    public function refreshStars(Request $request)
+    {
+        Cache::forget('user_'.Auth::id().'.github_stars');
+
+        return $this->getStars($request);
+    }
+
     /**
      * @param array $stars
      *
@@ -46,33 +54,35 @@ class GithubController extends Controller
             $star = Star::withRepoId($repo['id'])->first();
             // If user has autotag turned on and the repo has a language set
             if ($autotag && Auth::user()->autotag && $repo['language']) {
-              // If no star, create one first
-              if (! $star) {
-                  $star = new Star();
-                  $star->attachRepoInfo($repo['id'], $repo['full_name']);
-                  $star->save();
-              }
-              // Look for a tag with that name
-              $tagName = strtolower($repo['language']);
-              $userTag = Tag::whereName($tagName)->first();
-              // If the tag isn't found, create a new one
-              if (! $userTag) {
-                  $userTag = new Tag();
-                  $userTag->name = $repo['language'];
-                  $userTag->save();
-              }
-              $star->tags()->sync([$userTag->id], false);
+                // If no star, create one first
+                if (! $star) {
+                    $star = new Star();
+                    $star->attachRepoInfo($repo['id'], $repo['full_name']);
+                    $star->save();
+                }
+                // Look for a tag with that name
+                $tagName = strtolower($repo['language']);
+                $userTag = Tag::whereName($tagName)->first();
+                // If the tag isn't found, create a new one
+                if (! $userTag) {
+                    $userTag = new Tag();
+                    $userTag->name = $repo['language'];
+                    $userTag->save();
+                }
+                $star->tags()->sync([$userTag->id], false);
             }
             if ($star) {
                 $stars['stars'][$i]['tags'] = $star->tags;
+                $stars['stars'][$i]['notes'] = $star->notes;
             } else {
                 $stars['stars'][$i]['tags'] = [];
+                $stars['stars'][$i]['notes'] = '';
             }
         }
 
         return [
             'stars' => $stars,
-            'tags' => Tag::withStars()->get(),
+            'tags' => Tag::withStarCount()->get(),
         ];
     }
 }

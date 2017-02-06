@@ -7,5 +7,5 @@ Homestead.json
 .sass-cache
 .DS_Store
 .idea
-
+*.orig
 *.cache
