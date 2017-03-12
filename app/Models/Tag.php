@@ -52,7 +52,7 @@ class Tag extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithStars($query)
+     
     {
         return $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }

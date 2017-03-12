@@ -1,19 +1,19 @@
 import {
   SET_SEARCH_QUERY,
   SET_TOKENIZED_SEARCH
-} from "../mutation-types.js"
+} from '../mutation-types.js'
 
 const state = {
-  searchQuery: "",
+  searchQuery: '',
   tokenizedSearchQuery: {
-    query: "",
+    query: '',
     tags: [],
     strings: [],
     languages: []
   }
 }
 
-export const mutations = {
+const mutations = {
   [SET_SEARCH_QUERY] (state, query) {
     state.searchQuery = query
   },
@@ -22,7 +22,32 @@ export const mutations = {
   }
 }
 
+const actions = {
+  setSearchQuery ({ commit }, query) => {
+    commit(SET_SEARCH_QUERY, query)
+
+    const searchArray = query.split(':')
+    const tags = searchArray.filter((tag) => {
+      return tag[0] === '#'
+    }).map((tag) => {
+      return tag.substring(1).toLowerCase()
+    })
+    const strings = searchArray.filter((s) => {
+      return s[0] !== '#'
+    }).map((s) => {
+      return s.toLowerCase()
+    })
+    const tokenizedQuery = {
+      'query': query,
+      'tags': tags,
+      'strings': strings
+    }
+    commit(SET_TOKENIZED_SEARCH, tokenizedQuery)
+  }
+}
+
 export default {
   state,
-  mutations
+  mutations,
+  actions
 }

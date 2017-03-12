@@ -1,11 +1,15 @@
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import ls from 'local-storage'
+import { Promise } from 'es6-promise'
 import { SET_USER } from '../mutation-types.js'
+
+import user from '../api/user'
+
+Vue.use(VueResource)
 
 const state = {
   user: {}
-}
-
-const getters = {
-  user: state => state.user
 }
 
 const mutations = {
@@ -16,41 +20,29 @@ const mutations = {
 
 const actions = {
   fetchUser ({ commit }) => {
-    const promise = new Promise((resolve, reject) => {
-      Vue.http.get('/api/auth/user', null, {
-        headers: {
-          'Authorization': `Bearer ${ls('jwt')}`
-        }
-      }).then((response) => {
-        commit(SET_USER, response.data.message)
-        resolve(response.data.message)
-      }, (response) => {
-        reject(response)
+    return new Promise(resolve, reject) => {
+      user.fetch().then((res) => {
+        commit(SET_USER, res.message)
+        resolve(res.message)
+      }, (res) => {
+        reject(res)
       })
-    })
-    return promise
-  }
-
-  setUserAutoTag ({ commit }, prefState) => {
-    const promise = new Promise((resolve, reject) => {
-      Vue.http.post('/api/auth/user/autotag', { state: prefState }, {
-        headers: {
-          'Authorization': `Bearer ${ls('jwt')}`
-        }
-      }).then((response) => {
-        commit(SET_USER, response.data.message)
-        resolve(response.data.message)
-      }, (response) => {
-        reject(response.data)
+    }
+  },
+  setUserAutoTag ({ commit }, state) => {
+    return new Promise((resolve, reject) => {
+      user.setAutoTag(state).then((res) => {
+        commit(SET_USER, res.message)
+        resolve(res.message)
       })
+    }, (res) => {
+      reject(res)
     })
-    return promise
   }
 }
 
 export default {
   state,
-  getters,
   actions,
   mutations
 }

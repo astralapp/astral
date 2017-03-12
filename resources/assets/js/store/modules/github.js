@@ -1,3 +1,8 @@
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import ls from 'local-storage'
+import { Promise } from 'es6-promise'
+
 import {
   APPEND_GITHUB_STARS,
   SET_GITHUB_STARS,
@@ -9,18 +14,21 @@ import {
   INCREMENT_CACHED_PAGES,
   SET_README,
   REMOVE_TAG_FROM_STARS,
-  EDIT_TAG_NAMES_ON_STARS
-} from "../mutation-types.js"
+  EDIT_TAG_NAMES_ON_STARS,
+  SET_TAGS
+} from '../mutation-types.js'
+
+import Stars from '../api/stars'
 
 const state = {
   githubStars: [],
   currentStar: {},
-  readme: "",
+  readme: '',
   totalPages: 0,
   cachedPages: 0
 }
 
-export const mutations = {
+const mutations = {
   [APPEND_GITHUB_STARS] (state, stars) {
     state.githubStars = state.githubStars.concat(stars)
   },
@@ -78,7 +86,58 @@ export const mutations = {
   }
 }
 
+const actions = {
+  fetchStars ({ commit, dispatch, state }, page = 1, autotag = true, refresh = false) => {
+    return new Promise((resolve, reject) => {
+      Stars.fetch(page, autotag, refresh).then((res) => {
+        if (refresh) {
+          commit(SET_GITHUB_STARS, [])
+        }
+        data = res.data.message
+        if (data.stars.page_count) {
+          commit(SET_TOTAL_PAGES, data.stars.page_count)
+        }
+        if (data.stars.cached) {
+          commit(SET_CACHED_PAGES, data.stars.cached)
+        } else {
+          commit(SET_CACHED_PAGES, 0)
+        }
+        if (state.cachedPages && state.cachedPages === state.totalPages) {
+          commit(SET_GITHUB_STARS, data.stars.stars)
+          commit(SET_TAGS, data.tags)
+          resolve(data.stars.stars)
+        } else {
+          commit(APPEND_GITHUB_STARS, data.stars.stars)
+          commit(SET_TAGS, data.tags)
+          if (state.cachedPages) {
+            resolve(dispatch('fetchStars', state.cachedPages + 1))
+          } else {
+            if (page < state.totalPages) {
+              resolve(dispatch('fetchStars', page + 1))
+            } else {
+              resolve(data.stars.stars)
+            }
+          }
+        }
+      }, (res) => {
+        const headers = res.headers()
+        const errorRes = { response: res, headers: headers }
+        reject(JSON.stringify(errorRes))
+      })
+    })
+  },
+  fetchReadme ({ commit }, name) => {
+    Stars.fetchReadme(name).then((res) => {
+      commit(SET_README, res)
+    })
+  },
+  setCurrentStar ({ commit }, star) => {
+    commit(SET_CURRENT_STAR, star)
+  }
+}
+
 export default {
   state,
+  actions,
   mutations
 }
