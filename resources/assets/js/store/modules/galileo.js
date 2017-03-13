@@ -23,7 +23,7 @@ const mutations = {
 }
 
 const actions = {
-  setSearchQuery ({ commit }, query) => {
+  setSearchQuery ({ commit }, query) {
     commit(SET_SEARCH_QUERY, query)
 
     const searchArray = query.split(':')

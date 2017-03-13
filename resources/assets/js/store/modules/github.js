@@ -87,7 +87,7 @@ const mutations = {
 }
 
 const actions = {
-  fetchStars ({ commit, dispatch, state }, page = 1, autotag = true, refresh = false) => {
+  fetchStars ({ commit, dispatch, state }, page = 1, autotag = true, refresh = false) {
     return new Promise((resolve, reject) => {
       Stars.fetch(page, autotag, refresh).then((res) => {
         if (refresh) {
@@ -126,12 +126,12 @@ const actions = {
       })
     })
   },
-  fetchReadme ({ commit }, name) => {
+  fetchReadme ({ commit }, name) {
     Stars.fetchReadme(name).then((res) => {
       commit(SET_README, res)
     })
   },
-  setCurrentStar ({ commit }, star) => {
+  setCurrentStar ({ commit }, star) {
     commit(SET_CURRENT_STAR, star)
   }
 }

@@ -36,7 +36,7 @@ export default {
         })
       })
     })
-  }
+  },
   created () {
     this.tagsToSync = this.tags.map(function (tag) {
       return {

@@ -10,15 +10,8 @@
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 import ls from 'local-storage'
-import { user } from '../store/getters/userGetters'
-import { tags } from '../store/getters/tagsGetters'
-import {
-  fetchUser,
-  setCurrentTag,
-  resetCurrentTag,
-  setTagFilter
-} from '../store/actions'
 import SettingsPanel from './settings-panel.vue'
 import DashboardHeader from './dashboard-header.vue'
 import DashboardSidebar from './dashboard-sidebar.vue'
@@ -34,22 +27,24 @@ export default {
     'star-list': StarList,
     'notifier': Notifier
   },
-  vuex: {
-    getters: {
-      tags,
-      user: user
-    },
-    actions: {
-      fetchUser,
-      setCurrentTag,
-      setTagFilter,
-      resetCurrentTag
-    }
-  },
   data () {
     return {
       settingsPanelShowing: false
     }
+  },
+  computed: {
+    ...mapState([
+      'tags',
+      'user'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'fetchUser',
+      'setCurrentTag',
+      'setTagFilter',
+      'resetCurrentTag'
+    ])
   },
   created () {
     if (ls('jwt')) {

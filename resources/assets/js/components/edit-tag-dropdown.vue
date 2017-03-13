@@ -11,29 +11,28 @@
   </div>
 </template>
 <script>
-import { currentTag } from '../store/getters/tagsGetters'
-import { editTagName, deleteTag } from '../store/actions'
+import { mapActions, mapState } from 'vuex'
 import { mixin as clickaway } from 'vue-clickaway'
 
 export default {
   name: 'EditTagDropdown',
   mixins: [clickaway],
-  vuex: {
-    getters: {
-      currentTag
-    },
-    actions: {
-      editTagName,
-      deleteTag
-    }
-  },
   data () {
     return {
       currentTagName: '',
       tagEditorShowing: false
     }
   },
+  computed: {
+    ...mapState([
+      'currentTag'
+    ])
+  },
   methods: {
+    ...mapActions([
+      'editTagName',
+      'deleteTag'
+    ]),
     doEditTagName (id) {
       const name = this.$refs.tagName.value
       this.editTagName(id, name).then((res) => {

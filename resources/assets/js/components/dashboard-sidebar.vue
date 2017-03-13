@@ -27,37 +27,27 @@
       <input type="text" name="name" v-model="newTag.name" placeholder="Tag name">
       <button type="submit">Save</button>
     </form>
-    <transition-group name="tag" tag="ul" class="dashboard-list sidebar-tags" ref="tags-list">
-      <!-- <div class="no-tags" v-show="tags.length == 0">
-        <i class="fa fa-tag"></i>
-        <p>You haven't added any tags yet!</p>
-      </div> -->
+    <!-- <div class="no-tags" v-show="tags.length == 0">
+      <i class="fa fa-tag"></i>
+      <p>You haven't added any tags yet!</p>
+    </div> -->
+    <ul class="dashboard-list sidebar-tags" ref="tags-list">
       <li class="dashboard-list-item tag" v-for="tag in tags" :key="tag.id" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }" ref="tag">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
         <span class="tagged-count" v-if="tag.stars_count > 0">{{ tag.stars_count }}</span>
       </li>
-    </transition-group>
+    </ul>
   </div>
 </template>
 <script>
 import Vue from 'vue'
-import VueAnimatedList from 'vue-animated-list'
-import { newTag, tags, currentTag, tagFilter } from '../store/getters/tagsGetters'
-import {
-  fetchTags,
-  fetchGithubStars,
-  addTag,
-  tagStar,
-  reorderTags,
-  setCurrentTag
-} from '../store/actions'
+// import VueAnimatedList from 'vue-animated-list'
+import { mapState, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import { mixin as clickaway } from 'vue-clickaway'
 import dragula from 'dragula'
 import SortTagsDropdown from './sort-tags-dropdown.vue'
-
-Vue.use(VueAnimatedList)
 
 export default {
   name: 'DashboardSidebar',
@@ -65,22 +55,6 @@ export default {
     'sort-tags-dropdown': SortTagsDropdown
   },
   mixins: [clickaway],
-  vuex: {
-    getters: {
-      newTag,
-      tags,
-      currentTag,
-      tagFilter
-    },
-    actions: {
-      fetchTags,
-      fetchGithubStars,
-      addTag,
-      tagStar,
-      reorderTags,
-      setCurrentTag
-    }
-  },
   data () {
     return {
       addTagFormShowing: false,
@@ -88,6 +62,14 @@ export default {
       refreshingStars: false,
       drake: null
     }
+  },
+  computed: {
+    ...mapState([
+      'newTag',
+      'tags',
+      'currentTag',
+      'tagFilter'
+    ])
   },
   created () {
     let sortMap = []
@@ -139,6 +121,14 @@ export default {
     this.drake.destroy()
   },
   methods: {
+    ...mapActions([
+      'fetchTags',
+      'fetchStars',
+      'addTag',
+      'tagStar',
+      'reorderTags',
+      'setCurrentTag'
+    ]),
     doAddTag: function () {
       const newTagName = this.newTag.name
       this.addTag().then(() => {
@@ -174,7 +164,7 @@ export default {
     refreshStars () {
       this.$bus.$emit('STATUS', 'Loading stars...')
       this.refreshingStars = true
-      this.fetchGithubStars(1, 1, true).then((res) => {
+      this.fetchStars(1, 1, true).then((res) => {
         this.refreshingStars = false
         this.$bus.$emit('STATUS', '')
       }).catch((error) => {

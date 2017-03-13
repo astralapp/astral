@@ -20,10 +20,7 @@
   </div>
 </template>
 <script>
-import { user } from "../store/getters/userGetters"
-import { currentTag, tagFilter } from "../store/getters/tagsGetters"
-import { searchQuery } from "../store/getters/galileoGetters"
-import { setSearchQuery } from "../store/actions"
+import { mapState, mapActions } from 'vuex'
 import EditTagDropdown from "./edit-tag-dropdown.vue"
 import UserDropdown from "./user-dropdown.vue"
 import { mixin as clickaway } from "vue-clickaway"
@@ -42,18 +39,13 @@ export default {
       viewingUntagged: false
     }
   },
-  vuex: {
-    getters: {
-      user: user,
-      currentTag: currentTag,
-      tagFilter,
-      query: searchQuery
-    },
-    actions: {
-      setSearchQuery
-    }
-  },
   computed: {
+    ...mapState({
+      user: 'user',
+      currentTag: 'currentTag',
+      tagFilter: 'tagFilter',
+      query: 'searchQuery'
+    }),
     currentTagName () {
       if (Object.keys(this.currentTag).length) {
         return this.currentTag.name
@@ -71,8 +63,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setSearchQuery'
+    ]),
     currentTagExists () {
-      return Boolean(Object.keys(this.currentTag).length)
+      return !!(Object.keys(this.currentTag).length)
     }
   },
   events: {

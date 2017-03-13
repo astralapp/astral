@@ -55,18 +55,18 @@ const mutations = {
 }
 
 const actions = {
-  fetchTags ({ commit }) => {
-    return new Promise(resolve, reject) => {
+  fetchTags ({ commit }) {
+    return new Promise((resolve, reject) => {
       Tags.fetch().then((res) => {
         commit(SET_TAGS, res.message)
         resolve(res.message)
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  addTag ({ commit, state }) => {
-    return new Promise(resolve, reject) => {
+  addTag ({ commit, state }) {
+    return new Promise((resolve, reject) => {
       Tags.add(state.newTag).then((res) => {
         commit(ADD_TAG, res.message)
         commit(RESET_NEW_TAG)
@@ -74,20 +74,20 @@ const actions = {
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  reorderTags ({ commit }, sortMap) => {
-    return new Promise(resolve, reject) => {
+  reorderTags ({ commit }, sortMap) {
+    return new Promise((resolve, reject) => {
       Tags.reorder(sortMap).then((res) => {
         commit(SET_TAGS, res.message)
         resolve(res.message)
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  syncTags ({ commit, state }, repo, tags) => {
-    return new Promise(resolve, reject) => {
+  syncTags ({ commit, state }, repo, tags) {
+    return new Promise((resolve, reject) => {
       Tags.sync(repo, tags).then((res) => {
         commit(SET_CURRENT_STAR, state.github.githubStars.find(repo => repo.id === res.message.star.repo_id))
         commit(SET_REPO_TAGS, res.message.star.repo_id, res.message.star.tags)
@@ -96,10 +96,10 @@ const actions = {
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  editTagName ({ commit }, id, name) => {
-    return new Promise(resolve, reject) => {
+  editTagName ({ commit }, id, name) {
+    return new Promise((resolve, reject) => {
       Tags.edit(id, name).then((res) => {
         commit(SET_TAGS, res.message.tags)
         commit(SET_CURRENT_TAG, res.message.tag)
@@ -110,10 +110,10 @@ const actions = {
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  deleteTag ({ commit }, id) => {
-    return new Promise(resolve, reject) => {
+  deleteTag ({ commit }, id) {
+    return new Promise((resolve, reject) => {
       Tags.delete(id).then((res) => {
         commit(REMOVE_TAG_FROM_STARS, id)
         commit(SET_TAGS, res.message)
@@ -121,15 +121,15 @@ const actions = {
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  setCurrentTag ({ commit }, tag) => {
+  setCurrentTag ({ commit }, tag) {
     commit(SET_CURRENT_TAG, tag)
   },
-  setTagFilter ({ commit }, filter) => {
+  setTagFilter ({ commit }, filter) {
     commit(SET_TAG_FILTER, filter)
   },
-  resetCurrentTag ({ commit }) => {
+  resetCurrentTag ({ commit }) {
     commit(RESET_CURRENT_TAG)
   }
 }

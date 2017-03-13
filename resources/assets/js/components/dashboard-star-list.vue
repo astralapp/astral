@@ -23,40 +23,24 @@
   </div>
 </template>
 <script>
-import { user } from '../store/getters/userGetters'
-import { githubStars, currentStar } from '../store/getters/githubGetters'
-import { currentTag, tagFilter } from '../store/getters/tagsGetters'
-import { tokenizedSearchQuery } from '../store/getters/galileoGetters'
-import {
-  fetchGithubStars,
-  setCurrentStar,
-  setCurrentTag
-} from '../store/actions'
+import { mapState, mapActions } from 'vuex'
 import StarInfo from './star-info.vue'
 import galileo from './../filters/galileo.js'
-import './../directives/drag_and_drop.js'
 
 export default {
   name: 'StarList',
   components: {
     'star-info': StarInfo
   },
-  vuex: {
-    getters: {
-      user,
-      githubStars,
-      currentTag,
-      tagFilter,
-      currentStar,
-      searchQuery: tokenizedSearchQuery
-    },
-    actions: {
-      fetchGithubStars,
-      setCurrentStar,
-      setCurrentTag
-    }
-  },
   computed: {
+    ...mapState({
+      user: 'user',
+      githubStars: 'githubStars',
+      currentTag: 'currentTag',
+      tagFilter: 'tagFilter',
+      currentStar: 'currentStar',
+      searchQuery: 'tokenizedSearchQuery'
+    }),
     starsWithCurrentTag() {
       return this.githubStars.filter(this.starHasCurrentTag)
     },
@@ -81,6 +65,11 @@ export default {
     })
   },
   methods: {
+    ...mapActions([
+      'fetchGithubStars',
+      'setCurrentStar',
+      'setCurrentTag'
+    ]),
     starClicked (repo) {
       if (repo.id === this.currentStar.id) {
         return false

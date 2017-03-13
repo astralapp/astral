@@ -6,7 +6,7 @@ import { Base64 } from 'js-base64'
 
 Vue.use(VueResource)
 
-normalizeReadmeAssetUrls(readmeResponse) {
+const normalizeReadmeAssetUrls = (readmeResponse) => {
   let readme = Base64.decode(readmeResponse.data.content)
   const branch = readmeResponse.data.url.split('?ref=')[1]
   const regex = /(!\[.*\])\(\/?(?!(http:\/\/)|(https:\/\/)|(\/))(.*)\)/igm

@@ -10,8 +10,8 @@ const client = {
     return Object.assign({}, client.defaultHeaders, headers)
   }
 }
-
-['get', 'post', 'put', 'delete'].forEach((verb) => {
+const httpMethods = ['get', 'post', 'put', 'delete']
+httpMethods.forEach((verb) => {
     client[verb] = (path, data = {}, headers = {}) => {
       return new Promise((resolve, reject) => {
         Vue.http[verb](path, data, mergeHeaders(headers)).then((res) => {

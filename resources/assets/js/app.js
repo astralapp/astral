@@ -35,7 +35,7 @@ Object.defineProperty(Vue.prototype, '$bus', {
   }
 })
 
-const  bus = new Vue({})
+const bus = new Vue({})
 
 new Vue({
   el: '#app',

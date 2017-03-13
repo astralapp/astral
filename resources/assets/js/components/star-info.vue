@@ -32,9 +32,7 @@
   </div>
 </template>
 <script>
-import { readme, currentStar } from '../store/getters/githubGetters'
-import { tags } from '../store/getters/tagsGetters'
-import { editStarNotes, syncTags, fetchReadme } from '../store/actions'
+import { mapActions, mapState } from 'vuex'
 import TagEditor from './tag-editor.vue'
 import StarNotesEditor from './star-notes-editor.vue'
 import { mixin as clickaway } from 'vue-clickaway'
@@ -42,18 +40,6 @@ import { mixin as clickaway } from 'vue-clickaway'
 export default {
   name: 'StarInfo',
   mixins: [clickaway],
-  vuex: {
-    getters: {
-      readme,
-      currentStar,
-      tags
-    },
-    actions: {
-      editStarNotes,
-      sync: syncTags,
-      fetchReadme
-    }
-  },
   data () {
     return {
       tagEditorShowing: false,
@@ -65,6 +51,11 @@ export default {
     }
   },
   computed: {
+    ...mapState([
+      'readme',
+      'currentStar',
+      'tags'
+    ]),
     notes () {
       if (this.currentStar && this.currentStar.hasOwnProperty('id')) {
         return this.currentStar.notes
@@ -89,6 +80,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      editStarNotes: 'editStarNotes',
+      fetchReadme: 'editStarNotes',
+      sync: 'syncTags'
+    }),
     showTagEditor () { this.tagEditorShowing = true },
     hideTagEditor () { this.tagEditorShowing = false },
     clickedAwayFromTagEditor (e) {

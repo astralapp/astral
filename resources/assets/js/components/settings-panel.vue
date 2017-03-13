@@ -42,24 +42,27 @@
 </template>
 <script>
 import ls from 'local-storage'
-import { user } from '../store/getters/userGetters'
-import { setUserAutoTag } from '../store/actions'
+import { mapActions, mapState } from 'vuex'
 import ToggleSwitch from './toggle-switch.vue'
 export default {
   name: 'SettingsPanel',
   components: {
     'toggle-switch': ToggleSwitch
   },
-  vuex: {
-    getters: { user },
-    actions: { setUserAutoTag }
-  },
   data () {
     return {
       exportUrl: `/api/auth/user/exportData?token=${ls('jwt')}`
     }
   },
+  computed: {
+    ...mapState([
+      'user'
+    ])
+  },
   methods: {
+    ...mapActions([
+      'setUserAutoTag'
+    ]),
     setUserAutoTagPref (e) {
       this.setUserAutoTag(e.target.checked)
     },

@@ -19,24 +19,24 @@ const mutations = {
 }
 
 const actions = {
-  fetchUser ({ commit }) => {
-    return new Promise(resolve, reject) => {
+  fetchUser ({ commit }) {
+    return new Promise((resolve, reject) => {
       user.fetch().then((res) => {
         commit(SET_USER, res.message)
         resolve(res.message)
       }, (res) => {
         reject(res)
       })
-    }
+    })
   },
-  setUserAutoTag ({ commit }, state) => {
+  setUserAutoTag ({ commit }, state) {
     return new Promise((resolve, reject) => {
       user.setAutoTag(state).then((res) => {
         commit(SET_USER, res.message)
         resolve(res.message)
+      }, (res) => {
+        reject(res)
       })
-    }, (res) => {
-      reject(res)
     })
   }
 }
