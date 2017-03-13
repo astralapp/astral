@@ -1,6 +1,6 @@
 .toggleSwitch {
   label {
-    transition: all 400ms $easeOutCubic;
+    transition: background 400ms $easeOutCubic;
     background: #b0b6ba;
     color: rgba(#000, 0);
     cursor: pointer;
@@ -10,7 +10,7 @@
     border-radius: 11px;
     position: relative;
     &:before {
-      transition: all 400ms $easeOutCubic;
+      transition: color 400ms $easeOutCubic;
       transform: translateX(-100%);
       color: #b0b6ba;
       content: "Off";
@@ -23,9 +23,9 @@
       text-transform: uppercase;
     }
     &:after {
-      transition: all 400ms $easeOutCubic;
+      transition: transform 400ms $easeOutCubic;
       transform: translate3d(0,0,0);
-      @include size( 18px );
+      width: 18px; height: 18px;
       background: #fff;
       border-radius: 50%;
       content: "";

@@ -1,5 +1,5 @@
 .auth {
-  @include position( absolute, 0px 0px 0px 0px );
+  position: absolute; top: 0; right: 0; bottom: 0; left: 0;
   background: url(../../images/bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -9,8 +9,8 @@
   justify-content: center;
 }
 .auth-statusText {
-  @include animation( fadeInOut 2s cubic-bezier(0.1, 0.3, 0.3, 1.0) );
-  @include animation-iteration-count(infinite);
+  animation: fadeInOut 2s cubic-bezier(0.1, 0.3, 0.3, 1.0);
+  animation-iteration-count: infinite;
   font-size: 2.5rem;
   font-weight: 300;
   opacity: 1;
@@ -18,14 +18,14 @@
   text-shadow: 0 0 16px #fff;
 }
 .auth-pulser {
-  @include transform( scale(1) translate(-50%, -50%) );
-  @include transform-origin( top left );
-  @include animation-name( pulse );
-  @include animation-duration( 2s );
-  @include animation-iteration-count(infinite);
-  @include animation-fill-mode( backwards );
-  @include animation-timing-function( cubic-bezier(0.1, 0.3, 0.3, 1.0) );
-  @include size( 400px );
+  transform: scale(1) translate(-50%, -50%);
+  transform-origin: top left;
+  animation-name: pulse;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+  animation-timing-function: cubic-bezier(0.1, 0.3, 0.3, 1.0);
+  width: 400px; height: 400px;
   border-radius: 50%;
   border: 10px solid rgba(#fff, 0.7);
   opacity: 1;
@@ -48,7 +48,7 @@
     padding: 20px;
   }
   .auth-signInButton {
-    @include transition ( all 250ms ease );
+    transition: background 250ms ease, border 250ms ease;
     background: rgba(#fff, 0.08);
     border: 1px solid rgba(#fff,0.65);
     border-radius: 3px;
@@ -72,7 +72,7 @@
     padding: 20px;
   }
 }
-@include keyframes( fadeInOut ) {
+@keyframes fadeInOut {
   0% {
     opacity: 1;
   }
@@ -83,13 +83,14 @@
     opacity: 1;
   }
 }
-@include keyframes( pulse ) {
+
+@keyframes pulse  {
   0% {
-    @include transform( scale(0.1) translate(-50%, -50%) );
+    transform: scale(0.1) translate(-50%, -50%);
     opacity: 1;
   }
   50% {
-    @include transform( scale(1) translate(-50%, -50%) );
+    transform: scale(1) translate(-50%, -50%);
     opacity: 0;
   }
   100%{

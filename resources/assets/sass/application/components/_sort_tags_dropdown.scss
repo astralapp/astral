@@ -9,7 +9,7 @@
   z-index: 999;
   &::before {
     transform: translateX(-50%) rotate(45deg);
-    @include size( 12px );
+    width: 12px; height: 12px;
     background: #fff;
     background-clip: padding-box;
     border-top: 1px solid rgba(#373570, 0.1);

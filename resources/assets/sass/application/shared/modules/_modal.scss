@@ -11,8 +11,8 @@
     margin-right: -0.25em; /* Adjusts for spacing */
   }
   .dashboard-modal {
-    @include backface-visibility( hidden );
-    @include transform( scale(1, 1) perspective(1px) );
+    backface-visibility: hidden;
+    transform: scale(1, 1) perspective(1px);
     background: #fff;
     background-clip: padding-box;
     border: 1px solid rgba(#373570, 0.1);
@@ -37,7 +37,7 @@
         letter-spacing: 1px;
       }
       .close-modal {
-        @include transition ( color 250ms linear );
+        transition: color 250ms linear;
         color: #666;
         cursor: pointer;
         float: right;

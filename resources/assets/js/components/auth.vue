@@ -1,6 +1,6 @@
 <template>
   <div class="auth">
-    <div class="auth-authenticated" v-show="authenticated">
+    <div class="auth-authenticated" v-if="authenticated">
       <div class="auth-statusText">
         Signing In
       </div>

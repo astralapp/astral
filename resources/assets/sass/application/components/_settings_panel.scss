@@ -42,7 +42,7 @@
     }
     .settingsPanel-closePanel {
       transition: color 250ms linear;
-      @include size(25px);
+      width: 25px; height: 25px;
       appearance: none;
       border: none;
       background: none;

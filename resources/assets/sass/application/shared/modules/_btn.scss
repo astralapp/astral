@@ -1,6 +1,6 @@
 @mixin btn($color: $primary) {
-  @include appearance( none );
-  @include background-image(linear-gradient($color, darken($color, 8%)));
+  appearance: none;
+  background-image: linear-gradient($color, darken($color, 8%));
   -webkit-font-smoothing: antialiased;
   border: 1px solid darken($color, 15%);
   border-bottom: 1px solid darken($color, 19%);
@@ -13,7 +13,7 @@
   text-align: center;
   text-decoration: none;
   &:hover {
-    @include background-image(linear-gradient(lighten($color, 4%), darken($color, 8%)));
+    background-image: linear-gradient(lighten($color, 4%), darken($color, 8%));
     border: 1px solid darken($color, 11%);
     border-bottom: 1px solid darken($color, 15%);
     text-shadow: 0 1px 0 darken($color, 11%);
@@ -27,7 +27,7 @@
 }
 
 @mixin btn_flat($color: $primary) {
-  @include appearance( none );
+  appearance: none;
   -webkit-font-smoothing: antialiased;
   background: $color;
   border: none;
@@ -49,7 +49,7 @@
   }
 }
 @mixin btn_outline($color: $primary) {
-  @include appearance( none );
+  appearance: none;
   -webkit-font-smoothing: antialiased;
   background: rgba($color, 0);
   border-radius: 3px;
@@ -74,7 +74,7 @@
   }
 }
 @mixin btn_text($color: $primary) {
-  @include appearance( none );
+  appearance: none;
   -webkit-font-smoothing: antialiased;
   background: rgba($color, 0);
   border-radius: 3px;
@@ -90,10 +90,10 @@
   text-decoration: none;
   text-transform: uppercase;
   &:hover {
-    color: shade($color, 8%);
+    color: darken($color, 8%);
   }
   &:active {
-    color: shade($color, 12%);
+    color: darken($color, 12%);
   }
 }
 

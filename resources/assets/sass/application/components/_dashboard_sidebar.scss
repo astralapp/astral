@@ -9,7 +9,7 @@
   position: absolute; top: 60px; bottom: 0; left: 0;
   width: $dashboard-sidebar-width;
   .dashboard-sidebar-header {
-    @include size( $dashboard-sidebar-width 60px );
+    width: $dashboard-sidebar-width; height: 60px;
     padding: 0 20px;
     background: $primary;
     display: flex;
@@ -72,8 +72,8 @@
           height: 100%;
         }
         .tag-button-group-item {
-          @include transition ( all 200ms linear );
-          @include appearance(none);
+          transition: background 200ms linear, color 200ms linear;
+          appearance: none;
           background: transparent;
           border: none;
           border-left: 1px solid rgba(#fff, 0.08);
@@ -104,7 +104,7 @@
     background: $dark-blue;
     font-size: 0;
     input[type=text] {
-      @include appearance( none );
+      appearance: none;
       background: rgba(#fff, 0.1);
       background-clip: padding-box;
       border-radius: 0;

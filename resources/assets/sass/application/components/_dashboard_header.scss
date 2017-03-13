@@ -24,7 +24,7 @@
     height: 30px;
     padding-left: 34px;
     width: 300px;
-    @include placeholder {
+    &::placeholder {
       color: rgba($dark-steel, 0.5);
     }
     &:focus + .fa {
@@ -45,7 +45,7 @@
   font-size: 0.9rem;
   margin-left: 25px;
   .status-spinner {
-    @include size(16px);
+    width: 16px; height: 16px;
     animation: spin 1.2s backwards infinite linear;
     border: 2px solid;
     border-radius: 50%;

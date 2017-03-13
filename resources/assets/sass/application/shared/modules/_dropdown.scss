@@ -1,14 +1,14 @@
 .dropdown-wrap {
   position: relative;
   .dropdown {
-    @include transition(all 250ms ease);
-    @include transform( translate(-50%, -10px) scale(0.95));
+    transition: transform 250ms ease, opacity 250ms ease;
+    transform: translate(-50%, -10px) scale(0.95);
     position: absolute; top: 100%; left: 50%;
     margin: 0;
     opacity: 0;
     visibility: hidden;
     &.active {
-      @include transform( translate(-50%, 2px) scale(1));
+      transform: translate(-50%, 2px) scale(1);
       opacity: 1;
       visibility: visible;
     }

@@ -1,25 +1,26 @@
 <template>
-  <div class="dashboard-repos">
-    <ul class="repos">
-      <li class="repo" v-for="(repo, index) in starsList" :key="repo.id" draggable="true" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" ref="repo" :data-index="index">
-        <h3 class="repo-name" v-once="repo.full_name"></h3>
-        <div class="repo-description" v-once="repo.description"></div>
-        <ul class="repo-tags">
-          <transition-group name="star-tag" tag="ul">
-            <li v-for="tag in repo.tags" :key="tag.slug" @click.stop="setTag(tag)">
-              {{ tag.name }}
-            </li>
-          </transition-group>
-        <div class="repo-stats">
-          <div class="repo-stat stars"><i class="fa fa-star"></i> <span v-once="repo.stargazers_count"></span></div>
-          <div class="repo-stat forks"><i class="fa fa-code-fork"></i> <span v-once="repo.forks_count"></span></div>
-          <div class="repo-stat link"><a :href="repo.html_url" target="_blank" @click.stop>View on GitHub</a></div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div>
-    <star-info></star-info>
+  <div class="dashboard-star-container">
+    <div class="dashboard-repos">
+      <ul class="repos">
+        <li class="repo" v-for="(repo, index) in starsList" :key="repo.id" draggable="true" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" ref="repo" :data-index="index">
+          <h3 class="repo-name" v-once="repo.full_name"></h3>
+          <div class="repo-description" v-once="repo.description"></div>
+            <transition-group name="star-tag" tag="ul" class="repo-tags">
+              <li v-for="tag in repo.tags" :key="tag.slug" @click.stop="setTag(tag)">
+                {{ tag.name }}
+              </li>
+            </transition-group>
+          <div class="repo-stats">
+            <div class="repo-stat stars"><i class="fa fa-star"></i> <span v-once="repo.stargazers_count"></span></div>
+            <div class="repo-stat forks"><i class="fa fa-code-fork"></i> <span v-once="repo.forks_count"></span></div>
+            <div class="repo-stat link"><a :href="repo.html_url" target="_blank" @click.stop>View on GitHub</a></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <star-info></star-info>
+    </div>
   </div>
 </template>
 <script>

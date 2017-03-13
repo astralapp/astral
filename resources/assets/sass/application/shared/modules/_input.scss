@@ -1,5 +1,5 @@
 @mixin textfield() {
-  @include appearance( none );
+  appearance: none;
   background: #fcfcfc;
   background-clip: padding-box;
   border-radius: 3px;

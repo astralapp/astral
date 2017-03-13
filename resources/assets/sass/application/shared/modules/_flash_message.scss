@@ -3,7 +3,7 @@
   width: $dashboard-sidebar-width;
   z-index: 99999;
   .flash-message-inner {
-    @include size( 100% );
+    width: 100%; height: 100%;
     background: $primary;
     border-radius: 3px;
     color: #fff;
@@ -11,7 +11,7 @@
     font-weight: bold;
     padding: 20px 30px 20px 20px;
     .dismiss-flash-message {
-      @include transform( translateY(-50%) );
+      transform: translateY(-50%);
       color: darken($primary, 12%);
       cursor: pointer;
       font-size: 1.2rem;
