@@ -19,7 +19,7 @@
         <button class="tag-button-group-item" @click="addTagFormShowing = !addTagFormShowing"><i class="fa fa-plus-circle"></i> Add</button>
         <div class="sidebar-sortDropdown">
           <button class="tag-button-group-item" @click.stop="sortTagsDropdownVisible = !sortTagsDropdownVisible"><i class="fa fa-sort"></i> Sort</button>
-          <sort-tags-dropdown :visible="sortTagsDropdownVisible" v-on-clickaway="sortTagsDropdownVisible = false"></sort-tags-dropdown>
+          <sort-tags-dropdown :visible="sortTagsDropdownVisible" v-on-clickaway="hideSortTagsDropdown"></sort-tags-dropdown>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
 <script>
 import Vue from 'vue'
 // import VueAnimatedList from 'vue-animated-list'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import { mixin as clickaway } from 'vue-clickaway'
 import dragula from 'dragula'
@@ -64,7 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapGetters([
       'newTag',
       'tags',
       'currentTag',
@@ -72,38 +72,6 @@ export default {
     ])
   },
   created () {
-    let sortMap = []
-    if (!this.drake) {
-      this.drake = dragula([this.$refs.tagList]).on('drop', (el, target, source, sibling) => {
-        sortMap = [].slice.call(source.children).map(function (el, index) {
-          return {
-            id: el.dataset.id,
-            sort_order: index
-          }
-        })
-        this.reorderTags(sortMap)
-      })
-    }
-
-    this.$refs.tag.addEventListener('dragover', function (e) {
-      e.preventDefault()
-      e.stopPropagation()
-      e.target.classList.add('dragging')
-    }, false)
-    this.$refs.tag.addEventListener('dragleave', function (e) {
-      e.preventDefault()
-      e.stopPropagation()
-      e.target.classList.remove('dragging')
-    }, false)
-    this.$refs.tag.addEventListener('drop', (e) => {
-      const dropData = JSON.parse(e.dataTransfer.getData('text'))
-      const tagId = e.currentTarget.dataset.id
-      e.preventDefault()
-      e.stopPropagation()
-      e.target.classList.remove('dragging')
-      this.tagStarWithData(dropData, tagId)
-    }, false)
-
     this.fetchTags().then(() => {
       if (this.$route.params.tag) {
         const tag = this.tags.find((tag) => {
@@ -113,12 +81,74 @@ export default {
           this.setCurrentTag(tag)
         }
       }
+      let sortMap = []
+      this.drake = dragula([document.querySelector('.sidebar-tags')]).on('drop', (el, target, source, sibling) => {
+        sortMap = Array.from(source.children).map(function (el, index) {
+          return {
+            id: el.dataset.id,
+            sort_order: index
+          }
+        })
+        this.reorderTags(sortMap)
+      })
+      Array.from(document.querySelectorAll('.dashboard-list-item.tag')).forEach((tagItem) => {
+        tagItem.addEventListener('dragover', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.target.classList.add('dragging')
+        }, false)
+        tagItem.addEventListener('dragleave', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.target.classList.remove('dragging')
+        }, false)
+        tagItem.addEventListener('drop', (e) => {
+          const dropData = JSON.parse(e.dataTransfer.getData('text'))
+          const tagId = e.currentTarget.dataset.id
+          e.preventDefault()
+          e.stopPropagation()
+          e.target.classList.remove('dragging')
+          this.tagStarWithData(dropData, tagId)
+        }, false)
+      })
     }).catch((errors) => {
       this.$bus.$emit('NOTIFICATION', 'There was an error fetching your tags.', 'error')
     })
+
+    this.$bus.$on('TAGS_SORTED', (sorter) => {
+      this.sortTagsDropdownVisible = false
+      let sortedTags = []
+      let sortMap = []
+      switch (sorter) {
+        case 'ALPHA_ASC':
+          sortedTags = orderBy(this.tags, ['name'], ['asc'])
+          break
+        case 'ALPHA_DESC':
+          sortedTags = orderBy(this.tags, ['name'], ['desc'])
+          break
+        case 'STARS_ASC':
+          sortedTags = orderBy(this.tags, ['stars_count'], ['asc'])
+          break
+        case 'STARS_DESC':
+          sortedTags = orderBy(this.tags, ['stars_count'], ['desc'])
+          break
+        default:
+          sortedTags = orderBy(this.tags, ['name'], ['asc'])
+          break
+      }
+      sortMap = sortedTags.map((tag, index) => {
+        return {
+          id: tag.id,
+          sort_order: index
+        }
+      })
+      this.reorderTags(sortMap)
+    })
   },
   destroyed () {
-    this.drake.destroy()
+    if (this.drake) {
+      this.drake.destroy()
+    }
   },
   methods: {
     ...mapActions([
@@ -150,16 +180,16 @@ export default {
       this.tagStar(starData)
     },
     setTag: function (tag) {
-      this.$route.router.push(`/dashboard/tag/${tag.slug}`)
+      this.$router.push(`/dashboard/tag/${tag.slug}`)
     },
     resetTag: function () {
-      this.$route.router.push('/dashboard')
+      this.$router.push('/dashboard')
     },
     viewingUntagged () {
-      return window.location.pathname.match(/^\/dashboard\/untagged/g) !== null
+      return this.$route.fullPath.match(/^\/dashboard\/untagged/g) !== null
     },
     showUntagged () {
-      this.$route.router.push('/dashboard/untagged')
+      this.$router.push('/dashboard/untagged')
     },
     refreshStars () {
       this.$bus.$emit('STATUS', 'Loading stars...')
@@ -181,37 +211,14 @@ export default {
           this.$bus.$emit('NOTIFICATION', 'There was an error fetching your stars from GitHub.', 'error')
         }
       })
+    },
+    hideSortTagsDropdown() {
+      this.sortTagsDropdownVisible = false
     }
   },
   events: {
     'TAGS_SORTED': function (sorter) {
-      this.sortTagsDropdownVisible = false
-      let sortedTags = []
-      let sortMap = []
-      switch (sorter) {
-        case 'ALPHA_ASC':
-          sortedTags = orderBy(this.tags, ['name'], ['asc'])
-          break
-        case 'ALPHA_DESC':
-          sortedTags = orderBy(this.tags, ['name'], ['desc'])
-          break
-        case 'STARS_ASC':
-          sortedTags = orderBy(this.tags, ['stars_count'], ['asc'])
-          break
-        case 'STARS_DESC':
-          sortedTags = orderBy(this.tags, ['stars_count'], ['desc'])
-          break
-        default:
-          sortedTags = orderBy(this.tags, ['name'], ['asc'])
-          break
-      }
-      sortMap = sortedTags.map((tag, index) => {
-        return {
-          id: tag.id,
-          sort_order: index
-        }
-      })
-      this.reorderTags(sortMap)
+
     }
   }
 }

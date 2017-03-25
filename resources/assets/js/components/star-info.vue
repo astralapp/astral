@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import TagEditor from './tag-editor.vue'
 import StarNotesEditor from './star-notes-editor.vue'
 import { mixin as clickaway } from 'vue-clickaway'
@@ -40,6 +40,10 @@ import { mixin as clickaway } from 'vue-clickaway'
 export default {
   name: 'StarInfo',
   mixins: [clickaway],
+  components: {
+    'tag-editor': TagEditor,
+    'star-notes-editor': StarNotesEditor
+  },
   data () {
     return {
       tagEditorShowing: false,
@@ -51,7 +55,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapGetters([
       'readme',
       'currentStar',
       'tags'
@@ -79,10 +83,34 @@ export default {
       })
     }
   },
+  created () {
+    this.$bus.$on('SYNC_TAGS', tags => this.syncTags(tags))
+    this.$bus.$on('NOTES_SAVED', (notes) => { this.saveNotes(notes) })
+    this.$bus.$on('HIDE_TAG_DROPDOWN', () => {
+      this.tagEditorShowing = false
+    })
+    this.$bus.$on('STAR_CHANGED', () => {
+      this.noteEditorShowing = false
+      this.readmeLoading = true
+      this.fetchReadme(this.currentStar.full_name).then(() => {
+        this.readmeError = false
+        this.readmeLoading = false
+        this.readmeNotFound = false
+      }).catch((errors) => {
+        if(errors.message == 'Not Found') {
+          this.readmeNotFound = true
+        } else {
+          this.readmeError = true
+          this.$bus.$emit('NOTIFICATION', 'Unable to fetch readme from GitHub.', 'error')
+        }
+        this.readmeLoading = false
+      })
+    })
+  },
   methods: {
     ...mapActions({
       editStarNotes: 'editStarNotes',
-      fetchReadme: 'editStarNotes',
+      fetchReadme: 'fetchReadme',
       sync: 'syncTags'
     }),
     showTagEditor () { this.tagEditorShowing = true },
@@ -101,7 +129,7 @@ export default {
       this.hideTagEditor()
     },
     saveNotes (notes) {
-      this.editStarNotes(this.currentStar, notes).catch((errors) => {
+      this.editStarNotes({star: this.currentStar, text: notes}).catch((errors) => {
         this.$bus.$emit('NOTIFICATION', 'There was an error saving your notes for this star.', 'error')
       })
     },
@@ -111,39 +139,6 @@ export default {
         document.getElementById('txtGitHubCloneURL').select()
       }, 0)
     }
-  },
-  events: {
-    'SYNC_TAGS': function (tags) {
-      this.syncTags(tags)
-    },
-    'NOTES_SAVED': function (notes) {
-      this.saveNotes(notes)
-    },
-    'STAR_CHANGED': function () {
-      this.noteEditorShowing = false
-      this.readmeLoading = true
-      this.fetchReadme(this.currentStar.full_name).then(() => {
-        this.readmeError = false
-        this.readmeLoading = false
-        this.readmeNotFound = false
-      }).catch((errors) => {
-        if(errors.message == 'Not Found') {
-            this.readmeNotFound = true
-        } else {
-            this.readmeError = true
-            this.$bus.$emit('NOTIFICATION', 'Unable to fetch readme from GitHub.', 'error')
-        }
-        this.readmeLoading = false
-      })
-      this.$bus.$emit('STAR_CHANGED')
-    },
-    'HIDE_TAG_DROPDOWN': function () {
-      this.tagEditorShowing = false
-    }
-  },
-  components: {
-    'tag-editor': TagEditor,
-    'star-notes-editor': StarNotesEditor
   }
 }
 </script>

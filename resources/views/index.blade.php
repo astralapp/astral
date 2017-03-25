@@ -11,11 +11,12 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
   {!! Html::style('css/vendor/select2.min.css') !!}
   {!! Html::style('css/vendor/github.css') !!}
-  <link rel="stylesheet" href="{{ elixir("css/app.css") }}">
+  <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 <div id="app"></div>
-<script src="{{ elixir("js/app.bundle.js") }}"></script>
+<script src="/js/app.js"></script>
+{{-- <script src="{{ elixir("js/app.bundle.js") }}"></script> --}}
 @if (App::environment('production'))
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -13,6 +13,12 @@ const state = {
   }
 }
 
+const getters = {
+  searchQuery: state => state.searchQuery,
+  tokenizedSearchQuery: state => state.tokenizedSearchQuery
+}
+
+
 const mutations = {
   [SET_SEARCH_QUERY] (state, query) {
     state.searchQuery = query
@@ -48,6 +54,7 @@ const actions = {
 
 export default {
   state,
+  getters,
   mutations,
   actions
 }

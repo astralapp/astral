@@ -2,18 +2,18 @@
   <div class="dashboard-star-container">
     <div class="dashboard-repos">
       <ul class="repos">
-        <li class="repo" v-for="(repo, index) in starsList" :key="repo.id" draggable="true" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" ref="repo" :data-index="index">
-          <h3 class="repo-name" v-once="repo.full_name"></h3>
-          <div class="repo-description" v-once="repo.description"></div>
+        <li class="repo" v-for="(repo, index) in githubStars" :key="repo.id" draggable="true" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" ref="repo" :data-index="index">
+          <h3 class="repo-name" v-once>{{ repo.full_name }}</h3>
+          <div class="repo-description" v-once="">{{ repo.description }}</div>
             <transition-group name="star-tag" tag="ul" class="repo-tags">
               <li v-for="tag in repo.tags" :key="tag.slug" @click.stop="setTag(tag)">
                 {{ tag.name }}
               </li>
             </transition-group>
           <div class="repo-stats">
-            <div class="repo-stat stars"><i class="fa fa-star"></i> <span v-once="repo.stargazers_count"></span></div>
-            <div class="repo-stat forks"><i class="fa fa-code-fork"></i> <span v-once="repo.forks_count"></span></div>
-            <div class="repo-stat link"><a :href="repo.html_url" target="_blank" @click.stop>View on GitHub</a></div>
+            <div class="repo-stat stars"><i class="fa fa-star"></i> <span v-once>{{ repo.stargazers_count }}</span></div>
+            <div class="repo-stat forks"><i class="fa fa-code-fork"></i> <span v-once>{{ repo.forks_count }}</span></div>
+            <div class="repo-stat link"><a :href="repo.html_url" target="_blank" rel="noopener" @click.stop>View on GitHub</a></div>
           </div>
         </li>
       </ul>
@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import StarInfo from './star-info.vue'
 import galileo from './../filters/galileo.js'
 
@@ -34,7 +34,7 @@ export default {
     'star-info': StarInfo
   },
   computed: {
-    ...mapState({
+    ...mapGetters({
       user: 'user',
       githubStars: 'githubStars',
       currentTag: 'currentTag',
@@ -50,16 +50,17 @@ export default {
     }
   },
   created () {
-    this.$refs.repo.addEventListener('dragstart', function (e) {
-      const data = JSON.stringify(e.currentTarget.dataset.index)
-      e.dataTransfer.effectAllowed = 'move'
-      e.dataTransfer.setData('text/plain', data)
-    }, false)
-
     this.$bus.$emit('STATUS', 'Loading stars...')
 
-    this.fetchGithubStars().then((res) => {
+    this.fetchStars().then((res) => {
       this.$bus.$emit('STATUS', '')
+      Array.from(document.querySelectorAll('.repo')).forEach((repo) => {
+        repo.addEventListener('dragstart', function (e) {
+          const data = JSON.stringify(e.currentTarget.dataset.index)
+          e.dataTransfer.effectAllowed = 'move'
+          e.dataTransfer.setData('text/plain', data)
+        }, false)
+      })
     }).catch((errors) => {
       this.$bus.$emit('STATUS', '')
       this.$bus.$emit('NOTIFICATION', 'There was an error fetching your stars from GitHub.', 'error')
@@ -67,7 +68,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchGithubStars',
+      'fetchStars',
       'setCurrentStar',
       'setCurrentTag'
     ]),

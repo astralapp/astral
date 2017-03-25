@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-editTagTrigger" @click.self="tagEditorShowing = !tagEditorShowing" v-on-clickaway="tagEditorShowing = false">
+  <div class="dashboard-editTagTrigger" @click.self="tagEditorShowing = !tagEditorShowing" v-on-clickaway="hideTagEditor">
     <i class="fa fa-cog"></i>
     <transition name="dashboardHeader-editTagDropdown">
       <div class="dashboardHeader-editTagDropdown" v-show="tagEditorShowing">
@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { mixin as clickaway } from 'vue-clickaway'
 
 export default {
@@ -24,7 +24,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapGetters([
       'currentTag'
     ])
   },
@@ -33,11 +33,14 @@ export default {
       'editTagName',
       'deleteTag'
     ]),
+    hideTagEditor () {
+      this.tagEditorShowing = false
+    },
     doEditTagName (id) {
       const name = this.$refs.tagName.value
       this.editTagName(id, name).then((res) => {
         this.$bus.$emit('NOTIFICATION', `Tag renamed to ${name}.`)
-        this.$route.router.replace(`/dashboard/tag/${res.slug}`)
+        this.$router.replace(`/dashboard/tag/${res.slug}`)
       }).catch((errors) => {
         if (errors.name){
           this.$bus.$emit('NOTIFICATION', errors.name[0], 'error')
@@ -52,7 +55,7 @@ export default {
         this.deleteTag(this.currentTag.id).then((res) => {
           this.$bus.$emit('STATUS', '')
           this.$bus.$emit('NOTIFICATION', `${this.currentTag.name} tag successfully deleted.`)
-          this.$route.router.push('/dashboard')
+          this.$router.push('/dashboard')
         }).catch((errors) => {
           this.$bus.$emit('STATUS', '')
           this.$bus.$emit('NOTIFICATION', 'There was an error deleting this tag.', 'error')

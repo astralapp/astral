@@ -24,20 +24,18 @@
         error: ''
       }
     },
-    route: {
-      data ({ to }) {
-        if (to.query.error) {
-          this.authenticated = false
-          this.error = 'Unable to authenticate user.'
-        } else {
-          if (to.query.token && to.query.access_token) {
-            this.authenticated = true
-            ls('jwt', to.query.token)
-            ls('access_token', to.query.access_token)
-            setTimeout(() => {
-              this.$route.router.push('/dashboard')
-            }, 1)
-          }
+    created() {
+      if (this.$route.query.error) {
+        this.authenticated = false
+        this.error = 'Unable to authenticate user.'
+      } else {
+        if (this.$route.query.token && this.$route.query.access_token) {
+          this.authenticated = true
+          ls('jwt', this.$route.query.token)
+          ls('access_token', this.$route.query.access_token)
+          setTimeout(() => {
+            this.$router.push('dashboard')
+          }, 1)
         }
       }
     }

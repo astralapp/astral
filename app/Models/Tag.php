@@ -26,7 +26,7 @@ class Tag extends Model
      */
     public function user()
     {
-        return $this->belongsTo(\Astral\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -34,7 +34,7 @@ class Tag extends Model
      */
     public function stars()
     {
-        return $this->belongsToMany(\Astral\Models\Star::class);
+        return $this->belongsToMany(Star::class);
     }
 
     /**
@@ -52,7 +52,7 @@ class Tag extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-     
+    public function scopeWithStars($query)
     {
         return $query->with('stars')->withCount('stars')->where('user_id', Auth::id())->orderBy('sort_order', 'asc');
     }

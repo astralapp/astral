@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     public function stars()
     {
-        return $this->hasMany(\Astral\Models\Star::class);
+        return $this->hasMany(Star::class);
     }
 
     /**
@@ -27,7 +27,7 @@ class User extends Authenticatable
      */
     public function tags()
     {
-        return $this->hasMany(\Astral\Models\Tag::class);
+        return $this->hasMany(Tag::class);
     }
 
     public function mapGithubUser($githubUser)

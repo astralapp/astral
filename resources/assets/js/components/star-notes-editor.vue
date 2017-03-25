@@ -20,9 +20,9 @@ export default {
       notesSaved: false
     }
   },
-  created () {
+  mounted () {
     this.editor = new SimpleMDE({
-      element: this.$refs.editor,
+      element: document.querySelector('.repo-note-editor'),
       initialValue: this.notes,
       forceSync: true,
       autoDownloadFontAwesome: false,
@@ -48,14 +48,6 @@ export default {
       setTimeout(() => {
         this.notesSaved = false
       }, 3000)
-    }
-  },
-  events: {
-    'STAR_CHANGED': function () {
-      //  Set new notes
-      Vue.nextTick(() => {
-        this.editor.value(this.notes)
-      })
     }
   }
 }

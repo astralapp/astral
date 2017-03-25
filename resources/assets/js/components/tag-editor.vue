@@ -1,6 +1,6 @@
 <template>
   <div class="tag-editor dropdown">
-    <select multiple ref="tags" style="width:216px">
+    <select multiple ref="tags" style="width:216px" class="tag-editor-items">
       <option v-if="!tags.length" value="-1"></option>
       <option v-for="tag in tags" :value="tag.name" :selected="tag.selected">{{ tag.text }}</option>
     </select>
@@ -22,7 +22,7 @@ export default {
   },
   mounted () {
     Vue.nextTick(() => {
-      this.$refs.tags.select2({
+      $('.tag-editor-items').select2({
         tags: true,
         tokenSeparators: [','],
         minimumInputLength: 2,

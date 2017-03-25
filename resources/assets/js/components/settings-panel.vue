@@ -14,17 +14,9 @@
             Automatically adds a tag based on the repo's base language.
           </div> -->
           <div class="settingsPanel-settingControl">
-            <toggle-switch :checked="user.autotag" key="languageAutotag" :change="setUserAutoTagPref"></toggle-switch>
+            <toggle-switch :checked="user.autotag" :ukey="'languageAutotag'" :change="setUserAutoTagPref"></toggle-switch>
           </div>
         </div>
-        <!-- <div class="settingsPanel-row">
-          <div class="settingsPanel-settingName">
-            Use Night Theme&nbsp;&nbsp;<i class="fa fa-moon-o"></i>
-          </div>
-          <div class="settingsPanel-settingControl">
-            <toggle-switch :checked="nightTheme" key="nightTheme" :change=""></toggle-switch>
-          </div>
-        </div> -->
         <div class="settingsPanel-row">
           <div class="settingsPanel-settingName">
             Export Stars As JSON
@@ -42,7 +34,7 @@
 </template>
 <script>
 import ls from 'local-storage'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ToggleSwitch from './toggle-switch.vue'
 export default {
   name: 'SettingsPanel',
@@ -55,7 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapGetters([
       'user'
     ])
   },

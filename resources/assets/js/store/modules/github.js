@@ -28,6 +28,15 @@ const state = {
   cachedPages: 0
 }
 
+const getters = {
+  githubStars: state => state.githubStars,
+  currentStar: state => state.currentStar,
+  readme: state => state.readme,
+  totalPages: state => state.totalPages,
+  cachedPages: state => state.cachedPages
+}
+
+
 const mutations = {
   [APPEND_GITHUB_STARS] (state, stars) {
     state.githubStars = state.githubStars.concat(stars)
@@ -38,13 +47,14 @@ const mutations = {
   [SET_CURRENT_STAR] (state, star) {
     state.currentStar = star
   },
-  [SET_REPO_TAGS] (state, id, tags) {
+  [SET_REPO_TAGS] (state, {id, tags}) {
     const repoIndex = state.githubStars.findIndex(repo => repo.id === id)
     state.githubStars[repoIndex].tags = tags
   },
-  [SET_REPO_NOTES] (state, id, notes) {
+  [SET_REPO_NOTES] (state, {id, notes}) {
     const repoIndex = state.githubStars.findIndex(repo => repo.id === id)
     state.githubStars[repoIndex].notes = notes
+    state.currentStar.notes = notes
   },
   [SET_TOTAL_PAGES] (state, count) {
     state.totalPages = count
@@ -71,7 +81,7 @@ const mutations = {
       }
     })
   },
-  [EDIT_TAG_NAMES_ON_STARS] (state, id, newTag) {
+  [EDIT_TAG_NAMES_ON_STARS] (state, {id, newTag}) {
     state.githubStars = state.githubStars.map((star) => {
       if (star.tags && star.tags.length) {
         const tagIndex = star.tags.findIndex(tag => tag.id === id)
@@ -93,7 +103,7 @@ const actions = {
         if (refresh) {
           commit(SET_GITHUB_STARS, [])
         }
-        data = res.data.message
+        const data = res.message
         if (data.stars.page_count) {
           commit(SET_TOTAL_PAGES, data.stars.page_count)
         }
@@ -133,11 +143,22 @@ const actions = {
   },
   setCurrentStar ({ commit }, star) {
     commit(SET_CURRENT_STAR, star)
+  },
+  editStarNotes ({ commit }, {star, text}) {
+    return new Promise((resolve, reject) => {
+      Stars.editStarNotes(star, text).then((res) => {
+        commit(SET_REPO_NOTES, { id: res.message.repo_id, notes: res.message.notes })
+        resolve(res.message.notes)
+      }, (res) => {
+        reject(res)
+      })
+    })
   }
 }
 
 export default {
   state,
+  getters,
   actions,
   mutations
 }

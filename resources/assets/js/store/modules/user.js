@@ -12,6 +12,10 @@ const state = {
   user: {}
 }
 
+const getters = {
+  user: state => state.user
+}
+
 const mutations = {
   [SET_USER] (state, user) {
     state.user = user
@@ -43,6 +47,7 @@ const actions = {
 
 export default {
   state,
+  getters,
   actions,
   mutations
 }

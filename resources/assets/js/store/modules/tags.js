@@ -30,6 +30,13 @@ const state = {
   tagFilter: 'ALL'
 }
 
+const getters = {
+  newTag: state => state.newTag,
+  tags: state => state.tags,
+  currentTag: state => state.currentTag,
+  tagFilter: state => state.tagFilter
+}
+
 const mutations = {
   [ADD_TAG] (state, tag) {
     state.tags = state.tags.concat([tag])
@@ -90,7 +97,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       Tags.sync(repo, tags).then((res) => {
         commit(SET_CURRENT_STAR, state.github.githubStars.find(repo => repo.id === res.message.star.repo_id))
-        commit(SET_REPO_TAGS, res.message.star.repo_id, res.message.star.tags)
+        commit(SET_REPO_TAGS, {id: res.message.star.repo_id, tags: res.message.star.tags})
         commit(SET_TAGS, res.message.tags)
         resolve(res.message)
       }, (res) => {
@@ -104,7 +111,7 @@ const actions = {
         commit(SET_TAGS, res.message.tags)
         commit(SET_CURRENT_TAG, res.message.tag)
         setTimeout(() => {
-          commit(EDIT_TAG_NAMES_ON_STARS, id, res.message.tag)
+          commit(EDIT_TAG_NAMES_ON_STARS, {id: id, newTag: res.message.tag})
           resolve(res.message.tag)
         }, 0)
       }, (res) => {
@@ -127,6 +134,7 @@ const actions = {
     commit(SET_CURRENT_TAG, tag)
   },
   setTagFilter ({ commit }, filter) {
+    console.log('Filter: ', filter);
     commit(SET_TAG_FILTER, filter)
   },
   resetCurrentTag ({ commit }) {
@@ -136,6 +144,7 @@ const actions = {
 
 export default {
   state,
+  getters,
   actions,
   mutations
 }

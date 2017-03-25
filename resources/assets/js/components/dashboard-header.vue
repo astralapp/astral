@@ -15,12 +15,12 @@
       <img :src="user.avatar_url" :alt="user.name" class="dashboard-userDropdownAvatar"/>
       <span class="dashboard-userDropdownName">{{ user.username }}</span>
       <i class="fa fa-chevron-down"></i>
-      <user-dropdown :visible="userDropdownVisible" v-on-clickaway="userDropdownVisible = false"></user-dropdown>
+      <user-dropdown :visible="userDropdownVisible" v-on-clickaway="hideUserDropdown"></user-dropdown>
     </div>
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import EditTagDropdown from "./edit-tag-dropdown.vue"
 import UserDropdown from "./user-dropdown.vue"
 import { mixin as clickaway } from "vue-clickaway"
@@ -40,14 +40,15 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapGetters({
       user: 'user',
       currentTag: 'currentTag',
       tagFilter: 'tagFilter',
       query: 'searchQuery'
     }),
     currentTagName () {
-      if (Object.keys(this.currentTag).length) {
+      // return "All Stars"
+      if (!!Object.keys(this.currentTag).length) {
         return this.currentTag.name
       } else {
         return this.tagFilter === "UNTAGGED" ? "Untagged" : "All Stars"
@@ -62,20 +63,19 @@ export default {
       }
     }
   },
+  created() {
+    this.$bus.$on('STATUS', message => this.status = message)
+    this.$bus.$on('IS_VIEWING_UNTAGGED', isViewing => this.viewingUntagged = isViewing)
+  },
   methods: {
     ...mapActions([
       'setSearchQuery'
     ]),
     currentTagExists () {
-      return !!(Object.keys(this.currentTag).length)
-    }
-  },
-  events: {
-    "STATUS": function (message) {
-      this.status = message
+      return !!Object.keys(this.currentTag).length
     },
-    "IS_VIEWING_UNTAGGED": function (isViewing) {
-      this.viewingUntagged = isViewing
+    hideUserDropdown() {
+      this.userDropdownVisible = false
     }
   }
 }

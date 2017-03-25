@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import ls from 'local-storage'
 import SettingsPanel from './settings-panel.vue'
 import DashboardHeader from './dashboard-header.vue'
@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapGetters([
       'tags',
       'user'
     ])
@@ -50,44 +50,42 @@ export default {
     if (ls('jwt')) {
       this.fetchUser()
     } else {
-      this.$route.router.push('/auth')
+      this.$router.push('/auth')
     }
     window.addEventListener('keyup', (e) => {
       if (e.keyCode === 27) {
         this.$bus.$emit('HIDE_SETTINGS_PANEL')
       }
     })
-  },
-  events: {
-    'SHOW_SETTINGS_PANEL': function () {
-      this.settingsPanelShowing = true
-    },
-    'HIDE_SETTINGS_PANEL': function () {
-      this.settingsPanelShowing = false
-    }
-  },
-  route: {
-    data ({ to }) {
-      if (this.$route.path.match(/^\/dashboard\/untagged/g) !== null) {
+
+    this.$bus.$on('SHOW_SETTINGS_PANEL', () => { this.settingsPanelShowing = true })
+    this.$bus.$on('HIDE_SETTINGS_PANEL', () => { this.settingsPanelShowing = false })
+
+    this.$router.afterEach((to, from) => {
+      console.log(to)
+      if (to.path.match(/^\/dashboard\/untagged/g) !== null) {
         this.resetCurrentTag()
         this.setTagFilter('UNTAGGED')
         return true
       }
       if (this.tags.length) {
-        if (this.$route.params.tag) {
+        if (typeof to.params.tag !== 'undefined' ) {
           const tag = this.tags.find((tag) => {
-            return tag.slug === this.$route.params.tag
+            return tag.slug === to.params.tag
           })
           if (tag) {
             this.setTagFilter('TAG')
             this.setCurrentTag(tag)
+          } else {
+            this.setTagFilter('ALL')
+            this.resetCurrentTag()
           }
         } else {
           this.setTagFilter('ALL')
           this.resetCurrentTag()
         }
       }
-    }
+    })
   }
 }
 </script>

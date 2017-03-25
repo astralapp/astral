@@ -18767,9 +18767,9 @@ module.exports = accessor;
 
 "use strict";
 /* unused harmony export Store */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapState; });
+/* unused harmony export mapState */
 /* unused harmony export mapMutations */
-/* unused harmony export mapGetters */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapGetters; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return mapActions; });
 /**
  * vuex v2.2.1
@@ -20025,74 +20025,69 @@ const SET_TOKENIZED_SEARCH = "SET_TOKENIZED_SEARCH";
 var Vue = __webpack_require__(2);
 Vue = 'default' in Vue ? Vue['default'] : Vue;
 
-var version = '1.2.0';
+var version = '2.1.0';
 
-var compatible = (/^1\./).test(Vue.version);
+var compatible = (/^2\./).test(Vue.version);
 if (!compatible) {
-  Vue.util.warn('VueClickaway ' + version + ' only supports Vue 1.x, and does not support Vue ' + Vue.version);
+  Vue.util.warn('VueClickaway ' + version + ' only supports Vue 2.x, and does not support Vue ' + Vue.version);
+}
+
+
+
+// @SECTION: implementation
+
+var HANDLER = '_vue_clickaway_handler';
+
+function bind(el, binding) {
+  unbind(el);
+
+  var callback = binding.value;
+  if (typeof callback !== 'function') {
+    if (process.env.NODE_ENV !== 'production') {
+      Vue.util.warn(
+        'v-' + binding.name + '="' +
+        binding.expression + '" expects a function value, ' +
+        'got ' + callback
+      );
+    }
+    return;
+  }
+
+  // @NOTE: Vue binds directives in microtasks, while UI events are dispatched
+  //        in macrotasks. This causes the listener to be set up before
+  //        the "origin" click event (the event that lead to the binding of
+  //        the directive) arrives at the document root. To work around that,
+  //        we ignore events until the end of the "initial" macrotask.
+  // @REFERENCE: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
+  // @REFERENCE: https://github.com/simplesmiler/vue-clickaway/issues/8
+  var initialMacrotaskEnded = false;
+  setTimeout(function() {
+    initialMacrotaskEnded = true;
+  }, 0);
+
+  el[HANDLER] = function(ev) {
+    // @NOTE: IE 5.0+
+    // @REFERENCE: https://developer.mozilla.org/en/docs/Web/API/Node/contains
+    if (initialMacrotaskEnded && !el.contains(ev.target)) {
+      return callback(ev);
+    }
+  };
+
+  document.documentElement.addEventListener('click', el[HANDLER], false);
+}
+
+function unbind(el) {
+  document.documentElement.removeEventListener('click', el[HANDLER], false);
+  delete el[HANDLER];
 }
 
 var directive = {
-
-  acceptStatement: true,
-  priority: 700,
-
-  bind: function() {
-    var self = this;
-
-    // @NOTE: Vue binds directives in microtasks, while UI events are dispatched
-    //        in macrotasks. This causes the listener to be set up before
-    //        the "origin" click event (the event that lead to the binding of
-    //        the directive) arrives at the document root. To work around that,
-    //        we ignore events until the end of the "initial" macrotask.
-    // @REFERENCE: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
-    // @REFERENCE: https://github.com/simplesmiler/vue-clickaway/issues/8
-    self.initialMacrotaskEnded = false;
-    setTimeout(function() {
-      self.initialMacrotaskEnded = true;
-    });
+  bind: bind,
+  update: function(el, binding) {
+    if (binding.value === binding.oldValue) return;
+    bind(el, binding);
   },
-
-  update: function(handler) {
-    if (typeof handler !== 'function') {
-      if (process.env.NODE_ENV !== 'production') {
-        Vue.util.warn(
-          this.name + '="' +
-          this.expression + '" expects a function value, ' +
-          'got ' + handler
-        );
-      }
-      return;
-    }
-
-    this.reset();
-
-    var self = this;
-    var el = this.el;
-    var scope = this._scope || this.vm;
-
-    this.handler = function(ev) {
-      // @NOTE: IE 5.0+
-      // @REFERENCE: https://developer.mozilla.org/en/docs/Web/API/Node/contains
-      if (self.initialMacrotaskEnded && !el.contains(ev.target)) {
-        scope.$event = ev;
-        var res = handler(ev);
-        scope.$event = null;
-        return res;
-      }
-    };
-
-    Vue.util.on(document.documentElement, 'click', this.handler);
-  },
-
-  reset: function() {
-    Vue.util.off(document.documentElement, 'click', this.handler);
-  },
-
-  unbind: function() {
-    this.reset();
-  },
-
+  unbind: unbind,
 };
 
 var mixin = {
@@ -20123,17 +20118,24 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 const client = {
   defaultHeaders: { "Authorization": `Bearer ${__WEBPACK_IMPORTED_MODULE_2_local_storage___default()("jwt")}` },
+  headers: { "Authorization": `Bearer ${__WEBPACK_IMPORTED_MODULE_2_local_storage___default()("jwt")}` },
   mergeHeaders: headers => {
-    return Object.assign({}, client.defaultHeaders, headers);
+    return Object.assign({}, client.headers, headers);
+  },
+  withoutAuth: () => {
+    client.headers = {};
+    return client;
   }
 };
 const httpMethods = ['get', 'post', 'put', 'delete'];
 httpMethods.forEach(verb => {
   client[verb] = (path, data = {}, headers = {}) => {
     return new Promise((resolve, reject) => {
-      __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http[verb](path, data, mergeHeaders(headers)).then(res => {
+      __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http[verb](path, data, { headers: client.mergeHeaders(headers) }).then(res => {
+        client.headers = client.defaultHeaders;
         resolve(res.data);
       }, res => {
+        client.headers = client.defaultHeaders;
         reject(res);
       });
     });
@@ -51457,20 +51459,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       error: ''
     };
   },
-  route: {
-    data({ to }) {
-      if (to.query.error) {
-        this.authenticated = false;
-        this.error = 'Unable to authenticate user.';
-      } else {
-        if (to.query.token && to.query.access_token) {
-          this.authenticated = true;
-          __WEBPACK_IMPORTED_MODULE_0_local_storage___default()('jwt', to.query.token);
-          __WEBPACK_IMPORTED_MODULE_0_local_storage___default()('access_token', to.query.access_token);
-          setTimeout(() => {
-            this.$route.router.push('/dashboard');
-          }, 1);
-        }
+  created() {
+    if (this.$route.query.error) {
+      this.authenticated = false;
+      this.error = 'Unable to authenticate user.';
+    } else {
+      if (this.$route.query.token && this.$route.query.access_token) {
+        this.authenticated = true;
+        __WEBPACK_IMPORTED_MODULE_0_local_storage___default()('jwt', this.$route.query.token);
+        __WEBPACK_IMPORTED_MODULE_0_local_storage___default()('access_token', this.$route.query.access_token);
+        setTimeout(() => {
+          this.$router.push('dashboard');
+        }, 1);
       }
     }
   }
@@ -51532,14 +51532,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       viewingUntagged: false
     };
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
     user: 'user',
     currentTag: 'currentTag',
     tagFilter: 'tagFilter',
     query: 'searchQuery'
   }), {
     currentTagName() {
-      if (Object.keys(this.currentTag).length) {
+      // return "All Stars"
+      if (!!Object.keys(this.currentTag).length) {
         return this.currentTag.name;
       } else {
         return this.tagFilter === "UNTAGGED" ? "Untagged" : "All Stars";
@@ -51554,19 +51555,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       }
     }
   }),
+  created() {
+    this.$bus.$on('STATUS', message => this.status = message);
+    this.$bus.$on('IS_VIEWING_UNTAGGED', isViewing => this.viewingUntagged = isViewing);
+  },
   methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapActions */])(['setSearchQuery']), {
     currentTagExists() {
       return !!Object.keys(this.currentTag).length;
-    }
-  }),
-  events: {
-    "STATUS": function (message) {
-      this.status = message;
     },
-    "IS_VIEWING_UNTAGGED": function (isViewing) {
-      this.viewingUntagged = isViewing;
+    hideUserDropdown() {
+      this.userDropdownVisible = false;
     }
-  }
+  })
 };
 
 /***/ }),
@@ -51653,40 +51653,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       drake: null
     };
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['newTag', 'tags', 'currentTag', 'tagFilter'])),
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['newTag', 'tags', 'currentTag', 'tagFilter'])),
   created() {
-    let sortMap = [];
-    if (!this.drake) {
-      this.drake = __WEBPACK_IMPORTED_MODULE_4_dragula___default()([this.$refs.tagList]).on('drop', (el, target, source, sibling) => {
-        sortMap = [].slice.call(source.children).map(function (el, index) {
-          return {
-            id: el.dataset.id,
-            sort_order: index
-          };
-        });
-        this.reorderTags(sortMap);
-      });
-    }
-
-    this.$refs.tag.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.target.classList.add('dragging');
-    }, false);
-    this.$refs.tag.addEventListener('dragleave', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.target.classList.remove('dragging');
-    }, false);
-    this.$refs.tag.addEventListener('drop', e => {
-      const dropData = JSON.parse(e.dataTransfer.getData('text'));
-      const tagId = e.currentTarget.dataset.id;
-      e.preventDefault();
-      e.stopPropagation();
-      e.target.classList.remove('dragging');
-      this.tagStarWithData(dropData, tagId);
-    }, false);
-
     this.fetchTags().then(() => {
       if (this.$route.params.tag) {
         const tag = this.tags.find(tag => {
@@ -51696,70 +51664,41 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
           this.setCurrentTag(tag);
         }
       }
+      let sortMap = [];
+      this.drake = __WEBPACK_IMPORTED_MODULE_4_dragula___default()([document.querySelector('.sidebar-tags')]).on('drop', (el, target, source, sibling) => {
+        sortMap = Array.from(source.children).map(function (el, index) {
+          return {
+            id: el.dataset.id,
+            sort_order: index
+          };
+        });
+        this.reorderTags(sortMap);
+      });
+      Array.from(document.querySelectorAll('.dashboard-list-item.tag')).forEach(tagItem => {
+        tagItem.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.target.classList.add('dragging');
+        }, false);
+        tagItem.addEventListener('dragleave', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.target.classList.remove('dragging');
+        }, false);
+        tagItem.addEventListener('drop', e => {
+          const dropData = JSON.parse(e.dataTransfer.getData('text'));
+          const tagId = e.currentTarget.dataset.id;
+          e.preventDefault();
+          e.stopPropagation();
+          e.target.classList.remove('dragging');
+          this.tagStarWithData(dropData, tagId);
+        }, false);
+      });
     }).catch(errors => {
       this.$bus.$emit('NOTIFICATION', 'There was an error fetching your tags.', 'error');
     });
-  },
-  destroyed() {
-    this.drake.destroy();
-  },
-  methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapActions */])(['fetchTags', 'fetchStars', 'addTag', 'tagStar', 'reorderTags', 'setCurrentTag']), {
-    doAddTag: function () {
-      const newTagName = this.newTag.name;
-      this.addTag().then(() => {
-        this.$bus.$emit('NOTIFICATION', `${newTagName} was created successfully.`);
-      }).catch(errors => {
-        if (errors.name) {
-          this.$bus.$emit('NOTIFICATION', errors.name[0], 'error');
-        } else {
-          this.$bus.$emit('NOTIFICATION', 'There was an error creating this tag.', 'error');
-        }
-      });
-    },
-    tagStarWithData: function (data, tagId) {
-      const starData = {
-        repoId: data.id,
-        repoName: data.full_name,
-        tagId
-      };
-      this.tagStar(starData);
-    },
-    setTag: function (tag) {
-      this.$route.router.push(`/dashboard/tag/${tag.slug}`);
-    },
-    resetTag: function () {
-      this.$route.router.push('/dashboard');
-    },
-    viewingUntagged() {
-      return window.location.pathname.match(/^\/dashboard\/untagged/g) !== null;
-    },
-    showUntagged() {
-      this.$route.router.push('/dashboard/untagged');
-    },
-    refreshStars() {
-      this.$bus.$emit('STATUS', 'Loading stars...');
-      this.refreshingStars = true;
-      this.fetchStars(1, 1, true).then(res => {
-        this.refreshingStars = false;
-        this.$bus.$emit('STATUS', '');
-      }).catch(error => {
-        error = JSON.parse(error);
-        this.refreshingStars = false;
-        this.$bus.$emit('STATUS', '');
-        // Check if user is throttled
-        if (error.response.status === 429) {
-          const secondsRemaining = parseInt(error.headers['retry-after'], 10);
-          const time = secondsRemaining >= 60 ? `${Math.round(secondsRemaining / 60)} minute(s)` : `${secondsRemaining} second(s)`;
 
-          this.$bus.$emit('NOTIFICATION', `You can only refresh your stars from GitHub once every 5 minutes. Please wait ${time}, and try again.`, 'error', 7000);
-        } else {
-          this.$bus.$emit('NOTIFICATION', 'There was an error fetching your stars from GitHub.', 'error');
-        }
-      });
-    }
-  }),
-  events: {
-    'TAGS_SORTED': function (sorter) {
+    this.$bus.$on('TAGS_SORTED', sorter => {
       this.sortTagsDropdownVisible = false;
       let sortedTags = [];
       let sortMap = [];
@@ -51787,7 +51726,73 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         };
       });
       this.reorderTags(sortMap);
+    });
+  },
+  destroyed() {
+    if (this.drake) {
+      this.drake.destroy();
     }
+  },
+  methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapActions */])(['fetchTags', 'fetchStars', 'addTag', 'tagStar', 'reorderTags', 'setCurrentTag']), {
+    doAddTag: function () {
+      const newTagName = this.newTag.name;
+      this.addTag().then(() => {
+        this.$bus.$emit('NOTIFICATION', `${newTagName} was created successfully.`);
+      }).catch(errors => {
+        if (errors.name) {
+          this.$bus.$emit('NOTIFICATION', errors.name[0], 'error');
+        } else {
+          this.$bus.$emit('NOTIFICATION', 'There was an error creating this tag.', 'error');
+        }
+      });
+    },
+    tagStarWithData: function (data, tagId) {
+      const starData = {
+        repoId: data.id,
+        repoName: data.full_name,
+        tagId
+      };
+      this.tagStar(starData);
+    },
+    setTag: function (tag) {
+      this.$router.push(`/dashboard/tag/${tag.slug}`);
+    },
+    resetTag: function () {
+      this.$router.push('/dashboard');
+    },
+    viewingUntagged() {
+      return this.$route.fullPath.match(/^\/dashboard\/untagged/g) !== null;
+    },
+    showUntagged() {
+      this.$router.push('/dashboard/untagged');
+    },
+    refreshStars() {
+      this.$bus.$emit('STATUS', 'Loading stars...');
+      this.refreshingStars = true;
+      this.fetchStars(1, 1, true).then(res => {
+        this.refreshingStars = false;
+        this.$bus.$emit('STATUS', '');
+      }).catch(error => {
+        error = JSON.parse(error);
+        this.refreshingStars = false;
+        this.$bus.$emit('STATUS', '');
+        // Check if user is throttled
+        if (error.response.status === 429) {
+          const secondsRemaining = parseInt(error.headers['retry-after'], 10);
+          const time = secondsRemaining >= 60 ? `${Math.round(secondsRemaining / 60)} minute(s)` : `${secondsRemaining} second(s)`;
+
+          this.$bus.$emit('NOTIFICATION', `You can only refresh your stars from GitHub once every 5 minutes. Please wait ${time}, and try again.`, 'error', 7000);
+        } else {
+          this.$bus.$emit('NOTIFICATION', 'There was an error fetching your stars from GitHub.', 'error');
+        }
+      });
+    },
+    hideSortTagsDropdown() {
+      this.sortTagsDropdownVisible = false;
+    }
+  }),
+  events: {
+    'TAGS_SORTED': function (sorter) {}
   }
 };
 
@@ -51838,7 +51843,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   components: {
     'star-info': __WEBPACK_IMPORTED_MODULE_1__star_info_vue___default.a
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({
     user: 'user',
     githubStars: 'githubStars',
     currentTag: 'currentTag',
@@ -51854,22 +51859,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }
   }),
   created() {
-    this.$refs.repo.addEventListener('dragstart', function (e) {
-      const data = JSON.stringify(e.currentTarget.dataset.index);
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', data);
-    }, false);
-
     this.$bus.$emit('STATUS', 'Loading stars...');
 
-    this.fetchGithubStars().then(res => {
+    this.fetchStars().then(res => {
       this.$bus.$emit('STATUS', '');
+      Array.from(document.querySelectorAll('.repo')).forEach(repo => {
+        repo.addEventListener('dragstart', function (e) {
+          const data = JSON.stringify(e.currentTarget.dataset.index);
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', data);
+        }, false);
+      });
     }).catch(errors => {
       this.$bus.$emit('STATUS', '');
       this.$bus.$emit('NOTIFICATION', 'There was an error fetching your stars from GitHub.', 'error');
     });
   },
-  methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapActions */])(['fetchGithubStars', 'setCurrentStar', 'setCurrentTag']), {
+  methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapActions */])(['fetchStars', 'setCurrentStar', 'setCurrentTag']), {
     starClicked(repo) {
       if (repo.id === this.currentStar.id) {
         return false;
@@ -51952,50 +51958,52 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       settingsPanelShowing: false
     };
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['tags', 'user'])),
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])(['tags', 'user'])),
   methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapActions */])(['fetchUser', 'setCurrentTag', 'setTagFilter', 'resetCurrentTag'])),
   created() {
     if (__WEBPACK_IMPORTED_MODULE_1_local_storage___default()('jwt')) {
       this.fetchUser();
     } else {
-      this.$route.router.push('/auth');
+      this.$router.push('/auth');
     }
     window.addEventListener('keyup', e => {
       if (e.keyCode === 27) {
         this.$bus.$emit('HIDE_SETTINGS_PANEL');
       }
     });
-  },
-  events: {
-    'SHOW_SETTINGS_PANEL': function () {
+
+    this.$bus.$on('SHOW_SETTINGS_PANEL', () => {
       this.settingsPanelShowing = true;
-    },
-    'HIDE_SETTINGS_PANEL': function () {
+    });
+    this.$bus.$on('HIDE_SETTINGS_PANEL', () => {
       this.settingsPanelShowing = false;
-    }
-  },
-  route: {
-    data({ to }) {
-      if (this.$route.path.match(/^\/dashboard\/untagged/g) !== null) {
+    });
+
+    this.$router.afterEach((to, from) => {
+      console.log(to);
+      if (to.path.match(/^\/dashboard\/untagged/g) !== null) {
         this.resetCurrentTag();
         this.setTagFilter('UNTAGGED');
         return true;
       }
       if (this.tags.length) {
-        if (this.$route.params.tag) {
+        if (typeof to.params.tag !== 'undefined') {
           const tag = this.tags.find(tag => {
-            return tag.slug === this.$route.params.tag;
+            return tag.slug === to.params.tag;
           });
           if (tag) {
             this.setTagFilter('TAG');
             this.setCurrentTag(tag);
+          } else {
+            this.setTagFilter('ALL');
+            this.resetCurrentTag();
           }
         } else {
           this.setTagFilter('ALL');
           this.resetCurrentTag();
         }
       }
-    }
+    });
   }
 };
 
@@ -52035,13 +52043,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       tagEditorShowing: false
     };
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['currentTag'])),
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])(['currentTag'])),
   methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapActions */])(['editTagName', 'deleteTag']), {
+    hideTagEditor() {
+      this.tagEditorShowing = false;
+    },
     doEditTagName(id) {
       const name = this.$refs.tagName.value;
       this.editTagName(id, name).then(res => {
         this.$bus.$emit('NOTIFICATION', `Tag renamed to ${name}.`);
-        this.$route.router.replace(`/dashboard/tag/${res.slug}`);
+        this.$router.replace(`/dashboard/tag/${res.slug}`);
       }).catch(errors => {
         if (errors.name) {
           this.$bus.$emit('NOTIFICATION', errors.name[0], 'error');
@@ -52056,7 +52067,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         this.deleteTag(this.currentTag.id).then(res => {
           this.$bus.$emit('STATUS', '');
           this.$bus.$emit('NOTIFICATION', `${this.currentTag.name} tag successfully deleted.`);
-          this.$route.router.push('/dashboard');
+          this.$router.push('/dashboard');
         }).catch(errors => {
           this.$bus.$emit('STATUS', '');
           this.$bus.$emit('NOTIFICATION', 'There was an error deleting this tag.', 'error');
@@ -52170,14 +52181,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -52192,7 +52195,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       exportUrl: `/api/auth/user/exportData?token=${__WEBPACK_IMPORTED_MODULE_0_local_storage___default()('jwt')}`
     };
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['user'])),
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['user'])),
   methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapActions */])(['setUserAutoTag']), {
     setUserAutoTagPref(e) {
       this.setUserAutoTag(e.target.checked);
@@ -52289,6 +52292,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = {
   name: 'StarInfo',
   mixins: [__WEBPACK_IMPORTED_MODULE_3_vue_clickaway__["mixin"]],
+  components: {
+    'tag-editor': __WEBPACK_IMPORTED_MODULE_1__tag_editor_vue___default.a,
+    'star-notes-editor': __WEBPACK_IMPORTED_MODULE_2__star_notes_editor_vue___default.a
+  },
   data() {
     return {
       tagEditorShowing: false,
@@ -52299,7 +52306,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       currentNotes: ''
     };
   },
-  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['readme', 'currentStar', 'tags']), {
+  computed: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])(['readme', 'currentStar', 'tags']), {
     notes() {
       if (this.currentStar && this.currentStar.hasOwnProperty('id')) {
         return this.currentStar.notes;
@@ -52323,9 +52330,35 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       });
     }
   }),
+  created() {
+    this.$bus.$on('SYNC_TAGS', tags => this.syncTags(tags));
+    this.$bus.$on('NOTES_SAVED', notes => {
+      this.saveNotes(notes);
+    });
+    this.$bus.$on('HIDE_TAG_DROPDOWN', () => {
+      this.tagEditorShowing = false;
+    });
+    this.$bus.$on('STAR_CHANGED', () => {
+      this.noteEditorShowing = false;
+      this.readmeLoading = true;
+      this.fetchReadme(this.currentStar.full_name).then(() => {
+        this.readmeError = false;
+        this.readmeLoading = false;
+        this.readmeNotFound = false;
+      }).catch(errors => {
+        if (errors.message == 'Not Found') {
+          this.readmeNotFound = true;
+        } else {
+          this.readmeError = true;
+          this.$bus.$emit('NOTIFICATION', 'Unable to fetch readme from GitHub.', 'error');
+        }
+        this.readmeLoading = false;
+      });
+    });
+  },
   methods: _extends({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapActions */])({
     editStarNotes: 'editStarNotes',
-    fetchReadme: 'editStarNotes',
+    fetchReadme: 'fetchReadme',
     sync: 'syncTags'
   }), {
     showTagEditor() {
@@ -52348,7 +52381,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       this.hideTagEditor();
     },
     saveNotes(notes) {
-      this.editStarNotes(this.currentStar, notes).catch(errors => {
+      this.editStarNotes({ star: this.currentStar, text: notes }).catch(errors => {
         this.$bus.$emit('NOTIFICATION', 'There was an error saving your notes for this star.', 'error');
       });
     },
@@ -52358,40 +52391,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         document.getElementById('txtGitHubCloneURL').select();
       }, 0);
     }
-  }),
-  events: {
-    'SYNC_TAGS': function (tags) {
-      this.syncTags(tags);
-    },
-    'NOTES_SAVED': function (notes) {
-      this.saveNotes(notes);
-    },
-    'STAR_CHANGED': function () {
-      this.noteEditorShowing = false;
-      this.readmeLoading = true;
-      this.fetchReadme(this.currentStar.full_name).then(() => {
-        this.readmeError = false;
-        this.readmeLoading = false;
-        this.readmeNotFound = false;
-      }).catch(errors => {
-        if (errors.message == 'Not Found') {
-          this.readmeNotFound = true;
-        } else {
-          this.readmeError = true;
-          this.$bus.$emit('NOTIFICATION', 'Unable to fetch readme from GitHub.', 'error');
-        }
-        this.readmeLoading = false;
-      });
-      this.$bus.$emit('STAR_CHANGED');
-    },
-    'HIDE_TAG_DROPDOWN': function () {
-      this.tagEditorShowing = false;
-    }
-  },
-  components: {
-    'tag-editor': __WEBPACK_IMPORTED_MODULE_1__tag_editor_vue___default.a,
-    'star-notes-editor': __WEBPACK_IMPORTED_MODULE_2__star_notes_editor_vue___default.a
-  }
+  })
 };
 
 /***/ }),
@@ -52430,9 +52430,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       notesSaved: false
     };
   },
-  created() {
+  mounted() {
     this.editor = new __WEBPACK_IMPORTED_MODULE_1_simplemde___default.a({
-      element: this.$refs.editor,
+      element: document.querySelector('.repo-note-editor'),
       initialValue: this.notes,
       forceSync: true,
       autoDownloadFontAwesome: false,
@@ -52458,14 +52458,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       setTimeout(() => {
         this.notesSaved = false;
       }, 3000);
-    }
-  },
-  events: {
-    'STAR_CHANGED': function () {
-      //  Set new notes
-      __WEBPACK_IMPORTED_MODULE_0_vue___default.a.nextTick(() => {
-        this.editor.value(this.notes);
-      });
     }
   }
 };
@@ -52506,7 +52498,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted() {
     __WEBPACK_IMPORTED_MODULE_0_vue___default.a.nextTick(() => {
-      this.$refs.tags.select2({
+      __WEBPACK_IMPORTED_MODULE_1_jquery___default()('.tag-editor-items').select2({
         tags: true,
         tokenSeparators: [','],
         minimumInputLength: 2,
@@ -52561,7 +52553,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = {
   name: "ToggleSwitch",
-  props: ["checked", "key", "change"]
+  props: ["checked", "ukey", "change"]
 };
 
 /***/ }),
@@ -52660,8 +52652,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_resource___default.a);
 
 const normalizeReadmeAssetUrls = readmeResponse => {
-  let readme = __WEBPACK_IMPORTED_MODULE_4_js_base64__["Base64"].decode(readmeResponse.data.content);
-  const branch = readmeResponse.data.url.split('?ref=')[1];
+  let readme = __WEBPACK_IMPORTED_MODULE_4_js_base64__["Base64"].decode(readmeResponse.content);
+  const branch = readmeResponse.url.split('?ref=')[1];
   const regex = /(!\[.*\])\(\/?(?!(http:\/\/)|(https:\/\/)|(\/))(.*)\)/igm;
   const replaceWith = `$1(https://github.com/${name}/blob/${branch}/$5?raw=true)`;
   return readme.replace(regex, replaceWith);
@@ -52674,19 +52666,19 @@ const normalizeReadmeAssetUrls = readmeResponse => {
     return __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].get(url, {}, { 'Access-Token': token });
   },
   fetchReadme(name) {
-    const token = __WEBPACK_IMPORTED_MODULE_3_local_storage___default()('access_token');
+    const accessToken = __WEBPACK_IMPORTED_MODULE_3_local_storage___default()('access_token');
     return new Promise((resolve, reject) => {
-      __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then(res => {
-        let readme = normalizeReadmeAssetUrls(res);
-        __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readme, { 'Content-Type': 'text/plain' }).then(res => {
-          const renderedReadme = res.data;
-          resolve(renderedReadme);
+      __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].withoutAuth().get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then(res => {
+        let readmeMarkdown = normalizeReadmeAssetUrls(res);
+        __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].withoutAuth().post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readmeMarkdown, { 'Content-Type': 'text/plain' }).then(res => {
+          const readme = res;
+          resolve(readme);
         });
       });
     });
   },
-  editStarNotes(star, notes) {
-    return __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].post('/api/stars/notes', { star, notes });
+  editStarNotes(star, text) {
+    return __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].post('/api/stars/notes', { star, text });
   },
   tagStar(data) {
     __WEBPACK_IMPORTED_MODULE_2__client__["a" /* default */].post('/api/stars/tag', data);
@@ -52788,6 +52780,11 @@ const state = {
   }
 };
 
+const getters = {
+  searchQuery: state => state.searchQuery,
+  tokenizedSearchQuery: state => state.tokenizedSearchQuery
+};
+
 const mutations = {
   [__WEBPACK_IMPORTED_MODULE_0__mutation_types_js__["a" /* SET_SEARCH_QUERY */]](state, query) {
     state.searchQuery = query;
@@ -52823,6 +52820,7 @@ const actions = {
 
 /* harmony default export */ __webpack_exports__["a"] = {
   state,
+  getters,
   mutations,
   actions
 };
@@ -52859,6 +52857,14 @@ const state = {
   cachedPages: 0
 };
 
+const getters = {
+  githubStars: state => state.githubStars,
+  currentStar: state => state.currentStar,
+  readme: state => state.readme,
+  totalPages: state => state.totalPages,
+  cachedPages: state => state.cachedPages
+};
+
 const mutations = {
   [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["n" /* APPEND_GITHUB_STARS */]](state, stars) {
     state.githubStars = state.githubStars.concat(stars);
@@ -52869,13 +52875,14 @@ const mutations = {
   [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["j" /* SET_CURRENT_STAR */]](state, star) {
     state.currentStar = star;
   },
-  [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["k" /* SET_REPO_TAGS */]](state, id, tags) {
+  [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["k" /* SET_REPO_TAGS */]](state, { id, tags }) {
     const repoIndex = state.githubStars.findIndex(repo => repo.id === id);
     state.githubStars[repoIndex].tags = tags;
   },
-  [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["p" /* SET_REPO_NOTES */]](state, id, notes) {
+  [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["p" /* SET_REPO_NOTES */]](state, { id, notes }) {
     const repoIndex = state.githubStars.findIndex(repo => repo.id === id);
     state.githubStars[repoIndex].notes = notes;
+    state.currentStar.notes = notes;
   },
   [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["q" /* SET_TOTAL_PAGES */]](state, count) {
     state.totalPages = count;
@@ -52902,7 +52909,7 @@ const mutations = {
       }
     });
   },
-  [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["l" /* EDIT_TAG_NAMES_ON_STARS */]](state, id, newTag) {
+  [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["l" /* EDIT_TAG_NAMES_ON_STARS */]](state, { id, newTag }) {
     state.githubStars = state.githubStars.map(star => {
       if (star.tags && star.tags.length) {
         const tagIndex = star.tags.findIndex(tag => tag.id === id);
@@ -52924,7 +52931,7 @@ const actions = {
         if (refresh) {
           commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["o" /* SET_GITHUB_STARS */], []);
         }
-        data = res.data.message;
+        const data = res.message;
         if (data.stars.page_count) {
           commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["q" /* SET_TOTAL_PAGES */], data.stars.page_count);
         }
@@ -52964,11 +52971,22 @@ const actions = {
   },
   setCurrentStar({ commit }, star) {
     commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["j" /* SET_CURRENT_STAR */], star);
+  },
+  editStarNotes({ commit }, { star, text }) {
+    return new __WEBPACK_IMPORTED_MODULE_3_es6_promise__["Promise"]((resolve, reject) => {
+      __WEBPACK_IMPORTED_MODULE_5__api_stars__["a" /* default */].editStarNotes(star, text).then(res => {
+        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["p" /* SET_REPO_NOTES */], { id: res.message.repo_id, notes: res.message.notes });
+        resolve(res.message.notes);
+      }, res => {
+        reject(res);
+      });
+    });
   }
 };
 
 /* harmony default export */ __webpack_exports__["a"] = {
   state,
+  getters,
   actions,
   mutations
 };
@@ -53005,6 +53023,13 @@ const state = {
   tags: [],
   currentTag: {},
   tagFilter: 'ALL'
+};
+
+const getters = {
+  newTag: state => state.newTag,
+  tags: state => state.tags,
+  currentTag: state => state.currentTag,
+  tagFilter: state => state.tagFilter
 };
 
 const mutations = {
@@ -53067,7 +53092,7 @@ const actions = {
     return new __WEBPACK_IMPORTED_MODULE_3_es6_promise__["Promise"]((resolve, reject) => {
       __WEBPACK_IMPORTED_MODULE_5__api_tags__["a" /* default */].sync(repo, tags).then(res => {
         commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["j" /* SET_CURRENT_STAR */], state.github.githubStars.find(repo => repo.id === res.message.star.repo_id));
-        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["k" /* SET_REPO_TAGS */], res.message.star.repo_id, res.message.star.tags);
+        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["k" /* SET_REPO_TAGS */], { id: res.message.star.repo_id, tags: res.message.star.tags });
         commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["e" /* SET_TAGS */], res.message.tags);
         resolve(res.message);
       }, res => {
@@ -53081,7 +53106,7 @@ const actions = {
         commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["e" /* SET_TAGS */], res.message.tags);
         commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["h" /* SET_CURRENT_TAG */], res.message.tag);
         setTimeout(() => {
-          commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["l" /* EDIT_TAG_NAMES_ON_STARS */], id, res.message.tag);
+          commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["l" /* EDIT_TAG_NAMES_ON_STARS */], { id: id, newTag: res.message.tag });
           resolve(res.message.tag);
         }, 0);
       }, res => {
@@ -53104,6 +53129,7 @@ const actions = {
     commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["h" /* SET_CURRENT_TAG */], tag);
   },
   setTagFilter({ commit }, filter) {
+    console.log('Filter: ', filter);
     commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["g" /* SET_TAG_FILTER */], filter);
   },
   resetCurrentTag({ commit }) {
@@ -53113,6 +53139,7 @@ const actions = {
 
 /* harmony default export */ __webpack_exports__["a"] = {
   state,
+  getters,
   actions,
   mutations
 };
@@ -53146,6 +53173,10 @@ const state = {
   user: {}
 };
 
+const getters = {
+  user: state => state.user
+};
+
 const mutations = {
   [__WEBPACK_IMPORTED_MODULE_4__mutation_types_js__["u" /* SET_USER */]](state, user) {
     state.user = user;
@@ -53177,6 +53208,7 @@ const actions = {
 
 /* harmony default export */ __webpack_exports__["a"] = {
   state,
+  getters,
   actions,
   mutations
 };
@@ -83041,6 +83073,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "tag-editor dropdown"
   }, [_c('select', {
     ref: "tags",
+    staticClass: "tag-editor-items",
     staticStyle: {
       "width": "216px"
     },
@@ -83126,13 +83159,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dashboard-userDropdownMenuItem"
   }, [_c('a', {
     attrs: {
-      "href": "https://www.creatorlove.com/syropian/astral",
+      "href": "https://www.patreon.com/syropian",
       "target": "_blank",
       "rel": "noopener"
     }
   }, [_c('i', {
     staticClass: "fa fa-heart"
-  }), _vm._v(" Creator Love")])]), _vm._v(" "), _c('li', {
+  }), _vm._v(" Patreon")])]), _vm._v(" "), _c('li', {
     staticClass: "dashboard-userDropdownMenuItem"
   }, [_c('a', {
     attrs: {
@@ -83266,8 +83299,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "on-clickaway",
       rawName: "v-on-clickaway",
-      value: (_vm.userDropdownVisible = false),
-      expression: "userDropdownVisible = false"
+      value: (_vm.hideUserDropdown),
+      expression: "hideUserDropdown"
     }],
     attrs: {
       "visible": _vm.userDropdownVisible
@@ -83313,9 +83346,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("\n          Auto-Tag by Language\n        ")]), _vm._v(" "), _c('div', {
     staticClass: "settingsPanel-settingControl"
   }, [_c('toggle-switch', {
-    key: "languageAutotag",
     attrs: {
       "checked": _vm.user.autotag,
+      "ukey": 'languageAutotag',
       "change": _vm.setUserAutoTagPref
     }
   })], 1)]), _vm._v(" "), _c('div', {
@@ -83443,8 +83476,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "on-clickaway",
       rawName: "v-on-clickaway",
-      value: (_vm.sortTagsDropdownVisible = false),
-      expression: "sortTagsDropdownVisible = false"
+      value: (_vm.hideSortTagsDropdown),
+      expression: "hideSortTagsDropdown"
     }],
     attrs: {
       "visible": _vm.sortTagsDropdownVisible
@@ -83721,7 +83754,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dashboard-repos"
   }, [_c('ul', {
     staticClass: "repos"
-  }, _vm._l((_vm.starsList), function(repo, index) {
+  }, _vm._l((_vm.githubStars), function(repo, index) {
     return _c('li', {
       key: repo.id,
       ref: "repo",
@@ -83741,9 +83774,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._o(_c('h3', {
       staticClass: "repo-name"
-    }), 0, repo.id), _vm._v(" "), _vm._o(_c('div', {
+    }, [_vm._v(_vm._s(repo.full_name))]), 0, repo.id), _vm._v(" "), _vm._o(_c('div', {
       staticClass: "repo-description"
-    }), 1, repo.id), _vm._v(" "), _c('transition-group', {
+    }, [_vm._v(_vm._s(repo.description))]), 1, repo.id), _vm._v(" "), _c('transition-group', {
       staticClass: "repo-tags",
       attrs: {
         "name": "star-tag",
@@ -83765,16 +83798,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "repo-stat stars"
     }, [_c('i', {
       staticClass: "fa fa-star"
-    }), _vm._v(" "), _vm._o(_c('span'), 2, repo.id)]), _vm._v(" "), _c('div', {
+    }), _vm._v(" "), _vm._o(_c('span', [_vm._v(_vm._s(repo.stargazers_count))]), 2, repo.id)]), _vm._v(" "), _c('div', {
       staticClass: "repo-stat forks"
     }, [_c('i', {
       staticClass: "fa fa-code-fork"
-    }), _vm._v(" "), _vm._o(_c('span'), 3, repo.id)]), _vm._v(" "), _c('div', {
+    }), _vm._v(" "), _vm._o(_c('span', [_vm._v(_vm._s(repo.forks_count))]), 3, repo.id)]), _vm._v(" "), _c('div', {
       staticClass: "repo-stat link"
     }, [_c('a', {
       attrs: {
         "href": repo.html_url,
-        "target": "_blank"
+        "target": "_blank",
+        "rel": "noopener"
       },
       on: {
         "click": function($event) {
@@ -83801,8 +83835,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "on-clickaway",
       rawName: "v-on-clickaway",
-      value: (_vm.tagEditorShowing = false),
-      expression: "tagEditorShowing = false"
+      value: (_vm.hideTagEditor),
+      expression: "hideTagEditor"
     }],
     staticClass: "dashboard-editTagTrigger",
     on: {
@@ -83892,7 +83926,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('input', {
     attrs: {
       "type": "checkbox",
-      "id": _vm.key
+      "id": _vm.ukey
     },
     domProps: {
       "checked": _vm.checked
@@ -83902,7 +83936,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('label', {
     attrs: {
-      "for": _vm.key
+      "for": _vm.ukey
     }
   })])
 },staticRenderFns: []}
