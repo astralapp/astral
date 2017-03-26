@@ -12,6 +12,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ls from 'local-storage'
+import store from './../store'
 import SettingsPanel from './settings-panel.vue'
 import DashboardHeader from './dashboard-header.vue'
 import DashboardSidebar from './dashboard-sidebar.vue'
@@ -47,11 +48,6 @@ export default {
     ])
   },
   created () {
-    if (ls('jwt')) {
-      this.fetchUser()
-    } else {
-      this.$router.push('/auth')
-    }
     window.addEventListener('keyup', (e) => {
       if (e.keyCode === 27) {
         this.$bus.$emit('HIDE_SETTINGS_PANEL')
@@ -62,7 +58,6 @@ export default {
     this.$bus.$on('HIDE_SETTINGS_PANEL', () => { this.settingsPanelShowing = false })
 
     this.$router.afterEach((to, from) => {
-      console.log(to)
       if (to.path.match(/^\/dashboard\/untagged/g) !== null) {
         this.resetCurrentTag()
         this.setTagFilter('UNTAGGED')
@@ -86,6 +81,22 @@ export default {
         }
       }
     })
+  },
+  beforeRouteEnter (to, from, next) {
+    if(ls('jwt')) {
+      store.dispatch('fetchUser').then((res) => {
+        next()
+      }).catch((error) => {
+        console.log(error)
+        if(error.status === 401 || error.status === 400) {
+          next(encodeURI('/auth?error=true'))
+        } else {
+          next(false)
+        }
+      })
+    } else {
+      next('/auth')
+    }
   }
 }
 </script>

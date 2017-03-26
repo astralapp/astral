@@ -55,8 +55,8 @@ export default {
     this.fetchStars().then((res) => {
       this.$bus.$emit('STATUS', '')
       Array.from(document.querySelectorAll('.repo')).forEach((repo) => {
-        repo.addEventListener('dragstart', function (e) {
-          const data = JSON.stringify(e.currentTarget.dataset.index)
+        repo.addEventListener('dragstart', (e) => {
+          const data = JSON.stringify(this.githubStars[parseInt(e.currentTarget.dataset.index, 10)])
           e.dataTransfer.effectAllowed = 'move'
           e.dataTransfer.setData('text/plain', data)
         }, false)
@@ -80,7 +80,7 @@ export default {
       this.$bus.$emit('STAR_CHANGED')
     },
     setTag (tag) {
-      this.$route.router.push(`/dashboard/tag/${tag.slug}`)
+      this.$router.push(`/dashboard/tag/${tag.slug}`)
     },
     starHasCurrentTag (repo) {
       if (!Object.keys(this.currentTag).length) {

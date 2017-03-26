@@ -1,4 +1,7 @@
-import { mutations } from "../../../resources/assets/js/store/modules/github.js";
+import test from 'ava-spec'
+import { describe } from 'ava-spec'
+import { mutations } from "../../../resources/assets/js/store/modules/github.js"
+
 const {
   APPEND_GITHUB_STARS,
   SET_GITHUB_STARS,
@@ -6,53 +9,64 @@ const {
   SET_CACHED_PAGES,
   INCREMENT_CACHED_PAGES,
   SET_README
-} = mutations;
+} = mutations
 
-describe("GitHub Star Mutations", () => {
-  it("can receive an array of GitHub stars", () => {
+describe("GitHub Star Mutations", it => {
+  it("can receive an array of GitHub stars", t => {
     const stars = [
       {id: 56919458, name: "vue-multiselect"},
       {id: 58734906, name: "vue-jwt-auth"},
       {id: 58905085, name: "bideo.js"},
-    ];
-    const state = {};
-    SET_GITHUB_STARS(state, stars);
-    expect(state.githubStars).toEqual(stars);
-  });
-  it("can append new GitHub stars", () => {
+    ]
+    const state = {}
+    SET_GITHUB_STARS(state, stars)
+
+    t.is(state.githubStars, stars)
+  })
+
+  it("can append new GitHub stars", t => {
     const stars = [
       {id: 56919458, name: "vue-multiselect"},
       {id: 58734906, name: "vue-jwt-auth"},
       {id: 58905085, name: "bideo.js"},
-    ];
+    ]
     const newStars = [
       {id: 38582384, name: "vuex-assert"},
       {id: 92783554, name: "onfontready"},
       {id: 10549354, name: "vue-flatpickr"},
-    ];
-    const state = {githubStars: stars};
-    APPEND_GITHUB_STARS(state, newStars);
-    expect(state.githubStars).toEqual(stars.concat(newStars));
-  });
-  it("can set the total number of pages in the api pagination response", () => {
-    const state = {};
-    SET_TOTAL_PAGES(state, 5);
-    expect(state.totalPages).toBe(5);
-  });
-  it("can set the number of cached pages from the server", () => {
-    const state = {};
-    SET_CACHED_PAGES(state, 3);
-    expect(state.cachedPages).toBe(3);
-  });
-  it("can increment the number of cached pages", () => {
-    const state = { cachedPages: 1 };
-    INCREMENT_CACHED_PAGES(state);
-    expect(state.cachedPages).toBe(2);
-  });
-  it("can set the readme text", () => {
+    ]
+    const state = {githubStars: stars}
+    APPEND_GITHUB_STARS(state, newStars)
+
+    t.deepEqual(state.githubStars, stars.concat(newStars))
+  })
+
+  it("can set the total number of pages in the api pagination response", t => {
+    const state = {}
+    SET_TOTAL_PAGES(state, 5)
+
+    t.is(state.totalPages, 5)
+  })
+
+  it("can set the number of cached pages from the server", t => {
+    const state = {}
+    SET_CACHED_PAGES(state, 3)
+
+    t.is(state.cachedPages, 3)
+  })
+
+  it("can increment the number of cached pages", t => {
+    const state = { cachedPages: 1 }
+    INCREMENT_CACHED_PAGES(state)
+
+    t.is(state.cachedPages, 2)
+  })
+
+  it("can set the readme text", t => {
     const readmeText = "This is a readme."
-    const state = {};
-    SET_README(state, readmeText);
-    expect(state.readme).toBe(readmeText);
-  });
-});
+    const state = {}
+    SET_README(state, readmeText)
+
+    t.is(state.readme, readmeText)
+  })
+})

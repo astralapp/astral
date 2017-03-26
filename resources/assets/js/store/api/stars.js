@@ -36,7 +36,7 @@ export default {
     return client.post('/api/stars/notes', {star, text})
   },
   tagStar(data) {
-    client.post('/api/stars/tag', data)
+    return client.post('/api/stars/tag', data)
   }
 
 }

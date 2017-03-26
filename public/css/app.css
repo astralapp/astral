@@ -1697,7 +1697,7 @@ th {
   right: 0;
   bottom: 0;
   left: 0;
-  background: url(/images/bg.jpg?6ca7d1de109328e89c93ce398a14bed3);
+  background: url(/images/bg.jpg?461c8b53dc84a360346e43e7be2b1233);
   background-repeat: no-repeat;
   background-size: cover;
   color: #fff;
@@ -2166,10 +2166,6 @@ th {
 }
 
 .dashboard-searchBar .dashboard-telescope::-webkit-input-placeholder {
-  color: rgba(98, 108, 112, 0.5);
-}
-
-.dashboard-searchBar .dashboard-telescope::-moz-placeholder {
   color: rgba(98, 108, 112, 0.5);
 }
 

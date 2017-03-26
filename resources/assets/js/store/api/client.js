@@ -5,25 +5,23 @@ import ls from "local-storage"
 Vue.use(VueResource)
 
 const client = {
-  defaultHeaders: { "Authorization": `Bearer ${ls("jwt")}` },
-  headers: { "Authorization": `Bearer ${ls("jwt")}` },
-  mergeHeaders: (headers) => {
-    return Object.assign({}, client.headers, headers)
-  },
+  auth: true,
   withoutAuth: () => {
-    client.headers = {}
+    client.auth = false
     return client
   }
 }
+
 const httpMethods = ['get', 'post', 'put', 'delete']
+
 httpMethods.forEach((verb) => {
     client[verb] = (path, data = {}, headers = {}) => {
       return new Promise((resolve, reject) => {
-        Vue.http[verb](path, data, { headers: client.mergeHeaders(headers) }).then((res) => {
-          client.headers = client.defaultHeaders
+        Vue.http[verb](path, data, { headers: client.auth ? Object.assign({}, { "Authorization": `Bearer ${ls("jwt")}` }, headers) : headers }).then((res) => {
+          client.auth = true
           resolve(res.data)
         }, (res) => {
-          client.headers = client.defaultHeaders
+          client.auth = true
           reject(res)
         })
       })

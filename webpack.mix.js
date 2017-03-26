@@ -11,8 +11,8 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js/')
-   .sass('resources/assets/sass/app.scss', 'public/css/');
+ mix.js('resources/assets/js/app.js', 'public/js/')
+    .sass('resources/assets/sass/app.scss', 'public/css/');
 
 // Full API
 // mix.js(src, output);
@@ -25,6 +25,7 @@ mix.js('resources/assets/js/app.js', 'public/js/')
 // mix.combine(files, destination);
 // mix.babel(files, destination); <-- Identical to mix.combine(), but also includes Babel compilation.
 // mix.copy(from, to);
+// mix.copyDirectory(fromDir, toDir);
 // mix.minify(file);
 // mix.sourceMaps(); // Enable sourcemaps
 // mix.version(); // Enable versioning.
@@ -37,6 +38,7 @@ mix.js('resources/assets/js/app.js', 'public/js/')
 // mix.options({
 //   extractVueStyles: false, // Extract .vue component styling to file, rather than inline.
 //   processCssUrls: true, // Process/optimize relative stylesheet url()'s. Set to false, if you don't want them touched.
+//   purifyCss: false, // Remove unused CSS selectors.
 //   uglify: {}, // Uglify-specific options. https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
 //   postCss: [] // Post-CSS options: https://github.com/postcss/postcss/blob/master/docs/plugins.md
 // });

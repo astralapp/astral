@@ -37,7 +37,7 @@ const getters = {
   tagFilter: state => state.tagFilter
 }
 
-const mutations = {
+export const mutations = {
   [ADD_TAG] (state, tag) {
     state.tags = state.tags.concat([tag])
   },
@@ -134,7 +134,6 @@ const actions = {
     commit(SET_CURRENT_TAG, tag)
   },
   setTagFilter ({ commit }, filter) {
-    console.log('Filter: ', filter);
     commit(SET_TAG_FILTER, filter)
   },
   resetCurrentTag ({ commit }) {

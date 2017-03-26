@@ -37,7 +37,7 @@ const getters = {
 }
 
 
-const mutations = {
+export const mutations = {
   [APPEND_GITHUB_STARS] (state, stars) {
     state.githubStars = state.githubStars.concat(stars)
   },
@@ -97,7 +97,7 @@ const mutations = {
 }
 
 const actions = {
-  fetchStars ({ commit, dispatch, state }, page = 1, autotag = true, refresh = false) {
+  fetchStars ({ commit, dispatch, state }, {page = 1, autotag = true, refresh = false} = {}) {
     return new Promise((resolve, reject) => {
       Stars.fetch(page, autotag, refresh).then((res) => {
         if (refresh) {
@@ -149,6 +149,20 @@ const actions = {
       Stars.editStarNotes(star, text).then((res) => {
         commit(SET_REPO_NOTES, { id: res.message.repo_id, notes: res.message.notes })
         resolve(res.message.notes)
+      }, (res) => {
+        reject(res)
+      })
+    })
+  },
+  tagStar({ commit, state }, data) {
+    return new Promise((resolve, reject) => {
+      Stars.tagStar(data).then((res) => {
+        commit(SET_TAGS, res.message.tags)
+        commit(SET_REPO_TAGS, {id: res.message.star.repo_id, tags: res.message.star.tags})
+        if(state.currentStar.id === data.repoId){
+          commit(SET_CURRENT_STAR, state.githubStars.find(repo => repo.id === res.message.star.repo_id))
+        }
+        resolve(res.message)
       }, (res) => {
         reject(res)
       })

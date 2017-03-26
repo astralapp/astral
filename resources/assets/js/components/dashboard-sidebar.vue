@@ -42,7 +42,6 @@
 </template>
 <script>
 import Vue from 'vue'
-// import VueAnimatedList from 'vue-animated-list'
 import { mapGetters, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import { mixin as clickaway } from 'vue-clickaway'
@@ -71,6 +70,13 @@ export default {
       'tagFilter'
     ])
   },
+  watch: {
+    tags() {
+      setTimeout(() => {
+        this.bindTagItemDragListeners()
+      }, 1);
+    }
+  },
   created () {
     this.fetchTags().then(() => {
       if (this.$route.params.tag) {
@@ -90,26 +96,6 @@ export default {
           }
         })
         this.reorderTags(sortMap)
-      })
-      Array.from(document.querySelectorAll('.dashboard-list-item.tag')).forEach((tagItem) => {
-        tagItem.addEventListener('dragover', function (e) {
-          e.preventDefault()
-          e.stopPropagation()
-          e.target.classList.add('dragging')
-        }, false)
-        tagItem.addEventListener('dragleave', function (e) {
-          e.preventDefault()
-          e.stopPropagation()
-          e.target.classList.remove('dragging')
-        }, false)
-        tagItem.addEventListener('drop', (e) => {
-          const dropData = JSON.parse(e.dataTransfer.getData('text'))
-          const tagId = e.currentTarget.dataset.id
-          e.preventDefault()
-          e.stopPropagation()
-          e.target.classList.remove('dragging')
-          this.tagStarWithData(dropData, tagId)
-        }, false)
       })
     }).catch((errors) => {
       this.$bus.$emit('NOTIFICATION', 'There was an error fetching your tags.', 'error')
@@ -159,6 +145,28 @@ export default {
       'reorderTags',
       'setCurrentTag'
     ]),
+    bindTagItemDragListeners () {
+      Array.from(document.querySelectorAll('.dashboard-list-item.tag')).forEach((tagItem) => {
+        tagItem.addEventListener('dragover', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.target.classList.add('dragging')
+        }, false)
+        tagItem.addEventListener('dragleave', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+          e.target.classList.remove('dragging')
+        }, false)
+        tagItem.addEventListener('drop', (e) => {
+          const dropData = JSON.parse(e.dataTransfer.getData('text'))
+          const tagId = e.currentTarget.dataset.id
+          e.preventDefault()
+          e.stopPropagation()
+          e.target.classList.remove('dragging')
+          this.tagStarWithData(dropData, tagId)
+        }, false)
+      })
+    },
     doAddTag: function () {
       const newTagName = this.newTag.name
       this.addTag().then(() => {
@@ -194,7 +202,7 @@ export default {
     refreshStars () {
       this.$bus.$emit('STATUS', 'Loading stars...')
       this.refreshingStars = true
-      this.fetchStars(1, 1, true).then((res) => {
+      this.fetchStars({refresh: true}).then((res) => {
         this.refreshingStars = false
         this.$bus.$emit('STATUS', '')
       }).catch((error) => {
@@ -202,7 +210,7 @@ export default {
         this.refreshingStars = false
         this.$bus.$emit('STATUS', '')
         // Check if user is throttled
-        if (error.response.status === 429) {
+        if (error.status === 429) {
           const secondsRemaining = parseInt(error.headers['retry-after'], 10)
           const time = secondsRemaining >= 60 ? `${Math.round(secondsRemaining / 60)} minute(s)` : `${secondsRemaining} second(s)`
 
