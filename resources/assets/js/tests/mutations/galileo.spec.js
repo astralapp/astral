@@ -1,6 +1,6 @@
 import test from 'ava-spec'
 import { describe } from 'ava-spec'
-import { mutations } from "../../../resources/assets/js/store/modules/galileo.js"
+import { mutations } from "./../../store/modules/galileo.js"
 
 const {
   SET_SEARCH_QUERY,

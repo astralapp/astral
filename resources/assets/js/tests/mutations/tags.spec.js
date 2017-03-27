@@ -1,6 +1,6 @@
 import test from 'ava-spec'
 import { describe } from 'ava-spec'
-import { mutations } from "../../../resources/assets/js/store/modules/tags.js"
+import { mutations } from "./../../store/modules/tags.js"
 
 const {
   SET_NEW_TAG,

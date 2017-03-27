@@ -49,13 +49,10 @@
     position: absolute; top: -6px; left: 50%;
     z-index: 99;
   }
-  &-transition {
-    transition: all 250ms $easeOutCubic;
-    transform: translate3d(-50%, 2px, 0) scale(1);
-    opacity: 1;
-    visibility: visible;
+  &-enter-active, &-leave-active {
+    transition: transform 250ms $easeOutCubic, opacity 250ms $easeOutCubic;
   }
-  &-enter, &-leave {
+  &-enter, &-leave-to {
     transform: translate(-50%, -10px) scale(0.95);
     opacity: 0;
     visibility: hidden;

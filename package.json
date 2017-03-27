@@ -15,11 +15,11 @@
   "ava": {
     "verbose": true,
     "files": [
-      "tests/js/**/*.spec.js"
+      "resources/assets/js/tests/**/*.spec.js"
     ],
     "require": [
       "babel-register",
-      "./tests/js/helpers/setup-browser-env.js"
+      "./resources/assets/js/tests/helpers/setup-browser-env.js"
     ]
   },
   "dependencies": {
