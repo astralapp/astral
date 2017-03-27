@@ -120,10 +120,10 @@ const actions = {
           commit(APPEND_GITHUB_STARS, data.stars.stars)
           commit(SET_TAGS, data.tags)
           if (state.cachedPages) {
-            resolve(dispatch('fetchStars', state.cachedPages + 1))
+            resolve(dispatch('fetchStars', { page: state.cachedPages + 1 }))
           } else {
             if (page < state.totalPages) {
-              resolve(dispatch('fetchStars', page + 1))
+              resolve(dispatch('fetchStars', {page: page + 1 }))
             } else {
               resolve(data.stars.stars)
             }

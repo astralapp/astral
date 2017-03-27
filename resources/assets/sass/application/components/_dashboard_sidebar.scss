@@ -138,7 +138,7 @@
     margin: 0;
     padding: 0;
     .dashboard-list-item {
-      transition: all 200ms linear;
+      transition: transform 200ms linear;
       border-bottom: 1px solid rgba(#fff, 0.08);
       color: rgba(#fff, 0.65);
       cursor: pointer;
@@ -178,23 +178,22 @@
       }
     }
     &.sidebar-tags .tag {
-      &.tag-transition {
-        transition: all 250ms ease;
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
+      transition: all 250ms ease;
+      &.sidebar-tag-move {
+        transition: transform .5s cubic-bezier(.55,0,.1,1);
       }
-      &.tag-enter, &.tag-leave {
+      &.sidebar-tag-enter, &.sidebar-tag-leave-to {
         transform: translate3d(-100%, 0, 0);
         opacity: 0;
       }
-      &.tag-move {
-         transition: transform .5s cubic-bezier(.55,0,.1,1);
+      &.sidebar-tag-leave-active {
+        position: absolute;
       }
       &.dragging {
         background: $primary;
         color: #fff;
       }
-      &.gu-mirror { transition: none!important; }
+      &.gu-mirror, &.gu-transit { transition: none!important; }
       .tag-name {
         flex-grow: 1;
         pointer-events: none;

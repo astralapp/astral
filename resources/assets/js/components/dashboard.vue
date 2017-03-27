@@ -89,7 +89,7 @@ export default {
       }).catch((error) => {
         console.log(error)
         if(error.status === 401 || error.status === 400) {
-          next(encodeURI('/auth?error=true'))
+          next('/auth')
         } else {
           next(false)
         }

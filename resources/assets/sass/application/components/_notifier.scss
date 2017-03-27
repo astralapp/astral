@@ -2,6 +2,13 @@
   position: fixed; bottom: 20px; right: 20px;
   width: $dashboard-sidebar-width;
   z-index: 99999;
+  &-enter-active, &-leave-active {
+    transition: transform 250ms cubic-bezier(0.215, 0.61, 0.355, 1), opacity 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  &-enter, &-leave-to {
+    transform: translate3d(40px, 0, 0);
+    opacity: 0;
+  }
   .dashboard-notifierInner {
     width: 100%; height: 100%;
     background: $primary;
@@ -39,13 +46,4 @@
       }
     }
   }
-}
-.dashboard-notifier-transition {
-  transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
-}
-.dashboard-notifier-enter, .dashboard-notifier-leave {
-  transform: translate3d(40px, 0, 0);
-  opacity: 0;
 }

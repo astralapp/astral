@@ -31,13 +31,13 @@
       <i class="fa fa-tag"></i>
       <p>You haven't added any tags yet!</p>
     </div> -->
-    <ul class="dashboard-list sidebar-tags" ref="tags-list">
+    <transition-group name="sidebar-tag" tag="ul" class="dashboard-list sidebar-tags">
       <li class="dashboard-list-item tag" v-for="tag in tags" :key="tag.id" :data-id="tag.id" @click="setTag(tag)" :class="{ 'selected': currentTag.id == tag.id }" ref="tag">
         <i class="fa fa-tag"></i>
         <span class="tag-name">{{ tag.name }}</span>
         <span class="tagged-count" v-if="tag.stars_count > 0">{{ tag.stars_count }}</span>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 <script>
@@ -45,6 +45,7 @@ import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import { mixin as clickaway } from 'vue-clickaway'
+import $ from 'jquery'
 import dragula from 'dragula'
 import SortTagsDropdown from './sort-tags-dropdown.vue'
 
@@ -146,26 +147,25 @@ export default {
       'setCurrentTag'
     ]),
     bindTagItemDragListeners () {
-      Array.from(document.querySelectorAll('.dashboard-list-item.tag')).forEach((tagItem) => {
-        tagItem.addEventListener('dragover', function (e) {
+        $('.dashboard-list-item.tag').off('dragover dragleave drop')
+        $('.dashboard-list-item.tag').on('dragover', function (e) {
           e.preventDefault()
           e.stopPropagation()
           e.target.classList.add('dragging')
-        }, false)
-        tagItem.addEventListener('dragleave', function (e) {
+        })
+        $('.dashboard-list-item.tag').on('dragleave', function (e) {
           e.preventDefault()
           e.stopPropagation()
           e.target.classList.remove('dragging')
-        }, false)
-        tagItem.addEventListener('drop', (e) => {
-          const dropData = JSON.parse(e.dataTransfer.getData('text'))
+        })
+        $('.dashboard-list-item.tag').on('drop', (e) => {
+          const dropData = JSON.parse(e.originalEvent.dataTransfer.getData('text'))
           const tagId = e.currentTarget.dataset.id
           e.preventDefault()
           e.stopPropagation()
           e.target.classList.remove('dragging')
           this.tagStarWithData(dropData, tagId)
-        }, false)
-      })
+        })
     },
     doAddTag: function () {
       const newTagName = this.newTag.name
@@ -207,10 +207,11 @@ export default {
         this.$bus.$emit('STATUS', '')
       }).catch((error) => {
         error = JSON.parse(error)
+        console.log(error)
         this.refreshingStars = false
         this.$bus.$emit('STATUS', '')
         // Check if user is throttled
-        if (error.status === 429) {
+        if (error.response.status === 429) {
           const secondsRemaining = parseInt(error.headers['retry-after'], 10)
           const time = secondsRemaining >= 60 ? `${Math.round(secondsRemaining / 60)} minute(s)` : `${secondsRemaining} second(s)`
 
@@ -222,11 +223,6 @@ export default {
     },
     hideSortTagsDropdown() {
       this.sortTagsDropdownVisible = false
-    }
-  },
-  events: {
-    'TAGS_SORTED': function (sorter) {
-
     }
   }
 }
