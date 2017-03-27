@@ -38,7 +38,7 @@ export default {
     },
     doEditTagName (id) {
       const name = this.$refs.tagName.value
-      this.editTagName(id, name).then((res) => {
+      this.editTagName({id, name}).then((res) => {
         this.$bus.$emit('NOTIFICATION', `Tag renamed to ${name}.`)
         this.$router.replace(`/dashboard/tag/${res.slug}`)
       }).catch((errors) => {

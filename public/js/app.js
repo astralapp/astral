@@ -53171,7 +53171,7 @@ exports.default = {
       var _this = this;
 
       var name = this.$refs.tagName.value;
-      this.editTagName(id, name).then(function (res) {
+      this.editTagName({ id: id, name: name }).then(function (res) {
         _this.$bus.$emit('NOTIFICATION', 'Tag renamed to ' + name + '.');
         _this.$router.replace('/dashboard/tag/' + res.slug);
       }).catch(function (errors) {
@@ -53545,7 +53545,7 @@ exports.default = {
     syncTags: function syncTags(tags) {
       var _this3 = this;
 
-      this.sync(this.currentStar, tags).then(function (res) {
+      this.sync({ repo: this.currentStar, tags: tags }).then(function (res) {
         _this3.$bus.$emit('NOTIFICATION', 'Tags for ' + _this3.currentStar.full_name + ' updated.');
       }).catch(function (errors) {
         _this3.$bus.$emit('NOTIFICATION', 'There was an error saving these tags.', 'error');
@@ -53679,23 +53679,25 @@ exports.default = {
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     _vue2.default.nextTick(function () {
-      (0, _jquery2.default)('.tag-editor-items').select2({
-        tags: true,
-        tokenSeparators: [','],
-        minimumInputLength: 2,
-        placeholder: 'Add a tag'
-      }).on('change', function () {
-        var tagData = (0, _jquery2.default)(this).select2('data').map(function (tag) {
-          return {
-            name: tag.text,
-            selected: true
-          };
-        });
-      });
+      _this.initSelect2();
     });
   },
+
+  watch: {
+    tags: function tags() {
+      var _this2 = this;
+
+      _vue2.default.nextTick(function () {
+        _this2.initSelect2();
+      });
+    }
+  },
   created: function created() {
+    var _this3 = this;
+
     this.tagsToSync = this.tags.map(function (tag) {
       return {
         name: tag.text,
@@ -53703,6 +53705,10 @@ exports.default = {
       };
     }).filter(function (tag) {
       return tag.selected;
+    });
+
+    this.$bus.$on('CURRENT_TAGS_CHANGED', function (tags) {
+      _this3.tagsToSync = tags;
     });
   },
   destroyed: function destroyed() {
@@ -53712,11 +53718,24 @@ exports.default = {
   methods: {
     syncTags: function syncTags() {
       this.$bus.$emit('SYNC_TAGS', this.tagsToSync);
-    }
-  },
-  events: {
-    'CURRENT_TAGS_CHANGED': function CURRENT_TAGS_CHANGED(tags) {
-      this.tagsToSync = tags;
+    },
+    initSelect2: function initSelect2() {
+      var _this4 = this;
+
+      (0, _jquery2.default)('.tag-editor-items').select2({
+        tags: true,
+        tokenSeparators: [','],
+        minimumInputLength: 2,
+        placeholder: 'Add a tag'
+      }).on('change', function (e) {
+        var tagData = (0, _jquery2.default)(e.target).select2('data').map(function (tag) {
+          return {
+            name: tag.text,
+            selected: true
+          };
+        });
+        _this4.$bus.$emit('CURRENT_TAGS_CHANGED', tagData);
+      });
     }
   }
 }; //
@@ -54421,13 +54440,15 @@ var actions = {
       });
     });
   },
-  syncTags: function syncTags(_ref4, repo, tags) {
+  syncTags: function syncTags(_ref4, _ref5) {
     var commit = _ref4.commit,
-        state = _ref4.state;
+        rootState = _ref4.rootState;
+    var repo = _ref5.repo,
+        tags = _ref5.tags;
 
     return new _es6Promise.Promise(function (resolve, reject) {
       _tags2.default.sync(repo, tags).then(function (res) {
-        commit(_mutationTypes.SET_CURRENT_STAR, state.github.githubStars.find(function (repo) {
+        commit(_mutationTypes.SET_CURRENT_STAR, rootState.github.githubStars.find(function (repo) {
           return repo.id === res.message.star.repo_id;
         }));
         commit(_mutationTypes.SET_REPO_TAGS, { id: res.message.star.repo_id, tags: res.message.star.tags });
@@ -54438,8 +54459,10 @@ var actions = {
       });
     });
   },
-  editTagName: function editTagName(_ref5, id, name) {
-    var commit = _ref5.commit;
+  editTagName: function editTagName(_ref6, _ref7) {
+    var commit = _ref6.commit;
+    var id = _ref7.id,
+        name = _ref7.name;
 
     return new _es6Promise.Promise(function (resolve, reject) {
       _tags2.default.edit(id, name).then(function (res) {
@@ -54454,8 +54477,8 @@ var actions = {
       });
     });
   },
-  deleteTag: function deleteTag(_ref6, id) {
-    var commit = _ref6.commit;
+  deleteTag: function deleteTag(_ref8, id) {
+    var commit = _ref8.commit;
 
     return new _es6Promise.Promise(function (resolve, reject) {
       _tags2.default.delete(id).then(function (res) {
@@ -54467,18 +54490,18 @@ var actions = {
       });
     });
   },
-  setCurrentTag: function setCurrentTag(_ref7, tag) {
-    var commit = _ref7.commit;
+  setCurrentTag: function setCurrentTag(_ref9, tag) {
+    var commit = _ref9.commit;
 
     commit(_mutationTypes.SET_CURRENT_TAG, tag);
   },
-  setTagFilter: function setTagFilter(_ref8, filter) {
-    var commit = _ref8.commit;
+  setTagFilter: function setTagFilter(_ref10, filter) {
+    var commit = _ref10.commit;
 
     commit(_mutationTypes.SET_TAG_FILTER, filter);
   },
-  resetCurrentTag: function resetCurrentTag(_ref9) {
-    var commit = _ref9.commit;
+  resetCurrentTag: function resetCurrentTag(_ref11) {
+    var commit = _ref11.commit;
 
     commit(_mutationTypes.RESET_CURRENT_TAG);
   }
@@ -85445,7 +85468,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }) : _vm._e(), _vm._v(" "), _vm._l((_vm.tags), function(tag) {
     return _c('option', {
       domProps: {
-        "value": tag.name,
+        "value": tag.text,
         "selected": tag.selected
       }
     }, [_vm._v(_vm._s(tag.text))])
@@ -86120,7 +86143,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "dashboard-repos"
   }, [_c('ul', {
     staticClass: "repos"
-  }, _vm._l((_vm.githubStars), function(repo, index) {
+  }, _vm._l((_vm.starsList), function(repo, index) {
     return _c('li', {
       key: repo.id,
       ref: "repo",

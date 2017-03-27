@@ -121,7 +121,7 @@ export default {
       }
     },
     syncTags (tags) {
-      this.sync(this.currentStar, tags).then((res) => {
+      this.sync({repo: this.currentStar, tags: tags}).then((res) => {
         this.$bus.$emit('NOTIFICATION', `Tags for ${this.currentStar.full_name} updated.`)
       }).catch((errors) => {
         this.$bus.$emit('NOTIFICATION', 'There was an error saving these tags.', 'error')

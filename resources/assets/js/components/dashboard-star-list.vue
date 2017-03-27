@@ -2,7 +2,7 @@
   <div class="dashboard-star-container">
     <div class="dashboard-repos">
       <ul class="repos">
-        <li class="repo" v-for="(repo, index) in githubStars" :key="repo.id" draggable="true" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" ref="repo" :data-index="index">
+        <li class="repo" v-for="(repo, index) in starsList" :key="repo.id" draggable="true" @click="starClicked(repo)" :class="{ 'active': currentStar.id == repo.id }" ref="repo" :data-index="index">
           <h3 class="repo-name" v-once>{{ repo.full_name }}</h3>
           <div class="repo-description" v-once="">{{ repo.description }}</div>
             <transition-group name="star-tag" tag="ul" class="repo-tags">
