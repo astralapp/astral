@@ -6,7 +6,7 @@ import { Base64 } from 'js-base64'
 
 Vue.use(VueResource)
 
-const normalizeReadmeAssetUrls = (readmeResponse) => {
+const normalizeReadmeAssetUrls = (name, readmeResponse) => {
   let readme = Base64.decode(readmeResponse.content)
   const branch = readmeResponse.url.split('?ref=')[1]
   const regex = /(!\[.*\])\(\/?(?!(http:\/\/)|(https:\/\/)|(\/))(.*)\)/igm
@@ -24,7 +24,7 @@ export default {
     const accessToken = ls('access_token')
     return new Promise((resolve, reject) => {
       client.withoutAuth().get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((res) => {
-        let readmeMarkdown = normalizeReadmeAssetUrls(res)
+        let readmeMarkdown = normalizeReadmeAssetUrls(name, res)
         client.withoutAuth().post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readmeMarkdown, {'Content-Type': 'text/plain'}).then((res) => {
           const readme = res
           resolve(readme)
