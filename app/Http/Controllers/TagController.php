@@ -46,7 +46,7 @@ class TagController extends Controller
         $sortMap = $request->only('sortMap')['sortMap'];
         foreach ($sortMap as $row) {
             $tag = Tag::find((int) $row['id']);
-            $tag->sort_order = $row['sort_order'];
+            $tag->sort_order = $row['sortOrder'];
             $tag->save();
         }
 
