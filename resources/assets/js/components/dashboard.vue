@@ -64,7 +64,7 @@ export default {
         return true
       }
       if (this.tags.length) {
-        if (typeof to.params.tag !== 'undefined' ) {
+        if (typeof to.params.tag !== 'undefined') {
           const tag = this.tags.find((tag) => {
             return tag.slug === to.params.tag
           })
@@ -83,12 +83,12 @@ export default {
     })
   },
   beforeRouteEnter (to, from, next) {
-    if(ls('jwt')) {
+    if (ls('jwt')) {
       store.dispatch('fetchUser').then((res) => {
         next()
       }).catch((error) => {
         console.log(error)
-        if(error.status === 401 || error.status === 400) {
+        if (error.status === 401 || error.status === 400) {
           next('/auth')
         } else {
           next(false)

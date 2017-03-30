@@ -26,10 +26,10 @@ export default {
     })
   },
   watch: {
-    tags() {
+    tags () {
       Vue.nextTick(() => {
         this.initSelect2()
-      });
+      })
     }
   },
   created () {
@@ -67,6 +67,6 @@ export default {
         this.$bus.$emit('CURRENT_TAGS_CHANGED', tagData)
       })
     }
-  },
+  }
 }
 </script>

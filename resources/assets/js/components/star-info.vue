@@ -97,7 +97,7 @@ export default {
         this.readmeLoading = false
         this.readmeNotFound = false
       }).catch((errors) => {
-        if(errors.message == 'Not Found') {
+        if (errors.message === 'Not Found') {
           this.readmeNotFound = true
         } else {
           this.readmeError = true
@@ -121,7 +121,7 @@ export default {
       }
     },
     syncTags (tags) {
-      this.sync({repo: this.currentStar, tags: tags}).then((res) => {
+      this.sync({ repo: this.currentStar, tags: tags }).then((res) => {
         this.$bus.$emit('NOTIFICATION', `Tags for ${this.currentStar.full_name} updated.`)
       }).catch((errors) => {
         this.$bus.$emit('NOTIFICATION', 'There was an error saving these tags.', 'error')
@@ -129,7 +129,7 @@ export default {
       this.hideTagEditor()
     },
     saveNotes (notes) {
-      this.editStarNotes({star: this.currentStar, text: notes}).catch((errors) => {
+      this.editStarNotes({ star: this.currentStar, text: notes }).catch((errors) => {
         this.$bus.$emit('NOTIFICATION', 'There was an error saving your notes for this star.', 'error')
       })
     },

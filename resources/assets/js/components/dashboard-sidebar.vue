@@ -41,7 +41,6 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 import { orderBy } from 'lodash'
 import { mixin as clickaway } from 'vue-clickaway'
@@ -72,10 +71,10 @@ export default {
     ])
   },
   watch: {
-    tags() {
+    tags () {
       setTimeout(() => {
         this.bindTagItemDragListeners()
-      }, 1);
+      }, 1)
     }
   },
   created () {
@@ -93,7 +92,7 @@ export default {
         sortMap = Array.from(source.children).map(function (el, index) {
           return {
             id: el.dataset.id,
-            sort_order: index
+            sortOrder: index
           }
         })
         this.reorderTags(sortMap)
@@ -126,7 +125,7 @@ export default {
       sortMap = sortedTags.map((tag, index) => {
         return {
           id: tag.id,
-          sort_order: index
+          sortOrder: index
         }
       })
       this.reorderTags(sortMap)
@@ -147,32 +146,32 @@ export default {
       'setCurrentTag'
     ]),
     bindTagItemDragListeners () {
-        $('.dashboard-list-item.tag').off('dragover dragleave drop')
-        $('.dashboard-list-item.tag').on('dragover', function (e) {
-          e.preventDefault()
-          e.stopPropagation()
-          e.target.classList.add('dragging')
-        })
-        $('.dashboard-list-item.tag').on('dragleave', function (e) {
-          e.preventDefault()
-          e.stopPropagation()
-          e.target.classList.remove('dragging')
-        })
-        $('.dashboard-list-item.tag').on('drop', (e) => {
-          const dropData = JSON.parse(e.originalEvent.dataTransfer.getData('text'))
-          const tagId = e.currentTarget.dataset.id
-          e.preventDefault()
-          e.stopPropagation()
-          e.target.classList.remove('dragging')
-          this.tagStarWithData(dropData, tagId)
-        })
+      $('.dashboard-list-item.tag').off('dragover dragleave drop')
+      $('.dashboard-list-item.tag').on('dragover', function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.target.classList.add('dragging')
+      })
+      $('.dashboard-list-item.tag').on('dragleave', function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.target.classList.remove('dragging')
+      })
+      $('.dashboard-list-item.tag').on('drop', (e) => {
+        const dropData = JSON.parse(e.originalEvent.dataTransfer.getData('text'))
+        const tagId = e.currentTarget.dataset.id
+        e.preventDefault()
+        e.stopPropagation()
+        e.target.classList.remove('dragging')
+        this.tagStarWithData(dropData, tagId)
+      })
     },
     doAddTag: function () {
       const newTagName = this.newTag.name
       this.addTag().then(() => {
         this.$bus.$emit('NOTIFICATION', `${newTagName} was created successfully.`)
       }).catch((errors) => {
-        if (errors.name){
+        if (errors.name) {
           this.$bus.$emit('NOTIFICATION', errors.name[0], 'error')
         } else {
           this.$bus.$emit('NOTIFICATION', 'There was an error creating this tag.', 'error')
@@ -202,12 +201,11 @@ export default {
     refreshStars () {
       this.$bus.$emit('STATUS', 'Loading stars...')
       this.refreshingStars = true
-      this.fetchStars({refresh: true}).then((res) => {
+      this.fetchStars({ refresh: true }).then((res) => {
         this.refreshingStars = false
         this.$bus.$emit('STATUS', '')
       }).catch((error) => {
         error = JSON.parse(error)
-        console.log(error)
         this.refreshingStars = false
         this.$bus.$emit('STATUS', '')
         // Check if user is throttled
@@ -221,7 +219,7 @@ export default {
         }
       })
     },
-    hideSortTagsDropdown() {
+    hideSortTagsDropdown () {
       this.sortTagsDropdownVisible = false
     }
   }

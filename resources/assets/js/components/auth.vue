@@ -25,7 +25,7 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      if(to.query.error) {
+      if (to.query.error) {
         next(vm => {
           vm.authenticating = false
           vm.error = 'Unable to authenticate user.'

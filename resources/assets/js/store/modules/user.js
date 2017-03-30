@@ -1,12 +1,7 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import ls from 'local-storage'
 import { Promise } from 'es6-promise'
+
 import { SET_USER } from '../mutation-types.js'
-
 import user from '../api/user'
-
-Vue.use(VueResource)
 
 const state = {
   user: {}

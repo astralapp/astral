@@ -21,21 +21,21 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import EditTagDropdown from "./edit-tag-dropdown.vue"
-import UserDropdown from "./user-dropdown.vue"
-import { mixin as clickaway } from "vue-clickaway"
+import EditTagDropdown from './edit-tag-dropdown.vue'
+import UserDropdown from './user-dropdown.vue'
+import { mixin as clickaway } from 'vue-clickaway'
 
 export default {
-  name: "DashboardHeader",
+  name: 'DashboardHeader',
   components: {
-    "edit-tag-dropdown": EditTagDropdown,
-    "user-dropdown": UserDropdown
+    'edit-tag-dropdown': EditTagDropdown,
+    'user-dropdown': UserDropdown
   },
   mixins: [clickaway],
   data () {
     return {
       userDropdownVisible: false,
-      status: "",
+      status: '',
       viewingUntagged: false
     }
   },
@@ -47,11 +47,10 @@ export default {
       query: 'searchQuery'
     }),
     currentTagName () {
-      // return "All Stars"
-      if (!!Object.keys(this.currentTag).length) {
+      if (Object.keys(this.currentTag).length) {
         return this.currentTag.name
       } else {
-        return this.tagFilter === "UNTAGGED" ? "Untagged" : "All Stars"
+        return this.tagFilter === 'UNTAGGED' ? 'Untagged' : 'All Stars'
       }
     },
     currentSearchQuery: {
@@ -63,9 +62,9 @@ export default {
       }
     }
   },
-  created() {
-    this.$bus.$on('STATUS', message => this.status = message)
-    this.$bus.$on('IS_VIEWING_UNTAGGED', isViewing => this.viewingUntagged = isViewing)
+  created () {
+    this.$bus.$on('STATUS', (message) => { this.status = message })
+    this.$bus.$on('IS_VIEWING_UNTAGGED', (isViewing) => { this.viewingUntagged = isViewing })
   },
   methods: {
     ...mapActions([
@@ -74,7 +73,7 @@ export default {
     currentTagExists () {
       return !!Object.keys(this.currentTag).length
     },
-    hideUserDropdown() {
+    hideUserDropdown () {
       this.userDropdownVisible = false
     }
   }

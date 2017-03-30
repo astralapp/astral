@@ -7,7 +7,7 @@ import { Base64 } from 'js-base64'
 Vue.use(VueResource)
 
 const normalizeReadmeAssetUrls = (name, readmeResponse) => {
-  let readme = Base64.decode(readmeResponse.content)
+  const readme = Base64.decode(readmeResponse.content)
   const branch = readmeResponse.url.split('?ref=')[1]
   const regex = /(!\[.*\])\(\/?(?!(http:\/\/)|(https:\/\/)|(\/))(.*)\)/igm
   const replaceWith = `$1(https://github.com/${name}/blob/${branch}/$5?raw=true)`
@@ -15,27 +15,27 @@ const normalizeReadmeAssetUrls = (name, readmeResponse) => {
 }
 
 export default {
-  fetch(page = 1, autotag = true, refresh = false) {
+  fetch (page = 1, autotag = true, refresh = false) {
     const url = refresh ? `/api/github/stars/refresh` : `/api/github/stars?page=${page}&autotag=${autotag}`
     const token = ls('access_token')
     return client.get(url, {}, { 'Access-Token': token })
   },
-  fetchReadme(name) {
+  fetchReadme (name) {
     const accessToken = ls('access_token')
     return new Promise((resolve, reject) => {
       client.withoutAuth().get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((res) => {
-        let readmeMarkdown = normalizeReadmeAssetUrls(name, res)
-        client.withoutAuth().post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readmeMarkdown, {'Content-Type': 'text/plain'}).then((res) => {
+        const readmeMarkdown = normalizeReadmeAssetUrls(name, res)
+        client.withoutAuth().post(`https://api.github.com/markdown/raw?access_token=${accessToken}`, readmeMarkdown, { 'Content-Type': 'text/plain' }).then((res) => {
           const readme = res
           resolve(readme)
         })
       })
     })
   },
-  editStarNotes(star, text) {
-    return client.post('/api/stars/notes', {star, text})
+  editStarNotes (star, text) {
+    return client.post('/api/stars/notes', { star, text })
   },
-  tagStar(data) {
+  tagStar (data) {
     return client.post('/api/stars/tag', data)
   }
 

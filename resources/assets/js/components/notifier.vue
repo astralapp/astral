@@ -44,6 +44,6 @@ export default {
       clearTimeout(this._timeout)
       this.show = false
     }
-  },
+  }
 }
 </script>

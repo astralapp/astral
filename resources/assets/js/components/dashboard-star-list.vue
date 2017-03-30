@@ -42,10 +42,10 @@ export default {
       currentStar: 'currentStar',
       searchQuery: 'tokenizedSearchQuery'
     }),
-    starsWithCurrentTag() {
+    starsWithCurrentTag () {
       return this.githubStars.filter(this.starHasCurrentTag)
     },
-    starsList() {
+    starsList () {
       return galileo(this.starsWithCurrentTag, this.searchQuery)
     }
   },

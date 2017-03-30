@@ -1,14 +1,13 @@
-import test from 'ava-spec'
 import { describe } from 'ava-spec'
-import { mutations } from "./../../store/modules/user.js"
+import { mutations } from './../../store/modules/user.js'
 
 const { SET_USER } = mutations
 
-describe("User Mutations", it => {
+describe('User Mutations', it => {
   it('can set the user', t => {
     const testUser = {
       id: 1,
-      username: "Syropian"
+      username: 'Syropian'
     }
     const state = {}
     SET_USER(state, testUser)

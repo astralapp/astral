@@ -1,10 +1,10 @@
 import client from './client'
 
 export default {
-  fetch() {
+  fetch () {
     return client.get('/api/auth/user')
   },
-  setAutoTag(state) {
+  setAutoTag (state) {
     return client.post('/api/auth/user/autotag', { state })
   }
 }

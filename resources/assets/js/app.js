@@ -30,7 +30,7 @@ Vue.http.interceptors.push({
 })
 
 Object.defineProperty(Vue.prototype, '$bus', {
-  get() {
+  get () {
     return this.$root.bus
   }
 })

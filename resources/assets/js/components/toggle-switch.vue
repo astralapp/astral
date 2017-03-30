@@ -6,7 +6,7 @@
 </template>
 <script>
   export default {
-    name: "ToggleSwitch",
-    props: ["checked", "ukey", "change"]
+    name: 'ToggleSwitch',
+    props: ['checked', 'ukey', 'change']
   }
 </script>

@@ -1,8 +1,4 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import ls from 'local-storage'
 import { Promise } from 'es6-promise'
-
 
 import {
   ADD_TAG,
@@ -97,7 +93,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       Tags.sync(repo, tags).then((res) => {
         commit(SET_CURRENT_STAR, rootState.github.githubStars.find(repo => repo.id === res.message.star.repo_id))
-        commit(SET_REPO_TAGS, {id: res.message.star.repo_id, tags: res.message.star.tags})
+        commit(SET_REPO_TAGS, { id: res.message.star.repo_id, tags: res.message.star.tags })
         commit(SET_TAGS, res.message.tags)
         resolve(res.message)
       }, (res) => {
@@ -111,7 +107,7 @@ const actions = {
         commit(SET_TAGS, res.message.tags)
         commit(SET_CURRENT_TAG, res.message.tag)
         setTimeout(() => {
-          commit(EDIT_TAG_NAMES_ON_STARS, {id: id, newTag: res.message.tag})
+          commit(EDIT_TAG_NAMES_ON_STARS, { id: id, newTag: res.message.tag })
           resolve(res.message.tag)
         }, 0)
       }, (res) => {

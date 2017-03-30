@@ -18,7 +18,6 @@ const getters = {
   tokenizedSearchQuery: state => state.tokenizedSearchQuery
 }
 
-
 export const mutations = {
   [SET_SEARCH_QUERY] (state, query) {
     state.searchQuery = query

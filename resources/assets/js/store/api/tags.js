@@ -1,22 +1,22 @@
 import client from './client'
 
 export default {
-  fetch() {
+  fetch () {
     return client.get('/api/tags')
   },
-  reorder(sortMap) {
+  reorder (sortMap) {
     return client.post('/api/tags/reorder', { sortMap })
   },
-  add(tag) {
+  add (tag) {
     return client.post('/api/tags', tag)
   },
-  sync(star, tags) {
+  sync (star, tags) {
     return client.post('/api/stars/syncTags', { star, tags })
   },
-  edit(id, name) {
+  edit (id, name) {
     return client.put(`/api/tags/${id}`, { name })
   },
-  delete(id) {
+  delete (id) {
     return client.delete(`/api/tags/${id}`)
   }
 }
