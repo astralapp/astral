@@ -93,7 +93,7 @@ export default {
     this.$bus.$on('STAR_CHANGED', () => {
       this.noteEditorShowing = false
       this.readmeLoading = true
-      this.fetchReadme(this.currentStar.full_name, this.user.access_token).then(() => {
+      this.fetchReadme({ name: this.currentStar.full_name, accessToken: this.user.access_token }).then(() => {
         this.readmeError = false
         this.readmeLoading = false
         this.readmeNotFound = false

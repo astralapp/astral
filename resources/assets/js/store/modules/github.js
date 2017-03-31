@@ -132,8 +132,8 @@ const actions = {
       })
     })
   },
-  fetchReadme ({ commit }, name) {
-    Stars.fetchReadme(name).then((res) => {
+  fetchReadme ({ commit }, { name, accessToken }) {
+    Stars.fetchReadme(name, accessToken).then((res) => {
       commit(SET_README, res)
     })
   },
