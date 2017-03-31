@@ -2,10 +2,10 @@
 
 namespace Astral\Models;
 
-use Auth;
 use DB;
-use Illuminate\Database\Eloquent\Model;
+use Auth;
 use JWTAuth;
+use Illuminate\Database\Eloquent\Model;
 
 class Star extends Model
 {

@@ -2,8 +2,8 @@
 
 namespace Astral\Exceptions;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\MessageBag;
+use Illuminate\Contracts\Validation\Validator;
 
 class ApiException extends \Exception
 {

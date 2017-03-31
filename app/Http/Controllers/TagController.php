@@ -2,8 +2,8 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Models\Tag;
 use Auth;
+use Astral\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagController extends Controller

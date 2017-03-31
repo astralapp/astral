@@ -2,10 +2,10 @@
 
 namespace Astral\Models;
 
-use Astral\TagSlugger;
 use Auth;
-use Illuminate\Database\Eloquent\Model;
 use JWTAuth;
+use Astral\TagSlugger;
+use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {

@@ -20,8 +20,7 @@ export default {
     const token = ls('access_token')
     return client.get(url, {}, { 'Access-Token': token })
   },
-  fetchReadme (name) {
-    const accessToken = ls('access_token')
+  fetchReadme (name, accessToken) {
     return new Promise((resolve, reject) => {
       client.withoutAuth().get(`https://api.github.com/repos/${name}/readme?access_token=${accessToken}`).then((res) => {
         const readmeMarkdown = normalizeReadmeAssetUrls(name, res)
