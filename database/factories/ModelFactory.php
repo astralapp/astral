@@ -13,7 +13,7 @@
 
 $factory->define(Astral\Models\User::class, function (Faker\Generator $faker) {
     return [
-        'github_id' => $faker->unique()->numberBetween(1,1000000)
+        'github_id' => $faker->unique()->numberBetween(1,1000000),
         'name' => $faker->name,
         'username' => $faker->unique()->userName,
         'avatar_url' => $faker->imageUrl(80, 80, 'cats'),
