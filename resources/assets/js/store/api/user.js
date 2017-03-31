@@ -6,5 +6,8 @@ export default {
   },
   setAutoTag (state) {
     return client.post('/api/auth/user/autotag', { state })
+  },
+  setSeenPatreonNotice () {
+    return client.post('/api/auth/user/flag/patreon')
   }
 }

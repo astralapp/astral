@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <settings-panel :class="{'active': settingsPanelShowing}"></settings-panel>
+    <patreon-notice :class="{'active': patreonNoticeShowing}"></patreon-notice>
     <dashboard-header></dashboard-header>
     <div class="dashboard-main">
       <dashboard-sidebar></dashboard-sidebar>
@@ -18,11 +19,13 @@ import DashboardHeader from './dashboard-header.vue'
 import DashboardSidebar from './dashboard-sidebar.vue'
 import StarList from './dashboard-star-list.vue'
 import Notifier from './notifier.vue'
+import PatreonNotice from './notices/patreon-notice.vue'
 
 export default {
   name: 'Dashboard',
   components: {
     'settings-panel': SettingsPanel,
+    'patreon-notice': PatreonNotice,
     'dashboard-header': DashboardHeader,
     'dashboard-sidebar': DashboardSidebar,
     'star-list': StarList,
@@ -37,7 +40,10 @@ export default {
     ...mapGetters([
       'tags',
       'user'
-    ])
+    ]),
+    patreonNoticeShowing () {
+      return !this.user.seen_patreon_notice
+    }
   },
   methods: {
     ...mapActions([
@@ -55,7 +61,7 @@ export default {
     })
 
     this.$bus.$on('SHOW_SETTINGS_PANEL', () => { this.settingsPanelShowing = true })
-    this.$bus.$on('HIDE_SETTINGS_PANEL', () => { this.settingsPanelShowing = false })
+    this.$bus.$on('HIDE_OVERLAY_PANELS', () => { this.settingsPanelShowing = false })
 
     this.$router.afterEach((to, from) => {
       if (to.path.match(/^\/dashboard\/untagged/g) !== null) {

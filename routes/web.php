@@ -28,6 +28,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('auth/logout', 'AuthController@logout');
         Route::get('auth/user', 'AuthController@fetchUser');
         Route::post('auth/user/autotag', 'AuthController@setAutotag');
+        Route::post('auth/user/flag/patreon', 'AuthController@seenPatreonNotice');
         Route::get('github/stars', 'GithubController@getStars');
         Route::get('github/stars/refresh', 'GithubController@refreshStars')->middleware('throttle:1,5');
 

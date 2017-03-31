@@ -37,6 +37,16 @@ const actions = {
         reject(res)
       })
     })
+  },
+  setUserSeenPatreonNotice ({ commit }) {
+    return new Promise((resolve, reject) => {
+      user.setSeenPatreonNotice().then((res) => {
+        commit(SET_USER, res.message)
+        resolve(res.message)
+      }, (res) => {
+        reject(res)
+      })
+    })
   }
 }
 

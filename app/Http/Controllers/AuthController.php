@@ -15,7 +15,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['only' => ['fetchUser', 'setAutotag', 'exportData']]);
+        $this->middleware('jwt.auth', ['only' => ['fetchUser', 'setAutotag', 'exportData', 'seenPatreonNotice']]);
     }
 
     /**
@@ -71,6 +71,15 @@ class AuthController extends Controller
         $user->save();
 
         return Auth::user();
+    }
+
+    public function seenPatreonNotice(Request $request)
+    {
+      $user = Auth::user();
+      $user->seen_patreon_notice = true;
+      $user->save();
+
+      return Auth::user();
     }
 
     public function exportData()
