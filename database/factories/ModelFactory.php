@@ -26,7 +26,7 @@ $factory->define(Astral\Models\Star::class, function (Faker\Generator $faker) {
         'user_id' => function () {
           return factory('Astral\Models\User')->create()->id;
         },
-        'repo_id' => $faker->numberBetween(1,1000000)
+        'repo_id' => $faker->numberBetween(1,1000000),
         'repo_name' => $faker->userName.'/'.$faker->domainWord,
         'notes' => $faker->paragraphs(2, true),
     ];
