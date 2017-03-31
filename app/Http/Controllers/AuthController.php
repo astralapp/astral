@@ -2,13 +2,13 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Models\User;
-use Astral\Models\Star;
+use Log;
 use Auth;
 use JWTAuth;
-use Socialite;
 use Storage;
-use Log;
+use Socialite;
+use Astral\Models\Star;
+use Astral\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller

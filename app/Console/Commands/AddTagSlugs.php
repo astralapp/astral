@@ -2,9 +2,9 @@
 
 namespace Astral\Console\Commands;
 
+use Astral\Models\Tag;
 use Astral\TagSlugger;
 use Illuminate\Console\Command;
-use Astral\Models\Tag;
 
 class AddTagSlugs extends Command
 {
