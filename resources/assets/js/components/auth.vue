@@ -31,9 +31,8 @@
           vm.error = 'Unable to authenticate user.'
         })
       } else {
-        if (to.query.token && to.query.access_token) {
+        if (to.query.token) {
           ls('jwt', to.query.token)
-          ls('access_token', to.query.access_token)
           setTimeout(() => {
             next('/dashboard')
           }, 1)

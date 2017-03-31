@@ -41,7 +41,6 @@ class AuthController extends Controller
         $githubUser = Socialite::driver('github')->user();
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
-        $token = $githubUser->token;
         // If the user exists, just update fields that they may have changed in their Github settings
         if (! is_null($user)) {
             $user->mapGithubUser($githubUser);
@@ -52,7 +51,7 @@ class AuthController extends Controller
         }
         $jwt = JWTAuth::fromUser($user);
 
-        return redirect('/auth?token='.$jwt.'&access_token='.$token);
+        return redirect('/auth?token='.$jwt);
     }
 
     /**

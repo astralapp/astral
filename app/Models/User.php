@@ -12,7 +12,7 @@ class User extends Authenticatable
     protected $table = 'users';
 
     /** @var array */
-    protected $fillable = ['github_id', 'name', 'username', 'avatar_url', 'autotag'];
+    protected $fillable = ['github_id', 'name', 'username', 'avatar_url', 'autotag', 'access_token'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -38,6 +38,7 @@ class User extends Authenticatable
             $this->name = $githubUser->getName();
         }
         $this->avatar_url = $githubUser->getAvatar();
+        $this->access_token = $githubUser->token;
         $this->save();
     }
 }
