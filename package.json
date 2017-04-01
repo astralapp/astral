@@ -4,13 +4,13 @@
   "scripts": {
     "test": "ava",
     "lint": "eslint resources/assets/js --ext='.js,.vue'",
-    "clean": "rm -f public/build/css/* public/build/js/* public/build/rev-manifest.json",
+    "clean": "rm -f public/css/app.css public/css/app.*.css public/js/app.js public/js/app.*.js public/mix-manifest.json",
     "clean-deps": "rm -rf node_modules",
     "reinstall-deps": "npm run clean-deps && npm install",
     "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules",
     "watch": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
     "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
-    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "production": "npm run clean && cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "ava": {
     "verbose": true,
