@@ -2,11 +2,11 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Lib\GithubClient;
-use Astral\Models\Star;
-use Astral\Models\Tag;
 use Auth;
 use Cache;
+use Astral\Models\Tag;
+use Astral\Models\Star;
+use Astral\Lib\GithubClient;
 use Illuminate\Http\Request;
 
 class GithubController extends Controller

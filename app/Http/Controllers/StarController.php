@@ -2,9 +2,9 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Models\Star;
-use Astral\Models\Tag;
 use Auth;
+use Astral\Models\Tag;
+use Astral\Models\Star;
 use Illuminate\Http\Request;
 
 class StarController extends Controller

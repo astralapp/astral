@@ -2,9 +2,9 @@
 
 namespace Astral\Console\Commands;
 
-use Illuminate\Console\Command;
-use Colors\RandomColor;
 use Astral\Models\Tag;
+use Colors\RandomColor;
+use Illuminate\Console\Command;
 
 class ColorTags extends Command
 {
