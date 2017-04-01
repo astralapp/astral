@@ -28,6 +28,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
+    justify-content: center;
     opacity: 0;
     width: 500px;
   }
@@ -36,9 +37,10 @@
     padding: 0 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     h3 {
       margin: 0;
+      text-align: center;
     }
     .noticePanel-closePanel {
       transition: color 250ms linear;
@@ -54,18 +56,7 @@
     }
   }
   &-panelContent {
-    .noticePanel-row {
-      background: #f8f8f8;
-      border-top: 1px solid #e0e0e0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 60px;
-      padding: 0 20px;
-      &:last-child {
-        border-bottom: 1px solid #e0e0e0;
-      }
-    }
+    padding: 20px;
   }
   &-footer {
     display: flex;

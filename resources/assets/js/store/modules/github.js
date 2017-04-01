@@ -108,14 +108,14 @@ const actions = {
         } else {
           commit(SET_CACHED_PAGES, 0)
         }
-        if (state.cachedPages && state.cachedPages === state.totalPages) {
+        if (state.cachedPages && state.cachedPages >= state.totalPages) {
           commit(SET_GITHUB_STARS, data.stars.stars)
           commit(SET_TAGS, data.tags)
           resolve(data.stars.stars)
         } else {
           commit(APPEND_GITHUB_STARS, data.stars.stars)
           commit(SET_TAGS, data.tags)
-          if (state.cachedPages) {
+          if (!!state.cachedPages) {
             resolve(dispatch('fetchStars', { page: state.cachedPages + 1 }))
           } else {
             if (page < state.totalPages) {

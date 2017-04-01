@@ -37,15 +37,13 @@ class GithubClient
         $cacheKey = $this->starsCacheKey();
         $cacheExpiry = $this->starsCacheExpiry;
         $starsArray = [];
-        $starsReceieved = [];
         $normalizedStars = [];
 
         // Check if they're doing a fresh fetch to see if we've cached our stars already
         if ($page == 1 && Cache::has($cacheKey)) {
             $cachedStars = Cache::get($cacheKey);
             // Add a "cached" key so we can check on the front-end whether we should paginate or not. We set it to the number of pages currently cached, so we fetch only what we need in subsequent requests
-            $cachedPages = count($cachedStars['stars']);
-            $cachedStars['cached'] = (int) ceil($cachedPages / $this->starsPerPage);
+            $cachedStars['cached'] = (int) ceil(count($cachedStars['stars']) / $this->starsPerPage);
 
             return $cachedStars;
         }
@@ -55,29 +53,28 @@ class GithubClient
             return array_only($star, ['description', 'full_name', 'id', 'stargazers_count', 'forks_count', 'html_url', 'ssh_url', 'language']);
         }, $stars);
         $starsArray['stars'] = $normalizedStars;
-        $starsReceieved['stars'] = $normalizedStars;
         $paginationInfo = $this->paginator->getPagination();
         if ($this->paginator->hasNext()) {
             $pageCount = $this->getPageCountFromPaginationLink($paginationInfo['last']);
             $starsArray['page_count'] = $pageCount;
-            $starsReceieved['page_count'] = $pageCount;
         } else {
             // Fetch the last known total
             $cachedStars = Cache::get($cacheKey);
             $starsArray['page_count'] = $cachedStars['page_count'];
-            $starsReceieved['page_count'] = $cachedStars['page_count'];
         }
 
         if ($page != 1) {
             $cachedStars = Cache::get($cacheKey);
             // Merge the new stars into the old ones
-            $oldStars = $cachedStars['stars'];
-            $newStars = $starsArray['stars'];
-            $starsArray['stars'] = array_merge($oldStars, $newStars);
+            $oldStars = $cachedStars;
+            $newStars = $starsArray;
+            $starsArray['stars'] = array_merge($oldStars['stars'], $newStars['stars']);
+        } else {
+          $newStars = $starsArray;
         }
         Cache::put($cacheKey, $starsArray, $cacheExpiry);
 
-        return $starsReceieved;
+        return $newStars;
     }
 
     /**
