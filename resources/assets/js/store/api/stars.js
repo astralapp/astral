@@ -17,8 +17,7 @@ const normalizeReadmeAssetUrls = (name, readmeResponse) => {
 export default {
   fetch (page = 1, autotag = true, refresh = false) {
     const url = refresh ? `/api/github/stars/refresh` : `/api/github/stars?page=${page}&autotag=${autotag}`
-    const token = ls('access_token')
-    return client.get(url, {}, { 'Access-Token': token })
+    return client.get(url)
   },
   fetchReadme (name, accessToken) {
     return new Promise((resolve, reject) => {
