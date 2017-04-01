@@ -61,7 +61,7 @@ export default {
     })
 
     this.$bus.$on('SHOW_SETTINGS_PANEL', () => { this.settingsPanelShowing = true })
-    this.$bus.$on('HIDE_OVERLAY_PANELS', () => { this.settingsPanelShowing = false })
+    this.$bus.$on('HIDE_SETTINGS_PANEL', () => { this.settingsPanelShowing = false })
 
     this.$router.afterEach((to, from) => {
       if (to.path.match(/^\/dashboard\/untagged/g) !== null) {
