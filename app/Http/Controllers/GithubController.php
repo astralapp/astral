@@ -26,7 +26,7 @@ class GithubController extends Controller
     {
         $page = (int) $request->input('page', 1);
         $autotag = (bool) $request->input('autotag');
-        $access_token = $request->header('Access-Token');
+        $access_token = Auth::user()->access_token;
         $githubClient = new GithubClient($access_token);
         $stars = $githubClient->getStars($page);
 
