@@ -70,7 +70,7 @@ class GithubClient
             $newStars = $starsArray;
             $starsArray['stars'] = array_merge($oldStars['stars'], $newStars['stars']);
         } else {
-          $newStars = $starsArray;
+            $newStars = $starsArray;
         }
         Cache::put($cacheKey, $starsArray, $cacheExpiry);
 

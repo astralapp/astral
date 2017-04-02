@@ -74,11 +74,11 @@ class AuthController extends Controller
 
     public function seenPatreonNotice(Request $request)
     {
-      $user = Auth::user();
-      $user->seen_patreon_notice = true;
-      $user->save();
+        $user = Auth::user();
+        $user->seen_patreon_notice = true;
+        $user->save();
 
-      return Auth::user();
+        return Auth::user();
     }
 
     public function exportData()
