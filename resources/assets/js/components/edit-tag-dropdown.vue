@@ -3,7 +3,7 @@
     <i class="fa fa-cog"></i>
     <transition name="dashboardHeader-editTagDropdown">
       <div class="dashboardHeader-editTagDropdown" v-show="tagEditorShowing">
-        <input type="text" :value="currentTag.name" ref="tag-name">
+        <input type="text" v-model="currentTagField">
         <button class="btn-flat" @click="doEditTagName(currentTag.id)">Save</button>
         <button class="btn-flat btn-danger" @click="deleteCurrentTag">Delete Tag</button>
       </div>
@@ -19,7 +19,7 @@ export default {
   mixins: [clickaway],
   data () {
     return {
-      currentTagName: '',
+      currentTagField: Object.assign({}, this.$store.state.tags.currentTag).name,
       tagEditorShowing: false
     }
   },
@@ -37,7 +37,7 @@ export default {
       this.tagEditorShowing = false
     },
     doEditTagName (id) {
-      const name = this.$refs.tagName.value
+      const name = this.currentTagField
       this.editTagName({ id, name }).then((res) => {
         this.$bus.$emit('NOTIFICATION', `Tag renamed to ${name}.`)
         this.$router.replace(`/dashboard/tag/${res.slug}`)
