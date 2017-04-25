@@ -13,6 +13,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { mixin as clickaway } from 'vue-clickaway'
+import swal from 'sweetalert'
 
 export default {
   name: 'EditTagDropdown',
@@ -50,17 +51,26 @@ export default {
       })
     },
     deleteCurrentTag () {
-      if (window.confirm('Are you sure you want to delete this tag?')) {
-        this.$bus.$emit('STATUS', `Deleting ${this.currentTag.name} tag...`)
-        this.deleteTag(this.currentTag.id).then((res) => {
-          this.$bus.$emit('STATUS', '')
-          this.$bus.$emit('NOTIFICATION', `${this.currentTag.name} tag successfully deleted.`)
-          this.$router.push('/dashboard')
-        }).catch((errors) => {
-          this.$bus.$emit('STATUS', '')
-          this.$bus.$emit('NOTIFICATION', 'There was an error deleting this tag.', 'error')
-        })
-      }
+      swal({
+        title: 'Delete tag?',
+        text: 'Are you sure you want to delete this tag?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, I\'m sure',
+        closeOnConfirm: true
+      }, isConfirm => {
+        if (isConfirm) {
+          this.$bus.$emit('STATUS', `Deleting ${this.currentTag.name} tag...`)
+            this.deleteTag(this.currentTag.id).then((res) => {
+              this.$bus.$emit('STATUS', '')
+              this.$bus.$emit('NOTIFICATION', `${this.currentTag.name} tag successfully deleted.`)
+              this.$router.push('/dashboard')
+            }).catch((errors) => {
+              this.$bus.$emit('STATUS', '')
+              this.$bus.$emit('NOTIFICATION', 'There was an error deleting this tag.', 'error')
+            })
+        }
+      })
     }
   }
 }

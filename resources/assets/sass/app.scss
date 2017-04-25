@@ -12,6 +12,8 @@
 @import "application/components/dashboard";
 @import "application/components/edit_tag_dropdown";
 @import "application/components/tag_editor";
+@import "~sweetalert/dev/sweetalert";
+@import "~sweetalert/themes/facebook/facebook";
 
 *, *::before, *::after {
   box-sizing: border-box;
