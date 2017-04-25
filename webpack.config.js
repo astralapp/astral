@@ -219,9 +219,7 @@ module.exports.resolve = {
     extensions: ['*', '.js', '.jsx', '.vue'],
 
     alias: {
-        'vue$': 'vue/dist/vue.common.js',
-        sweetAlertStyles: path.resolve(__dirname, './node_modules/sweetalert/dist/sweetalert.css'),
-        sweetAlertThemeStyles: path.resolve(__dirname, './node_modules/sweetalert/themes/facebook/facebook.css')
+        'vue$': 'vue/dist/vue.common.js'
     }
 };
 

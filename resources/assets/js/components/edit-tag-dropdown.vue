@@ -14,8 +14,6 @@
 import { mapActions, mapGetters } from 'vuex'
 import { mixin as clickaway } from 'vue-clickaway'
 import swal from 'sweetalert'
-require('sweetAlertStyles')
-require('sweetAlertThemeStyles')
 
 export default {
   name: 'EditTagDropdown',
