@@ -47,6 +47,6 @@ class User extends Authenticatable
      */
     public function starsCacheKey()
     {
-      return "user_{$this->id}.github_stars";
+        return "user_{$this->id}.github_stars";
     }
 }

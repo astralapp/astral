@@ -141,7 +141,7 @@ class StarController extends Controller
     {
         $githubStarIds = collect(Cache::get(Auth::user()->starsCacheKey())['stars'])->pluck('id');
         $starIds = Auth::user()->stars()->has('tags')->get()->pluck('repo_id');
-        $starIds->diff($githubStarIds)->each(function($id) {
+        $starIds->diff($githubStarIds)->each(function ($id) {
             Auth::user()->stars()->withRepoId($id)->first()->delete();
         });
 
