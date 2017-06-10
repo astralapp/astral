@@ -67,7 +67,8 @@ export default {
       'newTag',
       'tags',
       'currentTag',
-      'tagFilter'
+      'tagFilter',
+      'githubStars'
     ])
   },
   watch: {
@@ -143,7 +144,8 @@ export default {
       'addTag',
       'tagStar',
       'reorderTags',
-      'setCurrentTag'
+      'setCurrentTag',
+      'cleanupStars'
     ]),
     bindTagItemDragListeners () {
       $('.dashboard-list-item.tag').off('dragover dragleave drop')
