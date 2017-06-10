@@ -8,4 +8,5 @@ You can join them in supporting Astral's development by [pledging on Patreon](ht
 - CJ Winslow
 - Joshua Harms
 - Noritaka Horio
-
+- Jonathon
+- Websec.io
