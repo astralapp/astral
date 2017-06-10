@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import client from './client'
-import ls from 'local-storage'
 import { Base64 } from 'js-base64'
 
 Vue.use(VueResource)
@@ -35,6 +34,9 @@ export default {
   },
   tagStar (data) {
     return client.post('/api/stars/tag', data)
+  },
+  cleanup () {
+    return client.post('/api/stars/cleanup')
   }
 
 }

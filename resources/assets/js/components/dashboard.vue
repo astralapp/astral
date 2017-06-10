@@ -93,7 +93,6 @@ export default {
       store.dispatch('fetchUser').then((res) => {
         next()
       }).catch((error) => {
-        console.log(error)
         if (error.status === 401 || error.status === 400) {
           next('/auth')
         } else {

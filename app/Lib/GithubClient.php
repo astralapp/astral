@@ -34,7 +34,7 @@ class GithubClient
      */
     public function getStars($page = 1)
     {
-        $cacheKey = $this->starsCacheKey();
+        $cacheKey = Auth::user()->starsCacheKey();
         $cacheExpiry = $this->starsCacheExpiry;
         $starsArray = [];
         $normalizedStars = [];
@@ -75,14 +75,6 @@ class GithubClient
         Cache::put($cacheKey, $starsArray, $cacheExpiry);
 
         return $newStars;
-    }
-
-    /**
-     * @return string
-     */
-    private function starsCacheKey()
-    {
-        return 'user_'.Auth::id().'.github_stars';
     }
 
     /**

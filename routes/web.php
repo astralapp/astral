@@ -40,5 +40,6 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('stars/autotag', 'StarController@autotag');
         Route::post('stars/syncTags', 'StarController@syncTags');
         Route::post('stars/notes', 'StarController@editNotes');
+        Route::post('stars/cleanup', 'StarController@cleanupStars');
     });
 });

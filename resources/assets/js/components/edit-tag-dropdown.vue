@@ -61,14 +61,14 @@ export default {
       }, isConfirm => {
         if (isConfirm) {
           this.$bus.$emit('STATUS', `Deleting ${this.currentTag.name} tag...`)
-            this.deleteTag(this.currentTag.id).then((res) => {
-              this.$bus.$emit('STATUS', '')
-              this.$bus.$emit('NOTIFICATION', `${this.currentTag.name} tag successfully deleted.`)
-              this.$router.push('/dashboard')
-            }).catch((errors) => {
-              this.$bus.$emit('STATUS', '')
-              this.$bus.$emit('NOTIFICATION', 'There was an error deleting this tag.', 'error')
-            })
+          this.deleteTag(this.currentTag.id).then((res) => {
+            this.$bus.$emit('STATUS', '')
+            this.$bus.$emit('NOTIFICATION', `${this.currentTag.name} tag successfully deleted.`)
+            this.$router.push('/dashboard')
+          }).catch((errors) => {
+            this.$bus.$emit('STATUS', '')
+            this.$bus.$emit('NOTIFICATION', 'There was an error deleting this tag.', 'error')
+          })
         }
       })
     }

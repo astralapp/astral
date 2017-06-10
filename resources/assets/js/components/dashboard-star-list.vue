@@ -53,7 +53,10 @@ export default {
     this.$bus.$emit('STATUS', 'Loading stars...')
 
     this.fetchStars().then((res) => {
-      this.$bus.$emit('STATUS', '')
+      this.$bus.$emit('STATUS', 'Cleaning up...')
+      this.cleanupStars().then((res) => {
+        this.$bus.$emit('STATUS', '')
+      })
       Array.from(document.querySelectorAll('.repo')).forEach((repo) => {
         repo.addEventListener('dragstart', (e) => {
           const data = JSON.stringify(this.githubStars[parseInt(e.currentTarget.dataset.index, 10)])
@@ -70,7 +73,8 @@ export default {
     ...mapActions([
       'fetchStars',
       'setCurrentStar',
-      'setCurrentTag'
+      'setCurrentTag',
+      'cleanupStars'
     ]),
     starClicked (repo) {
       if (repo.id === this.currentStar.id) {
