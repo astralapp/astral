@@ -67,7 +67,8 @@ export default {
       'newTag',
       'tags',
       'currentTag',
-      'tagFilter'
+      'tagFilter',
+      'githubStars'
     ])
   },
   watch: {
@@ -143,7 +144,8 @@ export default {
       'addTag',
       'tagStar',
       'reorderTags',
-      'setCurrentTag'
+      'setCurrentTag',
+      'cleanupStars'
     ]),
     bindTagItemDragListeners () {
       $('.dashboard-list-item.tag').off('dragover dragleave drop')
@@ -203,7 +205,17 @@ export default {
       this.refreshingStars = true
       this.fetchStars({ refresh: true }).then((res) => {
         this.refreshingStars = false
-        this.$bus.$emit('STATUS', '')
+        this.$bus.$emit('STATUS', 'Cleaning up...')
+        this.cleanupStars().then((res) => {
+          this.$bus.$emit('STATUS', '')
+        })
+        Array.from(document.querySelectorAll('.repo')).forEach((repo) => {
+          repo.addEventListener('dragstart', (e) => {
+            const data = JSON.stringify(this.githubStars[parseInt(e.currentTarget.dataset.index, 10)])
+            e.dataTransfer.effectAllowed = 'move'
+            e.dataTransfer.setData('text/plain', data)
+          }, false)
+        })
       }).catch((error) => {
         error = JSON.parse(error)
         this.refreshingStars = false

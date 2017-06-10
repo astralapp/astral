@@ -15,6 +15,7 @@ import {
 } from '../mutation-types.js'
 
 import Tags from '../api/tags'
+import Stars from '../api/stars'
 
 const state = {
   newTag: {
@@ -134,6 +135,16 @@ const actions = {
   },
   resetCurrentTag ({ commit }) {
     commit(RESET_CURRENT_TAG)
+  },
+  cleanupStars ({ commit }) {
+    return new Promise((resolve, reject) => {
+      Stars.cleanup().then((res) => {
+        commit(SET_TAGS, res.message.tags)
+        resolve(res.message)
+      }, (res) => {
+        reject(res)
+      })
+    })
   }
 }
 

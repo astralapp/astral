@@ -41,4 +41,12 @@ class User extends Authenticatable
         $this->access_token = $githubUser->token;
         $this->save();
     }
+
+    /**
+     * @return string
+     */
+    public function starsCacheKey()
+    {
+        return "user_{$this->id}.github_stars";
+    }
 }

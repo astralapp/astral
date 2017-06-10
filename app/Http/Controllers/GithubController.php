@@ -35,7 +35,7 @@ class GithubController extends Controller
 
     public function refreshStars(Request $request)
     {
-        Cache::forget('user_'.Auth::id().'.github_stars');
+        Cache::forget(Auth::user()->starsCacheKey());
 
         return $this->getStars($request);
     }

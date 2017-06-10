@@ -3,6 +3,7 @@
 namespace Astral\Http\Controllers;
 
 use Auth;
+use Cache;
 use Astral\Models\Tag;
 use Astral\Models\Star;
 use Illuminate\Http\Request;
@@ -129,5 +130,24 @@ class StarController extends Controller
         $star->save();
 
         return $star;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cleanupStars(Request $request)
+    {
+        $githubStarIds = collect(Cache::get(Auth::user()->starsCacheKey())['stars'])->pluck('id');
+        $starIds = Auth::user()->stars()->has('tags')->get()->pluck('repo_id');
+        $starIds->diff($githubStarIds)->each(function ($id) {
+            Auth::user()->stars()->withRepoId($id)->first()->delete();
+        });
+
+        return [
+            'stars' => Star::withTags()->get(),
+            'tags' => Tag::withStarCount()->get(),
+        ];
     }
 }
