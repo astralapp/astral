@@ -1,9 +1,9 @@
-## Astral v2
+## Astral
+> Organize your GitHub Stars with ease.
 
 [![Join the chat at https://gitter.im/astralapp/astral](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/astralapp/astral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/astralapp/astral.svg?branch=master)](https://travis-ci.org/astralapp/astral) [![ghit.me](https://ghit.me/badge.svg?repo=astralapp/astral)](https://ghit.me/repo/astralapp/astral)
 
-
-This is the repository for Astral v2. Currently looking for core contributors!
+<a href="https://app.codesponsor.io/link/vSYg5p7VLntutsyxZzPVdCUo/astralapp/astral" rel="nofollow"><img src="https://app.codesponsor.io/embed/vSYg5p7VLntutsyxZzPVdCUo/astralapp/astral.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
 
 ---
 
@@ -54,7 +54,7 @@ This is the repository for Astral v2. Currently looking for core contributors!
 	$ php artisan key:generate
 	```
 
-- Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and bask in its glory!
+- Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and enjoy!
 
 #### With Docker using Laradock
 
@@ -73,8 +73,6 @@ This is the repository for Astral v2. Currently looking for core contributors!
 	$ php artisan migrate
 	$ php artisan key:generate
 	```
-
-- Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and bask in its glory!
 
 ### Compiling JavaScript and SCSS Changes
 
