@@ -1,0 +1,32 @@
+@tailwind utilities;
+
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
+  -moz-font-feature-settings: 'calt=1, liga=1, clig=1, kern=1';
+  -ms-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
+  -o-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
+  -webkit-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
+  font-feature-settings: 'calt', 'liga', 'clig', 'kern';
+}
+
+html,
+body {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+body {
+  background: config('colors.brand');
+  font-family: config('fonts.sans');
+  min-height: 100%;
+}
+
+@import 'animations';
+
+@import 'custom-utilities';

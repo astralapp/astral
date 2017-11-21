@@ -1,0 +1,54 @@
+.tracking-wider {
+  letter-spacing: 0.08rem;
+}
+
+.focus-none:focus {
+  outline: none;
+}
+
+.list-none {
+  list-style-type: none;
+}
+.fill-none {
+  fill: transparent;
+}
+.stroke-current {
+  stroke: currentColor;
+}
+
+.nudge-t {
+  top: 1px;
+}
+
+.nudge-r {
+  right: 1px;
+}
+
+.nudge-b {
+  bottom: 1px;
+}
+
+.nudge-l {
+  left: 1px;
+}
+
+.transition-bg {
+  transition: background-color 150ms ease;
+}
+
+.transition-color {
+  transition: color 150ms ease;
+}
+
+.transition-border-color {
+  transition: border-color 150ms ease;
+}
+
+.tansition-color-bg {
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.transition-color-bg-border {
+  transition: background-color 150ms ease, color 150ms ease,
+    border-color 150ms ease;
+}

@@ -1,0 +1,26 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["transform-object-rest-spread"],
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "plugins": ["transform-async-to-generator", "transform-runtime"]
+}
