@@ -9,17 +9,34 @@ class StarTagsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt');
+        $this->middleware('auth:api');
+    }
+
+    public function store(Request $request)
+    {
+        $id = $request->input('relayId');
+        $tag_id = $request->input('tagId');
+        $star = Star::withRepoId($id)->first();
+        if (!is_null($star)) {
+            $star->tags()->sync([$tag_id], false);
+            $star->save();
+        } else {
+            $star = new Star();
+            $star->relay_id = $id;
+            $star->save();
+            $star->tags()->attach($tag_id);
+        }
+        return [
+            'tags' => Tag::withStarCount()->get(),
+        ];
     }
 
     public function update(Request $request)
     {
-        $id = $request->input('repo_id');
         $relayId = $request->input('relay_id');
         $star = Star::withRepoId($id)->first();
         if (!$star) {
             $star = new Star();
-            $star->repo_id = $id;
             $star->relay_id = $relayId;
             $star->user_id = auth()->id();
             $star->save();

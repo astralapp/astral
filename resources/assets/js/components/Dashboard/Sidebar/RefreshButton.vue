@@ -15,4 +15,15 @@ export default {
   props: ['active']
 }
 </script>
+<style lang="scss">
+.refresh-stars {
+  svg {
+    transition: stroke 150ms ease;
+  }
+  &:hover svg {
+    stroke: config('colors.grey');
+  }
+}
+</style>
+
 

@@ -15,8 +15,8 @@ class CreateStarsTable extends Migration
         Schema::create('stars', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('repo_id');
-            $table->string('relay_id')->nullable();
+            $table->integer('repo_id')->nullable();
+            $table->string('relay_id');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

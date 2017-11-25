@@ -15,4 +15,11 @@ class TagController extends Controller
     {
         return Tag::withStarCount()->get();
     }
+
+    public function store(Request $request)
+    {
+        $name = $request->input('name');
+
+        return Tag::create(['name' => $name]);
+    }
 }

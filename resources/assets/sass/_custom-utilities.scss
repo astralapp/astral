@@ -1,3 +1,7 @@
+.bg-white-10 {
+  background-color: rgba(#fff, 0.1);
+}
+
 .tracking-wider {
   letter-spacing: 0.08rem;
 }
@@ -51,4 +55,8 @@
 .transition-color-bg-border {
   transition: background-color 150ms ease, color 150ms ease,
     border-color 150ms ease;
+}
+
+.transition-stroke {
+  transition: stroke 150ms ease;
 }

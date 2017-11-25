@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise'
-import { SET_TAGS, SET_CURRENT_TAG } from '../mutation-types'
+import { ADD_TAG, SET_TAGS, SET_CURRENT_TAG } from '../mutation-types'
 
 import client from './../api/client.js'
 
@@ -19,6 +19,9 @@ const mutations = {
   },
   [SET_CURRENT_TAG](state, tag) {
     state.currentTag = Object.assign({}, tag)
+  },
+  [ADD_TAG](state, tag) {
+    state.tags = state.tags.concat([tag])
   }
 }
 
@@ -30,6 +33,17 @@ const actions = {
       .then(res => {
         commit(SET_TAGS, res)
       })
+  },
+  addTag({ commit }, name) {
+    return client
+      .withAuth()
+      .post('/api/tags', { name })
+      .then(res => {
+        commit(ADD_TAG, res)
+      })
+  },
+  setCurrentTag({ commit }, tag) {
+    commit(SET_CURRENT_TAG, tag)
   }
 }
 

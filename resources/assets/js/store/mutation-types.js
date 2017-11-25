@@ -1,5 +1,6 @@
 export const SET_USER = 'SET_USER'
 
+export const ADD_TAG = 'ADD_TAG'
 export const SET_TAGS = 'SET_TAGS'
 export const SET_CURRENT_TAG = 'SET_CURRENT_TAG'
 
@@ -8,4 +9,9 @@ export const SET_TOTAL_STARS = 'SET_TOTAL_STARS'
 export const SET_STARS_PAGE_INFO = 'SET_STARS_PAGE_INFO'
 export const CLEAR_STARS = 'CLEAR_STARS'
 export const SYNC_STAR_TAGS = 'SYNC_STAR_TAGS'
+export const PUSH_STAR_TAG = 'PUSH_STAR_TAG'
 export const MAP_USER_STARS_TO_GITHUB_STARS = 'MAP_USER_STARS_TO_GITHUB_STARS'
+export const SET_CURRENT_LANGUAGE = 'SET_CURRENT_LANGUAGE'
+export const SET_USER_STARS = 'SET_USER_STARS'
+export const SET_CURRENT_STAR = 'SET_CURRENT_STAR'
+export const SET_README = 'SET_README'

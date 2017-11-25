@@ -13,6 +13,11 @@ class StarsController extends Controller
         $this->middleware('auth:api');
     }
 
+    public function index()
+    {
+        return Star::with('tags')->where('user_id', auth()->id())->get();
+    }
+
     public function fetchGitHubStars(Request $request)
     {
         $token = auth()->user()->access_token;

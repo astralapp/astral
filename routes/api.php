@@ -15,7 +15,10 @@ use Illuminate\Http\Request;
 Route::get('me', 'AuthController@me');
 
 Route::get('/tags', 'TagController@index');
+Route::post('/tags', 'TagController@store');
 
 Route::put('/star/tags', 'StarTagsController@update');
+Route::post('/star/tags', 'StarTagsController@store');
 
+Route::get('/stars', 'StarsController@index');
 Route::post('stars/github', 'StarsController@fetchGitHubStars');
