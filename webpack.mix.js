@@ -66,7 +66,6 @@ mix
   )
   .options({
     extractVueStyles: true,
-    purifyCss: process.env.NODE_ENV === 'production',
     postCss: [tailwindcss('tailwind.js')]
   })
   .then(function() {

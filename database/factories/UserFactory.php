@@ -1,5 +1,4 @@
 <?php
-
 use Faker\Generator as Faker;
 
 /*
@@ -11,15 +10,17 @@ use Faker\Generator as Faker;
 | your application. Factories provide a convenient way to generate new
 | model instances for testing / seeding your application's database.
 |
-*/
+ */
 
-$factory->define(Astral\User::class, function (Faker $faker) {
+$factory->define(Astral\Models\User::class, function (Faker $faker) {
     static $password;
 
     return [
         'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
+        'github_id' => $faker->randomNumber,
+        'username' => $faker->userName,
+        'avatar_url' => $faker->imageUrl($width = 100, $height = 100),
+        'access_token' => str_random(40),
         'remember_token' => str_random(10),
     ];
 });
