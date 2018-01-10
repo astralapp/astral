@@ -54,7 +54,7 @@
 	$ php artisan key:generate
 	```
 
-- Fire up the app! Open a browser at [http://astralapp.app/](http://astralapp.app/) and enjoy!
+- Fire up the app! Open a browser at [http://astralapp.com/](http://astralapp.com/) and enjoy!
 
 #### With Docker using Laradock
 
