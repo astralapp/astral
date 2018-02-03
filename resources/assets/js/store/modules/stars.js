@@ -1,15 +1,19 @@
 import {
-  SET_STARS,
   CLEAR_STARS,
-  SET_TOTAL_STARS,
-  SET_STARS_PAGE_INFO,
-  SET_CURRENT_LANGUAGE,
   PUSH_STAR_TAG,
-  SET_TAGS,
-  SET_USER_STARS,
-  SYNC_STAR_TAGS,
+  SET_CURRENT_LANGUAGE,
   SET_CURRENT_STAR,
-  SET_README
+  SET_CURRENT_TAG,
+  SET_README,
+  SET_STARS_PAGE_INFO,
+  SET_STARS,
+  SET_STAR_TAGS,
+  SET_TAGS,
+  SET_TOTAL_STARS,
+  SET_USER_STARS,
+  SET_VIEWING_UNTAGGED,
+  SYNC_STAR_TAGS,
+  MAP_USER_STARS_TO_GITHUB_STARS
 } from '../mutation-types'
 
 import client from './../api/client.js'
@@ -21,7 +25,8 @@ const state = {
   totalStars: 0,
   currentLanguage: '',
   currentStar: {},
-  readme: ''
+  readme: '',
+  viewingUntagged: false
 }
 
 const getters = {
@@ -42,7 +47,17 @@ const getters = {
   },
   currentLanguage: state => state.currentLanguage,
   currentStar: state => state.currentStar,
-  readme: state => state.readme
+  currentStarIndex: state => {
+    if (Object.keys(state.currentStar).length) {
+      return state.stars.findIndex(
+        star => star.node.id === state.currentStar.node.id
+      )
+    } else {
+      return -1
+    }
+  },
+  readme: state => state.readme,
+  viewingUntagged: state => state.viewingUntagged
 }
 
 const mutations = {
@@ -74,10 +89,18 @@ const mutations = {
       }
     })
   },
+  [SET_STAR_TAGS](state, { starId, tags }) {
+    state.stars = state.stars.map(star => {
+      if (star.node.id === starId) {
+        star.tags = [].concat(tags)
+      }
+      return star
+    })
+  },
   [SET_USER_STARS](state, stars) {
     state.userStars = [].concat(stars)
   },
-  [SYNC_STAR_TAGS](state) {
+  [MAP_USER_STARS_TO_GITHUB_STARS](state) {
     const userStars = state.userStars
     state.stars.map(star => {
       const userStar = userStars.find(s => s.relay_id === star.node.id)
@@ -94,6 +117,9 @@ const mutations = {
   },
   [SET_README](state, readme) {
     state.readme = readme
+  },
+  [SET_VIEWING_UNTAGGED](state, viewing) {
+    state.viewingUntagged = viewing
   }
 }
 
@@ -116,7 +142,7 @@ const actions = {
         if (!cursor) {
           commit(SET_TOTAL_STARS, res.totalCount)
         }
-        commit(SYNC_STAR_TAGS)
+        commit(MAP_USER_STARS_TO_GITHUB_STARS)
       })
   },
   fetchUserStars({ commit }) {
@@ -150,9 +176,7 @@ const actions = {
     client
       .withoutAuth()
       .get(
-        `https://api.github.com/repos/${repoName}/readme?access_token=${
-          accessToken
-        }`,
+        `https://api.github.com/repos/${repoName}/readme?access_token=${accessToken}`,
         {},
         {
           Accept: 'application/vnd.github.v3.html'
@@ -160,6 +184,27 @@ const actions = {
       )
       .then(res => {
         commit(SET_README, res)
+      })
+  },
+  setViewingUntagged({ commit }, viewing) {
+    if (viewing) {
+      commit(SET_CURRENT_TAG, {})
+    }
+    commit(SET_VIEWING_UNTAGGED, viewing)
+  },
+  syncStarTags({ commit }, { relayId, tags }) {
+    client
+      .withAuth()
+      .put('/api/star/tags', {
+        relayId,
+        tags
+      })
+      .then(res => {
+        commit(SET_TAGS, res.tags)
+        commit(SET_STAR_TAGS, {
+          starId: relayId,
+          tags: res.star.tags
+        })
       })
   }
 }

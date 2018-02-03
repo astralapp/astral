@@ -1,5 +1,5 @@
 <template>
-  <div class="repo-readme p-4 text-grey-darkest bg-white w-full h-full overflow-y-scroll" v-html="readme" ref="readme"></div>
+  <div class="repo-readme flex-1 p-4 text-grey-darkest bg-white w-full overflow-y-scroll" v-html="readme" ref="readme"></div>
 </template>
 <script>
 export default {
@@ -64,6 +64,11 @@ export default {
   p {
     margin: 1em 0;
     line-height: 1.3;
+  }
+
+  ul,
+  ol {
+    margin-bottom: 1em;
   }
 
   pre {

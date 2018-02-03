@@ -29,10 +29,15 @@ class GitHubClient
               id
               nameWithOwner
               description
+              url
               databaseId
               primaryLanguage {
                 name
               }
+              stargazers {
+                totalCount
+              }
+              forkCount
             }
             cursor
           }

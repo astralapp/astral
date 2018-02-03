@@ -1,5 +1,5 @@
 <template>
-  <li class="dashboard-list-item flex items-center py-2 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
+  <li class="dashboard-list-item flex items-center py-2 pr-1 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
     <feather-icon :type="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none" v-if="icon">
     </feather-icon>
     <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">{{ title }}</span>

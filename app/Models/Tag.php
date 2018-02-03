@@ -9,7 +9,7 @@ class Tag extends Model
 {
     protected $guarded = ['id'];
 
-    protected $hidden = ['pivot', 'user_id'];
+    protected $hidden = ['pivot'];
 
     protected $fillable = ['name'];
 

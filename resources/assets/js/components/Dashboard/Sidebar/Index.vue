@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar bg-black py-8 overflow-y-scroll px-4">
+  <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
     <sidebar-header title="Stars">
       <refresh-button :active="refreshingStars" @click.native="refreshStars"></refresh-button>
     </sidebar-header>
@@ -13,7 +13,15 @@
         @click.native="resetFilters"
       >
       </sidebar-item>
-      <sidebar-item class="untagged-stars" title="Untagged Stars" icon="star" icon-size="16"></sidebar-item>
+      <sidebar-item 
+        class="untagged-stars" 
+        :class="{ 'selected': viewingUntagged }"
+        title="Untagged Stars" 
+        icon="star" 
+        icon-size="16" 
+        @click.native="setViewingUntagged(true)"
+        >
+        </sidebar-item>
     </ul>
     <sidebar-header title="Tags">
       <sort-tags></sort-tags>
@@ -21,7 +29,7 @@
     <new-tag-form @submit="doAddTag"></new-tag-form>
     <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3">
       <sidebar-item 
-        v-for="tag in tags" 
+        v-for="tag in sortedTags" 
         :key="tag.id" 
         :data-id="tag.id" 
         :badge="tag.stars_count"
@@ -74,13 +82,24 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['tags', 'currentTag', 'languages', 'currentLanguage']),
+    ...mapGetters([
+      'sortedTags',
+      'currentTag',
+      'languages',
+      'currentLanguage',
+      'viewingUntagged'
+    ]),
     noFiltersApplied() {
-      return !Object.keys(this.currentTag).length && this.currentLanguage === ''
+      return (
+        !Object.keys(this.currentTag).length &&
+        this.currentLanguage === '' &&
+        !this.viewingUntagged
+      )
     }
   },
   mounted() {
     this.fetchTags()
+    this.$bus.$on('TAGS_SORTED', method => this.sortTags(method))
   },
   methods: {
     ...mapActions([
@@ -88,7 +107,9 @@ export default {
       'fetchTags',
       'setCurrentTag',
       'setCurrentLanguage',
-      'pushStarTag'
+      'setViewingUntagged',
+      'pushStarTag',
+      'sortTags'
     ]),
     refreshStars() {
       console.log('Refreshing Stars...')
@@ -97,11 +118,12 @@ export default {
       this.addTag(name)
     },
     resetFilters() {
+      this.setViewingUntagged(false)
       this.setCurrentTag({})
       this.setCurrentLanguage('')
     },
     tagStarWithData({ data, id }) {
-      const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
+      const tag = this.sortedTags.find(tag => tag.id === parseInt(id, 10))
       this.pushStarTag({ starId: data.id, tag: tag })
     }
   }

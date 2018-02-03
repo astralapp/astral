@@ -277,6 +277,10 @@ autoprefixer@^7.1.1:
     postcss "^6.0.13"
     postcss-value-parser "^3.2.3"
 
+awesomplete@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/awesomplete/-/awesomplete-1.1.2.tgz#b6e253f73474e46278bba5ae7f81d4262160fb75"
+
 aws-sign2@~0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.6.0.tgz#14342dd38dbcc94d0e5b87d763cd63612c0e794f"
@@ -2691,6 +2695,10 @@ function-bind@^1.0.2, function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
 
+fuzzysearch@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/fuzzysearch/-/fuzzysearch-1.0.3.tgz#dffc80f6d6b04223f2226aa79dd194231096d008"
+
 gather-stream@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/gather-stream/-/gather-stream-1.0.0.tgz#b33994af457a8115700d410f317733cbe7a0904b"
@@ -4099,7 +4107,7 @@ longest@^1.0.0, longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
 
-loose-envify@^1.0.0:
+loose-envify@^1.0.0, loose-envify@^1.2.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.3.1.tgz#d1a8ad33fa9ce0e713d65fdd0ac8b748d478c848"
   dependencies:
@@ -4340,6 +4348,10 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
+mousetrap@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.1.tgz#2a085f5c751294c75e7e81f6ec2545b29cbf42d9"
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -4392,6 +4404,10 @@ multipipe@^0.1.2:
 nan@^2.3.0, nan@^2.3.2:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
+
+nanoid@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-1.0.1.tgz#58a8e0577d9db07ae4f231a3afa59af94e4fc439"
 
 ncname@1.0.x:
   version "1.0.0"
@@ -6532,13 +6548,14 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.2.0.tgz#0bdc5a5465771e73b84e784a2660ce56be37987d"
+tailwindcss@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.4.0.tgz#3e38cb15aed46158d77f67a32865bf4d145065f7"
   dependencies:
     commander "^2.11.0"
     fs-extra "^4.0.2"
     lodash "^4.17.4"
+    mousetrap "^1.6.1"
     nodemon "^1.11.0"
     postcss "^6.0.9"
     postcss-functions "^3.0.0"
@@ -6998,9 +7015,19 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-clickaway@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/vue-clickaway/-/vue-clickaway-2.1.0.tgz#392de764751f31cd20787e8fb3a6e319825f8d4f"
+  dependencies:
+    loose-envify "^1.2.0"
+
 vue-feather-icon@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/vue-feather-icon/-/vue-feather-icon-1.2.0.tgz#3801b8d25f99ea62978a2f0c4042976ede497573"
+
+vue-global-events@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vue-global-events/-/vue-global-events-1.0.2.tgz#63f41ad47aa969a318dc25b02f62409d1ae58d35"
 
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"
@@ -7027,6 +7054,10 @@ vue-loader@^13.0.5:
 vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
+
+vue-slicksort@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/vue-slicksort/-/vue-slicksort-0.1.4.tgz#a3e5410387002273e844e60630f94d683ffacbfa"
 
 vue-style-loader@^3.0.0:
   version "3.0.3"

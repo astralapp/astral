@@ -33,8 +33,8 @@ class StarTagsController extends Controller
 
     public function update(Request $request)
     {
-        $relayId = $request->input('relay_id');
-        $star = Star::withRepoId($id)->first();
+        $relayId = $request->input('relayId');
+        $star = Star::withRepoId($relayId)->first();
         if (!$star) {
             $star = new Star();
             $star->relay_id = $relayId;

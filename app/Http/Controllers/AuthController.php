@@ -38,8 +38,8 @@ class AuthController extends Controller
             $user->mapGithubUser($githubUser);
         }
         $jwt = JWTAuth::fromUser($user);
-
-        return redirect('/auth?token=' . $jwt);
+        $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
+        return redirect('/auth?token=' . $jwt . '&token_expiry=' . $jwtExpiry);
     }
 
     public function me(Request $request)

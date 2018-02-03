@@ -1,5 +1,9 @@
 <template>
   <div class="stars border-r border-grey-light bg-grey-lighter overflow-y-scroll relative">
+    <GlobalEvents
+      @keyup.down="nextStar"
+      @keyup.up="previousStar"
+    />
     <ul class="list-reset">
       <Star 
         v-for="star in filteredStars" 
@@ -16,16 +20,24 @@
   </div>
 </template>
 <script>
+import GlobalEvents from 'vue-global-events'
 import { mapGetters, mapActions } from 'vuex'
 import Star from './Star'
 export default {
   name: 'StarList',
   props: ['stars'],
   components: {
+    GlobalEvents,
     Star
   },
   computed: {
-    ...mapGetters(['currentTag', 'currentStar', 'currentLanguage']),
+    ...mapGetters([
+      'currentTag',
+      'currentStar',
+      'currentStarIndex',
+      'currentLanguage',
+      'viewingUntagged'
+    ]),
     filteredStars() {
       return this.stars
         .filter(star => {
@@ -44,6 +56,13 @@ export default {
               star.node.primaryLanguage.name === this.currentLanguage
             )
           }
+        })
+        .filter(star => {
+          if (!this.viewingUntagged) {
+            return true
+          }
+
+          return !star.tags.length
         })
     }
   },
@@ -76,11 +95,27 @@ export default {
         !!Object.keys(this.currentStar).length &&
         this.currentStar.node.id === star.node.id
       )
+    },
+    previousStar() {
+      if (this.currentStarIndex === 0) return
+      const previousStar = this.stars[this.currentStarIndex - 1]
+      this.setCurrentStar(previousStar)
+    },
+    nextStar() {
+      if (this.currentStarIndex === this.stars.length - 1) return
+      const nextStar =
+        this.currentStarIndex === -1
+          ? this.stars[0]
+          : this.stars[this.currentStarIndex + 1]
+      this.setCurrentStar(nextStar)
     }
   }
 }
 </script>
 <style lang="scss">
+.stars {
+  transform: translate3d(0, 0, 0);
+}
 #repo-clone {
   transform: translate3d(-50%, -50%, 0);
   border-radius: 0.375rem;
@@ -100,4 +135,3 @@ export default {
   }
 }
 </style>
-

@@ -28,7 +28,7 @@ class Star extends Model
             $this->tags()->sync([]);
         } else {
             foreach ($tags as $tag) {
-                $name = strtolower($tag['name']);
+                $name = $tag['name'];
                 $userTag = Tag::whereName($name)->first();
                 if (!$userTag) {
                     $userTag = Tag::create(['name' => $name]);

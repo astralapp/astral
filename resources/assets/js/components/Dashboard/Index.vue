@@ -4,9 +4,8 @@
     <sidebar></sidebar>
     <galileo></galileo>
     <star-list :stars="starsWithCurrentTag"></star-list>
-    <div class="star-info bg-grey-lighter relative">
-      <readme v-if="readme" :readme="readme"></readme>
-    </div>
+    <star-info></star-info>
+    <div><notifier timeout="3000"></notifier></div>
   </div>
 </template>
 <script>
@@ -15,18 +14,27 @@ import Navbar from './Navbar'
 import Sidebar from './Sidebar/'
 import StarList from './StarList'
 import Galileo from './Galileo'
-import Readme from './Readme'
+import StarInfo from './StarInfo'
+import Notifier from '../Notifier'
 export default {
   name: 'Dashboard',
   components: {
     Galileo,
     Navbar,
-    Readme,
+    StarInfo,
     Sidebar,
-    StarList
+    StarList,
+    Notifier
   },
   computed: {
-    ...mapGetters(['user', 'stars', 'pageInfo', 'currentTag', 'readme']),
+    ...mapGetters([
+      'user',
+      'stars',
+      'pageInfo',
+      'currentTag',
+      'readme',
+      'currentStar'
+    ]),
     starsWithCurrentTag() {
       return this.stars.filter(star => {
         if (!Object.keys(this.currentTag).length) {
