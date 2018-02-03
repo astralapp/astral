@@ -23,6 +23,7 @@
 import GlobalEvents from 'vue-global-events'
 import { mapGetters, mapActions } from 'vuex'
 import Star from './Star'
+import galileo from './../../filters/galileo'
 export default {
   name: 'StarList',
   props: ['stars'],
@@ -36,10 +37,11 @@ export default {
       'currentStar',
       'currentStarIndex',
       'currentLanguage',
-      'viewingUntagged'
+      'viewingUntagged',
+      'tokenizedSearchQuery'
     ]),
     filteredStars() {
-      return this.stars
+      const stars = this.stars
         .filter(star => {
           if (!Object.keys(this.currentTag).length) {
             return true
@@ -64,6 +66,8 @@ export default {
 
           return !star.tags.length
         })
+
+      return galileo(stars, this.tokenizedSearchQuery)
     }
   },
   watch: {

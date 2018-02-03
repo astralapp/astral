@@ -14009,24 +14009,26 @@ return Promise$2;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return SET_USER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return SET_USER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADD_TAG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return SET_TAGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return SET_TAGS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SET_CURRENT_TAG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return SET_TAG_SORT_METHOD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return SET_STARS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return SET_TOTAL_STARS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return SET_STARS_PAGE_INFO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return SET_TAG_SORT_METHOD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return SET_STARS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return SET_TOTAL_STARS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return SET_STARS_PAGE_INFO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return CLEAR_STARS; });
 /* unused harmony export SYNC_STAR_TAGS */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PUSH_STAR_TAG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return SET_STAR_TAGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return SET_STAR_TAGS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return MAP_USER_STARS_TO_GITHUB_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SET_CURRENT_LANGUAGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return SET_USER_STARS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return SET_USER_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SET_CURRENT_STAR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SET_README; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return SET_VIEWING_UNTAGGED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return SET_VIEWING_UNTAGGED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return SET_SEARCH_QUERY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return SET_TOKENIZED_SEARCH; });
 var SET_USER = 'SET_USER';
 
 var ADD_TAG = 'ADD_TAG';
@@ -14047,6 +14049,9 @@ var SET_USER_STARS = 'SET_USER_STARS';
 var SET_CURRENT_STAR = 'SET_CURRENT_STAR';
 var SET_README = 'SET_README';
 var SET_VIEWING_UNTAGGED = 'SET_VIEWING_UNTAGGED';
+
+var SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
+var SET_TOKENIZED_SEARCH = 'SET_TOKENIZED_SEARCH';
 
 /***/ }),
 /* 39 */
@@ -50621,6 +50626,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Star__ = __webpack_require__(398);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Star___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__Star__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__filters_galileo__ = __webpack_require__(731);
 
 
 //
@@ -50644,6 +50650,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -50655,11 +50662,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     GlobalEvents: __WEBPACK_IMPORTED_MODULE_2_vue_global_events___default.a,
     Star: __WEBPACK_IMPORTED_MODULE_4__Star___default.a
   },
-  computed: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["c" /* mapGetters */])(['currentTag', 'currentStar', 'currentStarIndex', 'currentLanguage', 'viewingUntagged']), {
+  computed: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["c" /* mapGetters */])(['currentTag', 'currentStar', 'currentStarIndex', 'currentLanguage', 'viewingUntagged', 'tokenizedSearchQuery']), {
     filteredStars: function filteredStars() {
       var _this = this;
 
-      return this.stars.filter(function (star) {
+      var stars = this.stars.filter(function (star) {
         if (!__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(_this.currentTag).length) {
           return true;
         } else {
@@ -50680,6 +50687,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         return !star.tags.length;
       });
+
+      return Object(__WEBPACK_IMPORTED_MODULE_5__filters_galileo__["a" /* default */])(stars, this.tokenizedSearchQuery);
     }
   }),
   watch: {
@@ -52220,7 +52229,7 @@ function injectStyle (ssrContext) {
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(730)
 /* template */
 var __vue_template__ = __webpack_require__(419)
 /* template functional */
@@ -52287,9 +52296,26 @@ var render = function() {
         { staticClass: "relative w-full" },
         [
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.currentSearchQuery,
+                expression: "currentSearchQuery"
+              }
+            ],
             staticClass:
               "search-input text-grey-darkest h-10 border-2 border-grey-light rounded pr-2 pl-8 w-full focus-none transition-border-color",
-            attrs: { type: "text", placeholder: "Gaze through your telescope" }
+            attrs: { type: "text", placeholder: "Gaze through your telescope" },
+            domProps: { value: _vm.currentSearchQuery },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.currentSearchQuery = $event.target.value
+              }
+            }
           }),
           _vm._v(" "),
           _c("feather-icon", {
@@ -52897,6 +52923,8 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_user__ = __webpack_require__(434);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_stars__ = __webpack_require__(458);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_tags__ = __webpack_require__(459);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_galileo__ = __webpack_require__(732);
+
 
 
 
@@ -52909,7 +52937,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   modules: {
     user: __WEBPACK_IMPORTED_MODULE_2__modules_user__["a" /* default */],
     stars: __WEBPACK_IMPORTED_MODULE_3__modules_stars__["a" /* default */],
-    tags: __WEBPACK_IMPORTED_MODULE_4__modules_tags__["a" /* default */]
+    tags: __WEBPACK_IMPORTED_MODULE_4__modules_tags__["a" /* default */],
+    galileo: __WEBPACK_IMPORTED_MODULE_5__modules_galileo__["a" /* default */]
   }
 }));
 
@@ -52945,7 +52974,7 @@ var getters = {
   }
 };
 
-var mutations = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["o" /* SET_USER */], function (state, user) {
+var mutations = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["q" /* SET_USER */], function (state, user) {
   state.user = user;
 });
 
@@ -52954,7 +52983,7 @@ var actions = {
     var commit = _ref.commit;
 
     return __WEBPACK_IMPORTED_MODULE_4__api_client__["a" /* default */].withAuth().get('/api/me').then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["o" /* SET_USER */], res);
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["q" /* SET_USER */], res);
     });
   }
 };
@@ -53965,13 +53994,13 @@ var getters = {
   }
 };
 
-var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["i" /* SET_STARS */], function (state, edges) {
+var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["j" /* SET_STARS */], function (state, edges) {
   state.stars = state.stars.concat(edges);
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["b" /* CLEAR_STARS */], function (state) {
   state.stars = [];
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["n" /* SET_TOTAL_STARS */], function (state, total) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["p" /* SET_TOTAL_STARS */], function (state, total) {
   state.totalStars = total;
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["j" /* SET_STARS_PAGE_INFO */], function (state, info) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["k" /* SET_STARS_PAGE_INFO */], function (state, info) {
   state.pageInfo = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, info);
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["e" /* SET_CURRENT_LANGUAGE */], function (state, language) {
   state.currentLanguage = language;
@@ -53989,7 +54018,7 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
       return star;
     }
   });
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["k" /* SET_STAR_TAGS */], function (state, _ref2) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["l" /* SET_STAR_TAGS */], function (state, _ref2) {
   var starId = _ref2.starId,
       tags = _ref2.tags;
 
@@ -53999,7 +54028,7 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
     }
     return star;
   });
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["p" /* SET_USER_STARS */], function (state, stars) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["r" /* SET_USER_STARS */], function (state, stars) {
   state.userStars = [].concat(stars);
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["c" /* MAP_USER_STARS_TO_GITHUB_STARS */], function (state) {
   var userStars = state.userStars;
@@ -54018,7 +54047,7 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
   state.currentStar = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, star);
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["h" /* SET_README */], function (state, readme) {
   state.readme = readme;
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["q" /* SET_VIEWING_UNTAGGED */], function (state, viewing) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_3__mutation_types__["s" /* SET_VIEWING_UNTAGGED */], function (state, viewing) {
   state.viewingUntagged = viewing;
 }), _mutations);
 
@@ -54030,13 +54059,13 @@ var actions = {
     var url = '/api/stars/github';
     var data = cursor ? { cursor: cursor } : {};
     return __WEBPACK_IMPORTED_MODULE_4__api_client_js__["a" /* default */].withAuth().post('/api/stars/github', data).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["i" /* SET_STARS */], res.edges.map(function (edge) {
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["j" /* SET_STARS */], res.edges.map(function (edge) {
         edge.tags = [];
         return edge;
       }));
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["j" /* SET_STARS_PAGE_INFO */], res.pageInfo);
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["k" /* SET_STARS_PAGE_INFO */], res.pageInfo);
       if (!cursor) {
-        commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["n" /* SET_TOTAL_STARS */], res.totalCount);
+        commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["p" /* SET_TOTAL_STARS */], res.totalCount);
       }
       commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["c" /* MAP_USER_STARS_TO_GITHUB_STARS */]);
     });
@@ -54045,7 +54074,7 @@ var actions = {
     var commit = _ref4.commit;
 
     __WEBPACK_IMPORTED_MODULE_4__api_client_js__["a" /* default */].withAuth().get('/api/stars').then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["p" /* SET_USER_STARS */], res);
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["r" /* SET_USER_STARS */], res);
     });
   },
   setCurrentLanguage: function setCurrentLanguage(_ref5, language) {
@@ -54064,7 +54093,7 @@ var actions = {
       relayId: starId,
       tagId: tag.id
     }).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["l" /* SET_TAGS */], res.tags);
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["m" /* SET_TAGS */], res.tags);
     });
   },
   setCurrentStar: function setCurrentStar(_ref8, star) {
@@ -54089,7 +54118,7 @@ var actions = {
     if (viewing) {
       commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["g" /* SET_CURRENT_TAG */], {});
     }
-    commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["q" /* SET_VIEWING_UNTAGGED */], viewing);
+    commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["s" /* SET_VIEWING_UNTAGGED */], viewing);
   },
   syncStarTags: function syncStarTags(_ref11, _ref12) {
     var commit = _ref11.commit;
@@ -54100,8 +54129,8 @@ var actions = {
       relayId: relayId,
       tags: tags
     }).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["l" /* SET_TAGS */], res.tags);
-      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["k" /* SET_STAR_TAGS */], {
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["m" /* SET_TAGS */], res.tags);
+      commit(__WEBPACK_IMPORTED_MODULE_3__mutation_types__["l" /* SET_STAR_TAGS */], {
         starId: relayId,
         tags: res.star.tags
       });
@@ -54184,13 +54213,13 @@ var getters = {
   }
 };
 
-var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["l" /* SET_TAGS */], function (state, tags) {
+var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["m" /* SET_TAGS */], function (state, tags) {
   state.tags = tags;
 }), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["g" /* SET_CURRENT_TAG */], function (state, tag) {
   state.currentTag = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign___default()({}, tag);
 }), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["a" /* ADD_TAG */], function (state, tag) {
   state.tags = state.tags.concat([tag]);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["m" /* SET_TAG_SORT_METHOD */], function (state, method) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["n" /* SET_TAG_SORT_METHOD */], function (state, method) {
   state.tagSortMethod = method;
 }), _mutations);
 
@@ -54199,7 +54228,7 @@ var actions = {
     var commit = _ref.commit;
 
     return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().get('/api/tags').then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["l" /* SET_TAGS */], res);
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["m" /* SET_TAGS */], res);
     });
   },
   addTag: function addTag(_ref2, name) {
@@ -54213,14 +54242,14 @@ var actions = {
     var commit = _ref3.commit;
 
     if (__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(tag).length) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_VIEWING_UNTAGGED */], false);
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["s" /* SET_VIEWING_UNTAGGED */], false);
     }
     commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["g" /* SET_CURRENT_TAG */], tag);
   },
   sortTags: function sortTags(_ref4, method) {
     var commit = _ref4.commit;
 
-    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["m" /* SET_TAG_SORT_METHOD */], method);
+    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["n" /* SET_TAG_SORT_METHOD */], method);
   }
 };
 
@@ -67521,6 +67550,148 @@ return index;
 
 })));
 
+
+/***/ }),
+/* 730 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(8);
+
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Galileo',
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapGetters */])({
+    query: 'searchQuery'
+  }), {
+    currentSearchQuery: {
+      get: function get() {
+        return this.query;
+      },
+      set: function set(query) {
+        this.setSearchQuery(query);
+      }
+    }
+  }),
+  methods: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['setSearchQuery']))
+});
+
+/***/ }),
+/* 731 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
+
+
+/* harmony default export */ __webpack_exports__["a"] = (function (value, query) {
+  //  If there's no query return all items
+  if (query.query.replace(/\s/g, '') === '') {
+    return value;
+  }
+
+  //  Begin the filter process
+  return value.filter(function (repo) {
+    var searchText = (repo.node.nameWithOwner + ' ' + (repo.node.hasOwnProperty('description') ? repo.node.description : '') + ' ' + repo.notes).toLowerCase();
+    if (query.tags.length) {
+      // Intersect repo tags with query tags to ensure repo contains all tags in query
+      var tagNames = repo.tags.map(function (tag) {
+        return tag.name.toLowerCase();
+      });
+      var hasTags = Object(__WEBPACK_IMPORTED_MODULE_0_lodash__["intersection"])(query.tags, tagNames).length === query.tags.length;
+      var hasStrings = ~searchText.indexOf(query.strings.join(' ').toLowerCase());
+      return hasTags && hasStrings;
+    } else {
+      //  Just search the repo text and/or description
+      return ~searchText.indexOf(query.strings.join(' ').toLowerCase());
+    }
+  });
+});
+
+/***/ }),
+/* 732 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mutation_types_js__ = __webpack_require__(38);
+
+
+var _mutations;
+
+
+
+var state = {
+  searchQuery: '',
+  tokenizedSearchQuery: {
+    query: '',
+    tags: [],
+    strings: [],
+    languages: []
+  }
+};
+
+var getters = {
+  searchQuery: function searchQuery(state) {
+    return state.searchQuery;
+  },
+  tokenizedSearchQuery: function tokenizedSearchQuery(state) {
+    return state.tokenizedSearchQuery;
+  }
+};
+
+var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_1__mutation_types_js__["i" /* SET_SEARCH_QUERY */], function (state, query) {
+  state.searchQuery = query;
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_1__mutation_types_js__["o" /* SET_TOKENIZED_SEARCH */], function (state, obj) {
+  state.tokenizedSearchQuery = obj;
+}), _mutations);
+
+var actions = {
+  setSearchQuery: function setSearchQuery(_ref, query) {
+    var commit = _ref.commit;
+
+    commit(__WEBPACK_IMPORTED_MODULE_1__mutation_types_js__["i" /* SET_SEARCH_QUERY */], query);
+
+    var searchArray = query.split(':');
+    var tags = searchArray.filter(function (tag) {
+      return tag[0] === '#';
+    }).map(function (tag) {
+      return tag.substring(1).toLowerCase();
+    });
+    var strings = searchArray.filter(function (s) {
+      return s[0] !== '#';
+    }).map(function (s) {
+      return s.toLowerCase();
+    });
+    var tokenizedQuery = {
+      query: query,
+      tags: tags,
+      strings: strings
+    };
+    commit(__WEBPACK_IMPORTED_MODULE_1__mutation_types_js__["o" /* SET_TOKENIZED_SEARCH */], tokenizedQuery);
+  }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  state: state,
+  getters: getters,
+  mutations: mutations,
+  actions: actions
+});
 
 /***/ })
 /******/ ]);
