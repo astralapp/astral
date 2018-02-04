@@ -1,6 +1,6 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/../resources/assets/sass/temp/app.css": "/../resources/assets/sass/temp/app.css",
-    "/../resources/assets/sass/temp/preflight.css": "/../resources/assets/sass/temp/preflight.css",
-    "/css/app.css": "/css/app.css"
+    "/js/app.js": "/js/app.js?id=5c4577dfee8deaa2f0a8",
+    "/../resources/assets/sass/temp/app.css": "/../resources/assets/sass/temp/app.css?id=7a190d9a8c1380145128",
+    "/../resources/assets/sass/temp/preflight.css": "/../resources/assets/sass/temp/preflight.css?id=a828268b52146d0df514",
+    "/css/app.css": "/css/app.css?id=2359eba7bd00887db869"
 }
