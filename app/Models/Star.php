@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Star extends Model
 {
+    protected $fillable = ['relay_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -42,14 +44,12 @@ class Star extends Model
     protected static function boot()
     {
         parent::boot();
+
         static::creating(function ($star) {
             $user = JWTAuth::parseToken()->authenticate();
             $star->user_id = auth()->id();
         });
-        static::saving(function ($star) {
-            $user = JWTAuth::parseToken()->authenticate();
-            $star->user_id = auth()->id();
-        });
+
         static::deleting(function ($star) {
             DB::table('star_tag')->where('star_id', $star->id)->delete();
         });

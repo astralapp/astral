@@ -21,7 +21,7 @@ export default {
       },
       set: debounce(function(query) {
         this.setSearchQuery(query)
-      }, 150)
+      }, 300)
     }
   },
   methods: {
