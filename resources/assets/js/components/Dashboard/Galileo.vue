@@ -7,6 +7,7 @@
   </div>
 </template>
 <script>
+import { debounce } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Galileo',
@@ -18,9 +19,9 @@ export default {
       get() {
         return this.query
       },
-      set(query) {
+      set: debounce(function(query) {
         this.setSearchQuery(query)
-      }
+      }, 150)
     }
   },
   methods: {
