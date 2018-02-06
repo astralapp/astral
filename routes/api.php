@@ -20,5 +20,7 @@ Route::post('/tags', 'TagController@store');
 Route::put('/star/tags', 'StarTagsController@update');
 Route::post('/star/tags', 'StarTagsController@store');
 
+Route::post('/star/notes', 'StarNotesController@store');
+
 Route::get('/stars', 'StarsController@index');
 Route::post('stars/github', 'StarsController@fetchGitHubStars');

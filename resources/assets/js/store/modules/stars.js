@@ -13,7 +13,8 @@ import {
   SET_USER_STARS,
   SET_VIEWING_UNTAGGED,
   SYNC_STAR_TAGS,
-  MAP_USER_STARS_TO_GITHUB_STARS
+  MAP_USER_STARS_TO_GITHUB_STARS,
+  SET_STAR_NOTES
 } from '../mutation-types'
 
 import client from './../api/client.js'
@@ -104,8 +105,13 @@ const mutations = {
     const userStars = state.userStars
     state.stars.map(star => {
       const userStar = userStars.find(s => s.relay_id === star.node.id)
-      if (userStar && userStar.tags.length) {
-        star.tags = userStar.tags
+      if (userStar && (userStar.tags.length || userStar.notes)) {
+        if (userStar.tags.length) {
+          star.tags = userStar.tags
+        }
+        if (userStar.notes) {
+          star.notes = userStar.notes
+        }
         return star
       } else {
         return star
@@ -120,6 +126,16 @@ const mutations = {
   },
   [SET_VIEWING_UNTAGGED](state, viewing) {
     state.viewingUntagged = viewing
+  },
+  [SET_STAR_NOTES](state, { id, notes }) {
+    state.stars.map(star => {
+      if (star.node.id === id) {
+        star.notes = notes
+      }
+
+      return star
+    })
+    state.currentStar = { ...state.currentStar, notes }
   }
 }
 
@@ -135,6 +151,7 @@ const actions = {
           SET_STARS,
           res.edges.map(edge => {
             edge.tags = []
+            edge.notes = ''
             return edge
           })
         )
@@ -204,6 +221,20 @@ const actions = {
         commit(SET_STAR_TAGS, {
           starId: relayId,
           tags: res.star.tags
+        })
+      })
+  },
+  editStarNotes({ commit }, { relayId, notes }) {
+    client
+      .withAuth()
+      .post('/api/star/notes', {
+        id: relayId,
+        notes
+      })
+      .then(res => {
+        commit(SET_STAR_NOTES, {
+          id: relayId,
+          notes
         })
       })
   }
