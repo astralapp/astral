@@ -1,14 +1,17 @@
 <template>
   <li class="dashboard-list-item flex items-center py-2 pr-1 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
-    <feather-icon :type="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none" v-if="icon">
-    </feather-icon>
+    <Icon :type="icon" v-if="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none"></Icon>
     <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">{{ title }}</span>
     <span class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1" v-if="!!badge">{{ badge }}</span>
   </li>
 </template>
 <script>
+import Icon from '@/components/Icon'
 export default {
   name: 'SidebarItem',
+  components: {
+    Icon
+  },
   props: {
     title: String,
     icon: String,

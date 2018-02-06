@@ -2,12 +2,7 @@
 <div class="dashboard-list-item toggle-new-tag h-10 relative">
   <transition name="new-tag-form">
     <div class="toggle-new-tag-button flex items-center text-base font-semibold text-grey-darker h-10 cursor-pointer transition-color hover:text-grey" @click="showForm" v-show="!formShowing">
-      <feather-icon
-      type="plus-circle"
-      height="14"
-      class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"
-    >
-    </feather-icon>
+      <Icon type="PlusCircleIcon" height="14" class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"></Icon>
       <span class="dashboard-list-item-name relative flex-grow">Add a tag...</span>
     </div>
   </transition>
@@ -20,8 +15,12 @@
 </template>
 
 <script>
+import Icon from '@/components/Icon'
 export default {
   name: 'new-tag-form',
+  components: {
+    Icon
+  },
   data() {
     return {
       formShowing: false,

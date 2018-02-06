@@ -14,16 +14,17 @@
     "axios": "^0.17",
     "es6-promise": "^4.1.1",
     "fuzzysearch": "^1.0.3",
+    "highlight.js": "^9.12.0",
     "local-storage": "^1.4.2",
     "lodash": "^4.17.4",
     "nanoid": "^1.0.1",
+    "simplemde": "^1.11.2",
     "vue": "^2.5.13",
     "vue-clickaway": "^2.1.0",
-    "vue-feather-icon": "^1.2.0",
+    "vue-feather-icons": "^4.5.0",
     "vue-global-events": "^1.0.2",
     "vue-router": "^3.0.1",
     "vue-slicksort": "^0.1.4",
-    "vue-sweetalert": "^0.1.18",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -35,6 +36,6 @@
     "cross-env": "^5.1",
     "laravel-mix": "^2.0.0",
     "laravel-mix-purgecss": "^1.0.5",
-    "tailwindcss": "^0.4.0"
+    "tailwindcss": "^0.4.1"
   }
 }

@@ -8,7 +8,7 @@
         :class="{ 'selected': noFiltersApplied }"
         class="all-stars" 
         title="All Stars" 
-        icon="inbox" 
+        icon="InboxIcon" 
         icon-size="16" 
         @click.native="resetFilters"
       >
@@ -17,7 +17,7 @@
         class="untagged-stars" 
         :class="{ 'selected': viewingUntagged }"
         title="Untagged Stars" 
-        icon="star" 
+        icon="StarIcon" 
         icon-size="16" 
         @click.native="setViewingUntagged(true)"
         >
@@ -36,7 +36,7 @@
         :title="tag.name" 
         class="tag rounded" 
         ref="tag" 
-        icon="tag" 
+        icon="TagIcon" 
         icon-size="14" 
         :class="{ 'selected': currentTag.id == tag.id }"
         :star-target="true"
@@ -129,4 +129,3 @@ export default {
   }
 }
 </script>
-
