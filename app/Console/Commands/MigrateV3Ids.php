@@ -43,7 +43,7 @@ class MigrateV3Ids extends Command
      */
     public function handle()
     {
-        $starsToFix = Star::where('relay_id', '');
+        $starsToFix = Star::whereNull('relay_id');
 
         $count = $starsToFix->count();
 
@@ -58,6 +58,9 @@ class MigrateV3Ids extends Command
                     $star->update(['relay_id' => $this->repos[$star->repo_id]]);
                 } else {
                     $repo = $this->fetchRepo($star->repo_id);
+                    if (!array_key_exists('node_id', $repo)) {
+                        continue;
+                    }
                     $nodeId = $repo['node_id'];
                     $star->update(['relay_id' => $nodeId]);
                     $this->repos[$star->repo_id] = $nodeId;

@@ -16,7 +16,7 @@ class CreateStarsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->integer('repo_id')->nullable();
-            $table->string('relay_id');
+            $table->string('relay_id')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
