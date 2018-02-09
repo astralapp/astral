@@ -7,13 +7,13 @@
       class="rounded-full w-10 h-10"
     />
     <span class="text-white ml-1">{{ user.username }}</span>
-    <feather-icon
-      type="chevron-down"
+    <Icon
+      type="ChevronDownIcon"
       height="16"
       width="16"
       class="stroke-current text-white ml-1"
     >
-    </feather-icon>
+    </Icon>
   </div>
   <div class="user-dropdown-container absolute pin-t pin-r bg-white rounded shadow z-10 overflow-hidden" v-show="visible">
     <ul class="list-reset">
@@ -44,9 +44,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { mixin as clickaway } from 'vue-clickaway'
+import Icon from '@/components/Icon'
 export default {
   name: 'UserDropdown',
   mixins: [clickaway],
+  components: {
+    Icon
+  },
   data() {
     return {
       visible: false
@@ -68,4 +72,3 @@ export default {
   margin-top: 45px;
 }
 </style>
-

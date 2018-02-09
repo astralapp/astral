@@ -8,11 +8,11 @@
     ></star-tags>
     <div class="star-meta flex items-center mt-4">
       <div class="stargazers-count flex items-center text-grey-dark mr-2">
-        <feather-icon type="star" class="stroke-current h-4"></feather-icon>
+        <Icon type="StarIcon" class="stroke-current h-4"></Icon>
         <span class="text-xs" v-once>{{ star.node.stargazers.totalCount }}</span>
       </div>
       <div class="fork-count flex items-center text-grey-dark mr-4">
-        <feather-icon type="share-2" class="stroke-current h-4"></feather-icon>
+        <Icon type="Share2Icon" class="stroke-current h-4"></Icon>
         <span class="text-xs" v-once>{{ star.node.forkCount }}</span>
       </div>
       <div class="github-link flex items-center text-grey-dark">
@@ -28,10 +28,12 @@
 </template>
 <script>
 import StarTags from '@/components/Dashboard/StarTags'
+import Icon from '@/components/Icon'
 export default {
   name: 'Star',
   props: ['star', 'selected'],
   components: {
+    Icon,
     StarTags
   },
   computed: {

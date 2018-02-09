@@ -1,10 +1,10 @@
 <template>
 <div class="star-info bg-grey-lighter relative flex flex-col">
   <div class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center" v-if="!noRepoSelected">
-    <a href="#" class="bg-brand rounded text-white px-3 py-2" @click="notesShowing = !notesShowing">
-      <!-- <feather-icon type="star" :height="16" class="mr-1 pointer-events-none stroke-current fill-none"></feather-icon> -->
+    <button class="bg-brand rounded text-white text-xs px-3 py-2 font-semibold tracking-wide uppercase focus-none" @click="notesShowing = !notesShowing">
+      <Icon :type="toggleNotesIcon" height="16" width="16" class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"></Icon>
       <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
-    </a>
+    </button>
     <div class="ml-auto">
       <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
       <input 
@@ -31,10 +31,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import NotesEditor from '@/components/Dashboard/NotesEditor'
 import Readme from '@/components/Dashboard/Readme'
+import Icon from '@/components/Icon'
 export default {
   name: 'StarInfo',
   components: {
-    // Icon,
+    Icon,
     NotesEditor,
     Readme
   },
@@ -63,6 +64,9 @@ export default {
     },
     notesEditorShowing() {
       return this.notesShowing && !this.noRepoSelected
+    },
+    toggleNotesIcon() {
+      return this.currentStarNotes ? 'FileTextIcon' : 'FileIcon'
     }
   },
   methods: {

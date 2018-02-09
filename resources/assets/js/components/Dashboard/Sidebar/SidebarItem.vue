@@ -1,6 +1,6 @@
 <template>
   <li class="dashboard-list-item flex items-center py-2 pr-1 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
-    <Icon :type="icon" v-if="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none"></Icon>
+    <Icon :type="icon" v-if="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none relative"></Icon>
     <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">{{ title }}</span>
     <span class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1" v-if="!!badge">{{ badge }}</span>
   </li>
@@ -17,7 +17,7 @@ export default {
     icon: String,
     iconSize: {
       type: [String, Number],
-      default: 4
+      default: 16
     },
     badge: {
       type: [String, Number],

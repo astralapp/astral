@@ -48717,6 +48717,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_clickaway__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_clickaway___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_clickaway__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Icon__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Icon__);
 
 //
 //
@@ -48761,12 +48763,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'UserDropdown',
   mixins: [__WEBPACK_IMPORTED_MODULE_2_vue_clickaway__["mixin"]],
+  components: {
+    Icon: __WEBPACK_IMPORTED_MODULE_3__components_Icon___default.a
+  },
   data: function data() {
     return {
       visible: false
@@ -48818,9 +48824,9 @@ var render = function() {
           _vm._v(_vm._s(_vm.user.username))
         ]),
         _vm._v(" "),
-        _c("feather-icon", {
+        _c("Icon", {
           staticClass: "stroke-current text-white ml-1",
-          attrs: { type: "chevron-down", height: "16", width: "16" }
+          attrs: { type: "ChevronDownIcon", height: "16", width: "16" }
         })
       ],
       1
@@ -58236,6 +58242,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Icon__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Icon__);
 //
 //
 //
@@ -58248,9 +58256,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'RefreshButton',
-  props: ['active']
+  props: ['active'],
+  components: {
+    Icon: __WEBPACK_IMPORTED_MODULE_0__components_Icon___default.a
+  }
 });
 
 /***/ }),
@@ -58268,9 +58280,9 @@ var render = function() {
       class: { active: _vm.active }
     },
     [
-      _c("feather-icon", {
+      _c("Icon", {
         staticClass: "stroke-current fill-none",
-        attrs: { type: "refresh-cw", height: "16", width: "16" }
+        attrs: { type: "RefreshCwIcon", height: "16", width: "16" }
       })
     ],
     1
@@ -58473,7 +58485,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     icon: String,
     iconSize: {
       type: [String, Number],
-      default: 4
+      default: 16
     },
     badge: {
       type: [String, Number],
@@ -58547,7 +58559,8 @@ var render = function() {
     [
       _vm.icon
         ? _c("Icon", {
-            staticClass: "mr-1 pointer-events-none stroke-current fill-none",
+            staticClass:
+              "mr-1 pointer-events-none stroke-current fill-none relative",
             attrs: { type: _vm.icon, height: _vm.iconSize }
           })
         : _vm._e(),
@@ -58642,6 +58655,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_clickaway___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_clickaway__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Dashboard_Sidebar_TagSortDropdown__ = __webpack_require__(157);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Dashboard_Sidebar_TagSortDropdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_Dashboard_Sidebar_TagSortDropdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Icon__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Icon__);
 //
 //
 //
@@ -58657,6 +58672,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -58664,6 +58680,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   name: 'SortTags',
   mixins: [__WEBPACK_IMPORTED_MODULE_0_vue_clickaway__["mixin"]],
   components: {
+    Icon: __WEBPACK_IMPORTED_MODULE_2__components_Icon___default.a,
     TagSortDropdown: __WEBPACK_IMPORTED_MODULE_1__components_Dashboard_Sidebar_TagSortDropdown___default.a
   },
   data: function data() {
@@ -58914,9 +58931,9 @@ var render = function() {
         [
           _c("span", [_vm._v("Sort")]),
           _vm._v(" "),
-          _c("feather-icon", {
+          _c("Icon", {
             staticClass: "transition-stroke stroke-current fill-none ml-1",
-            attrs: { type: "chevron-down", height: "16", width: "16" }
+            attrs: { type: "ChevronDownIcon", height: "16", width: "16" }
           })
         ],
         1
@@ -59372,6 +59389,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Dashboard_StarTags__ = __webpack_require__(171);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Dashboard_StarTags___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_Dashboard_StarTags__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Icon__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Icon__);
 
 //
 //
@@ -59401,12 +59420,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Star',
   props: ['star', 'selected'],
   components: {
+    Icon: __WEBPACK_IMPORTED_MODULE_2__components_Icon___default.a,
     StarTags: __WEBPACK_IMPORTED_MODULE_1__components_Dashboard_StarTags___default.a
   },
   computed: {
@@ -60624,9 +60645,9 @@ var render = function() {
               "stargazers-count flex items-center text-grey-dark mr-2"
           },
           [
-            _c("feather-icon", {
+            _c("Icon", {
               staticClass: "stroke-current h-4",
-              attrs: { type: "star" }
+              attrs: { type: "StarIcon" }
             }),
             _vm._v(" "),
             _vm._m(2)
@@ -60638,9 +60659,9 @@ var render = function() {
           "div",
           { staticClass: "fork-count flex items-center text-grey-dark mr-4" },
           [
-            _c("feather-icon", {
+            _c("Icon", {
               staticClass: "stroke-current h-4",
-              attrs: { type: "share-2" }
+              attrs: { type: "Share2Icon" }
             }),
             _vm._v(" "),
             _vm._m(3)
@@ -60903,6 +60924,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Icon__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Icon__);
 
 //
 //
@@ -60912,11 +60935,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Galileo',
+  components: {
+    Icon: __WEBPACK_IMPORTED_MODULE_3__components_Icon___default.a
+  },
   computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapGetters */])({
     query: 'searchQuery'
   }), {
@@ -60975,10 +61002,10 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("feather-icon", {
+          _c("Icon", {
             staticClass:
               "search-input-icon absolute fill-none stroke-grey transition-stroke",
-            attrs: { type: "search", height: "18" }
+            attrs: { type: "SearchIcon", height: "18" }
           })
         ],
         1
@@ -61068,6 +61095,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Dashboard_NotesEditor___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Dashboard_NotesEditor__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Dashboard_Readme__ = __webpack_require__(392);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Dashboard_Readme___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_Dashboard_Readme__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Icon__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Icon__);
 
 
 //
@@ -61099,6 +61128,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -61106,7 +61136,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'StarInfo',
   components: {
-    // Icon,
+    Icon: __WEBPACK_IMPORTED_MODULE_5__components_Icon___default.a,
     NotesEditor: __WEBPACK_IMPORTED_MODULE_3__components_Dashboard_NotesEditor___default.a,
     Readme: __WEBPACK_IMPORTED_MODULE_4__components_Dashboard_Readme___default.a
   },
@@ -61135,6 +61165,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     notesEditorShowing: function notesEditorShowing() {
       return this.notesShowing && !this.noRepoSelected;
+    },
+    toggleNotesIcon: function toggleNotesIcon() {
+      return this.currentStarNotes ? 'FileTextIcon' : 'FileIcon';
     }
   }),
   methods: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapActions */])(['editStarNotes']), {
@@ -86217,10 +86250,10 @@ var render = function() {
             },
             [
               _c(
-                "a",
+                "button",
                 {
-                  staticClass: "bg-brand rounded text-white px-3 py-2",
-                  attrs: { href: "#" },
+                  staticClass:
+                    "bg-brand rounded text-white text-xs px-3 py-2 font-semibold tracking-wide uppercase focus-none",
                   on: {
                     click: function($event) {
                       _vm.notesShowing = !_vm.notesShowing
@@ -86228,12 +86261,23 @@ var render = function() {
                   }
                 },
                 [
+                  _c("Icon", {
+                    staticClass:
+                      "mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom",
+                    attrs: {
+                      type: _vm.toggleNotesIcon,
+                      height: "16",
+                      width: "16"
+                    }
+                  }),
+                  _vm._v(" "),
                   _c("span", [
                     _vm._v(
                       _vm._s(_vm.notesShowing ? "Hide Notes" : "Show Notes")
                     )
                   ])
-                ]
+                ],
+                1
               ),
               _vm._v(" "),
               _c("div", { staticClass: "ml-auto" }, [
