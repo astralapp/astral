@@ -27,7 +27,7 @@
   </li>
 </template>
 <script>
-import StarTags from './StarTags'
+import StarTags from '@/components/Dashboard/StarTags'
 export default {
   name: 'Star',
   props: ['star', 'selected'],

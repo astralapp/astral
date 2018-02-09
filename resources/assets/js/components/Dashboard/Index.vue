@@ -10,12 +10,12 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Navbar from './Navbar'
-import Sidebar from './Sidebar/'
-import StarList from './StarList'
-import Galileo from './Galileo'
-import StarInfo from './StarInfo'
-import Notifier from '../Notifier'
+import Navbar from '@/components/Dashboard/Navbar'
+import Sidebar from '@/components/Dashboard/Sidebar/'
+import StarList from '@/components/Dashboard/StarList'
+import Galileo from '@/components/Dashboard/Galileo'
+import StarInfo from '@/components/Dashboard/StarInfo'
+import Notifier from '@/components/Notifier'
 export default {
   name: 'Dashboard',
   components: {
@@ -88,4 +88,3 @@ export default {
   }
 }
 </style>
-

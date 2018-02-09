@@ -15,7 +15,7 @@
 </template>
 <script>
 import { mixin as clickaway } from 'vue-clickaway'
-import TagSortDropdown from './TagSortDropdown'
+import TagSortDropdown from '@/components/Dashboard/Sidebar/TagSortDropdown'
 export default {
   name: 'SortTags',
   mixins: [clickaway],

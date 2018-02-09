@@ -61,11 +61,11 @@
   </div>
 </template>
 <script>
-import NewTagForm from './NewTagForm'
-import RefreshButton from './RefreshButton'
-import SidebarHeader from './SidebarHeader'
-import SidebarItem from './SidebarItem'
-import SortTags from './SortTags'
+import NewTagForm from '@/components/Dashboard/Sidebar/NewTagForm'
+import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
+import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
+import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
+import SortTags from '@/components/Dashboard/Sidebar/SortTags'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Sidebar',

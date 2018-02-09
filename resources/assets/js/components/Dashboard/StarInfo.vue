@@ -2,7 +2,7 @@
 <div class="star-info bg-grey-lighter relative flex flex-col">
   <div class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center" v-if="!noRepoSelected">
     <a href="#" class="bg-brand rounded text-white px-3 py-2" @click="notesShowing = !notesShowing">
-      <feather-icon type="star" :height="16" class="mr-1 pointer-events-none stroke-current fill-none"></feather-icon>
+      <!-- <feather-icon type="star" :height="16" class="mr-1 pointer-events-none stroke-current fill-none"></feather-icon> -->
       <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
     </a>
     <div class="ml-auto">
@@ -29,9 +29,8 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import NotesEditor from './NotesEditor'
-import Readme from './Readme'
-// import Icon from './../FeatherIcon'
+import NotesEditor from '@/components/Dashboard/NotesEditor'
+import Readme from '@/components/Dashboard/Readme'
 export default {
   name: 'StarInfo',
   components: {

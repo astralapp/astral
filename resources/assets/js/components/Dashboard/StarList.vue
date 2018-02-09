@@ -22,8 +22,8 @@
 <script>
 import GlobalEvents from 'vue-global-events'
 import { mapGetters, mapActions } from 'vuex'
-import Star from './Star'
-import galileo from './../../filters/galileo'
+import Star from '@/components/Dashboard/Star'
+import galileo from '@/filters/galileo'
 export default {
   name: 'StarList',
   props: ['stars'],
