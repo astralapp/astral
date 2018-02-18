@@ -13,7 +13,6 @@ use Faker\Generator as Faker;
  */
 
 $factory->define(Astral\Models\User::class, function (Faker $faker) {
-    static $password;
 
     return [
         'name' => $faker->name,

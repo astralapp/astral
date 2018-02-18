@@ -1,7 +1,6 @@
 <?php
 namespace Astral\Models;
 
-use JWTAuth;
 use Illuminate\Database\Eloquent\Model;
 
 class Star extends Model
@@ -46,7 +45,6 @@ class Star extends Model
         parent::boot();
 
         static::creating(function ($star) {
-            $user = JWTAuth::parseToken()->authenticate();
             $star->user_id = auth()->id();
         });
 

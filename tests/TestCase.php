@@ -2,7 +2,7 @@
 namespace Tests;
 
 use Astral\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use JWTAuth;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function login(User $user = null)
     {
-        $user = $user ? : create('GameReel\Models\User');
+        $user = $user ? : create('Astral\Models\User');
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
         $this->headers['Authorization'] = 'Bearer ' . $token;

@@ -1,7 +1,6 @@
 <?php
 namespace Astral\Models;
 
-use JWTAuth;
 use Astral\Lib\TagSlugger;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,7 +37,6 @@ class Tag extends Model
         parent::boot();
 
         static::creating(function ($tag) {
-            JWTAuth::parseToken()->authenticate();
             $tag->user_id = auth()->id();
             $tag->sort_order = self::where('user_id', auth()->id())->count();
             $tag->slug = (new TagSlugger($tag->name))->fix();
