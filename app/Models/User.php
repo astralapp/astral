@@ -1,4 +1,5 @@
 <?php
+
 namespace Astral\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -27,7 +28,7 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function mapGithubUser($githubUser)
+    public function mapGitHubUser($githubUser)
     {
         $this->username = $githubUser->getNickname();
         $this->github_id = $githubUser->getId();

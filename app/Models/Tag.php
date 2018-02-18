@@ -1,4 +1,5 @@
 <?php
+
 namespace Astral\Models;
 
 use Astral\Lib\TagSlugger;

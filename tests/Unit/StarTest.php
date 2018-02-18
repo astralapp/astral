@@ -34,10 +34,8 @@ class StarTest extends TestCase
     }
 
     /** @test */
-    public function it_can_use_a_query_scope_to_fetch_a_repo_by_relay_id()
+    public function it_can_fetch_a_repo_by_relay_id()
     {
-        Star::flushEventListeners();
-
         create('Astral\Models\Star', ['user_id' => auth()->id()], 5);
 
         $firstId = Star::all()->first()->relay_id;

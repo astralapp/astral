@@ -31,11 +31,11 @@ class AuthController extends Controller
         $user = User::where('github_id', $id)->first();
         // If the user exists, just update fields that they may have changed in their Github settings
         if (!is_null($user)) {
-            $user->mapGithubUser($githubUser);
+            $user->mapGitHubUser($githubUser);
         } // If no user was found, create a new one
         else {
             $user = new User();
-            $user->mapGithubUser($githubUser);
+            $user->mapGitHubUser($githubUser);
         }
         $jwt = JWTAuth::fromUser($user);
         $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
