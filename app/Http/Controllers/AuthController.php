@@ -30,13 +30,10 @@ class AuthController extends Controller
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
         // If the user exists, just update fields that they may have changed in their Github settings
-        if (!is_null($user)) {
-            $user->mapGitHubUser($githubUser);
-        } // If no user was found, create a new one
-        else {
+        if (is_null($user)) {
             $user = new User();
-            $user->mapGitHubUser($githubUser);
-        }
+        } // If no user was found, create a new one
+        $user->mapGitHubUser($githubUser);
         $jwt = JWTAuth::fromUser($user);
         $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
         return redirect('/auth?token=' . $jwt . '&token_expiry=' . $jwtExpiry);
