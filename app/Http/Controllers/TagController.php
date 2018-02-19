@@ -18,6 +18,8 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, ['name' => 'required']);
+
         $name = $request->input('name');
 
         return Tag::create(['name' => $name]);
