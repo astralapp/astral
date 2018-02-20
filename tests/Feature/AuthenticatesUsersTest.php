@@ -13,7 +13,7 @@ class AuthenticatesUsersTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
         parent::tearDown();

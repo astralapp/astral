@@ -11,7 +11,7 @@ class TagsTest extends TestCase
 
     protected $tags;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

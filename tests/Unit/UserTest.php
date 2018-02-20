@@ -13,7 +13,7 @@ class UserTest extends TestCase
 
     protected $user;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

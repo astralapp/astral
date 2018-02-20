@@ -12,7 +12,7 @@ class StarTest extends TestCase
 
     protected $star;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
