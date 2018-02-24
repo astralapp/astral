@@ -1,5 +1,5 @@
 <template>
-  <li class="p-4 border-b border-grey-light cursor-pointer" :class="{'shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}" @dragstart="starDragged">
+  <li class="p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg" :class="{'shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}" @dragstart="starDragged">
     <h3 class="repo-name text-base text-brand mb-2 font-bold" v-once>{{ star.node.nameWithOwner }}</h3>
     <p class="text-dark-grey text-sm" v-once>{{ star.node.description }}</p>
     <star-tags 

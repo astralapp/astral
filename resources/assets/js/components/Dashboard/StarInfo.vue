@@ -1,7 +1,7 @@
 <template>
 <div class="star-info bg-grey-lighter relative flex flex-col">
   <div class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center" v-if="!noRepoSelected">
-    <button class="bg-brand rounded text-white text-xs px-3 py-2 font-semibold tracking-wide uppercase focus-none" @click="notesShowing = !notesShowing">
+    <button class="bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none" @click="notesShowing = !notesShowing">
       <Icon :type="toggleNotesIcon" height="16" width="16" class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"></Icon>
       <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
     </button>

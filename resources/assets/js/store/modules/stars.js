@@ -159,6 +159,7 @@ const actions = {
         if (!cursor) {
           commit(SET_TOTAL_STARS, res.totalCount)
         }
+
         commit(MAP_USER_STARS_TO_GITHUB_STARS)
       })
   },

@@ -100,18 +100,30 @@ export default {
         this.currentStar.node.id === star.node.id
       )
     },
-    previousStar() {
+    previousStar(e) {
+      if (this.shouldDisableKeyShortcuts(e)) {
+        return false
+      }
       if (this.currentStarIndex === 0) return
       const previousStar = this.stars[this.currentStarIndex - 1]
       this.setCurrentStar(previousStar)
     },
-    nextStar() {
+    nextStar(e) {
+      if (this.shouldDisableKeyShortcuts(e)) {
+        return false
+      }
       if (this.currentStarIndex === this.stars.length - 1) return
       const nextStar =
         this.currentStarIndex === -1
           ? this.stars[0]
           : this.stars[this.currentStarIndex + 1]
       this.setCurrentStar(nextStar)
+    },
+    shouldDisableKeyShortcuts(e) {
+      return (
+        e.target.tagName === 'INPUT' ||
+        document.querySelector('.CodeMirror-focused')
+      )
     }
   }
 }

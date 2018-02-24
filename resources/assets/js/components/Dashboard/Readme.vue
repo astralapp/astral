@@ -10,28 +10,29 @@ export default {
       handler(newVal, oldVal) {
         if (oldVal !== newVal) {
           setTimeout(() => {
-            Array.from(
-              document.querySelectorAll('.repo-readme a')
-            ).forEach(anchor => {
-              anchor.addEventListener(
-                'click',
-                e => {
-                  const $target = e.currentTarget
-                  if (
-                    $target.classList.contains('anchor') ||
-                    $target.getAttribute('href').startsWith('#')
-                  ) {
-                    e.preventDefault()
-                    const target = $target.getAttribute('href')
-                    const section = document.querySelector(
-                      `.repo-readme #user-content-${target.substring(1)}`
-                    )
-                    this.$refs.readme.scrollTop = section.offsetTop
-                  }
-                },
-                false
-              )
-            })
+            this.$refs.readme.scrollTop = 0
+            Array.from(document.querySelectorAll('.repo-readme a')).forEach(
+              anchor => {
+                anchor.addEventListener(
+                  'click',
+                  e => {
+                    const $target = e.currentTarget
+                    if (
+                      $target.classList.contains('anchor') ||
+                      $target.getAttribute('href').startsWith('#')
+                    ) {
+                      e.preventDefault()
+                      const target = $target.getAttribute('href')
+                      const section = document.querySelector(
+                        `.repo-readme #user-content-${target.substring(1)}`
+                      )
+                      this.$refs.readme.scrollTop = section.offsetTop - 74
+                    }
+                  },
+                  false
+                )
+              }
+            )
           }, 0)
         }
       },
@@ -72,6 +73,7 @@ export default {
   }
 
   pre {
+    font-size: 14px;
     margin-bottom: 0;
     word-break: normal;
     border: 1px solid config('colors.grey-light');
