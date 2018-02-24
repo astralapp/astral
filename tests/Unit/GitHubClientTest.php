@@ -2,10 +2,11 @@
 
 namespace Tests\Unit;
 
+use Zttp\Zttp;
 use Tests\TestCase;
 use Astral\Lib\GitHubClient;
-use Zttp\Zttp;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Astral\Exceptions\InvalidAccessTokenException;
 
 class GitHubClientTest extends TestCase
 {
@@ -43,5 +44,22 @@ class GitHubClientTest extends TestCase
         $stars = $this->client->fetchStars($cursor, 1);
 
         $this->assertEquals($this->sampleStars['edges'][1], $stars['edges'][0]);
+    }
+
+    /** @test */
+    public function it_throws_an_exception_if_no_token_is_provided()
+    {
+        $stars = [];
+
+        try {
+            $client = new GitHubClient('invalid-token');
+            $stars = $client->fetchStars(null, 100);
+        } catch (InvalidAccessTokenException $e) {
+            $this->assertCount(0, $stars);
+            return;
+        }
+
+        $this->fail('Stars were fetched even though an invalid access token was passed');
+
     }
 }

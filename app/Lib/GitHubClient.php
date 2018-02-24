@@ -2,6 +2,7 @@
 namespace Astral\Lib;
 
 use Zttp\Zttp;
+use Astral\Exceptions\InvalidAccessTokenException;
 
 class GitHubClient
 {
@@ -10,6 +11,10 @@ class GitHubClient
 
   public function __construct($token)
   {
+    if (!$token) {
+      throw new MissingAccessTokenException;
+    }
+
     $this->endpoint = 'https://api.github.com/graphql';
     $this->token = $token;
   }
@@ -48,12 +53,18 @@ class GitHubClient
     }
 GQL;
 
-    return Zttp::withHeaders([
+    $response = Zttp::withHeaders([
       'Authorization' => 'Bearer ' . $this->token,
       'Content-Type' => 'application/json',
     ])->post($this->endpoint, [
       'query' => $query,
       'variables' => '',
-    ])->json()['data']['viewer']['starredRepositories'];
+    ]);
+
+    if ($response->getStatusCode() == 401) {
+      throw new InvalidAccessTokenException;
+    }
+
+    return $response->json()['data']['viewer']['starredRepositories'];
   }
 }

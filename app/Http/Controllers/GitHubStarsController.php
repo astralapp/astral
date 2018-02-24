@@ -1,0 +1,63 @@
+<?php
+
+namespace Astral\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Astral\Lib\GitHubClient;
+use Illuminate\Support\Facades\Cache;
+
+class GitHubStarsController extends Controller
+{
+    protected $client;
+
+    public function __construct(GitHubClient $client)
+    {
+        $this->middleware('auth:api');
+        $this->client = $client;
+    }
+
+    public function index(Request $request)
+    {
+        $cursor = $request->has('cursor') ? $request->input('cursor') : null;
+        $key = auth()->user()->starsCacheKey();
+        $expiry = env('APP_ENV') == 'local' ? 60 * 8 : 60 * 2;
+        if (Cache::has($key)) {
+            $cached = Cache::get($key);
+
+            if ((bool)$cached['pageInfo']['hasNextPage'] == false) {
+                // We already have all their stars so just return them
+                return $cached;
+            } else {
+                // Get the next page
+                $next = $this->client->fetchStars($cached['pageInfo']['endCursor']);
+
+                $oldEdges = $cached['edges'];
+                $newEdges = $next['edges'];
+                
+                // Merge the old and new edges
+                $edges = array_merge($oldEdges, $newEdges);
+                
+                // Grab the new page info
+                $pageInfo = $next['pageInfo'];
+                $totalCount = $next['totalCount'];
+                // Create our new response and put it in the Cache
+                $new = [
+                    'edges' => $edges,
+                    'pageInfo' => $pageInfo,
+                    'totalCount' => $totalCount,
+                ];
+                Cache::put($key, $new, $expiry);
+
+                // If they passed a cursor just return the new edges, else return the combined version
+                return $cursor ? $next : $new;
+            }
+        } else {
+            $cursor = null;
+            $fetched = $this->client->fetchStars($cursor);
+            Cache::put($key, $fetched, $expiry);
+
+            return $fetched;
+        }
+    }
+
+}

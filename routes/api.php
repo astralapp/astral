@@ -18,4 +18,6 @@ Route::post('/star/tags', 'StarTagsController@store');
 Route::post('/star/notes', 'StarNotesController@store');
 
 Route::get('/stars', 'StarsController@index');
-Route::post('stars/github', 'StarsController@fetchGitHubStars');
+
+Route::post('stars/github', 'GitHubStarsController@index');
+

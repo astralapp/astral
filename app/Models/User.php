@@ -2,6 +2,8 @@
 
 namespace Astral\Models;
 
+use Astral\Models\Tag;
+use Astral\Models\Star;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,6 +28,16 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function stars()
+    {
+        return $this->hasMany(Star::class);
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
     }
 
     public function mapGitHubUser($githubUser)

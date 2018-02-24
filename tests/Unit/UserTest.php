@@ -21,6 +21,18 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function it_has_associated_stars()
+    {
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->user->stars);
+    }
+
+    /** @test */
+    public function it_has_associated_tags()
+    {
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $this->user->tags);
+    }
+
+    /** @test */
     public function it_can_map_a_github_user_object()
     {
         $githubUser = new GitHubUser();

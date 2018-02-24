@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Astral\Models\Star;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AddNotesToStarTest extends TestCase
+class AddsNotesToStarTest extends TestCase
 {
     use RefreshDatabase;
 
