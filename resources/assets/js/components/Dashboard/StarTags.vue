@@ -79,6 +79,9 @@ export default {
     this.mutableTags = [...this.tags]
   },
   watch: {
+    tags() {
+      this.mutableTags = [...this.tags]
+    },
     mutableTags() {
       if (this.awesomplete) {
         this.awesomplete.list = this.suggestions
