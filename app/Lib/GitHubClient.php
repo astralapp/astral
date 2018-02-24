@@ -2,8 +2,6 @@
 namespace Astral\Lib;
 
 use Zttp\Zttp;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 
 class GitHubClient
 {
@@ -16,13 +14,13 @@ class GitHubClient
     $this->token = $token;
   }
 
-  public function fetchStars($cursor = null)
+  public function fetchStars($cursor = null, $perPage = 100)
   {
     $cursorString = $cursor ? 'after:"' . $cursor . '"' : 'after: null';
     $query = <<<GQL
     query {
       viewer {
-        starredRepositories(first: 100, orderBy: {field: STARRED_AT, direction: DESC},  {$cursorString}) {
+        starredRepositories(first: {$perPage}, orderBy: {field: STARRED_AT, direction: DESC},  {$cursorString}) {
           totalCount
           edges {
             node {

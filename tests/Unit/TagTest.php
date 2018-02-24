@@ -20,7 +20,6 @@ class TagTest extends TestCase
 
         $this->tag = create('Astral\Models\Tag');
     }
-
     /** @test */
     public function it_has_an_associated_user()
     {

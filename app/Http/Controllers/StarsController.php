@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Cache;
 
 class StarsController extends Controller
 {
-    public function __construct()
+    protected $client;
+
+    public function __construct(GitHubClient $client)
     {
         $this->middleware('auth:api');
+        $this->client = $client;
     }
 
     public function index()
@@ -20,12 +23,9 @@ class StarsController extends Controller
 
     public function fetchGitHubStars(Request $request)
     {
-        $token = auth()->user()->access_token;
-        $client = new GitHubClient($token);
         $cursor = $request->has('cursor') ? $request->input('cursor') : null;
         $key = auth()->user()->starsCacheKey();
         $expiry = env('APP_ENV') == 'local' ? 60 * 8 : 60 * 2;
-
         if (Cache::has($key)) {
             $cached = Cache::get($key);
 
@@ -34,7 +34,7 @@ class StarsController extends Controller
                 return $cached;
             } else {
                 // Get the next page
-                $next = $client->fetchStars($cached['pageInfo']['endCursor']);
+                $next = $this->client->fetchStars($cached['pageInfo']['endCursor']);
 
                 $oldEdges = $cached['edges'];
                 $newEdges = $next['edges'];
@@ -58,7 +58,7 @@ class StarsController extends Controller
             }
         } else {
             $cursor = null;
-            $fetched = $client->fetchStars($cursor);
+            $fetched = $this->client->fetchStars($cursor);
             Cache::put($key, $fetched, $expiry);
 
             return $fetched;

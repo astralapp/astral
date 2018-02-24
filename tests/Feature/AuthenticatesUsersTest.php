@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use JWTAuth;
-use Mockery as m;
+use Mockery;
 use Tests\TestCase;
 use Astral\Models\User;
 use Laravel\Socialite\Facades\Socialite;
@@ -15,7 +15,8 @@ class AuthenticatesUsersTest extends TestCase
 
     protected function tearDown()
     {
-        m::close();
+        Mockery::close();
+
         parent::tearDown();
     }
 
@@ -50,7 +51,7 @@ class AuthenticatesUsersTest extends TestCase
 
     public function mockSocialiteFacade()
     {
-        $abstractUser = m::mock('Laravel\Socialite\Two\User');
+        $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
         $abstractUser->shouldReceive('getId')
             ->andReturn(1234567890)
             ->shouldReceive('getNickname')
@@ -61,7 +62,7 @@ class AuthenticatesUsersTest extends TestCase
             ->andReturn('https://en.gravatar.com/userimage');
         $abstractUser->token = 'abcde12345';
 
-        $provider = m::mock('Laravel\Socialite\Contracts\Provider');
+        $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
         $provider->shouldReceive('user')->andReturn($abstractUser);
 
         Socialite::shouldReceive('driver')->with('github')->andReturn($provider);
