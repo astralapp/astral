@@ -21,3 +21,5 @@ Route::get('/stars', 'StarsController@index');
 
 Route::post('stars/github', 'GitHubStarsController@index');
 
+Route::delete('stars/cleanup', 'StarsJanitorController@destroy');
+
