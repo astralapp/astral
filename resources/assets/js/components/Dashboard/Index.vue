@@ -49,7 +49,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchGitHubStars', 'fetchUserStars'])
+    ...mapActions([
+      'fetchUser',
+      'fetchGitHubStars',
+      'fetchUserStars',
+      'cleanupStars'
+    ])
   },
   async created() {
     await this.fetchUser()
@@ -58,6 +63,7 @@ export default {
     while (this.pageInfo.hasNextPage) {
       await this.fetchGitHubStars(this.pageInfo.endCursor)
     }
+    await this.cleanupStars()
   }
 }
 </script>

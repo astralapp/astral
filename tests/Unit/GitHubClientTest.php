@@ -25,7 +25,7 @@ class GitHubClientTest extends TestCase
     {
         $stars = $this->client->fetchStars(null, 100);
 
-        $this->assertEquals($this->sampleStars, $stars);
+        $this->assertArrayHasKey('edges', $stars);
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class GitHubClientTest extends TestCase
 
         $stars = $this->client->fetchStars($cursor, 1);
 
-        $this->assertEquals($this->sampleStars['edges'][1], $stars['edges'][0]);
+        $this->assertEquals($this->sampleStars['edges'][1]['node']['id'], $stars['edges'][0]['node']['id']);
     }
 
     /** @test */

@@ -238,6 +238,15 @@ const actions = {
           notes
         })
       })
+  },
+  cleanupStars({ commit }) {
+    client
+      .withAuth()
+      .delete('/api/stars/cleanup')
+      .then(res => {
+        commit(SET_USER_STARS, res)
+        commit(MAP_USER_STARS_TO_GITHUB_STARS)
+      })
   }
 }
 

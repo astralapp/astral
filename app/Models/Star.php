@@ -2,6 +2,7 @@
 
 namespace Astral\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Star extends Model
