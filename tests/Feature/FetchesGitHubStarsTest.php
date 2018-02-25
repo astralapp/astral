@@ -50,9 +50,27 @@ class FetchesGitHubStarsTest extends TestCase
 
         $this->clientMock->shouldReceive('fetchStars')->with(null)->andReturn($this->sampleStars);
 
-        $this->postJson('/api/stars/github', [])
+        $this->getJson('/api/stars/github')
             ->assertStatus(200)
             ->assertJson($this->sampleStars);
 
+    }
+
+    /** @test */
+    public function a_user_can_request_a_refresh_of_their_stars()
+    {
+        $this->withoutExceptionHandling();
+
+        $cacheKey = auth()->user()->starsCacheKey();
+
+        Cache::spy();
+
+        $this->clientMock->shouldReceive('fetchStars')->with(null)->andReturn($this->sampleStars);
+
+        $this->getJson('/api/stars/github?refresh=true')
+            ->assertStatus(200)
+            ->assertJson($this->sampleStars);
+
+        Cache::shouldHaveReceived('forget')->with($cacheKey)->once();
     }
 }

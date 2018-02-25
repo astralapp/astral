@@ -1,3 +1,4 @@
+import qs from 'qs'
 import {
   CLEAR_STARS,
   PUSH_STAR_TAG,
@@ -145,7 +146,7 @@ const actions = {
     let data = cursor ? { cursor } : {}
     return client
       .withAuth()
-      .post('/api/stars/github', data)
+      .get(`/api/stars/github?${qs.stringify(data)}`)
       .then(res => {
         commit(
           SET_STARS,

@@ -2,8 +2,8 @@
 
 namespace Astral\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Astral\Lib\GitHubClient;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class GitHubStarsController extends Controller
@@ -18,8 +18,13 @@ class GitHubStarsController extends Controller
 
     public function index(Request $request)
     {
-        $cursor = $request->has('cursor') ? $request->input('cursor') : null;
         $key = auth()->user()->starsCacheKey();
+
+        if ($request->has('refresh')) {
+            Cache::forget($key);
+        }
+
+        $cursor = $request->has('cursor') ? $request->input('cursor') : null;
         $expiry = env('APP_ENV') == 'local' ? 60 * 8 : 60 * 2;
         if (Cache::has($key)) {
             $cached = Cache::get($key);
