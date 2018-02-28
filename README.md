@@ -22,4 +22,4 @@ npm run dev
 
 ### Step 2
 
-Next, boot up a server to visit the app. If using a tool like Laravel Valet, of course the URL will default to `http://astral.test`. That's pretty much it!
+Next, boot up a server to visit the app. If you're using a tool like Laravel Valet, the URL will likely default to `http://astral.test`. That's pretty much it!
