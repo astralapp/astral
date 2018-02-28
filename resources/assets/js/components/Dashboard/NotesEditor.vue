@@ -30,7 +30,78 @@ export default {
       spellChecker: false,
       hideIcons: ['side-by-side', 'guide'],
       showIcons: ['code'],
-      status: false
+      status: false,
+      toolbar: [
+        {
+          name: 'bold',
+          action: SimpleMDE.toggleBold,
+          className: 'fas fa-bold',
+          title: 'Bold'
+        },
+        {
+          name: 'italic',
+          action: SimpleMDE.toggleItalic,
+          className: 'fas fa-italic',
+          title: 'Italic'
+        },
+        {
+          name: 'heading',
+          action: SimpleMDE.toggleHeadingSmaller,
+          className: 'fas fa-heading',
+          title: 'Heading'
+        },
+        '|',
+        {
+          name: 'code',
+          action: SimpleMDE.toggleCodeBlock,
+          className: 'fas fa-code',
+          title: 'Code'
+        },
+        {
+          name: 'quote',
+          action: SimpleMDE.toggleBlockquote,
+          className: 'fas fa-quote-left',
+          title: 'Quote'
+        },
+        {
+          name: 'unordered-list',
+          action: SimpleMDE.toggleUnorderedList,
+          className: 'fas fa-list-ul',
+          title: 'Unordered List'
+        },
+        {
+          name: 'ordered-list',
+          action: SimpleMDE.toggleOrderedList,
+          className: 'fas fa-list-ol',
+          title: 'Ordered List'
+        },
+        '|',
+        {
+          name: 'link',
+          action: SimpleMDE.drawLink,
+          className: 'fas fa-link',
+          title: 'Link'
+        },
+        {
+          name: 'image',
+          action: SimpleMDE.drawImage,
+          className: 'fas fa-image',
+          title: 'Image'
+        },
+        '|',
+        {
+          name: 'preview',
+          action: SimpleMDE.togglePreview,
+          className: 'fas fa-eye',
+          title: 'Preview'
+        },
+        {
+          name: 'fullscreen',
+          action: SimpleMDE.toggleFullScreen,
+          className: 'fas fa-arrows-alt',
+          title: 'Image'
+        }
+      ]
     })
     this.editor.codemirror.on(
       'change',
@@ -74,6 +145,9 @@ export default {
   border-top-right-radius: 0;
   border: none;
   border-bottom: 1px solid config('colors.grey-light');
+  button {
+    color: config('colors.grey-dark');
+  }
 }
 .CodeMirror {
   flex-grow: 1;
