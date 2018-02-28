@@ -13,7 +13,7 @@ class TagController extends Controller
 
     public function index()
     {
-        return Tag::withStarCount()->get();
+        return auth()->user()->tags()->withStarCount()->get();
     }
 
     public function store(Request $request)
@@ -22,6 +22,6 @@ class TagController extends Controller
 
         $name = $request->input('name');
 
-        return Tag::create(['name' => $name]);
+        return auth()->user()->tags()->create(['name' => $name]);
     }
 }

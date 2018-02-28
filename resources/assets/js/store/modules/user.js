@@ -22,7 +22,7 @@ const actions = {
   fetchUser({ commit }) {
     return client
       .withAuth()
-      .get('/api/me')
+      .get('/api/auth/me')
       .then(res => {
         commit(SET_USER, res)
       })

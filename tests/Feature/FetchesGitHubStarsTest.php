@@ -19,11 +19,11 @@ class FetchesGitHubStarsTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
 
         $this->sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
 
-        $this->clientMock = Mockery::mock(GitHubClient::class, [auth()->user()->access_token])->makePartial();
+        $this->clientMock = Mockery::mock(GitHubClient::class, [auth()->user()->access_token]);
 
         $this->app->instance(GitHubClient::class, $this->clientMock);
 

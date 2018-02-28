@@ -15,11 +15,12 @@ class StarNotesController extends Controller
   {
     $id = $request->input('id');
     $notes = $request->input('notes');
-    $star = Star::withRepoId($id)->first();
+    $star = auth()->user()->stars()->withRepoId($id)->first();
 
     if (!$star) {
       $star = new Star();
       $star->relay_id = $id;
+      $star->user_id = auth()->id();
     }
 
     $star->notes = $notes;

@@ -15,7 +15,7 @@ class CleansUpStarsTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
     }
 
     /** @test */

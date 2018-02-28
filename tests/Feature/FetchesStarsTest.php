@@ -13,7 +13,7 @@ class FetchesStarsTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
     }
 
     /** @test */

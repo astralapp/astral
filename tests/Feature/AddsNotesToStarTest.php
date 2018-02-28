@@ -16,9 +16,9 @@ class AddsNotesToStarTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
 
-        $this->star = create('Astral\Models\Star');
+        $this->star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
 
     }
 

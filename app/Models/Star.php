@@ -21,7 +21,7 @@ class Star extends Model
 
     public function scopeWithRepoId($query, $id)
     {
-        return $query->where('user_id', auth()->id())->where('relay_id', $id);
+        return $query->where('relay_id', $id);
     }
 
     public function syncTags($tags = [])
@@ -45,10 +45,6 @@ class Star extends Model
     protected static function boot()
     {
         parent::boot();
-
-        static::creating(function ($star) {
-            $star->user_id = auth()->id();
-        });
 
         static::deleting(function ($star) {
             DB::table('star_tag')->where('star_id', $star->id)->delete();

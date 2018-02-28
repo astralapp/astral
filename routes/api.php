@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 |--------------------------------------------------------------------------
  */
 
-Route::get('me', 'AuthController@me');
+Route::get('auth/me', 'AuthController@me');
+Route::get('auth/refresh', 'AuthController@refresh');
+Route::get('auth/logout', 'AuthController@logout');
 
 Route::get('/tags', 'TagController@index');
 Route::post('/tags', 'TagController@store');

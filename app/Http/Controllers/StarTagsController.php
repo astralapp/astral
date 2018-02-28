@@ -16,7 +16,7 @@ class StarTagsController extends Controller
     {
         $id = $request->input('relayId');
         $tag_id = $request->input('tagId');
-        $star = Star::withRepoId($id)->first();
+        $star = auth()->user()->stars()->withRepoId($id)->first();
         if (!is_null($star)) {
             $star->tags()->sync([$tag_id], false);
             $star->save();
@@ -27,14 +27,14 @@ class StarTagsController extends Controller
             $star->tags()->attach($tag_id);
         }
         return [
-            'tags' => Tag::withStarCount()->get(),
+            'tags' => auth()->user()->tags()->withStarCount()->get(),
         ];
     }
 
     public function update(Request $request)
     {
         $relayId = $request->input('relayId');
-        $star = Star::withRepoId($relayId)->first();
+        $star = auth()->user()->stars()->withRepoId($relayId)->first();
         if (!$star) {
             $star = new Star();
             $star->relay_id = $relayId;
@@ -43,7 +43,7 @@ class StarTagsController extends Controller
         }
         $star->syncTags($request->input('tags'));
         $star->load('tags');
-        $tags = Tag::withStarCount()->get();
+        $tags = auth()->user()->tags()->withStarCount()->get();
 
         return response()->json(compact('star', 'tags'));
     }

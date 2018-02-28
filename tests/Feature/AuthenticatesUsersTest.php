@@ -29,7 +29,7 @@ class AuthenticatesUsersTest extends TestCase
     }
 
     /** @test */
-    public function it_retrieves_github_request_and_creates_a_new_user()
+    public function it_receives_the_github_response_and_creates_a_new_user()
     {
         $this->mockSocialiteFacade();
 
@@ -67,4 +67,38 @@ class AuthenticatesUsersTest extends TestCase
 
         Socialite::shouldReceive('driver')->with('github')->andReturn($provider);
     }
+
+    /** @test */
+    public function it_can_fetch_the_currently_authenticated_user()
+    {
+        $this->login();
+
+        $this->getJson('/api/auth/me')
+            ->assertStatus(200)
+            ->assertJson(auth()->user()->toArray());
+    }
+
+    /** @test */
+    public function it_can_fetch_a_refresh_token()
+    {
+        $this->login();
+
+        $this->getJson('/api/auth/refresh')
+            ->assertStatus(200)
+            ->assertJsonStructure(['access_token', 'token_type', 'expires_in']);
+    }
+
+    /** @test */
+    public function a_user_can_logout()
+    {
+        $this->login();
+
+        $this->assertAuthenticated();
+
+        $this->getJson('/api/auth/logout')
+            ->assertStatus(205);
+
+        $this->assertGuest();
+    }
+
 }

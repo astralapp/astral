@@ -17,7 +17,7 @@ class StarsJanitorTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
 
         $this->janitor = new StarsJanitor(auth()->user());
 

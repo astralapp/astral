@@ -20,6 +20,6 @@ class StarsJanitorController extends Controller
     {
         $this->janitor->deleteEmptyStars()->deleteUnstarredStars();
 
-        return auth()->user()->stars->load('tags');
+        return auth()->user()->stars()->with('tags')->get();
     }
 }

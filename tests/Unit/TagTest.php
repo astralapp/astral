@@ -16,7 +16,7 @@ class TagTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
 
         $this->tag = create('Astral\Models\Tag');
     }

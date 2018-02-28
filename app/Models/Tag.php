@@ -25,12 +25,12 @@ class Tag extends Model
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', $name)->where('user_id', auth()->id());
+        return $query->where('name', $name);
     }
 
     public function scopeWithStarCount($query)
     {
-        return $query->withCount('stars')->where('user_id', auth()->id())->orderBy('sort_order', 'asc');
+        return $query->withCount('stars')->orderBy('sort_order', 'asc');
     }
 
     protected static function boot()

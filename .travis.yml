@@ -1,0 +1,33 @@
+
+language: php
+
+php:
+  - 7.1
+  - 7.2
+
+env:
+  JWT_SECRET: YuJwjOCrWGWIdyq95yP89qUKPTvQ3BQK
+  global:
+    - setup=basic
+
+matrix:
+  fast_finish: true
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+  - memcached
+  - redis-server
+
+before_install:
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - travis_retry composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+
+script: vendor/bin/phpunit

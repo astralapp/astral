@@ -11,10 +11,6 @@ class GitHubClient
 
   public function __construct($token)
   {
-    if (!$token) {
-      throw new MissingAccessTokenException;
-    }
-
     $this->endpoint = 'https://api.github.com/graphql';
     $this->token = $token;
   }

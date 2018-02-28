@@ -16,7 +16,7 @@ class StarTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
 
         $this->star = create('Astral\Models\Star');
     }

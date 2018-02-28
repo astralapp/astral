@@ -13,7 +13,7 @@ class StarsController extends Controller
 
     public function index()
     {
-        return Star::with('tags')->where('user_id', auth()->id())->get();
+        return auth()->user()->stars()->with('tags')->get();
     }
 
 }

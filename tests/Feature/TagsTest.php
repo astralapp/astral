@@ -15,7 +15,7 @@ class TagsTest extends TestCase
     {
         parent::setUp();
 
-        createLoggedInUser();
+        $this->login();
 
         $this->tags = create('Astral\Models\Tag', ['user_id' => auth()->id()], 5);
     }
@@ -31,6 +31,7 @@ class TagsTest extends TestCase
     /** @test */
     public function a_user_can_add_a_new_tag()
     {
+        $this->withoutExceptionHandling();
         $response = $this->postJson('/api/tags', ['name' => 'Laravel'])
             ->assertStatus(200)
             ->assertJson(['name' => 'Laravel']);
