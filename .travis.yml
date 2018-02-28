@@ -8,11 +8,6 @@ php:
 env:
   APP_KEY: XTe0nzaJt90Utv23jJQ3zti4RXYrIiyP
   JWT_SECRET: YuJwjOCrWGWIdyq95yP89qUKPTvQ3BQK
-  global:
-    - setup=basic
-
-matrix:
-  fast_finish: true
 
 sudo: false
 
