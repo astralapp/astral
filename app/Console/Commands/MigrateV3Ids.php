@@ -28,6 +28,8 @@ class MigrateV3Ids extends Command
      * @return void
      */
 
+    protected $repos;
+    protected $accessToken;
 
     public function __construct()
     {
