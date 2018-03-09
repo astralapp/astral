@@ -61030,25 +61030,27 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (value, query) {
+/* harmony default export */ __webpack_exports__["a"] = (function (stars, query) {
   //  If there's no query return all items
   if (query.query.replace(/\s/g, '') === '') {
-    return value;
+    return stars;
   }
 
   //  Begin the filter process
-  return value.filter(function (repo) {
-    var searchText = (repo.node.nameWithOwner + ' ' + (repo.node.hasOwnProperty('description') ? repo.node.description : '') + ' ' + repo.notes).toLowerCase();
+  return stars.filter(function (_ref) {
+    var value = _ref.value;
+
+    var searchText = (value.node.nameWithOwner + ' ' + (value.node.hasOwnProperty('description') ? value.node.description : '') + ' ' + value.notes).toLowerCase();
     if (query.tags.length) {
-      // Intersect repo tags with query tags to ensure repo contains all tags in query
-      var tagNames = repo.tags.map(function (tag) {
+      // Intersect value tags with query tags to ensure value contains all tags in query
+      var tagNames = value.tags.map(function (tag) {
         return tag.name.toLowerCase();
       });
       var hasTags = Object(__WEBPACK_IMPORTED_MODULE_0_lodash__["intersection"])(query.tags, tagNames).length === query.tags.length;
       var hasStrings = ~searchText.indexOf(query.strings.join(' ').toLowerCase());
       return hasTags && hasStrings;
     } else {
-      //  Just search the repo text and/or description
+      //  Just search the value text and/or description
       return ~searchText.indexOf(query.strings.join(' ').toLowerCase());
     }
   });
