@@ -2,16 +2,12 @@
   "private": true,
   "scripts": {
     "dev": "npm run development",
-    "development":
-      "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch":
-      "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-poll": "npm run watch -- --watch-poll",
-    "hot":
-      "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "production":
-      "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
     "awesomplete": "^1.1.2",
@@ -23,10 +19,10 @@
     "lodash": "^4.17.4",
     "nanoid": "^1.0.1",
     "qs": "^6.5.1",
-    "simplemde":
-      "https://github.com/Ionaru/simplemde-markdown-editor/tarball/development",
+    "simplemde": "https://github.com/Ionaru/simplemde-markdown-editor/tarball/development",
     "vue": "^2.5.13",
     "vue-clickaway": "^2.1.0",
+    "vue-collection-cluster": "^1.0.11",
     "vue-feather-icons": "^4.5.0",
     "vue-global-events": "^1.0.2",
     "vue-router": "^3.0.1",
