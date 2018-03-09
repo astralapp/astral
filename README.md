@@ -8,6 +8,7 @@ An open source application that allows you to organize your GitHub Stars with ea
 
 * To run this project, you must have PHP 7 and Node.js installed.
 * You should setup a host on your web server for your local domain. For this you could also configure Laravel Homestead or Valet.
+* [Create a new GitHub OAuth App](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/) so you can plug in your API keys.
 
 ### Step 1
 
@@ -15,7 +16,7 @@ Begin by cloning this repository to your machine, and installing all Composer & 
 
 ```bash
 git clone git@github.com:astralapp/astral.git
-cd astral && composer install && npm install # or yarn
+cd astral && composer install && yarn # or npm install
 php artisan astral:install
 npm run dev
 ```
