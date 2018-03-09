@@ -1,26 +1,28 @@
 <template>
-  <div class="stars border-r border-grey-light bg-grey-lighter overflow-y-scroll relative">
+  <div class="stars border-r border-grey-light bg-grey-lighter relative overflow-hidden">
     <GlobalEvents
       @keyup.down="nextStar"
       @keyup.up="previousStar"
     />
-    <ul class="list-reset">
-      <Star 
-        v-for="star in filteredStars" 
-        :star="star"
-        :key="star.node.id"
-        :data-id="star.node.id"
-        :selected="starIsCurrentStar(star)"
-        draggable="true"
-        @dragstart.native="starDragged($event)"
-        @dragend.native="clearClonedRepoNodes"
-        @click.native="setCurrentStar(star)"
-      ></Star>
-    </ul>
+    <collection-cluster :items="filteredStars" v-bind="cluster" class="overflow-y-scroll">
+      <div slot="star" slot-scope="{cell, item}" :key="item.value.node.id">
+        <Star 
+          :star="item.value"
+          :data-id="item.value.node.id"
+          :selected="starIsCurrentStar(item.value)"
+          draggable="true"
+          @dragstart.native="starDragged($event)"
+          @dragend.native="clearClonedRepoNodes"
+          @click.native="setCurrentStar(item.value)"
+        ></Star>
+      </div>
+    </collection-cluster>
   </div>
 </template>
 <script>
 import GlobalEvents from 'vue-global-events'
+import CollectionCluster from 'vue-collection-cluster'
+import { chunk } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import Star from '@/components/Dashboard/Star'
 import galileo from '@/filters/galileo'
@@ -28,8 +30,17 @@ export default {
   name: 'StarList',
   props: ['stars'],
   components: {
+    CollectionCluster,
     GlobalEvents,
     Star
+  },
+  data() {
+    return {
+      cluster: {
+        heightType: 'automatic',
+        itemHeight: 168
+      }
+    }
   },
   computed: {
     ...mapGetters([
@@ -65,6 +76,9 @@ export default {
           }
 
           return !star.tags.length
+        })
+        .map(star => {
+          return { type: 'star', value: star }
         })
 
       return galileo(stars, this.tokenizedSearchQuery)
@@ -131,6 +145,9 @@ export default {
 <style lang="scss">
 .stars {
   transform: translate3d(0, 0, 0);
+}
+.collection-cluster {
+  height: calc(100vh - 136px);
 }
 #repo-clone {
   transform: translate3d(-50%, -50%, 0);
