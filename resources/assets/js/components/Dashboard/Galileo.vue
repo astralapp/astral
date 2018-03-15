@@ -7,9 +7,9 @@
   </div>
 </template>
 <script>
-import { debounce } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import Icon from '@/components/Icon'
+
 export default {
   name: 'Galileo',
   components: {
@@ -23,9 +23,9 @@ export default {
       get() {
         return this.query
       },
-      set: debounce(function(query) {
+      set(query) {
         this.setSearchQuery(query)
-      }, 300)
+      }
     }
   },
   methods: {
