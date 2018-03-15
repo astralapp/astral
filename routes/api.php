@@ -11,8 +11,9 @@ Route::get('auth/me', 'AuthController@me');
 Route::get('auth/refresh', 'AuthController@refresh');
 Route::get('auth/logout', 'AuthController@logout');
 
-Route::get('/tags', 'TagController@index');
-Route::post('/tags', 'TagController@store');
+Route::get('/tags', 'TagsController@index');
+Route::post('/tags', 'TagsController@store');
+Route::put('/tags/reorder', 'TagSortOrderController@update');
 
 Route::put('/star/tags', 'StarTagsController@update');
 Route::post('/star/tags', 'StarTagsController@store');

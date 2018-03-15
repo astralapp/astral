@@ -3,7 +3,6 @@ export const SET_USER = 'SET_USER'
 export const ADD_TAG = 'ADD_TAG'
 export const SET_TAGS = 'SET_TAGS'
 export const SET_CURRENT_TAG = 'SET_CURRENT_TAG'
-export const SET_TAG_SORT_METHOD = 'SET_TAG_SORT_METHOD'
 
 export const SET_STARS = 'SET_STARS'
 export const SET_TOTAL_STARS = 'SET_TOTAL_STARS'

@@ -23,6 +23,7 @@ class StarTagsController extends Controller
         } else {
             $star = new Star();
             $star->relay_id = $id;
+            $star->user_id = auth()->id();
             $star->save();
             $star->tags()->attach($tag_id);
         }

@@ -31,16 +31,73 @@ class TagsTest extends TestCase
     /** @test */
     public function a_user_can_add_a_new_tag()
     {
-        $this->withoutExceptionHandling();
         $response = $this->postJson('/api/tags', ['name' => 'Laravel'])
             ->assertStatus(200)
             ->assertJson(['name' => 'Laravel']);
     }
 
     /** @test */
-    public function a_tag_must_include_a_name()
+    public function a_new_tag_must_include_a_name()
     {
         $this->postJson('/api/tags', ['name' => ''])->assertStatus(422);
 
     }
+
+    /** @test */
+    public function tags_can_be_reordered()
+    {
+        // Shuffle the tags
+        $i = 0;
+        $tags = $this->tags->shuffle()->map(function ($tag) use (&$i) {
+            $tag->sort_order = $i;
+            $i++;
+            return [
+                'name' => $tag->name,
+                'id' => $tag->id,
+                'sort_order' => $tag->sort_order
+            ];
+        })->toArray();
+
+        $this->putJson('/api/tags/reorder', ['tags' => $tags])
+            ->assertJson($tags)
+            ->assertStatus(200);
+
+    }
+
+    /** @test */
+    public function reordering_tags_requires_an_id()
+    {
+        $tags = $this->tags->map(function ($tag) {
+            $tag->id = null;
+
+            return $tag;
+        })->toArray();
+
+        $this->putJson('/api/tags/reorder', ['tags' => $tags])->assertStatus(422);
+    }
+
+    /** @test */
+    public function ids_passed_for_reordering_must_exist_in_the_db()
+    {
+        $tags = $this->tags->map(function ($tag) {
+            $tag->id = 1337;
+
+            return $tag;
+        })->toArray();
+
+        $this->putJson('/api/tags/reorder', ['tags' => $tags])->assertStatus(422);
+    }
+
+    /** @test */
+    public function reordering_tags_requires_a_sort_order()
+    {
+        $tags = $this->tags->map(function ($tag) {
+            $tag->sort_order = null;
+
+            return $tag;
+        })->toArray();
+
+        $this->putJson('/api/tags/reorder', ['tags' => $tags])->assertStatus(422);
+    }
+
 }

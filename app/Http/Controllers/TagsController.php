@@ -4,7 +4,7 @@ namespace Astral\Http\Controllers;
 use Astral\Models\Tag;
 use Illuminate\Http\Request;
 
-class TagController extends Controller
+class TagsController extends Controller
 {
     public function __construct()
     {
@@ -24,4 +24,5 @@ class TagController extends Controller
 
         return auth()->user()->tags()->create(['name' => $name]);
     }
+
 }

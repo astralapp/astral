@@ -27,9 +27,9 @@
       <sort-tags></sort-tags>
     </sidebar-header>
     <new-tag-form @submit="doAddTag"></new-tag-form>
-    <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3">
+    <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
       <sidebar-item 
-        v-for="tag in sortedTags" 
+        v-for="tag in tags" 
         :key="tag.id" 
         :data-id="tag.id" 
         :badge="tag.stars_count"
@@ -67,6 +67,7 @@ import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
 import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
 import SortTags from '@/components/Dashboard/Sidebar/SortTags'
 import { mapActions, mapGetters } from 'vuex'
+import dragula from 'dragula'
 export default {
   name: 'Sidebar',
   components: {
@@ -78,12 +79,13 @@ export default {
   },
   data() {
     return {
-      refreshingStars: false
+      refreshingStars: false,
+      drake: null
     }
   },
   computed: {
     ...mapGetters([
-      'sortedTags',
+      'tags',
       'currentTag',
       'languages',
       'currentLanguage',
@@ -99,7 +101,23 @@ export default {
   },
   mounted() {
     this.fetchTags()
-    this.$bus.$on('TAGS_SORTED', method => this.sortTags(method))
+
+    this.$bus.$on('TAGS_SORTED', method => {
+      this.sortTags(method)
+    })
+
+    this.drake = dragula([this.$refs.sidebarTags]).on(
+      'drop',
+      (el, target, source, sibling) => {
+        let sortMap = Array.from(source.children).map((el, i) => {
+          return {
+            id: el.dataset.id,
+            sort_order: i
+          }
+        })
+        this.reorderTags(sortMap)
+      }
+    )
   },
   methods: {
     ...mapActions([
@@ -109,6 +127,7 @@ export default {
       'setCurrentLanguage',
       'setViewingUntagged',
       'pushStarTag',
+      'reorderTags',
       'sortTags'
     ]),
     refreshStars() {
@@ -123,9 +142,30 @@ export default {
       this.setCurrentLanguage('')
     },
     tagStarWithData({ data, id }) {
-      const tag = this.sortedTags.find(tag => tag.id === parseInt(id, 10))
+      const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
       this.pushStarTag({ starId: data.id, tag: tag })
     }
   }
 }
 </script>
+<style lang="scss">
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
+  filter: alpha(opacity=20);
+}
+</style>
