@@ -3,6 +3,7 @@
 namespace Astral\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Question\Question;
 
 class InstallCommand extends Command
 {
@@ -115,7 +116,7 @@ class InstallCommand extends Command
         return [
             'GITHUB_CLIENT_ID' => $this->ask('Github Client Id'),
             'GITHUB_CLIENT_SECRET' => $this->ask('Github Client Secret'),
-            'GITHUB_CLIENT_CALLBACK_URL' => $this->ask('Github Client Callback URL', 'http://astral.test/auth/github/callback'),
+            'GITHUB_CLIENT_CALLBACK_URL' => $this->ask('Github Client Callback URL', 'https://astral.test/auth/github/callback'),
         ];
     }
 
