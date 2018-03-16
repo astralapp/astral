@@ -88892,6 +88892,7 @@ var actions = {
 
     var sortedTags = [];
     var sortMap = [];
+
     switch (method) {
       case 'ALPHA_ASC':
         sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['name'], ['asc']);

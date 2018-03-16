@@ -65,6 +65,7 @@ const actions = {
   sortTags({ commit, state, dispatch }, method) {
     let sortedTags = []
     let sortMap = []
+
     switch (method) {
       case 'ALPHA_ASC':
         sortedTags = orderBy(state.tags, ['name'], ['asc'])
