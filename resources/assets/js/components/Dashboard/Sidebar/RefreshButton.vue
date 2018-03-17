@@ -1,5 +1,5 @@
 <template>
-<button class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker" :class="{ 'active': active }">
+<button class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none" :class="{ 'active': active }">
   <Icon
     type="RefreshCwIcon"
     height="16"
@@ -26,6 +26,19 @@ export default {
   }
   &:hover svg {
     stroke: config('colors.grey');
+  }
+  &.active {
+    animation: spin 750ms linear 0s infinite;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 }
 </style>

@@ -15,7 +15,8 @@ import {
   SET_VIEWING_UNTAGGED,
   SYNC_STAR_TAGS,
   MAP_USER_STARS_TO_GITHUB_STARS,
-  SET_STAR_NOTES
+  SET_STAR_NOTES,
+  RESET_STARS
 } from '../mutation-types'
 
 import client from './../api/client.js'
@@ -137,17 +138,29 @@ const mutations = {
       return star
     })
     state.currentStar = { ...state.currentStar, notes }
+  },
+  [RESET_STARS](state) {
+    state.currentStar = {}
+    state.readme = ''
+    state.pageInfo = {}
+    state.totalStars = 0
+    state.stars = []
   }
 }
 
 const actions = {
-  fetchGitHubStars({ commit }, cursor = null) {
+  fetchGitHubStars({ commit }, { cursor = null, refresh = false }) {
     let url = '/api/stars/github'
     let cursorQs = cursor ? { cursor } : {}
-
+    let refreshQs = refresh ? { refresh: true } : {}
+    if (refresh) {
+      commit(RESET_STARS)
+    }
     return client
       .withAuth()
-      .get(`/api/stars/github?${qs.stringify(cursorQs)}`)
+      .get(
+        `/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`
+      )
       .then(res => {
         commit(
           SET_STARS,

@@ -716,6 +716,32 @@ button,
 .refresh-stars:hover svg {
   stroke: #b8c2cc;
 }
+.refresh-stars.active {
+  -webkit-animation: spin 750ms linear 0s infinite;
+          animation: spin 750ms linear 0s infinite;
+  opacity: .75;
+  pointer-events: none;
+}
+@-webkit-keyframes spin {
+from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+}
+to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+}
+}
+@keyframes spin {
+from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+}
+to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+}
+}
 
 .dashboard-list-item[data-v-5aba6afa] {
   -webkit-transition: opacity 250ms ease, color 250ms ease, background-color 250ms ease, -webkit-transform 250ms ease;

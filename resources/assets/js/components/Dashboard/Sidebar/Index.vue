@@ -89,7 +89,8 @@ export default {
       'currentTag',
       'languages',
       'currentLanguage',
-      'viewingUntagged'
+      'viewingUntagged',
+      'pageInfo'
     ]),
     noFiltersApplied() {
       return (
@@ -128,10 +129,21 @@ export default {
       'setViewingUntagged',
       'pushStarTag',
       'reorderTags',
-      'sortTags'
+      'sortTags',
+      'fetchGitHubStars',
+      'cleanupStars'
     ]),
-    refreshStars() {
-      console.log('Refreshing Stars...')
+    async refreshStars() {
+      this.refreshingStars = true
+      await this.fetchGitHubStars({ cursor: false, refresh: true })
+      while (this.pageInfo.hasNextPage) {
+        await this.fetchGitHubStars({
+          cursor: this.pageInfo.endCursor,
+          refresh: false
+        })
+      }
+      await this.cleanupStars()
+      this.refreshingStars = false
     },
     doAddTag(name) {
       this.addTag(name)

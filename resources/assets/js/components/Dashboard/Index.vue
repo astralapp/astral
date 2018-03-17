@@ -59,9 +59,12 @@ export default {
   async created() {
     await this.fetchUser()
     await this.fetchUserStars()
-    await this.fetchGitHubStars()
+    await this.fetchGitHubStars({ cursor: null, refresh: false })
     while (this.pageInfo.hasNextPage) {
-      await this.fetchGitHubStars(this.pageInfo.endCursor)
+      await this.fetchGitHubStars({
+        cursor: this.pageInfo.endCursor,
+        refresh: false
+      })
     }
     await this.cleanupStars()
   }

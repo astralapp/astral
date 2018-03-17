@@ -86,6 +86,10 @@ export default {
   },
   watch: {
     currentStar(newValue, oldValue) {
+      if (!Object.keys(newValue).length) {
+        return false
+      }
+
       if (
         !(Object.keys(oldValue).length && oldValue.node.id === newValue.node.id)
       ) {
