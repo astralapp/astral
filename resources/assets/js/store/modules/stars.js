@@ -143,10 +143,11 @@ const mutations = {
 const actions = {
   fetchGitHubStars({ commit }, cursor = null) {
     let url = '/api/stars/github'
-    let data = cursor ? { cursor } : {}
+    let cursorQs = cursor ? { cursor } : {}
+
     return client
       .withAuth()
-      .get(`/api/stars/github?${qs.stringify(data)}`)
+      .get(`/api/stars/github?${qs.stringify(cursorQs)}`)
       .then(res => {
         commit(
           SET_STARS,

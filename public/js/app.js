@@ -88275,8 +88275,9 @@ var actions = {
     var cursor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
     var url = '/api/stars/github';
-    var data = cursor ? { cursor: cursor } : {};
-    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().get('/api/stars/github?' + __WEBPACK_IMPORTED_MODULE_3_qs___default.a.stringify(data)).then(function (res) {
+    var cursorQs = cursor ? { cursor: cursor } : {};
+
+    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().get('/api/stars/github?' + __WEBPACK_IMPORTED_MODULE_3_qs___default.a.stringify(cursorQs)).then(function (res) {
       commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["j" /* SET_STARS */], res.edges.map(function (edge) {
         edge.tags = [];
         edge.notes = '';
