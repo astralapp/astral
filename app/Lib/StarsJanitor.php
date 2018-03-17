@@ -2,6 +2,7 @@
 
 namespace Astral\Lib;
 
+use Zttp\Zttp;
 use Astral\Models\Star;
 use Astral\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -42,5 +43,32 @@ class StarsJanitor
 
     return $this;
 
+  }
+
+  public function migrateStarIds()
+  {
+    $starsToFix = $this->user()->stars()->whereNull('relay_id')->get();
+
+    foreach ($starsToFix as $star) {
+      if (!$star->repo_id) {
+        continue;
+      }
+      $repo = $this->fetchRepo($star->repo_id);
+      if (!array_key_exists('node_id', $repo)) {
+        continue;
+      }
+      $nodeId = $repo['node_id'];
+      $star->update(['relay_id' => $nodeId]);
+    }
+
+    return $this;
+  }
+
+  private function fetchRepo($id)
+  {
+    $token = $this->user()->access_token;
+    return Zttp::withHeaders([
+      'Accept' => 'application/vnd.github.jean-grey-preview+json'
+    ])->get("https://api.github.com/repositories/{$id}?access_token={$token}")->json();
   }
 }
