@@ -29,7 +29,8 @@
     <new-tag-form @submit="doAddTag"></new-tag-form>
     <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
       <sidebar-item 
-        v-for="tag in tags" 
+        v-for="tag in tags"
+        :tag="tag"
         :key="tag.id" 
         :data-id="tag.id" 
         :badge="tag.stars_count"
@@ -41,6 +42,7 @@
         :class="{ 'selected': currentTag.id == tag.id }"
         :star-target="true"
         @starDropped="tagStarWithData"
+        @deleteTag="doDeleteTag"
         @click.native="setCurrentTag(tag)"
         >
         </sidebar-item>
@@ -130,6 +132,7 @@ export default {
       'pushStarTag',
       'reorderTags',
       'sortTags',
+      'deleteTag',
       'fetchGitHubStars',
       'cleanupStars'
     ]),
@@ -147,6 +150,9 @@ export default {
     },
     doAddTag(name) {
       this.addTag(name)
+    },
+    doDeleteTag(id) {
+      this.deleteTag(id)
     },
     resetFilters() {
       this.setViewingUntagged(false)

@@ -2,16 +2,26 @@
   <li class="dashboard-list-item flex items-center py-2 pr-1 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
     <Icon :type="icon" v-if="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none relative"></Icon>
     <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">{{ title }}</span>
+    <div class="opacity-0 transition-opacity edit-tag mr-1 relative" v-if="starTarget" :class="{'opacity-100': editTagDropdownShowing}">
+      <button @click.stop="editTagDropdownShowing = !editTagDropdownShowing" class="text-white px-2" v-on-clickaway="hideEditTagDropdown">
+        <Icon type="MoreHorizontalIcon" :height="iconSize" class="stroke-none fill-current relative"></Icon>
+      </button>
+      <edit-tag-dropdown :visible="editTagDropdownShowing" @deleteTag="deleteTag"></edit-tag-dropdown>
+    </div>
     <span class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1" v-if="!!badge">{{ badge }}</span>
   </li>
 </template>
 <script>
+import { mixin as clickaway } from 'vue-clickaway'
+import EditTagDropdown from '@/components/Dashboard/Sidebar/EditTagDropdown'
 import Icon from '@/components/Icon'
 export default {
   name: 'SidebarItem',
   components: {
+    EditTagDropdown,
     Icon
   },
+  mixins: [clickaway],
   props: {
     title: String,
     icon: String,
@@ -26,14 +36,25 @@ export default {
     starTarget: {
       type: Boolean,
       default: false
+    },
+    tag: {
+      type: Object,
+      required: false
     }
   },
   data() {
     return {
-      isHighlighted: false
+      isHighlighted: false,
+      editTagDropdownShowing: false
     }
   },
   methods: {
+    deleteTag() {
+      this.$emit('deleteTag', this.tag.id)
+    },
+    hideEditTagDropdown() {
+      this.editTagDropdownShowing = false
+    },
     highlight() {
       if (this.starTarget) {
         this.isHighlighted = true
@@ -73,6 +94,9 @@ export default {
     }
     svg {
       stroke: #fff;
+    }
+    .edit-tag {
+      opacity: 1;
     }
   }
   &.selected {

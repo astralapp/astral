@@ -767,6 +767,9 @@ to {
 .dashboard-list-item:hover svg[data-v-5aba6afa] {
   stroke: #fff;
 }
+.dashboard-list-item:hover .edit-tag[data-v-5aba6afa] {
+  opacity: 1;
+}
 .dashboard-list-item.selected[data-v-5aba6afa] {
   color: #21a179;
 }
@@ -791,6 +794,13 @@ to {
 .dashboard-list-item.gu-transit[data-v-5aba6afa] {
   -webkit-transition: none !important;
   transition: none !important;
+}
+
+.edit-tag-dropdown {
+  background-clip: padding-box;
+  border: 1px solid rgba(54, 67, 73, .1);
+  top: 20px;
+  z-index: 99;
 }
 
 .tag-sort-dropdown {
@@ -3792,6 +3802,26 @@ to {
   opacity: 1;
 }
 
+.group:hover .group-hover\:opacity-0 {
+  opacity: 0;
+}
+
+.group:hover .group-hover\:opacity-25 {
+  opacity: .25;
+}
+
+.group:hover .group-hover\:opacity-50 {
+  opacity: .5;
+}
+
+.group:hover .group-hover\:opacity-75 {
+  opacity: .75;
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
 .overflow-auto {
   overflow: auto;
 }
@@ -5255,6 +5285,11 @@ body {
 .transition-stroke {
   -webkit-transition: stroke 150ms ease;
   transition: stroke 150ms ease;
+}
+
+.transition-opacity {
+  -webkit-transition: opacity 150ms ease;
+  transition: opacity 150ms ease;
 }
 
 @media (min-width: 576px) {
@@ -7903,26 +7938,6 @@ body {
 
   .sm\:-ml-px {
     margin-left: -1px;
-  }
-
-  .sm\:opacity-0 {
-    opacity: 0;
-  }
-
-  .sm\:opacity-25 {
-    opacity: .25;
-  }
-
-  .sm\:opacity-50 {
-    opacity: .5;
-  }
-
-  .sm\:opacity-75 {
-    opacity: .75;
-  }
-
-  .sm\:opacity-100 {
-    opacity: 1;
   }
 
   .sm\:overflow-auto {
@@ -11929,26 +11944,6 @@ body {
     margin-left: -1px;
   }
 
-  .md\:opacity-0 {
-    opacity: 0;
-  }
-
-  .md\:opacity-25 {
-    opacity: .25;
-  }
-
-  .md\:opacity-50 {
-    opacity: .5;
-  }
-
-  .md\:opacity-75 {
-    opacity: .75;
-  }
-
-  .md\:opacity-100 {
-    opacity: 1;
-  }
-
   .md\:overflow-auto {
     overflow: auto;
   }
@@ -15953,26 +15948,6 @@ body {
     margin-left: -1px;
   }
 
-  .lg\:opacity-0 {
-    opacity: 0;
-  }
-
-  .lg\:opacity-25 {
-    opacity: .25;
-  }
-
-  .lg\:opacity-50 {
-    opacity: .5;
-  }
-
-  .lg\:opacity-75 {
-    opacity: .75;
-  }
-
-  .lg\:opacity-100 {
-    opacity: 1;
-  }
-
   .lg\:overflow-auto {
     overflow: auto;
   }
@@ -19975,26 +19950,6 @@ body {
 
   .xl\:-ml-px {
     margin-left: -1px;
-  }
-
-  .xl\:opacity-0 {
-    opacity: 0;
-  }
-
-  .xl\:opacity-25 {
-    opacity: .25;
-  }
-
-  .xl\:opacity-50 {
-    opacity: .5;
-  }
-
-  .xl\:opacity-75 {
-    opacity: .75;
-  }
-
-  .xl\:opacity-100 {
-    opacity: 1;
   }
 
   .xl\:overflow-auto {

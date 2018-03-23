@@ -588,6 +588,10 @@ module.exports = {
     screen: '100vh'
   },
 
+  modules: {
+    opacity: ['group-hover']
+  },
+
   /*
   |-----------------------------------------------------------------------------
   | Padding                                https://tailwindcss.com/docs/padding

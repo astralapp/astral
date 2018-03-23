@@ -4,7 +4,9 @@ import {
   ADD_TAG,
   SET_TAGS,
   SET_CURRENT_TAG,
-  SET_VIEWING_UNTAGGED
+  SET_VIEWING_UNTAGGED,
+  DELETE_TAG,
+  SET_STAR_TAGS
 } from '../mutation-types'
 
 import client from './../api/client.js'
@@ -28,6 +30,12 @@ const mutations = {
   },
   [ADD_TAG](state, tag) {
     state.tags = state.tags.concat([tag])
+  },
+  [DELETE_TAG](state, id) {
+    const index = state.tags.findIndex(tag => {
+      return tag.id === id
+    })
+    state.tags.splice(index, 1)
   }
 }
 
@@ -94,6 +102,26 @@ const actions = {
     })
 
     dispatch('reorderTags', sortMap)
+  },
+  deleteTag({ rootState, state, commit }, id) {
+    if (state.currentTag.id === id) {
+      commit(SET_CURRENT_TAG, {})
+    }
+    commit(DELETE_TAG, id)
+    const starsWithTag = rootState.stars.stars
+      .filter(star => {
+        return ~star.tags.map(tag => tag.id).indexOf(id)
+      })
+      .map(star => {
+        const filteredTags = star.tags.filter(tag => {
+          return tag.id !== id
+        })
+        return { starId: star.node.id, tags: filteredTags }
+      })
+
+    starsWithTag.forEach(star => {
+      commit(SET_STAR_TAGS, star)
+    })
   }
 }
 
