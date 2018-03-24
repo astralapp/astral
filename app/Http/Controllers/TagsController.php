@@ -25,4 +25,12 @@ class TagsController extends Controller
         return auth()->user()->tags()->create(['name' => $name]);
     }
 
+    public function destroy(Request $request, Tag $tag)
+    {
+        auth()->user()->tags()->findOrFail($tag->id)->delete();
+
+        return response()->json([], 204);
+
+    }
+
 }

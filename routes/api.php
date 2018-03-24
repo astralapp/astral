@@ -13,6 +13,7 @@ Route::get('auth/logout', 'AuthController@logout');
 
 Route::get('/tags', 'TagsController@index');
 Route::post('/tags', 'TagsController@store');
+Route::delete('/tags/{tag}', 'TagsController@destroy');
 Route::put('/tags/reorder', 'TagSortOrderController@update');
 
 Route::put('/star/tags', 'StarTagsController@update');

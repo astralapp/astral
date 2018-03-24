@@ -43,6 +43,7 @@
         :star-target="true"
         @starDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
+        @renameTag="renameTag"
         @click.native="setCurrentTag(tag)"
         >
         </sidebar-item>
@@ -133,6 +134,7 @@ export default {
       'reorderTags',
       'sortTags',
       'deleteTag',
+      'renameTag',
       'fetchGitHubStars',
       'cleanupStars'
     ]),
@@ -152,6 +154,7 @@ export default {
       this.addTag(name)
     },
     doDeleteTag(id) {
+      //TODO: Ask user to confirm
       this.deleteTag(id)
     },
     resetFilters() {

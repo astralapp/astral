@@ -100,4 +100,15 @@ class TagsTest extends TestCase
         $this->putJson('/api/tags/reorder', ['tags' => $tags])->assertStatus(422);
     }
 
+    /** @test */
+    public function a_user_can_delete_their_tags()
+    {
+        $this->withoutExceptionHandling();
+
+        $id = auth()->user()->tags()->first()->id;
+
+        $this->deleteJson("/api/tags/{$id}")->assertStatus(204);
+        $this->assertNull(auth()->user()->tags()->find($id));
+    }
+
 }

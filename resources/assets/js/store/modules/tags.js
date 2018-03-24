@@ -6,6 +6,7 @@ import {
   SET_CURRENT_TAG,
   SET_VIEWING_UNTAGGED,
   DELETE_TAG,
+  RENAME_TAG,
   SET_STAR_TAGS
 } from '../mutation-types'
 
@@ -36,6 +37,15 @@ const mutations = {
       return tag.id === id
     })
     state.tags.splice(index, 1)
+  },
+  [RENAME_TAG](state, { id, name }) {
+    state.tags = state.tags.map(tag => {
+      if (tag.id === id) {
+        tag.name = name
+      }
+
+      return tag
+    })
   }
 }
 
@@ -104,6 +114,8 @@ const actions = {
     dispatch('reorderTags', sortMap)
   },
   deleteTag({ rootState, state, commit }, id) {
+    client.withAuth().delete(`/api/tags/${id}`)
+
     if (state.currentTag.id === id) {
       commit(SET_CURRENT_TAG, {})
     }
@@ -117,6 +129,29 @@ const actions = {
           return tag.id !== id
         })
         return { starId: star.node.id, tags: filteredTags }
+      })
+
+    starsWithTag.forEach(star => {
+      commit(SET_STAR_TAGS, star)
+    })
+  },
+  renameTag({ rootState, state, commit }, { id, name }) {
+    if (state.currentTag.id === id) {
+      commit(SET_CURRENT_TAG, { ...state.currentTag, name })
+    }
+
+    commit(RENAME_TAG, { id, name })
+
+    const starsWithTag = rootState.stars.stars
+      .filter(star => {
+        return ~star.tags.map(tag => tag.id).indexOf(id)
+      })
+      .map(star => {
+        const tags = star.tags.map(tag => {
+          tag.name = name
+          return tag
+        })
+        return { starId: star.node.id, tags }
       })
 
     starsWithTag.forEach(star => {

@@ -1,27 +1,29 @@
 <template>
-  <li class="dashboard-list-item flex items-center py-2 pr-1 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
+  <li class="dashboard-list-item flex items-center relative py-2 pr-1 text-base font-semibold text-grey cursor-pointer" :class="{'dragging': isHighlighted}" @dragover.stop.prevent="highlight" @dragleave.stop.prevent="unhighlight" @drop.stop.prevent="starDropped">
     <Icon :type="icon" v-if="icon" :height="iconSize" class="mr-1 pointer-events-none stroke-current fill-none relative"></Icon>
     <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">{{ title }}</span>
-    <div class="opacity-0 transition-opacity edit-tag mr-1 relative" v-if="starTarget" :class="{'opacity-100': editTagDropdownShowing}">
-      <button @click.stop="editTagDropdownShowing = !editTagDropdownShowing" class="text-white px-2" v-on-clickaway="hideEditTagDropdown">
-        <Icon type="MoreHorizontalIcon" :height="iconSize" class="stroke-none fill-current relative"></Icon>
+    <div class="opacity-0 transition-opacity edit-tag absolute pin-r" v-if="starTarget" :class="{'opacity-100': editTagDropdownShowing}">
+      <button @click.stop="editTagDropdownShowing = !editTagDropdownShowing" class="text-grey hover:text-white px-2">
+        <Icon type="MoreHorizontalIcon" :height="iconSize" class="edit-tag-icon stroke-none fill-current relative"></Icon>
       </button>
-      <edit-tag-dropdown :visible="editTagDropdownShowing" @deleteTag="deleteTag"></edit-tag-dropdown>
+      <edit-tag-dropdown :tag="tag" :visible="editTagDropdownShowing" @deleteTag="deleteTag" v-click-outside="hideEditTagDropdown" @renameTag="renameTag"></edit-tag-dropdown>
     </div>
-    <span class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1" v-if="!!badge">{{ badge }}</span>
+    <span class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1" v-if="!!badge" :class="{'opacity-0': editTagDropdownShowing}">{{ badge }}</span>
   </li>
 </template>
 <script>
-import { mixin as clickaway } from 'vue-clickaway'
+import vClickOutside from 'v-click-outside'
 import EditTagDropdown from '@/components/Dashboard/Sidebar/EditTagDropdown'
 import Icon from '@/components/Icon'
 export default {
   name: 'SidebarItem',
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   components: {
     EditTagDropdown,
     Icon
   },
-  mixins: [clickaway],
   props: {
     title: String,
     icon: String,
@@ -51,8 +53,14 @@ export default {
   methods: {
     deleteTag() {
       this.$emit('deleteTag', this.tag.id)
+      this.hideEditTagDropdown()
     },
-    hideEditTagDropdown() {
+    renameTag(name) {
+      this.$emit('renameTag', { id: this.tag.id, name: name })
+      this.hideEditTagDropdown()
+    },
+    hideEditTagDropdown(e) {
+      console.log(e)
       this.editTagDropdownShowing = false
     },
     highlight() {
@@ -81,7 +89,7 @@ export default {
   transition: transform 250ms ease, opacity 250ms ease, color 250ms ease,
     background-color 250ms ease;
   &-badge {
-    transition: background-color 250ms ease;
+    transition: background-color 250ms ease, opacity 250ms ease;
     padding: 0.3rem 0.7rem;
   }
   svg {
@@ -89,10 +97,11 @@ export default {
   }
   &:hover {
     color: #fff;
-    &-badge {
+    .dashboard-list-item-badge {
       background: rgba(#fff, 0.2);
+      opacity: 0;
     }
-    svg {
+    svg:not(.edit-tag-icon) {
       stroke: #fff;
     }
     .edit-tag {
@@ -104,7 +113,7 @@ export default {
     .dashboard-list-item-badge {
       background: config('colors.brand');
     }
-    svg {
+    svg:not(.edit-tag-icon) {
       stroke: config('colors.brand');
     }
   }
