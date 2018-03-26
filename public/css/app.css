@@ -793,13 +793,15 @@ to {
 }
 .dashboard-list-item:hover .dashboard-list-item-badge[data-v-5aba6afa] {
   background: rgba(255, 255, 255, .2);
-  opacity: 0;
 }
 .dashboard-list-item:hover svg[data-v-5aba6afa]:not(.edit-tag-icon) {
   stroke: #fff;
 }
 .dashboard-list-item:hover .edit-tag[data-v-5aba6afa] {
   opacity: 1;
+}
+.dashboard-list-item.tag:hover .dashboard-list-item-badge[data-v-5aba6afa] {
+  opacity: 0;
 }
 .dashboard-list-item.selected[data-v-5aba6afa] {
   color: #21a179;

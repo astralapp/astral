@@ -99,13 +99,17 @@ export default {
     color: #fff;
     .dashboard-list-item-badge {
       background: rgba(#fff, 0.2);
-      opacity: 0;
     }
     svg:not(.edit-tag-icon) {
       stroke: #fff;
     }
     .edit-tag {
       opacity: 1;
+    }
+  }
+  &.tag:hover {
+    .dashboard-list-item-badge {
+      opacity: 0;
     }
   }
   &.selected {
