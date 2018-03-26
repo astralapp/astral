@@ -40,7 +40,16 @@ class TagsTest extends TestCase
     public function a_new_tag_must_include_a_name()
     {
         $this->postJson('/api/tags', ['name' => ''])->assertStatus(422);
+    }
 
+    /** @test */
+    public function tag_names_must_be_unique_per_user()
+    {
+        $this->postJson('/api/tags', ['name' => $this->tags[1]->name])->assertStatus(422);
+
+        $this->patchJson("/api/tags/{$this->tags[0]->id}", [
+            'name' => $this->tags[2]->name
+        ])->assertStatus(422);
     }
 
     /** @test */
@@ -103,12 +112,28 @@ class TagsTest extends TestCase
     /** @test */
     public function a_user_can_delete_their_tags()
     {
-        $this->withoutExceptionHandling();
-
         $id = auth()->user()->tags()->first()->id;
 
         $this->deleteJson("/api/tags/{$id}")->assertStatus(204);
         $this->assertNull(auth()->user()->tags()->find($id));
+    }
+
+    /** @test */
+    public function a_user_can_rename_their_tags()
+    {
+        $this->withExceptionHandling();
+
+        $tag = auth()->user()->tags()->first();
+        $id = $tag->id;
+
+        $req = $this->patchJson("/api/tags/{$id}", [
+            'name' => 'New Tag'
+        ])->assertStatus(200)
+            ->assertJson([
+                'id' => $id,
+                'name' => 'New Tag',
+            ]);
+        $this->assertEquals('New Tag', $tag->fresh()->name);
     }
 
 }

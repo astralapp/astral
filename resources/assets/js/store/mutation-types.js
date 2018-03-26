@@ -4,7 +4,7 @@ export const ADD_TAG = 'ADD_TAG'
 export const SET_TAGS = 'SET_TAGS'
 export const SET_CURRENT_TAG = 'SET_CURRENT_TAG'
 export const DELETE_TAG = 'DELETE_TAG'
-export const RENAME_TAG = 'RENAME_TAG'
+export const UPDATE_TAG = 'UPDATE_TAG'
 
 export const SET_STARS = 'SET_STARS'
 export const RESET_STARS = 'RESET_STARS'

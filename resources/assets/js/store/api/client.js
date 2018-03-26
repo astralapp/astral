@@ -5,7 +5,7 @@ import router from '@/router'
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
-const verbs = ['get', 'post', 'put', 'delete']
+const verbs = ['get', 'post', 'put', 'patch', 'delete']
 
 const client = {
   auth: false,

@@ -154,7 +154,7 @@ export default {
       this.addTag(name)
     },
     doDeleteTag(id) {
-      //TODO: Ask user to confirm
+      // TODO: Ask user to confirm
       this.deleteTag(id)
     },
     resetFilters() {

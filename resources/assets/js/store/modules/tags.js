@@ -6,7 +6,7 @@ import {
   SET_CURRENT_TAG,
   SET_VIEWING_UNTAGGED,
   DELETE_TAG,
-  RENAME_TAG,
+  UPDATE_TAG,
   SET_STAR_TAGS
 } from '../mutation-types'
 
@@ -38,10 +38,10 @@ const mutations = {
     })
     state.tags.splice(index, 1)
   },
-  [RENAME_TAG](state, { id, name }) {
+  [UPDATE_TAG](state, { id, newTag }) {
     state.tags = state.tags.map(tag => {
       if (tag.id === id) {
-        tag.name = name
+        tag = newTag
       }
 
       return tag
@@ -136,27 +136,32 @@ const actions = {
     })
   },
   renameTag({ rootState, state, commit }, { id, name }) {
-    if (state.currentTag.id === id) {
-      commit(SET_CURRENT_TAG, { ...state.currentTag, name })
-    }
+    client
+      .withAuth()
+      .patch(`/api/tags/${id}`, { name })
+      .then(res => {
+        if (state.currentTag.id === id) {
+          commit(SET_CURRENT_TAG, res)
+        }
 
-    commit(RENAME_TAG, { id, name })
+        commit(UPDATE_TAG, { id, newTag: res })
 
-    const starsWithTag = rootState.stars.stars
-      .filter(star => {
-        return ~star.tags.map(tag => tag.id).indexOf(id)
-      })
-      .map(star => {
-        const tags = star.tags.map(tag => {
-          tag.name = name
-          return tag
+        const starsWithTag = rootState.stars.stars
+          .filter(star => {
+            return ~star.tags.map(tag => tag.id).indexOf(id)
+          })
+          .map(star => {
+            const tags = star.tags.map(tag => {
+              tag.name = name
+              return tag
+            })
+            return { starId: star.node.id, tags }
+          })
+
+        starsWithTag.forEach(star => {
+          commit(SET_STAR_TAGS, star)
         })
-        return { starId: star.node.id, tags }
       })
-
-    starsWithTag.forEach(star => {
-      commit(SET_STAR_TAGS, star)
-    })
   }
 }
 
