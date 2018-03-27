@@ -1,9 +1,12 @@
 # Astral
 > Organize your GitHub Stars with ease.
 
-[![Build Status](https://travis-ci.org/astralapp/astral.svg?branch=master)](https://travis-ci.org/astralapp/astral) [![ghit.me](https://ghit.me/badge.svg?repo=astralapp/astral)](https://ghit.me/repo/astralapp/astral) [![Support on Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/syropian)
+[![Build Status](https://travis-ci.org/astralapp/astral.svg?branch=master)](https://travis-ci.org/astralapp/astral) [![Support on Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/syropian)
 
 ---
+
+### Interested in the future of Astral?
+I've been working hard on a full rewrite and redesign! You can follow its progress and even try it yourself locally via the [v3](https://github.com/astralapp/astral/tree/v3) branch.
 
 
 ### Improvements
