@@ -22,7 +22,6 @@
 <script>
 import GlobalEvents from 'vue-global-events'
 import CollectionCluster from 'vue-collection-cluster'
-import { chunk } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import Star from '@/components/Dashboard/Star'
 import galileo from '@/filters/galileo'
@@ -34,7 +33,7 @@ export default {
     GlobalEvents,
     Star
   },
-  data () {
+  data() {
     return {
       cluster: {
         heightType: 'automatic',
@@ -51,7 +50,7 @@ export default {
       'viewingUntagged',
       'tokenizedSearchQuery'
     ]),
-    filteredStars () {
+    filteredStars() {
       const stars = this.stars
         .filter(star => {
           if (!Object.keys(this.currentTag).length) {
@@ -85,7 +84,7 @@ export default {
     }
   },
   watch: {
-    currentStar (newValue, oldValue) {
+    currentStar(newValue, oldValue) {
       if (!Object.keys(newValue).length) {
         return false
       }
@@ -99,7 +98,7 @@ export default {
   },
   methods: {
     ...mapActions(['setCurrentStar', 'fetchReadme']),
-    starDragged (e) {
+    starDragged(e) {
       let width, height
       const el = e.currentTarget
       const clone = el.cloneNode(true)
@@ -109,16 +108,16 @@ export default {
       height = clone.offsetHeight
       e.dataTransfer.setDragImage(clone, width / 2, height / 2)
     },
-    clearClonedRepoNodes () {
+    clearClonedRepoNodes() {
       document.getElementById('repo-clone').remove()
     },
-    starIsCurrentStar (star) {
+    starIsCurrentStar(star) {
       return (
         !!Object.keys(this.currentStar).length &&
         this.currentStar.node.id === star.node.id
       )
     },
-    previousStar (e) {
+    previousStar(e) {
       if (this.shouldDisableKeyShortcuts(e)) {
         return false
       }
@@ -126,7 +125,7 @@ export default {
       const previousStar = this.stars[this.currentStarIndex - 1]
       this.setCurrentStar(previousStar)
     },
-    nextStar (e) {
+    nextStar(e) {
       if (this.shouldDisableKeyShortcuts(e)) {
         return false
       }
@@ -137,7 +136,7 @@ export default {
           : this.stars[this.currentStarIndex + 1]
       this.setCurrentStar(nextStar)
     },
-    shouldDisableKeyShortcuts (e) {
+    shouldDisableKeyShortcuts(e) {
       return (
         e.target.tagName === 'INPUT' ||
         document.querySelector('.CodeMirror-focused')

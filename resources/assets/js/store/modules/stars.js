@@ -13,7 +13,6 @@ import {
   SET_TOTAL_STARS,
   SET_USER_STARS,
   SET_VIEWING_UNTAGGED,
-  SYNC_STAR_TAGS,
   MAP_USER_STARS_TO_GITHUB_STARS,
   SET_STAR_NOTES,
   RESET_STARS
@@ -150,7 +149,6 @@ const mutations = {
 
 const actions = {
   fetchGitHubStars ({ commit }, { cursor = null, refresh = false }) {
-    let url = '/api/stars/github'
     let cursorQs = cursor ? { cursor } : {}
     let refreshQs = refresh ? { refresh: true } : {}
     if (refresh) {
@@ -209,7 +207,9 @@ const actions = {
     client
       .withoutAuth()
       .get(
-        `https://api.github.com/repos/${repoName}/readme?access_token=${accessToken}`,
+        `https://api.github.com/repos/${repoName}/readme?access_token=${
+          accessToken
+        }`,
         {},
         {
           Accept: 'application/vnd.github.v3.html'

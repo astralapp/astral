@@ -48,12 +48,12 @@
 import nanoid from 'nanoid'
 import fuzzysearch from 'fuzzysearch'
 import Awesomplete from 'awesomplete'
-import { differenceBy, isEqual } from 'lodash'
+import { differenceBy } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'StarTags',
   props: ['star', 'tags'],
-  data () {
+  data() {
     return {
       awesomplete: null,
       mutableTags: [],
@@ -67,22 +67,20 @@ export default {
     ...mapGetters({
       allTags: 'tags'
     }),
-    suggestions () {
-      const allTagNames = this.allTags.map(tag => tag.name)
-      const currentTagNames = this.mutableTags.map(tag => tag.name)
+    suggestions() {
       return differenceBy(this.allTags, this.mutableTags, 'name').map(
         tag => tag.name
       )
     }
   },
-  mounted () {
+  mounted() {
     this.mutableTags = [...this.tags]
   },
   watch: {
-    tags () {
+    tags() {
       this.mutableTags = [...this.tags]
     },
-    mutableTags () {
+    mutableTags() {
       if (this.awesomplete) {
         this.awesomplete.list = this.suggestions
       }
@@ -90,14 +88,14 @@ export default {
   },
   methods: {
     ...mapActions(['syncStarTags']),
-    startEditing () {
+    startEditing() {
       this.isEditing = true
       this.initAwesomplete()
       this.$nextTick(() => {
         this.$refs.input.focus()
       })
     },
-    addTag (name, e) {
+    addTag(name, e) {
       if (name.trim() !== '') {
         this.mutableTags.push({
           name: name.trim().replace(',', ''),
@@ -107,23 +105,23 @@ export default {
       }
       this.$refs.input.focus()
     },
-    removeTagAtIndex (index) {
+    removeTagAtIndex(index) {
       this.$delete(this.mutableTags, index)
     },
-    removeTag (tag) {
+    removeTag(tag) {
       this.$refs.input.focus()
       const index = this.mutableTags.findIndex(t => t.name === tag.name)
       this.removeTagAtIndex(index)
     },
-    deletePressed () {
+    deletePressed() {
       if (this.newTag === '' && this.mutableTags.length) {
         this.removeTagAtIndex(this.mutableTags.length - 1)
       }
     },
-    onFocus () {
+    onFocus() {
       this.$emit('focus')
     },
-    onBlur (e) {
+    onBlur(e) {
       const isDeletingTag =
         e.relatedTarget && e.relatedTarget.classList.contains('remove-tag')
 
@@ -147,10 +145,10 @@ export default {
         }
       }
     },
-    initAwesomplete () {
+    initAwesomplete() {
       this.awesomplete = new Awesomplete(this.$refs.input, {
         autoFirst: true,
-        filter (text, input) {
+        filter(text, input) {
           return fuzzysearch(input.toLowerCase(), text.toLowerCase())
         },
         list: this.suggestions
@@ -162,7 +160,7 @@ export default {
         false
       )
     },
-    suggestionSelected (e) {
+    suggestionSelected(e) {
       e.stopPropagation()
       if (e.target === this.$refs.input) {
         setTimeout(() => {
