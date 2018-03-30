@@ -13,13 +13,13 @@ const getters = {
 }
 
 const mutations = {
-  [SET_USER](state, user) {
+  [SET_USER] (state, user) {
     state.user = user
   }
 }
 
 const actions = {
-  fetchUser({ commit }) {
+  fetchUser ({ commit }) {
     return client
       .withAuth()
       .get('/api/auth/me')

@@ -44,36 +44,36 @@ export default {
       required: false
     }
   },
-  data() {
+  data () {
     return {
       isHighlighted: false,
       editTagDropdownShowing: false
     }
   },
   methods: {
-    deleteTag() {
+    deleteTag () {
       this.$emit('deleteTag', this.tag.id)
       this.hideEditTagDropdown()
     },
-    renameTag(name) {
+    renameTag (name) {
       this.$emit('renameTag', { id: this.tag.id, name: name })
       this.hideEditTagDropdown()
     },
-    hideEditTagDropdown(e) {
+    hideEditTagDropdown (e) {
       console.log(e)
       this.editTagDropdownShowing = false
     },
-    highlight() {
+    highlight () {
       if (this.starTarget) {
         this.isHighlighted = true
       }
     },
-    unhighlight() {
+    unhighlight () {
       if (this.starTarget) {
         this.isHighlighted = false
       }
     },
-    starDropped(e) {
+    starDropped (e) {
       if (this.starTarget) {
         const dropData = JSON.parse(e.dataTransfer.getData('text'))
         const tagId = this.$el.dataset.id

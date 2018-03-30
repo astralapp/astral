@@ -13,7 +13,7 @@ export default {
   name: 'TagSortDropdown',
   props: ['visible'],
   methods: {
-    sortTags(method) {
+    sortTags (method) {
       this.$bus.$emit('TAGS_SORTED', method)
     }
   }
@@ -27,5 +27,3 @@ export default {
   z-index: 99;
 }
 </style>
-
-

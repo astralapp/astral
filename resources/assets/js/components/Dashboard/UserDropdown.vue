@@ -1,8 +1,8 @@
 <template>
 <div class="relative ml-auto">
   <div class="flex items-center cursor-pointer" v-on-clickaway="hideDropdown" @click="visible = !visible">
-    <img 
-      :src="user.avatar_url" 
+    <img
+      :src="user.avatar_url"
       :alt="user.username"
       class="rounded-full w-10 h-10"
     />
@@ -18,23 +18,23 @@
   <div class="user-dropdown-container absolute pin-t pin-r bg-white rounded shadow z-10 overflow-hidden" v-show="visible">
     <ul class="list-reset">
       <li>
-        <a 
-          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest" 
+        <a
+          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
           href="#">Settings</a>
       </li>
       <li>
-        <a 
-          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest" 
+        <a
+          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
           href="https://github.com/astralapp/astral" target="_blank" rel="noopener">GitHub</a>
       </li>
       <li>
-        <a 
-          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest" 
+        <a
+          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
           href="https://patreon.com/syropian" target="_blank" rel="noopener">Patreon</a>
       </li>
       <li>
-        <a 
-          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest" 
+        <a
+          class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
           href="#">Logout</a>
       </li>
     </ul>
@@ -51,7 +51,7 @@ export default {
   components: {
     Icon
   },
-  data() {
+  data () {
     return {
       visible: false
     }
@@ -60,7 +60,7 @@ export default {
     ...mapGetters(['user'])
   },
   methods: {
-    hideDropdown() {
+    hideDropdown () {
       this.visible = false
     }
   }

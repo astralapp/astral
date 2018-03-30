@@ -64,22 +64,22 @@ const getters = {
 }
 
 const mutations = {
-  [SET_STARS](state, edges) {
+  [SET_STARS] (state, edges) {
     state.stars = state.stars.concat(edges)
   },
-  [CLEAR_STARS](state) {
+  [CLEAR_STARS] (state) {
     state.stars = []
   },
-  [SET_TOTAL_STARS](state, total) {
+  [SET_TOTAL_STARS] (state, total) {
     state.totalStars = total
   },
-  [SET_STARS_PAGE_INFO](state, info) {
+  [SET_STARS_PAGE_INFO] (state, info) {
     state.pageInfo = { ...info }
   },
-  [SET_CURRENT_LANGUAGE](state, language) {
+  [SET_CURRENT_LANGUAGE] (state, language) {
     state.currentLanguage = language
   },
-  [PUSH_STAR_TAG](state, { starId, tag }) {
+  [PUSH_STAR_TAG] (state, { starId, tag }) {
     state.stars = state.stars.map(star => {
       if (
         star.node.id === starId &&
@@ -92,7 +92,7 @@ const mutations = {
       }
     })
   },
-  [SET_STAR_TAGS](state, { starId, tags }) {
+  [SET_STAR_TAGS] (state, { starId, tags }) {
     state.stars = state.stars.map(star => {
       if (star.node.id === starId) {
         star.tags = [].concat(tags)
@@ -100,10 +100,10 @@ const mutations = {
       return star
     })
   },
-  [SET_USER_STARS](state, stars) {
+  [SET_USER_STARS] (state, stars) {
     state.userStars = [].concat(stars)
   },
-  [MAP_USER_STARS_TO_GITHUB_STARS](state) {
+  [MAP_USER_STARS_TO_GITHUB_STARS] (state) {
     const userStars = state.userStars
     state.stars.map(star => {
       const userStar = userStars.find(s => s.relay_id === star.node.id)
@@ -120,16 +120,16 @@ const mutations = {
       }
     })
   },
-  [SET_CURRENT_STAR](state, star) {
+  [SET_CURRENT_STAR] (state, star) {
     state.currentStar = { ...star }
   },
-  [SET_README](state, readme) {
+  [SET_README] (state, readme) {
     state.readme = readme
   },
-  [SET_VIEWING_UNTAGGED](state, viewing) {
+  [SET_VIEWING_UNTAGGED] (state, viewing) {
     state.viewingUntagged = viewing
   },
-  [SET_STAR_NOTES](state, { id, notes }) {
+  [SET_STAR_NOTES] (state, { id, notes }) {
     state.stars.map(star => {
       if (star.node.id === id) {
         star.notes = notes
@@ -139,7 +139,7 @@ const mutations = {
     })
     state.currentStar = { ...state.currentStar, notes }
   },
-  [RESET_STARS](state) {
+  [RESET_STARS] (state) {
     state.currentStar = {}
     state.readme = ''
     state.pageInfo = {}
@@ -149,7 +149,7 @@ const mutations = {
 }
 
 const actions = {
-  fetchGitHubStars({ commit }, { cursor = null, refresh = false }) {
+  fetchGitHubStars ({ commit }, { cursor = null, refresh = false }) {
     let url = '/api/stars/github'
     let cursorQs = cursor ? { cursor } : {}
     let refreshQs = refresh ? { refresh: true } : {}
@@ -178,7 +178,7 @@ const actions = {
         commit(MAP_USER_STARS_TO_GITHUB_STARS)
       })
   },
-  fetchUserStars({ commit }) {
+  fetchUserStars ({ commit }) {
     client
       .withAuth()
       .get('/api/stars')
@@ -186,10 +186,10 @@ const actions = {
         commit(SET_USER_STARS, res)
       })
   },
-  setCurrentLanguage({ commit }, language) {
+  setCurrentLanguage ({ commit }, language) {
     commit(SET_CURRENT_LANGUAGE, language)
   },
-  pushStarTag({ commit, rootState }, { starId, tag }) {
+  pushStarTag ({ commit, rootState }, { starId, tag }) {
     commit(PUSH_STAR_TAG, { starId, tag })
     client
       .withAuth()
@@ -201,10 +201,10 @@ const actions = {
         commit(SET_TAGS, res.tags)
       })
   },
-  setCurrentStar({ commit }, star) {
+  setCurrentStar ({ commit }, star) {
     commit(SET_CURRENT_STAR, star)
   },
-  fetchReadme({ rootState, commit }, repoName) {
+  fetchReadme ({ rootState, commit }, repoName) {
     const accessToken = rootState.user.user.access_token
     client
       .withoutAuth()
@@ -219,13 +219,13 @@ const actions = {
         commit(SET_README, res)
       })
   },
-  setViewingUntagged({ commit }, viewing) {
+  setViewingUntagged ({ commit }, viewing) {
     if (viewing) {
       commit(SET_CURRENT_TAG, {})
     }
     commit(SET_VIEWING_UNTAGGED, viewing)
   },
-  syncStarTags({ commit }, { relayId, tags }) {
+  syncStarTags ({ commit }, { relayId, tags }) {
     client
       .withAuth()
       .put('/api/star/tags', {
@@ -240,7 +240,7 @@ const actions = {
         })
       })
   },
-  editStarNotes({ commit }, { relayId, notes }) {
+  editStarNotes ({ commit }, { relayId, notes }) {
     client
       .withAuth()
       .post('/api/star/notes', {
@@ -254,7 +254,7 @@ const actions = {
         })
       })
   },
-  cleanupStars({ commit }) {
+  cleanupStars ({ commit }) {
     client
       .withAuth()
       .delete('/api/stars/cleanup')

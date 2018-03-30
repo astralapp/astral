@@ -12,7 +12,8 @@
     "prod": "npm run production",
     "production":
       "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint resources/assets/js --ext='.js,.vue'"
   },
   "jest": {
     "moduleFileExtensions": ["js", "json", "vue"],
@@ -56,6 +57,13 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "cross-env": "^5.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-vue": "^4.4.0",
     "jest": "^22.4.3",
     "laravel-mix": "^2.0.0",
     "laravel-mix-purgecss": "^1.0.5",

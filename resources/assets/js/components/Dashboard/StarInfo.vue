@@ -7,12 +7,12 @@
     </button>
     <div class="ml-auto">
       <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
-      <input 
-        type="text" 
-        readonly="readonly" 
+      <input
+        type="text"
+        readonly="readonly"
         id="starCloneUrl"
-        class="github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color" 
-        :value="currentStarCloneUrl" 
+        class="github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color"
+        :value="currentStarCloneUrl"
         @focus="highlightText"
       />
     </div>
@@ -25,7 +25,7 @@
     <span class="font-bold text-grey">No README found</span>
   </div>
   <notes-editor v-if="notesEditorShowing" @save="doEditStarNotes" :notes="currentStarNotes"></notes-editor>
-</div>  
+</div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -39,45 +39,45 @@ export default {
     NotesEditor,
     Readme
   },
-  data() {
+  data () {
     return {
       notesShowing: false
     }
   },
   computed: {
     ...mapGetters(['readme', 'currentStar']),
-    noRepoSelected() {
+    noRepoSelected () {
       return !Object.keys(this.currentStar).length
     },
-    repoHasNoReadme() {
+    repoHasNoReadme () {
       return Object.keys(this.currentStar).length && !this.readme
     },
-    currentStarCloneUrl() {
+    currentStarCloneUrl () {
       return `git@github.com:${this.currentStar.node.nameWithOwner}.git`
     },
-    currentStarNotes() {
+    currentStarNotes () {
       if (!this.noRepoSelected && this.currentStar.hasOwnProperty('notes')) {
         return this.currentStar.notes
       } else {
         return ''
       }
     },
-    notesEditorShowing() {
+    notesEditorShowing () {
       return this.notesShowing && !this.noRepoSelected
     },
-    toggleNotesIcon() {
+    toggleNotesIcon () {
       return this.currentStarNotes ? 'FileTextIcon' : 'FileIcon'
     }
   },
   methods: {
     ...mapActions(['editStarNotes']),
-    doEditStarNotes(notes) {
+    doEditStarNotes (notes) {
       this.editStarNotes({
         relayId: this.currentStar.node.id,
         notes
       })
     },
-    highlightText(e) {
+    highlightText (e) {
       e.currentTarget.select()
     }
   }

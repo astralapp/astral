@@ -1,6 +1,6 @@
 import { intersection } from 'lodash'
 
-export default function(stars, query) {
+export default function (stars, query) {
   //  If there's no query return all items
   if (query.query.replace(/\s/g, '') === '') {
     return stars

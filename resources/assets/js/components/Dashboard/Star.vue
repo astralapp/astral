@@ -2,7 +2,7 @@
   <div class="p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg" :class="{'shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}" @dragstart="starDragged">
     <h3 class="repo-name text-base text-brand mb-2 font-bold" v-once>{{ star.node.nameWithOwner }}</h3>
     <p class="text-dark-grey text-sm" v-once>{{ star.node.description }}</p>
-    <star-tags 
+    <star-tags
       :tags="normalizedStarTags"
       :star="star"
     ></star-tags>
@@ -16,11 +16,11 @@
         <span class="text-xs" v-once>{{ star.node.forkCount }}</span>
       </div>
       <div class="github-link flex items-center text-grey-dark">
-        <a 
-        class="text-xs text-grey-dark font-bold hover:no-underline" 
-        :href="star.node.url" 
-        target="_blank" 
-        rel="noopener" 
+        <a
+        class="text-xs text-grey-dark font-bold hover:no-underline"
+        :href="star.node.url"
+        target="_blank"
+        rel="noopener"
         @click.stop>View on GitHub</a>
       </div>
     </div>
@@ -37,7 +37,7 @@ export default {
     StarTags
   },
   computed: {
-    normalizedStarTags() {
+    normalizedStarTags () {
       if (!this.star.tags.length) {
         return this.star.tags
       } else {
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    starDragged(e) {
+    starDragged (e) {
       const data = JSON.stringify(this.star.node)
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.setData('text/plain', data)

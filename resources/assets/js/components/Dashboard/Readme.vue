@@ -7,7 +7,7 @@ export default {
   props: ['readme'],
   watch: {
     readme: {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         if (oldVal !== newVal) {
           setTimeout(() => {
             this.$refs.readme.scrollTop = 0
@@ -205,5 +205,3 @@ export default {
   }
 }
 </style>
-
-

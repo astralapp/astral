@@ -11,16 +11,16 @@
 export default {
   name: 'EditTagDropdown',
   props: ['visible', 'tag'],
-  data() {
+  data () {
     return {
       tagName: this.tag.name
     }
   },
   methods: {
-    renameTag() {
+    renameTag () {
       this.$emit('renameTag', this.tagName)
     },
-    deleteTag() {
+    deleteTag () {
       this.$emit('deleteTag')
     }
   }
@@ -34,5 +34,3 @@ export default {
   z-index: 99;
 }
 </style>
-
-

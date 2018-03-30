@@ -16,16 +16,16 @@ const getters = {
 }
 
 const mutations = {
-  [SET_SEARCH_QUERY](state, query) {
+  [SET_SEARCH_QUERY] (state, query) {
     state.searchQuery = query
   },
-  [SET_TOKENIZED_SEARCH](state, obj) {
+  [SET_TOKENIZED_SEARCH] (state, obj) {
     state.tokenizedSearchQuery = obj
   }
 }
 
 const actions = {
-  setSearchQuery({ commit }, query) {
+  setSearchQuery ({ commit }, query) {
     commit(SET_SEARCH_QUERY, query)
 
     const searchArray = query.split(':')

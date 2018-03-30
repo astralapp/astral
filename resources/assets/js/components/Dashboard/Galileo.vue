@@ -20,10 +20,10 @@ export default {
       query: 'searchQuery'
     }),
     currentSearchQuery: {
-      get() {
+      get () {
         return this.query
       },
-      set(query) {
+      set (query) {
         this.setSearchQuery(query)
       }
     }

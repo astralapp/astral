@@ -7,7 +7,7 @@ export default {
   props: {
     type: { type: String, required: true }
   },
-  render(h, ctx) {
+  render (h, ctx) {
     return h(icons[ctx.props.type], ctx.data)
   }
 }

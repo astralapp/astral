@@ -6,7 +6,7 @@ import store from './store'
 Vue.config.productionTip = false
 
 Object.defineProperty(Vue.prototype, '$bus', {
-  get() {
+  get () {
     return this.$root.bus
   }
 })
