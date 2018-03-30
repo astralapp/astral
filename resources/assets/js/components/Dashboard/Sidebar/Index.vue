@@ -4,21 +4,21 @@
       <refresh-button :active="refreshingStars" @click.native="refreshStars"></refresh-button>
     </sidebar-header>
     <ul class="dashboard-list sidebar-stars list-none m-0 p-0 border-b border-black pb-3">
-      <sidebar-item 
+      <sidebar-item
         :class="{ 'selected': noFiltersApplied }"
-        class="all-stars" 
-        title="All Stars" 
-        icon="InboxIcon" 
-        icon-size="16" 
+        class="all-stars"
+        title="All Stars"
+        icon="InboxIcon"
+        icon-size="16"
         @click.native="resetFilters"
       >
       </sidebar-item>
-      <sidebar-item 
-        class="untagged-stars" 
+      <sidebar-item
+        class="untagged-stars"
         :class="{ 'selected': viewingUntagged }"
-        title="Untagged Stars" 
-        icon="StarIcon" 
-        icon-size="16" 
+        title="Untagged Stars"
+        icon="StarIcon"
+        icon-size="16"
         @click.native="setViewingUntagged(true)"
         >
         </sidebar-item>
@@ -28,17 +28,17 @@
     </sidebar-header>
     <new-tag-form @submit="doAddTag"></new-tag-form>
     <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
-      <sidebar-item 
+      <sidebar-item
         v-for="tag in tags"
         :tag="tag"
-        :key="tag.id" 
-        :data-id="tag.id" 
+        :key="tag.id"
+        :data-id="tag.id"
         :badge="tag.stars_count"
-        :title="tag.name" 
-        class="tag rounded" 
-        ref="tag" 
-        icon="TagIcon" 
-        icon-size="14" 
+        :title="tag.name"
+        class="tag rounded"
+        ref="tag"
+        icon="TagIcon"
+        icon-size="14"
         :class="{ 'selected': currentTag.id == tag.id }"
         :star-target="true"
         @starDropped="tagStarWithData"
@@ -50,14 +50,14 @@
     </ul>
     <sidebar-header title="Languages"></sidebar-header>
     <ul class="dashboard-list sidebar-languages list-none m-0 p-0 border-b border-black pb-3">
-      <sidebar-item 
-        v-for="(value, key) in languages" 
-        :key="key" 
+      <sidebar-item
+        v-for="(value, key) in languages"
+        :key="key"
         :badge="value"
-        :title="key" 
+        :title="key"
         class="language rounded"
         :class="{ 'selected': currentLanguage == key }"
-        @click.native="setCurrentLanguage(key)" 
+        @click.native="setCurrentLanguage(key)"
         >
         </sidebar-item>
     </ul>

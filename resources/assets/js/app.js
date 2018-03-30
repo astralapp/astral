@@ -11,6 +11,7 @@ Object.defineProperty(Vue.prototype, '$bus', {
   }
 })
 
+/* eslint-disable no-new */
 const bus = new Vue({})
 
 new Vue({

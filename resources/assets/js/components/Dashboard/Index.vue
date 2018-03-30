@@ -35,7 +35,7 @@ export default {
       'readme',
       'currentStar'
     ]),
-    starsWithCurrentTag() {
+    starsWithCurrentTag () {
       return this.stars.filter(star => {
         if (!Object.keys(this.currentTag).length) {
           return true
@@ -56,7 +56,7 @@ export default {
       'cleanupStars'
     ])
   },
-  async created() {
+  async created () {
     await this.fetchUser()
     await this.fetchUserStars()
     await this.fetchGitHubStars({ cursor: null, refresh: false })
