@@ -13,10 +13,15 @@
     "production":
       "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "jest",
+    "watch-test": "jest --watchAll",
     "lint": "eslint resources/assets/js --ext='.js,.vue'"
   },
   "jest": {
     "moduleFileExtensions": ["js", "json", "vue"],
+    "setupFiles": ["<rootDir>/resources/assets/js/__tests__/utils/mockument"],
+    "testPathIgnorePatterns": [
+      "<rootDir>/resources/assets/js/__tests__/utils/"
+    ],
     "transform": {
       ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
@@ -64,6 +69,7 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.4.0",
+    "flush-promises": "^1.0.0",
     "jest": "^22.4.3",
     "laravel-mix": "^2.0.0",
     "laravel-mix-purgecss": "^1.0.5",
