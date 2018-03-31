@@ -1,9 +1,11 @@
 import Vue from 'vue'
+import vmodal from 'vue-js-modal'
 import App from './components/App'
 import router from './router'
 import store from './store'
 
 Vue.config.productionTip = false
+Vue.use(vmodal)
 
 Object.defineProperty(Vue.prototype, '$bus', {
   get () {

@@ -6,6 +6,7 @@
     <star-list :stars="starsWithCurrentTag"></star-list>
     <star-info></star-info>
     <div><notifier timeout="3000"></notifier></div>
+    <settings-modal :user="user"></settings-modal>
   </div>
 </template>
 <script>
@@ -15,6 +16,7 @@ import Sidebar from '@/components/Dashboard/Sidebar/'
 import StarList from '@/components/Dashboard/StarList'
 import Galileo from '@/components/Dashboard/Galileo'
 import StarInfo from '@/components/Dashboard/StarInfo'
+import SettingsModal from '@/components/Dashboard/SettingsModal'
 import Notifier from '@/components/Notifier'
 export default {
   name: 'Dashboard',
@@ -24,6 +26,7 @@ export default {
     StarInfo,
     Sidebar,
     StarList,
+    SettingsModal,
     Notifier
   },
   computed: {

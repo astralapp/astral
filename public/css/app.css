@@ -1120,6 +1120,31 @@ to {
   color: #1d3e81;
 }
 
+.toggle-switch label[data-v-2ffe3af0]::before {
+  -webkit-transition: -webkit-transform 150ms ease-in-out;
+  transition: -webkit-transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out, -webkit-transform 150ms ease-in-out;
+  content: '';
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #f8fafc;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.toggle-switch input:checked + label[data-v-2ffe3af0] {
+  background: #21a179;
+}
+.toggle-switch input:checked + label[data-v-2ffe3af0]::before {
+  -webkit-transform: translate3d(24px, 0, 0);
+          transform: translate3d(24px, 0, 0);
+}
+
 .dashboard-notifier {
   position: fixed;
   width: 280px;
@@ -3517,6 +3542,10 @@ to {
   margin: 2rem;
 }
 
+.m-12 {
+  margin: 3rem;
+}
+
 .m-16 {
   margin: 4rem;
 }
@@ -3597,6 +3626,16 @@ to {
 .mx-8 {
   margin-left: 2rem;
   margin-right: 2rem;
+}
+
+.my-12 {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.mx-12 {
+  margin-left: 3rem;
+  margin-right: 3rem;
 }
 
 .my-16 {
@@ -3739,6 +3778,22 @@ to {
 
 .ml-8 {
   margin-left: 2rem;
+}
+
+.mt-12 {
+  margin-top: 3rem;
+}
+
+.mr-12 {
+  margin-right: 3rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.ml-12 {
+  margin-left: 3rem;
 }
 
 .mt-16 {
@@ -7978,6 +8033,10 @@ body {
     margin: 2rem;
   }
 
+  .sm\:m-12 {
+    margin: 3rem;
+  }
+
   .sm\:m-16 {
     margin: 4rem;
   }
@@ -8058,6 +8117,16 @@ body {
   .sm\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
+  }
+
+  .sm\:my-12 {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .sm\:mx-12 {
+    margin-left: 3rem;
+    margin-right: 3rem;
   }
 
   .sm\:my-16 {
@@ -8200,6 +8269,22 @@ body {
 
   .sm\:ml-8 {
     margin-left: 2rem;
+  }
+
+  .sm\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .sm\:mr-12 {
+    margin-right: 3rem;
+  }
+
+  .sm\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
+  .sm\:ml-12 {
+    margin-left: 3rem;
   }
 
   .sm\:mt-16 {
@@ -12325,6 +12410,10 @@ body {
     margin: 2rem;
   }
 
+  .md\:m-12 {
+    margin: 3rem;
+  }
+
   .md\:m-16 {
     margin: 4rem;
   }
@@ -12405,6 +12494,16 @@ body {
   .md\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
+  }
+
+  .md\:my-12 {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .md\:mx-12 {
+    margin-left: 3rem;
+    margin-right: 3rem;
   }
 
   .md\:my-16 {
@@ -12547,6 +12646,22 @@ body {
 
   .md\:ml-8 {
     margin-left: 2rem;
+  }
+
+  .md\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .md\:mr-12 {
+    margin-right: 3rem;
+  }
+
+  .md\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
+  .md\:ml-12 {
+    margin-left: 3rem;
   }
 
   .md\:mt-16 {
@@ -16672,6 +16787,10 @@ body {
     margin: 2rem;
   }
 
+  .lg\:m-12 {
+    margin: 3rem;
+  }
+
   .lg\:m-16 {
     margin: 4rem;
   }
@@ -16752,6 +16871,16 @@ body {
   .lg\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
+  }
+
+  .lg\:my-12 {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .lg\:mx-12 {
+    margin-left: 3rem;
+    margin-right: 3rem;
   }
 
   .lg\:my-16 {
@@ -16894,6 +17023,22 @@ body {
 
   .lg\:ml-8 {
     margin-left: 2rem;
+  }
+
+  .lg\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .lg\:mr-12 {
+    margin-right: 3rem;
+  }
+
+  .lg\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
+  .lg\:ml-12 {
+    margin-left: 3rem;
   }
 
   .lg\:mt-16 {
@@ -21019,6 +21164,10 @@ body {
     margin: 2rem;
   }
 
+  .xl\:m-12 {
+    margin: 3rem;
+  }
+
   .xl\:m-16 {
     margin: 4rem;
   }
@@ -21099,6 +21248,16 @@ body {
   .xl\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
+  }
+
+  .xl\:my-12 {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .xl\:mx-12 {
+    margin-left: 3rem;
+    margin-right: 3rem;
   }
 
   .xl\:my-16 {
@@ -21241,6 +21400,22 @@ body {
 
   .xl\:ml-8 {
     margin-left: 2rem;
+  }
+
+  .xl\:mt-12 {
+    margin-top: 3rem;
+  }
+
+  .xl\:mr-12 {
+    margin-right: 3rem;
+  }
+
+  .xl\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
+  .xl\:ml-12 {
+    margin-left: 3rem;
   }
 
   .xl\:mt-16 {

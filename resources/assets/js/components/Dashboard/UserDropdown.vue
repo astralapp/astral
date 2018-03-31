@@ -20,7 +20,7 @@
       <li>
         <a
           class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
-          href="#">Settings</a>
+          href="#" @click.prevent="showSettingsModal">Settings</a>
       </li>
       <li>
         <a
@@ -51,7 +51,7 @@ export default {
   components: {
     Icon
   },
-  data () {
+  data() {
     return {
       visible: false
     }
@@ -60,8 +60,11 @@ export default {
     ...mapGetters(['user'])
   },
   methods: {
-    hideDropdown () {
+    hideDropdown() {
       this.visible = false
+    },
+    showSettingsModal() {
+      this.$modal.show('settings-modal')
     }
   }
 }
