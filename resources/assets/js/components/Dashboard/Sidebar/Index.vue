@@ -28,25 +28,18 @@
     </sidebar-header>
     <new-tag-form @submit="doAddTag"></new-tag-form>
     <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
-      <sidebar-item
+      <sidebar-tag
         v-for="tag in tags"
         :tag="tag"
         :key="tag.id"
+        :isSelected="currentTag.id == tag.id"
         :data-id="tag.id"
-        :badge="tag.stars_count"
-        :title="tag.name"
-        class="tag rounded"
-        ref="tag"
-        icon="TagIcon"
-        icon-size="14"
-        :class="{ 'selected': currentTag.id == tag.id }"
-        :star-target="true"
+        @click.native="setCurrentTag(tag)"
         @starDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
         @renameTag="renameTag"
-        @click.native="setCurrentTag(tag)"
-        >
-        </sidebar-item>
+      >
+      </sidebar-tag>
     </ul>
     <sidebar-header title="Languages"></sidebar-header>
     <ul class="dashboard-list sidebar-languages list-none m-0 p-0 border-b border-black pb-3">
@@ -68,6 +61,7 @@ import NewTagForm from '@/components/Dashboard/Sidebar/NewTagForm'
 import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
 import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
 import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
+import SidebarTag from '@/components/Dashboard/Sidebar/SidebarTag'
 import SortTags from '@/components/Dashboard/Sidebar/SortTags'
 import { mapActions, mapGetters } from 'vuex'
 import dragula from 'dragula'
@@ -78,6 +72,7 @@ export default {
     RefreshButton,
     SidebarHeader,
     SidebarItem,
+    SidebarTag,
     SortTags
   },
   data() {
