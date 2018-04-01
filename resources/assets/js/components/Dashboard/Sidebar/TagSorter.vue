@@ -1,6 +1,6 @@
 <template>
 <div class="sidebar-sortDropdown">
-  <button class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none" :class="{'text-grey': dropdownVisible}" @click.stop="toggleDropdown" v-on-clickaway="hideDropdown">
+  <button class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none" :class="{'text-grey': dropdownVisible}" @click.stop="toggleDropdown" v-click-outside="hideDropdown">
     <span>Sort</span>
     <Icon
       type="ChevronDownIcon"
@@ -14,29 +14,31 @@
 </div>
 </template>
 <script>
-import { mixin as clickaway } from 'vue-clickaway'
+import vClickOutside from 'v-click-outside'
 import TagSortDropdown from '@/components/Dashboard/Sidebar/TagSortDropdown'
 import Icon from '@/components/Icon'
 export default {
-  name: 'SortTags',
-  mixins: [clickaway],
+  name: 'TagSorter',
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   components: {
     Icon,
     TagSortDropdown
   },
-  data () {
+  data() {
     return {
       dropdownVisible: false
     }
   },
-  mounted () {
+  mounted() {
     this.$bus.$on('TAGS_SORTED', method => (this.dropdownVisible = false))
   },
   methods: {
-    toggleDropdown () {
+    toggleDropdown() {
       this.dropdownVisible = !this.dropdownVisible
     },
-    hideDropdown () {
+    hideDropdown() {
       this.dropdownVisible = false
     }
   }

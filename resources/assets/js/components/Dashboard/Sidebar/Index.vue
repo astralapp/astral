@@ -62,7 +62,7 @@ import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
 import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
 import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
 import SidebarTag from '@/components/Dashboard/Sidebar/SidebarTag'
-import SortTags from '@/components/Dashboard/Sidebar/SortTags'
+import TagSorter from '@/components/Dashboard/Sidebar/TagSorter'
 import { mapActions, mapGetters } from 'vuex'
 import dragula from 'dragula'
 export default {
@@ -73,7 +73,7 @@ export default {
     SidebarHeader,
     SidebarItem,
     SidebarTag,
-    SortTags
+    TagSorter
   },
   data() {
     return {
