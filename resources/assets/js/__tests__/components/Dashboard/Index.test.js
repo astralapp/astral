@@ -32,6 +32,9 @@ describe('Dashboard Index', () => {
         },
         currentTag: () => {
           return { name: 'VueJS' }
+        },
+        user: () => {
+          return {}
         }
       },
       actions
