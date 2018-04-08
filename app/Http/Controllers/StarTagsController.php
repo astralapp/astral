@@ -34,7 +34,12 @@ class StarTagsController extends Controller
 
     public function update(Request $request)
     {
-        $relayIds = $request->input('relayIds');
+        $relayIds = [];
+        if ($request->input('relayId') !== null) {
+            $relayIds = [$request->input('relayId')];
+        } else {
+            $relayIds = $request->input('relayIds');    
+        }
         foreach ($relayIds as $relayId) {
             $star = auth()->user()->stars()->withRepoId($relayId)->first();
 
