@@ -24,7 +24,7 @@
         </sidebar-item>
     </ul>
     <sidebar-header title="Tags">
-      <sort-tags></sort-tags>
+      <tag-sorter></tag-sorter>
     </sidebar-header>
     <new-tag-form @submit="doAddTag"></new-tag-form>
     <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
