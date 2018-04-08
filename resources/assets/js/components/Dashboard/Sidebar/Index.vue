@@ -24,7 +24,7 @@
         </sidebar-item>
     </ul>
     <sidebar-header title="Tags">
-      <sort-tags></sort-tags>
+      <tag-sorter></tag-sorter>
     </sidebar-header>
     <new-tag-form @submit="doAddTag"></new-tag-form>
     <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
@@ -35,7 +35,7 @@
         :isSelected="currentTag.id == tag.id"
         :data-id="tag.id"
         @click.native="setCurrentTag(tag)"
-        @starDropped="tagStarWithData"
+        @starsDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
         @renameTag="renameTag"
       >
@@ -159,7 +159,12 @@ export default {
     },
     tagStarWithData({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
-      this.pushStarTag({ starId: data.id, tag: tag })
+      const pushStar = (data) => this.pushStarTag({ starId: data.id, tag: tag })
+      if (Array.isArray(data)) {
+        data.forEach((star) => pushStar(star))
+      } else {
+        pushStar(data)
+      }
     }
   }
 }

@@ -4,6 +4,7 @@ import {
   PUSH_STAR_TAG,
   SET_CURRENT_LANGUAGE,
   SET_CURRENT_STAR,
+  ADD_TO_CURRENT_STARS,
   SET_CURRENT_TAG,
   SET_README,
   SET_STARS_PAGE_INFO,
@@ -27,6 +28,7 @@ const state = {
   totalStars: 0,
   currentLanguage: '',
   currentStar: {},
+  currentStars: [],
   readme: '',
   viewingUntagged: false
 }
@@ -49,6 +51,7 @@ const getters = {
   },
   currentLanguage: state => state.currentLanguage,
   currentStar: state => state.currentStar,
+  currentStars: state => [...(new Set(state.currentStars))],
   currentStarIndex: state => {
     if (Object.keys(state.currentStar).length) {
       return state.stars.findIndex(
@@ -121,6 +124,13 @@ const mutations = {
   },
   [SET_CURRENT_STAR] (state, star) {
     state.currentStar = { ...star }
+    state.currentStars = []
+  },
+  [ADD_TO_CURRENT_STARS] (state, star) {
+    if (state.currentStars.length === 0) {
+      state.currentStars.push(state.currentStar)
+    }
+    state.currentStars.push(star)
   },
   [SET_README] (state, readme) {
     state.readme = readme
@@ -144,6 +154,7 @@ const mutations = {
     state.pageInfo = {}
     state.totalStars = 0
     state.stars = []
+    state.currentStars = []
   }
 }
 
@@ -201,6 +212,9 @@ const actions = {
   },
   setCurrentStar ({ commit }, star) {
     commit(SET_CURRENT_STAR, star)
+  },
+  addToCurrentStars ({ commit }, star) {
+    commit(ADD_TO_CURRENT_STARS, star)
   },
   fetchReadme ({ rootState, commit }, repoName) {
     const accessToken = rootState.user.user.access_token

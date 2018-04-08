@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import StarTags from '@/components/Dashboard/StarTags'
 import Icon from '@/components/Icon'
 export default {
@@ -37,6 +38,9 @@ export default {
     StarTags
   },
   computed: {
+    ...mapGetters([
+      'currentStars',
+    ]),
     normalizedStarTags () {
       if (!this.star.tags.length) {
         return this.star.tags
@@ -56,7 +60,12 @@ export default {
   },
   methods: {
     starDragged (e) {
-      const data = JSON.stringify(this.star.node)
+      let data = '';
+      if (this.currentStars.length !== 0) {
+        data = JSON.stringify(this.currentStars.map((star) => star.node))
+      } else {
+        data = JSON.stringify(this.star.node)
+      }
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.setData('text/plain', data)
     }
