@@ -63,7 +63,7 @@ export default {
       let data = '';
       if (this.currentStars.length !== 0) {
         data = JSON.stringify(this.currentStars.map((star) => star.node))
-        } else {
+      } else {
         data = JSON.stringify(this.star.node)
       }
       e.dataTransfer.effectAllowed = 'move'
