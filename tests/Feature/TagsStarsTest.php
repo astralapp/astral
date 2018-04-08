@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TagsStarsTest extends TestCase
 {
@@ -27,12 +27,12 @@ class TagsStarsTest extends TestCase
 
         $response = $this->postJson('/api/star/tags', [
             'relayId' => $this->star->relay_id,
-            'tagId' => $tag->id,
+            'tagId'   => $tag->id,
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'tags' => [$tag->toArray()]
+            'tags' => [$tag->toArray()],
         ]);
 
         $this->assertEquals(1, $this->star->tags()->count());
@@ -50,13 +50,13 @@ class TagsStarsTest extends TestCase
 
         $response = $this->putJson('/api/star/tags', [
             'relayId' => $this->star->relay_id,
-            'tags' => $tags,
+            'tags'    => $tags,
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
             'star' => $this->star->toArray(),
-            'tags' => $tags
+            'tags' => $tags,
         ]);
 
         $this->assertEquals(3, $this->star->tags()->count());

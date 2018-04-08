@@ -2,8 +2,8 @@
 
 namespace Astral\Models;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Star extends Model
 {

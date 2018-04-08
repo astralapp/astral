@@ -1,9 +1,10 @@
 <?php
+
 namespace Tests;
 
 use Astral\Models\User;
-use JWTAuth;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use JWTAuth;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -13,10 +14,10 @@ abstract class TestCase extends BaseTestCase
 
     protected function login(User $user = null)
     {
-        $user = $user ? : create('Astral\Models\User');
+        $user = $user ?: create('Astral\Models\User');
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
-        $this->headers['Authorization'] = 'Bearer ' . $token;
+        $this->headers['Authorization'] = 'Bearer '.$token;
         auth()->login($user);
 
         return $this;
