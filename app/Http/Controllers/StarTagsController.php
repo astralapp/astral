@@ -2,7 +2,6 @@
 namespace Astral\Http\Controllers;
 
 use Astral\Models\Star;
-use Astral\Models\Tag;
 use Illuminate\Http\Request;
 
 class StarTagsController extends Controller
@@ -27,6 +26,7 @@ class StarTagsController extends Controller
             $star->save();
             $star->tags()->attach($tag_id);
         }
+
         return [
             'tags' => auth()->user()->tags()->withStarCount()->get(),
         ];
@@ -38,7 +38,7 @@ class StarTagsController extends Controller
         if ($request->input('relayId') !== null) {
             $relayIds = [$request->input('relayId')];
         } else {
-            $relayIds = $request->input('relayIds');    
+            $relayIds = $request->input('relayIds');
         }
         foreach ($relayIds as $relayId) {
             $star = auth()->user()->stars()->withRepoId($relayId)->first();
