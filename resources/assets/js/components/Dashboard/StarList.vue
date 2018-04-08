@@ -13,7 +13,7 @@
           draggable="true"
           @dragstart.native="starDragged($event)"
           @dragend.native="clearClonedRepoNodes"
-          @click.native="setCurrentStar(item.value)"
+          @click.native="handleClick($event, item.value)"
         ></Star>
       </div>
     </collection-cluster>
@@ -46,6 +46,7 @@ export default {
       'currentTag',
       'currentStar',
       'currentStarIndex',
+      'currentStars',
       'currentLanguage',
       'viewingUntagged',
       'tokenizedSearchQuery'
@@ -97,7 +98,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentStar', 'fetchReadme']),
+    ...mapActions(['setCurrentStar', 'fetchReadme', 'addToCurrentStars']),
     starDragged(e) {
       let width, height
       const el = e.currentTarget
@@ -113,8 +114,9 @@ export default {
     },
     starIsCurrentStar(star) {
       return (
-        !!Object.keys(this.currentStar).length &&
-        this.currentStar.node.id === star.node.id
+        (!!Object.keys(this.currentStar).length &&
+        this.currentStar.node.id === star.node.id) ||
+        this.currentStars.includes(star)
       )
     },
     previousStar(e) {
@@ -141,6 +143,13 @@ export default {
         e.target.tagName === 'INPUT' ||
         document.querySelector('.CodeMirror-focused')
       )
+    },
+    handleClick(e, star) {
+      if (e.shiftKey) {
+        this.addToCurrentStars(star)
+      } else {
+        this.setCurrentStar(star)
+      }
     }
   }
 }

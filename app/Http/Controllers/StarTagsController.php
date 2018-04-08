@@ -34,16 +34,19 @@ class StarTagsController extends Controller
 
     public function update(Request $request)
     {
-        $relayId = $request->input('relayId');
-        $star = auth()->user()->stars()->withRepoId($relayId)->first();
-        if (!$star) {
-            $star = new Star();
-            $star->relay_id = $relayId;
-            $star->user_id = auth()->id();
-            $star->save();
+        $relayIds = $request->input('relayIds');
+        foreach ($relayIds as $relayId) {
+            $star = auth()->user()->stars()->withRepoId($relayId)->first();
+
+            if (!$star) {
+                $star = new Star();
+                $star->relay_id = $relayId;
+                $star->user_id = auth()->id();
+                $star->save();
+            }
+            $star->syncTags($request->input('tags'));
+            $star->load('tags');
         }
-        $star->syncTags($request->input('tags'));
-        $star->load('tags');
         $tags = auth()->user()->tags()->withStarCount()->get();
 
         return response()->json(compact('star', 'tags'));
