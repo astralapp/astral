@@ -103,6 +103,9 @@ export default {
       let width, height
       const el = e.currentTarget
       const clone = el.cloneNode(true)
+      if (this.currentStars.length > 0) {
+        clone.children[0].outerText += ` + ${this.currentStars.length - 1} more`
+      }
       clone.id = 'repo-clone'
       document.body.appendChild(clone)
       width = clone.offsetWidth
