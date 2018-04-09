@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Astral\Models\Star;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class StarTest extends TestCase
 {
@@ -60,7 +60,6 @@ class StarTest extends TestCase
         $this->star->syncTags([]);
 
         $this->assertCount(0, $this->star->tags);
-
     }
 
     private function attachSampleTagsToStars($count = 5)
@@ -75,5 +74,4 @@ class StarTest extends TestCase
 
         return $tags;
     }
-
 }

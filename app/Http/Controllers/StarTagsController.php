@@ -1,4 +1,5 @@
 <?php
+
 namespace Astral\Http\Controllers;
 
 use Astral\Models\Star;
