@@ -1,9 +1,9 @@
 <?php
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Astral\Lib\TagSlugger;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TagSluggerTest extends TestCase
 {

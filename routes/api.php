@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +27,3 @@ Route::get('/stars', 'StarsController@index');
 Route::get('stars/github', 'GitHubStarsController@index');
 
 Route::delete('stars/cleanup', 'StarsJanitorController@destroy');
-

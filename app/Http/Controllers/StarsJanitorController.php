@@ -2,8 +2,6 @@
 
 namespace Astral\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Astral\Lib\StarsJanitor;
 
 class StarsJanitorController extends Controller

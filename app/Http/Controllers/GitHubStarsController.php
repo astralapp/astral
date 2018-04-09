@@ -29,7 +29,7 @@ class GitHubStarsController extends Controller
         if (Cache::has($key)) {
             $cached = Cache::get($key);
 
-            if ((bool)$cached['pageInfo']['hasNextPage'] == false) {
+            if ((bool) $cached['pageInfo']['hasNextPage'] == false) {
                 // We already have all their stars so just return them
                 return $cached;
             } else {
@@ -38,17 +38,17 @@ class GitHubStarsController extends Controller
 
                 $oldEdges = $cached['edges'];
                 $newEdges = $next['edges'];
-                
+
                 // Merge the old and new edges
                 $edges = array_merge($oldEdges, $newEdges);
-                
+
                 // Grab the new page info
                 $pageInfo = $next['pageInfo'];
                 $totalCount = $next['totalCount'];
                 // Create our new response and put it in the Cache
                 $new = [
-                    'edges' => $edges,
-                    'pageInfo' => $pageInfo,
+                    'edges'      => $edges,
+                    'pageInfo'   => $pageInfo,
                     'totalCount' => $totalCount,
                 ];
                 Cache::put($key, $new, $expiry);
@@ -64,5 +64,4 @@ class GitHubStarsController extends Controller
             return $fetched;
         }
     }
-
 }

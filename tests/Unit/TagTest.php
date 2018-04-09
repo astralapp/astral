@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Astral\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TagTest extends TestCase
 {
@@ -20,6 +20,7 @@ class TagTest extends TestCase
 
         $this->tag = create('Astral\Models\Tag');
     }
+
     /** @test */
     public function it_has_an_associated_user()
     {

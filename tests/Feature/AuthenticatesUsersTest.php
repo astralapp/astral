@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
+use Astral\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use JWTAuth;
+use Laravel\Socialite\Facades\Socialite;
 use Mockery;
 use Tests\TestCase;
-use Astral\Models\User;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthenticatesUsersTest extends TestCase
 {
@@ -47,7 +47,6 @@ class AuthenticatesUsersTest extends TestCase
 
         $response->assertRedirect("/auth?token={$token}&token_expiry={$expiry}");
     }
-
 
     public function mockSocialiteFacade()
     {
@@ -100,5 +99,4 @@ class AuthenticatesUsersTest extends TestCase
 
         $this->assertGuest();
     }
-
 }
