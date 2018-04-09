@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Astral\Exceptions\NotAllGitHubStarsFetchedException;
+use Illuminate\Support\Facades\Cache;
+use Tests\TestCase;
 
 class CleansUpStarsTest extends TestCase
 {
@@ -21,7 +20,7 @@ class CleansUpStarsTest extends TestCase
     /** @test */
     public function it_deletes_db_stars_that_no_longer_exist_in_users_github_stars_list()
     {
-        $sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
+        $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
 
         $validStar = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][0]['node']['id'], 'user_id' => auth()->id()]);
         $validStar->syncTags([['name' => 'Testo']]);
@@ -41,7 +40,5 @@ class CleansUpStarsTest extends TestCase
         $this->assertCount(1, auth()->user()->fresh()->stars);
         $this->assertNull(auth()->user()->stars()->find($unstarredStar->id));
         $this->assertNull(auth()->user()->stars()->find($emptyStar->id));
-
     }
-
 }
