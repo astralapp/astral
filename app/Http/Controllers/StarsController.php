@@ -1,8 +1,6 @@
 <?php
-namespace Astral\Http\Controllers;
 
-use Astral\Models\Star;
-use Illuminate\Http\Request;
+namespace Astral\Http\Controllers;
 
 class StarsController extends Controller
 {
@@ -15,5 +13,4 @@ class StarsController extends Controller
     {
         return auth()->user()->stars()->with('tags')->get();
     }
-
 }

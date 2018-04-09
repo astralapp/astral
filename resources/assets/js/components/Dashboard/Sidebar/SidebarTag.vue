@@ -9,7 +9,7 @@
       'dragging': isHighlighted
     }"
     :title="tag.name"
-    @dragover.native.stop.prevent="highlight" @dragleave.native.stop.prevent="unhighlight" @drop.native.stop.prevent="starDropped"
+    @dragover.native.stop.prevent="highlight" @dragleave.native.stop.prevent="unhighlight" @drop.native.stop.prevent="starsDropped"
   >
     <div class="opacity-0 transition-opacity edit-tag absolute pin-r" :class="{'opacity-100': editTagDropdownShowing}">
       <button @click.stop="editTagDropdownShowing = !editTagDropdownShowing" class="text-grey hover:text-white px-2">
@@ -59,10 +59,10 @@ export default {
     unhighlight() {
       this.isHighlighted = false
     },
-    starDropped(e) {
+    starsDropped(e) {
       const dropData = JSON.parse(e.dataTransfer.getData('text'))
       this.unhighlight()
-      this.$emit('starDropped', { data: dropData, id: this.tag.id })
+      this.$emit('starsDropped', { data: dropData, id: this.tag.id })
     }
   }
 }

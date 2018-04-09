@@ -1,8 +1,8 @@
 <?php
+
 namespace Astral\Http\Controllers;
 
 use Astral\Models\Star;
-use Astral\Models\Tag;
 use Illuminate\Http\Request;
 
 class StarTagsController extends Controller
@@ -27,6 +27,7 @@ class StarTagsController extends Controller
             $star->save();
             $star->tags()->attach($tag_id);
         }
+
         return [
             'tags' => auth()->user()->tags()->withStarCount()->get(),
         ];
@@ -34,16 +35,24 @@ class StarTagsController extends Controller
 
     public function update(Request $request)
     {
-        $relayId = $request->input('relayId');
-        $star = auth()->user()->stars()->withRepoId($relayId)->first();
-        if (!$star) {
-            $star = new Star();
-            $star->relay_id = $relayId;
-            $star->user_id = auth()->id();
-            $star->save();
+        $relayIds = [];
+        if ($request->input('relayId') !== null) {
+            $relayIds = [$request->input('relayId')];
+        } else {
+            $relayIds = $request->input('relayIds');
         }
-        $star->syncTags($request->input('tags'));
-        $star->load('tags');
+        foreach ($relayIds as $relayId) {
+            $star = auth()->user()->stars()->withRepoId($relayId)->first();
+
+            if (!$star) {
+                $star = new Star();
+                $star->relay_id = $relayId;
+                $star->user_id = auth()->id();
+                $star->save();
+            }
+            $star->syncTags($request->input('tags'));
+            $star->load('tags');
+        }
         $tags = auth()->user()->tags()->withStarCount()->get();
 
         return response()->json(compact('star', 'tags'));

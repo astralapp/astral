@@ -1,4 +1,5 @@
 <?php
+
 use Faker\Generator as Faker;
 
 $factory->define(Astral\Models\Tag::class, function (Faker $faker) {

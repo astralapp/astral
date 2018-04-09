@@ -1,4 +1,5 @@
 <?php
+
 namespace Astral\Http\Controllers;
 
 use Astral\Models\Tag;
@@ -19,7 +20,7 @@ class TagsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'bail|required|unique:tags,name,NULL,id,user_id,' . auth()->id(),
+            'name' => 'bail|required|unique:tags,name,NULL,id,user_id,'.auth()->id(),
         ]);
 
         $name = $request->input('name');
@@ -30,7 +31,7 @@ class TagsController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $this->validate($request, [
-            'name' => 'bail|required|unique:tags,name,NULL,id,user_id,' . auth()->id(),
+            'name' => 'bail|required|unique:tags,name,NULL,id,user_id,'.auth()->id(),
         ]);
 
         $tag = auth()->user()->tags()->findOrFail($tag->id);
@@ -45,7 +46,5 @@ class TagsController extends Controller
         auth()->user()->tags()->findOrFail($tag->id)->delete();
 
         return response()->json([], 204);
-
     }
-
 }
