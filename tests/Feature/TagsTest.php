@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TagsTest extends TestCase
 {
@@ -48,7 +48,7 @@ class TagsTest extends TestCase
         $this->postJson('/api/tags', ['name' => $this->tags[1]->name])->assertStatus(422);
 
         $this->patchJson("/api/tags/{$this->tags[0]->id}", [
-            'name' => $this->tags[2]->name
+            'name' => $this->tags[2]->name,
         ])->assertStatus(422);
     }
 
@@ -60,17 +60,17 @@ class TagsTest extends TestCase
         $tags = $this->tags->shuffle()->map(function ($tag) use (&$i) {
             $tag->sort_order = $i;
             $i++;
+
             return [
-                'name' => $tag->name,
-                'id' => $tag->id,
-                'sort_order' => $tag->sort_order
+                'name'       => $tag->name,
+                'id'         => $tag->id,
+                'sort_order' => $tag->sort_order,
             ];
         })->toArray();
 
         $this->putJson('/api/tags/reorder', ['tags' => $tags])
             ->assertJson($tags)
             ->assertStatus(200);
-
     }
 
     /** @test */
@@ -127,13 +127,12 @@ class TagsTest extends TestCase
         $id = $tag->id;
 
         $req = $this->patchJson("/api/tags/{$id}", [
-            'name' => 'New Tag'
+            'name' => 'New Tag',
         ])->assertStatus(200)
             ->assertJson([
-                'id' => $id,
+                'id'   => $id,
                 'name' => 'New Tag',
             ]);
         $this->assertEquals('New Tag', $tag->fresh()->name);
     }
-
 }
