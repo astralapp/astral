@@ -1,4 +1,5 @@
 <?php
+
 namespace Astral\Lib;
 
 class TagSlugger
@@ -31,7 +32,7 @@ class TagSlugger
         $this->replace_encoded_space();
         $this->replace_plus();
 
-        return str_slug($this->slug) ? : str_random(6);
+        return str_slug($this->slug) ?: str_random(6);
     }
 
     private function replace_ampersand()

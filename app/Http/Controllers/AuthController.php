@@ -1,11 +1,12 @@
 <?php
+
 namespace Astral\Http\Controllers;
 
-use JWTAuth;
-use Socialite;
 use Astral\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use JWTAuth;
+use Socialite;
 
 class AuthController extends Controller
 {
@@ -36,7 +37,8 @@ class AuthController extends Controller
         $user->mapGitHubUser($githubUser);
         $jwt = JWTAuth::fromUser($user);
         $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
-        return redirect('/auth?token=' . $jwt . '&token_expiry=' . $jwtExpiry);
+
+        return redirect('/auth?token='.$jwt.'&token_expiry='.$jwtExpiry);
     }
 
     public function me(Request $request)
@@ -53,8 +55,8 @@ class AuthController extends Controller
     {
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
+            'token_type'   => 'bearer',
+            'expires_in'   => $this->guard()->factory()->getTTL() * 60,
         ]);
     }
 
@@ -64,7 +66,6 @@ class AuthController extends Controller
 
         return response()->json([], 205);
     }
-
 
     public function guard()
     {
