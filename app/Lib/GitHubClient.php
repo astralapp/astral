@@ -1,24 +1,25 @@
 <?php
+
 namespace Astral\Lib;
 
-use Zttp\Zttp;
 use Astral\Exceptions\InvalidAccessTokenException;
+use Zttp\Zttp;
 
 class GitHubClient
 {
-  protected $endpoint;
-  protected $token;
+    protected $endpoint;
+    protected $token;
 
-  public function __construct($token)
-  {
-    $this->endpoint = 'https://api.github.com/graphql';
-    $this->token = $token;
-  }
+    public function __construct($token)
+    {
+        $this->endpoint = 'https://api.github.com/graphql';
+        $this->token = $token;
+    }
 
-  public function fetchStars($cursor = null, $perPage = 100)
-  {
-    $cursorString = $cursor ? 'after:"' . $cursor . '"' : 'after: null';
-    $query = <<<GQL
+    public function fetchStars($cursor = null, $perPage = 100)
+    {
+        $cursorString = $cursor ? 'after:"'.$cursor.'"' : 'after: null';
+        $query = <<<GQL
     query {
       viewer {
         starredRepositories(first: {$perPage}, orderBy: {field: STARRED_AT, direction: DESC},  {$cursorString}) {
@@ -49,18 +50,18 @@ class GitHubClient
     }
 GQL;
 
-    $response = Zttp::withHeaders([
-      'Authorization' => 'Bearer ' . $this->token,
-      'Content-Type' => 'application/json',
+        $response = Zttp::withHeaders([
+      'Authorization' => 'Bearer '.$this->token,
+      'Content-Type'  => 'application/json',
     ])->post($this->endpoint, [
-      'query' => $query,
+      'query'     => $query,
       'variables' => '',
     ]);
 
-    if ($response->getStatusCode() == 401) {
-      throw new InvalidAccessTokenException;
-    }
+        if ($response->getStatusCode() == 401) {
+            throw new InvalidAccessTokenException();
+        }
 
-    return $response->json()['data']['viewer']['starredRepositories'];
-  }
+        return $response->json()['data']['viewer']['starredRepositories'];
+    }
 }

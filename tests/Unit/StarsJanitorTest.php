@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Astral\Lib\StarsJanitor;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use Tests\TestCase;
 
 class StarsJanitorTest extends TestCase
 {
@@ -20,14 +20,12 @@ class StarsJanitorTest extends TestCase
         $this->login();
 
         $this->janitor = new StarsJanitor(auth()->user());
-
-
     }
 
     /** @test */
     public function it_deletes_db_stars_that_no_longer_exist_in_users_github_stars_list()
     {
-        $sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
+        $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
 
         $star1 = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][0]['node']['id'], 'user_id' => auth()->id()]);
         $star2 = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][1]['node']['id'], 'user_id' => auth()->id()]);
@@ -41,7 +39,6 @@ class StarsJanitorTest extends TestCase
 
         $this->assertCount(2, auth()->user()->fresh()->stars);
         $this->assertNull(auth()->user()->stars()->find($star3->id));
-
     }
 
     /** @test */
@@ -60,5 +57,4 @@ class StarsJanitorTest extends TestCase
         $this->assertNotNull(auth()->user()->stars()->find($star3->id));
         $this->assertNull(auth()->user()->stars()->find($star2->id));
     }
-
 }
