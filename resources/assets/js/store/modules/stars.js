@@ -1,4 +1,5 @@
 import qs from 'qs'
+import _ from 'lodash'
 import {
   CLEAR_STARS,
   PUSH_STAR_TAG,
@@ -27,7 +28,6 @@ const state = {
   pageInfo: {},
   totalStars: 0,
   currentLanguage: '',
-  currentStar: {},
   currentStars: [],
   readme: '',
   viewingUntagged: false
@@ -50,12 +50,12 @@ const getters = {
       }, {})
   },
   currentLanguage: state => state.currentLanguage,
-  currentStar: state => state.currentStar,
-  currentStars: state => [...(new Set(state.currentStars))],
+  currentStar: state => state.currentStars.length > 0 ? state.currentStars[0] : {},
+  currentStars: state => [...(_.uniqBy(state.currentStars))],
   currentStarIndex: state => {
-    if (Object.keys(state.currentStar).length) {
+    if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
       return state.stars.findIndex(
-        star => star.node.id === state.currentStar.node.id
+        star => star.node.id === state.currentStars[0].node.id
       )
     } else {
       return -1
@@ -123,13 +123,9 @@ const mutations = {
     })
   },
   [SET_CURRENT_STAR] (state, star) {
-    state.currentStar = { ...star }
-    state.currentStars = []
+    state.currentStars = [{ ...star }]
   },
   [ADD_TO_CURRENT_STARS] (state, star) {
-    if (state.currentStars.length === 0) {
-      state.currentStars.push(state.currentStar)
-    }
     state.currentStars.push(star)
   },
   [SET_README] (state, readme) {
@@ -146,10 +142,9 @@ const mutations = {
 
       return star
     })
-    state.currentStar = { ...state.currentStar, notes }
+    state.currentStars = [{ ...state.currentStars[0], notes }]
   },
   [RESET_STARS] (state) {
-    state.currentStar = {}
     state.readme = ''
     state.pageInfo = {}
     state.totalStars = 0
