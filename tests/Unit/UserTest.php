@@ -2,10 +2,9 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Astral\Models\User;
-use Tests\Stubs\GitHubUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Stubs\GitHubUser;
+use Tests\TestCase;
 
 class UserTest extends TestCase
 {
