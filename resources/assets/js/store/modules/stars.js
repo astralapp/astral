@@ -1,5 +1,5 @@
 import qs from 'qs'
-import _ from 'lodash'
+import { uniqBy } from 'lodash'
 import {
   CLEAR_STARS,
   PUSH_STAR_TAG,
@@ -51,7 +51,7 @@ const getters = {
   },
   currentLanguage: state => state.currentLanguage,
   currentStar: state => state.currentStars.length > 0 ? state.currentStars[0] : {},
-  currentStars: state => [...(_.uniqBy(state.currentStars))],
+  currentStars: state => [...(uniqBy(state.currentStars))],
   currentStarIndex: state => {
     if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
       return state.stars.findIndex(
