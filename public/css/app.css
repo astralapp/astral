@@ -868,6 +868,27 @@ to {
   display: none;
 }
 
+.star[data-v-59fc56f8]::before {
+  -webkit-transition: -webkit-transform 150ms ease-in-out;
+  transition: -webkit-transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out, -webkit-transform 150ms ease-in-out;
+  -webkit-transform: translate3d(-4px, 0, 0);
+          transform: translate3d(-4px, 0, 0);
+  background-color: #21a179;
+  content: '';
+  display: block;
+  width: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: -1px;
+}
+.star.selected[data-v-59fc56f8]::before {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+
 .awesomplete [hidden] {
   display: none;
 }

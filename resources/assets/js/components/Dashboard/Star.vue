@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg" :class="{'shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}" @dragstart="starDragged">
+  <div class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg" :class="{'selected shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}" @dragstart="starDragged">
     <h3 class="repo-name text-base text-brand mb-2 font-bold" v-once>{{ star.node.nameWithOwner }}</h3>
     <p class="text-dark-grey text-sm" v-once>{{ star.node.description }}</p>
     <star-tags
@@ -38,10 +38,8 @@ export default {
     StarTags
   },
   computed: {
-    ...mapGetters([
-      'currentStars',
-    ]),
-    normalizedStarTags () {
+    ...mapGetters(['currentStars']),
+    normalizedStarTags() {
       if (!this.star.tags.length) {
         return this.star.tags
       } else {
@@ -59,10 +57,10 @@ export default {
     }
   },
   methods: {
-    starDragged (e) {
-      let data = '';
+    starDragged(e) {
+      let data = ''
       if (this.currentStars.length !== 0) {
-        data = JSON.stringify(this.currentStars.map((star) => star.node))
+        data = JSON.stringify(this.currentStars.map(star => star.node))
       } else {
         data = JSON.stringify(this.star.node)
       }
@@ -72,3 +70,23 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.star {
+  &::before {
+    transition: transform 150ms ease-in-out;
+    transform: translate3d(-4px, 0, 0);
+    background-color: config('colors.brand');
+    content: '';
+    display: block;
+    width: 4px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: -1px;
+  }
+  &.selected::before {
+    transform: translate3d(0, 0, 0);
+  }
+}
+</style>
+

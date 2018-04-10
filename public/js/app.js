@@ -62150,17 +62150,21 @@ return index;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(497)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(195)
 /* template */
-var __vue_template__ = __webpack_require__(207)
+var __vue_template__ = __webpack_require__(498)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-59fc56f8"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -63338,140 +63342,7 @@ if (false) {
 }
 
 /***/ }),
-/* 207 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass:
-        "p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg",
-      class: {
-        "shadow-inner bg-grey-lightest": _vm.selected,
-        "bg-white": !_vm.selected
-      },
-      on: { dragstart: _vm.starDragged }
-    },
-    [
-      _vm._m(0),
-      _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
-      _c("star-tags", {
-        attrs: { tags: _vm.normalizedStarTags, star: _vm.star }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "star-meta flex items-center mt-4" }, [
-        _c(
-          "div",
-          {
-            staticClass:
-              "stargazers-count flex items-center text-grey-dark mr-2"
-          },
-          [
-            _c("Icon", {
-              staticClass: "stroke-current h-4",
-              attrs: { type: "StarIcon" }
-            }),
-            _vm._v(" "),
-            _vm._m(2)
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "fork-count flex items-center text-grey-dark mr-4" },
-          [
-            _c("Icon", {
-              staticClass: "stroke-current h-4",
-              attrs: { type: "Share2Icon" }
-            }),
-            _vm._v(" "),
-            _vm._m(3)
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "github-link flex items-center text-grey-dark" },
-          [
-            _c(
-              "a",
-              {
-                staticClass:
-                  "text-xs text-grey-dark font-bold hover:no-underline",
-                attrs: {
-                  href: _vm.star.node.url,
-                  target: "_blank",
-                  rel: "noopener"
-                },
-                on: {
-                  click: function($event) {
-                    $event.stopPropagation()
-                  }
-                }
-              },
-              [_vm._v("View on GitHub")]
-            )
-          ]
-        )
-      ])
-    ],
-    1
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "h3",
-      { staticClass: "repo-name text-base text-brand mb-2 font-bold" },
-      [_vm._v(_vm._s(_vm.star.node.nameWithOwner))]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "text-dark-grey text-sm" }, [
-      _vm._v(_vm._s(_vm.star.node.description))
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "text-xs" }, [
-      _vm._v(_vm._s(_vm.star.node.stargazers.totalCount))
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "text-xs" }, [
-      _vm._v(_vm._s(_vm.star.node.forkCount))
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-59fc56f8", module.exports)
-  }
-}
-
-/***/ }),
+/* 207 */,
 /* 208 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -92019,6 +91890,146 @@ module.exports = function fingerprint () {
   return clientId;
 };
 
+
+/***/ }),
+/* 497 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 498 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass:
+        "star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg",
+      class: {
+        "selected shadow-inner bg-grey-lightest": _vm.selected,
+        "bg-white": !_vm.selected
+      },
+      on: { dragstart: _vm.starDragged }
+    },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c("star-tags", {
+        attrs: { tags: _vm.normalizedStarTags, star: _vm.star }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "star-meta flex items-center mt-4" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "stargazers-count flex items-center text-grey-dark mr-2"
+          },
+          [
+            _c("Icon", {
+              staticClass: "stroke-current h-4",
+              attrs: { type: "StarIcon" }
+            }),
+            _vm._v(" "),
+            _vm._m(2)
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "fork-count flex items-center text-grey-dark mr-4" },
+          [
+            _c("Icon", {
+              staticClass: "stroke-current h-4",
+              attrs: { type: "Share2Icon" }
+            }),
+            _vm._v(" "),
+            _vm._m(3)
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "github-link flex items-center text-grey-dark" },
+          [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "text-xs text-grey-dark font-bold hover:no-underline",
+                attrs: {
+                  href: _vm.star.node.url,
+                  target: "_blank",
+                  rel: "noopener"
+                },
+                on: {
+                  click: function($event) {
+                    $event.stopPropagation()
+                  }
+                }
+              },
+              [_vm._v("View on GitHub")]
+            )
+          ]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "h3",
+      { staticClass: "repo-name text-base text-brand mb-2 font-bold" },
+      [_vm._v(_vm._s(_vm.star.node.nameWithOwner))]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "text-dark-grey text-sm" }, [
+      _vm._v(_vm._s(_vm.star.node.description))
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-xs" }, [
+      _vm._v(_vm._s(_vm.star.node.stargazers.totalCount))
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "text-xs" }, [
+      _vm._v(_vm._s(_vm.star.node.forkCount))
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-59fc56f8", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
