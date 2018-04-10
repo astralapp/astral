@@ -1145,6 +1145,38 @@ to {
           transform: translate3d(24px, 0, 0);
 }
 
+label[data-v-686c8d5f]::after {
+  -webkit-transition: -webkit-transform 150ms ease-in-out;
+  transition: -webkit-transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out;
+  transition: transform 150ms ease-in-out, -webkit-transform 150ms ease-in-out;
+  content: '';
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #f8fafc;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+label .toggle-switch-label[data-v-686c8d5f] {
+  -webkit-transition: color 150ms ease-in-out;
+  transition: color 150ms ease-in-out;
+  -webkit-transform: translateX(-125%);
+          transform: translateX(-125%);
+  width: 25px;
+}
+input:checked + label[data-v-686c8d5f] {
+  background: #21a179;
+}
+input:checked + label[data-v-686c8d5f]::after {
+  -webkit-transform: translate3d(24px, 0, 0);
+          transform: translate3d(24px, 0, 0);
+}
+
 .dashboard-notifier {
   position: fixed;
   width: 280px;

@@ -2,23 +2,25 @@
   "private": true,
   "scripts": {
     "dev": "npm run development",
-    "development":
-      "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch":
-      "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-poll": "npm run watch -- --watch-poll",
-    "hot":
-      "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "production":
-      "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "jest",
     "watch-test": "jest --watchAll",
     "lint": "eslint resources/assets/js --ext='.js,.vue'"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "vue"],
-    "setupFiles": ["<rootDir>/resources/assets/js/__tests__/utils/mockument"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "setupFiles": [
+      "<rootDir>/resources/assets/js/__tests__/utils/mockument"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/resources/assets/js/__tests__/utils/"
     ],
@@ -33,6 +35,7 @@
   "dependencies": {
     "awesomplete": "^1.1.2",
     "axios": "^0.17",
+    "cuid": "^2.1.1",
     "dragula": "^3.7.2",
     "es6-promise": "^4.1.1",
     "fuzzysearch": "^1.0.3",
@@ -41,8 +44,7 @@
     "lodash": "^4.17.4",
     "nanoid": "^1.0.1",
     "qs": "^6.5.1",
-    "simplemde":
-      "https://github.com/Ionaru/simplemde-markdown-editor/tarball/development",
+    "simplemde": "https://github.com/Ionaru/simplemde-markdown-editor/tarball/development",
     "v-click-outside": "^1.0.4",
     "vue": "^2.5.13",
     "vue-clickaway": "^2.1.0",
