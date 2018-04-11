@@ -12,7 +12,7 @@
     >
       <span
         :class="checked ? 'text-brand': 'text-grey'"
-        class="inline-block uppercase text-right text-sm font-bold toggle-switch-label select-none">
+        class="toggle-switch-label inline-block uppercase text-right text-sm font-bold select-none">
         {{ checked ? onLabel : offLabel }}
       </span>
     </label>

@@ -89815,7 +89815,7 @@ var render = function() {
           "span",
           {
             staticClass:
-              "inline-block uppercase text-right text-sm font-bold toggle-switch-label select-none",
+              "toggle-switch-label inline-block uppercase text-right text-sm font-bold select-none",
             class: _vm.checked ? "text-brand" : "text-grey"
           },
           [
