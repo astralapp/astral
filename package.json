@@ -12,7 +12,9 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "lint": "eslint resources/assets/js --ext='.js,.vue'",
-    "lint:fix": "eslint resources/assets/js --ext='.js,.vue' --fix"
+    "lint:fix": "eslint resources/assets/js --ext='.js,.vue' --fix",
+    "precommit": "npm run lint:fix",
+    "prepush": "npm test"
   },
   "jest": {
     "moduleFileExtensions": ["js", "json", "vue"],
