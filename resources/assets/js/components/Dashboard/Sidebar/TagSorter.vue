@@ -1,17 +1,20 @@
 <template>
-<div class="sidebar-sortDropdown">
-  <button class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none" :class="{'text-grey': dropdownVisible}" @click.stop="toggleDropdown" v-click-outside="hideDropdown">
-    <span>Sort</span>
-    <Icon
-      type="ChevronDownIcon"
-      class="transition-stroke stroke-current fill-none ml-1"
-      height="16"
-      width="16"
-    >
-    </Icon>
-  </button>
-  <tag-sort-dropdown :visible="dropdownVisible"></tag-sort-dropdown>
-</div>
+  <div class="sidebar-sortDropdown">
+    <button
+      class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none"
+      :class="{'text-grey': dropdownVisible}"
+      @click.stop="toggleDropdown"
+      v-click-outside="hideDropdown">
+      <span>Sort</span>
+      <Icon
+        type="ChevronDownIcon"
+        class="transition-stroke stroke-current fill-none ml-1"
+        height="16"
+        width="16"
+      />
+    </button>
+    <tag-sort-dropdown :visible="dropdownVisible"/>
+  </div>
 </template>
 <script>
 import vClickOutside from 'v-click-outside'
@@ -26,19 +29,19 @@ export default {
     Icon,
     TagSortDropdown
   },
-  data() {
+  data () {
     return {
       dropdownVisible: false
     }
   },
-  mounted() {
+  mounted () {
     this.$bus.$on('TAGS_SORTED', method => (this.dropdownVisible = false))
   },
   methods: {
-    toggleDropdown() {
+    toggleDropdown () {
       this.dropdownVisible = !this.dropdownVisible
     },
-    hideDropdown() {
+    hideDropdown () {
       this.dropdownVisible = false
     }
   }

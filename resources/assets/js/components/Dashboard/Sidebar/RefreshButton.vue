@@ -1,22 +1,23 @@
 <template>
-<button class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none" :class="{ 'active': active }">
-  <Icon
-    type="RefreshCwIcon"
-    height="16"
-    width="16"
-    class="stroke-current fill-none"
-  >
-  </Icon>
-</button>
+  <button
+    class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none"
+    :class="{ 'active': active }">
+    <Icon
+      type="RefreshCwIcon"
+      height="16"
+      width="16"
+      class="stroke-current fill-none"
+    />
+  </button>
 </template>
 <script>
 import Icon from '@/components/Icon'
 export default {
   name: 'RefreshButton',
-  props: ['active'],
   components: {
     Icon
-  }
+  },
+  props: ['active']
 }
 </script>
 <style lang="scss">

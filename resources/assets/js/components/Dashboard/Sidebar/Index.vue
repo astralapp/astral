@@ -1,7 +1,9 @@
 <template>
   <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
     <sidebar-header title="Stars">
-      <refresh-button :active="refreshingStars" @click.native="refreshStars"></refresh-button>
+      <refresh-button
+        :active="refreshingStars"
+        @click.native="refreshStars"/>
     </sidebar-header>
     <ul class="dashboard-list sidebar-stars list-none m-0 p-0 border-b border-black pb-3">
       <sidebar-item
@@ -11,8 +13,7 @@
         icon="InboxIcon"
         icon-size="16"
         @click.native="resetFilters"
-      >
-      </sidebar-item>
+      />
       <sidebar-item
         class="untagged-stars"
         :class="{ 'selected': viewingUntagged }"
@@ -20,28 +21,28 @@
         icon="StarIcon"
         icon-size="16"
         @click.native="setViewingUntagged(true)"
-        >
-        </sidebar-item>
+      />
     </ul>
     <sidebar-header title="Tags">
-      <tag-sorter></tag-sorter>
+      <tag-sorter/>
     </sidebar-header>
-    <new-tag-form @submit="doAddTag"></new-tag-form>
-    <ul class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3" ref="sidebarTags">
+    <new-tag-form @submit="doAddTag"/>
+    <ul
+      class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3"
+      ref="sidebarTags">
       <sidebar-tag
         v-for="tag in tags"
         :tag="tag"
         :key="tag.id"
-        :isSelected="currentTag.id == tag.id"
+        :is-selected="currentTag.id == tag.id"
         :data-id="tag.id"
         @click.native="setCurrentTag(tag)"
         @starsDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
         @renameTag="renameTag"
-      >
-      </sidebar-tag>
+      />
     </ul>
-    <sidebar-header title="Languages"></sidebar-header>
+    <sidebar-header title="Languages"/>
     <ul class="dashboard-list sidebar-languages list-none m-0 p-0 border-b border-black pb-3">
       <sidebar-item
         v-for="(value, key) in languages"
@@ -51,8 +52,7 @@
         class="language rounded"
         :class="{ 'selected': currentLanguage == key }"
         @click.native="setCurrentLanguage(key)"
-        >
-        </sidebar-item>
+      />
     </ul>
   </div>
 </template>
@@ -75,7 +75,7 @@ export default {
     SidebarTag,
     TagSorter
   },
-  data() {
+  data () {
     return {
       refreshingStars: false,
       drake: null
@@ -90,7 +90,7 @@ export default {
       'viewingUntagged',
       'pageInfo'
     ]),
-    noFiltersApplied() {
+    noFiltersApplied () {
       return (
         !Object.keys(this.currentTag).length &&
         this.currentLanguage === '' &&
@@ -98,7 +98,7 @@ export default {
       )
     }
   },
-  mounted() {
+  mounted () {
     this.fetchTags()
 
     this.$bus.$on('TAGS_SORTED', method => {
@@ -133,7 +133,7 @@ export default {
       'fetchGitHubStars',
       'cleanupStars'
     ]),
-    async refreshStars() {
+    async refreshStars () {
       this.refreshingStars = true
       await this.fetchGitHubStars({ cursor: false, refresh: true })
       while (this.pageInfo.hasNextPage) {
@@ -145,19 +145,19 @@ export default {
       await this.cleanupStars()
       this.refreshingStars = false
     },
-    doAddTag(name) {
+    doAddTag (name) {
       this.addTag(name)
     },
-    doDeleteTag(id) {
+    doDeleteTag (id) {
       // TODO: Ask user to confirm
       this.deleteTag(id)
     },
-    resetFilters() {
+    resetFilters () {
       this.setViewingUntagged(false)
       this.setCurrentTag({})
       this.setCurrentLanguage('')
     },
-    tagStarWithData({ data, id }) {
+    tagStarWithData ({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
       const pushStar = (data) => this.pushStarTag({ starId: data.id, tag: tag })
       if (Array.isArray(data)) {

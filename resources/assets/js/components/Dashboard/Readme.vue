@@ -1,5 +1,8 @@
 <template>
-  <div class="repo-readme flex-1 p-4 text-grey-darkest bg-white w-full overflow-y-scroll" v-html="readme" ref="readme"></div>
+  <div
+    class="repo-readme flex-1 p-4 text-grey-darkest bg-white w-full overflow-y-scroll"
+    v-html="readme"
+    ref="readme"/>
 </template>
 <script>
 export default {

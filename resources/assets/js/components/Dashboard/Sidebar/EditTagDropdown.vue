@@ -1,11 +1,21 @@
 <template>
-<div class="edit-tag-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden p-3" v-show="visible" @click.stop>
-  <form class="flex flex-col" @submit.prevent="renameTag">
-    <input type="text" v-model="tagName" class="text-sm text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-1 px-2 mb-4 w-full focus-none appearance-none transition-border-color">
-    <button class="text-sm bg-brand hover:bg-brand-light text-white font-bold py-1 px-3 rounded mb-2">Save</button>
-    <button class="text-sm bg-red hover:bg-red-dark text-white font-bold py-1 px-3 rounded" @click.stop.prevent="deleteTag">Delete</button>
-  </form>
-</div>
+  <div
+    class="edit-tag-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden p-3"
+    v-show="visible"
+    @click.stop>
+    <form
+      class="flex flex-col"
+      @submit.prevent="renameTag">
+      <input
+        type="text"
+        v-model="tagName"
+        class="text-sm text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-1 px-2 mb-4 w-full focus-none appearance-none transition-border-color">
+      <button class="text-sm bg-brand hover:bg-brand-light text-white font-bold py-1 px-3 rounded mb-2">Save</button>
+      <button
+        class="text-sm bg-red hover:bg-red-dark text-white font-bold py-1 px-3 rounded"
+        @click.stop.prevent="deleteTag">Delete</button>
+    </form>
+  </div>
 </template>
 <script>
 export default {

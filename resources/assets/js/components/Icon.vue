@@ -2,8 +2,8 @@
 import * as icons from 'vue-feather-icons'
 
 export default {
-  functional: true,
   name: 'Icon',
+  functional: true,
   props: {
     type: { type: String, required: true }
   },

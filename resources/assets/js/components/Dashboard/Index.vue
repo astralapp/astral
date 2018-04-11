@@ -1,12 +1,12 @@
 <template>
   <div class="dashboard w-screen h-screen overflow-hidden">
-    <navbar></navbar>
-    <sidebar></sidebar>
-    <galileo></galileo>
-    <star-list :stars="starsWithCurrentTag"></star-list>
-    <star-info></star-info>
-    <div><notifier timeout="3000"></notifier></div>
-    <settings-modal :user="user"></settings-modal>
+    <navbar/>
+    <sidebar/>
+    <galileo/>
+    <star-list :stars="starsWithCurrentTag"/>
+    <star-info/>
+    <div><notifier timeout="3000"/></div>
+    <settings-modal :user="user"/>
   </div>
 </template>
 <script>
@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'stars', 'pageInfo', 'currentTag', 'currentStar']),
-    starsWithCurrentTag() {
+    starsWithCurrentTag () {
       return this.stars.filter(star => {
         if (!Object.keys(this.currentTag).length) {
           return true
@@ -52,7 +52,7 @@ export default {
       'cleanupStars'
     ])
   },
-  async created() {
+  async created () {
     await this.fetchUser()
     await this.fetchUserStars()
     await this.fetchGitHubStars({ cursor: null, refresh: false })

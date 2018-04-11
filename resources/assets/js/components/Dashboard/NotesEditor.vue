@@ -1,7 +1,9 @@
 <template>
   <div class="absolute pin-t pin-l pin-b mt-16 w-full bg-white flex flex-col">
-    <textarea ref="editor"></textarea>
-    <div class="repo-notes-status" v-show="notesSaved">Saved</div>
+    <textarea ref="editor"/>
+    <div
+      class="repo-notes-status"
+      v-show="notesSaved">Saved</div>
   </div>
 </template>
 <script>
@@ -11,14 +13,25 @@ import 'highlight.js'
 export default {
   name: 'NotesEditor',
   props: ['notes'],
-  data() {
+  data () {
     return {
       editor: null,
       currentNotes: '',
       notesSaved: false
     }
   },
-  mounted() {
+  watch: {
+    notes (val) {
+      if (this.editor.isPreviewActive()) {
+        this.editor.togglePreview()
+      }
+      if (val === this.editor.value()) {
+        return
+      }
+      this.editor.value(val)
+    }
+  },
+  mounted () {
     this.editor = new SimpleMDE({
       element: this.$refs.editor,
       initialValue: this.notes,
@@ -113,22 +126,11 @@ export default {
       }, 1000)
     )
   },
-  destroyed() {
+  destroyed () {
     this.editor = null
   },
-  watch: {
-    notes(val) {
-      if (this.editor.isPreviewActive()) {
-        this.editor.togglePreview()
-      }
-      if (val === this.editor.value()) {
-        return
-      }
-      this.editor.value(val)
-    }
-  },
   methods: {
-    saveNotes() {
+    saveNotes () {
       this.$emit('save', this.currentNotes)
       this.notesSaved = true
       setTimeout(() => {

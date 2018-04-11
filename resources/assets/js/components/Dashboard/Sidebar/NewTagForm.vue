@@ -1,23 +1,38 @@
 <template>
-<div class="dashboard-list-item toggle-new-tag h-10 relative">
-  <transition name="new-tag-form">
-    <div class="toggle-new-tag-button flex items-center text-base font-semibold text-grey-darker h-10 cursor-pointer transition-color hover:text-grey" @click="showForm" v-show="!formShowing">
-      <Icon type="PlusCircleIcon" height="14" class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"></Icon>
-      <span class="dashboard-list-item-name relative flex-grow">Add a tag...</span>
-    </div>
-  </transition>
-  <transition name="new-tag-form">
-    <form class="toggle-new-tag-form flex items-center absolute pin-t pin-l w-full" v-show="formShowing" @submit.prevent="formSubmitted">
-      <input class="h-10 text-base rounded bg-white px-2 w-full" type="text" v-model="tagName" @blur="formBlurred" ref="form" placeholder="Enter a tag name...">
-    </form>
-  </transition>
-</div>
+  <div class="dashboard-list-item toggle-new-tag h-10 relative">
+    <transition name="new-tag-form">
+      <div
+        class="toggle-new-tag-button flex items-center text-base font-semibold text-grey-darker h-10 cursor-pointer transition-color hover:text-grey"
+        @click="showForm"
+        v-show="!formShowing">
+        <Icon
+          type="PlusCircleIcon"
+          height="14"
+          class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"/>
+        <span class="dashboard-list-item-name relative flex-grow">Add a tag...</span>
+      </div>
+    </transition>
+    <transition name="new-tag-form">
+      <form
+        class="toggle-new-tag-form flex items-center absolute pin-t pin-l w-full"
+        v-show="formShowing"
+        @submit.prevent="formSubmitted">
+        <input
+          class="h-10 text-base rounded bg-white px-2 w-full"
+          type="text"
+          v-model="tagName"
+          @blur="formBlurred"
+          ref="form"
+          placeholder="Enter a tag name...">
+      </form>
+    </transition>
+  </div>
 </template>
 
 <script>
 import Icon from '@/components/Icon'
 export default {
-  name: 'new-tag-form',
+  name: 'NewTagForm',
   components: {
     Icon
   },

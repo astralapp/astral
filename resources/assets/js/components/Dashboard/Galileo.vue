@@ -1,8 +1,15 @@
 <template>
   <div class="search-container bg-white border-b border-r border-grey-light h-16 px-4 flex items-center justify-center">
     <div class="relative w-full">
-      <input type="text" class="search-input text-grey-darkest h-10 border-2 border-grey-light rounded pr-2 pl-8 w-full focus-none transition-border-color" placeholder="Gaze through your telescope" v-model="currentSearchQuery" />
-      <Icon type="SearchIcon" class="search-input-icon absolute fill-none stroke-grey transition-stroke" height="18"></Icon>
+      <input
+        type="text"
+        class="search-input text-grey-darkest h-10 border-2 border-grey-light rounded pr-2 pl-8 w-full focus-none transition-border-color"
+        placeholder="Gaze through your telescope"
+        v-model="currentSearchQuery" >
+      <Icon
+        type="SearchIcon"
+        class="search-input-icon absolute fill-none stroke-grey transition-stroke"
+        height="18"/>
     </div>
   </div>
 </template>

@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <transition name="screen-fade" mode="out-in" appear>
+    <transition
+      name="screen-fade"
+      mode="out-in"
+      appear>
       <router-view/>
     </transition>
   </div>

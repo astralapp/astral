@@ -1,4 +1,3 @@
-import { Promise } from 'es6-promise'
 import ls from 'local-storage'
 import { SET_USER } from '../mutation-types'
 import client from '../api/client'

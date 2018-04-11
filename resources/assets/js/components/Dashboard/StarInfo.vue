@@ -1,31 +1,50 @@
 <template>
-<div class="star-info bg-grey-lighter relative flex flex-col">
-  <div class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center" v-if="!noRepoSelected">
-    <button class="bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none" @click="notesShowing = !notesShowing">
-      <Icon :type="toggleNotesIcon" height="16" width="16" class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"></Icon>
-      <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
-    </button>
-    <div class="ml-auto">
-      <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
-      <input
-        type="text"
-        readonly="readonly"
-        id="starCloneUrl"
-        class="github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color"
-        :value="currentStarCloneUrl"
-        @focus="highlightText"
-      />
+  <div class="star-info bg-grey-lighter relative flex flex-col">
+    <div
+      class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center"
+      v-if="!noRepoSelected">
+      <button
+        class="bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none"
+        @click="notesShowing = !notesShowing">
+        <Icon
+          :type="toggleNotesIcon"
+          height="16"
+          width="16"
+          class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"/>
+        <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
+      </button>
+      <div class="ml-auto">
+        <label
+          for="starCloneUrl"
+          class="mr-2 font-bold cursor-pointer">Clone:</label>
+        <input
+          type="text"
+          readonly="readonly"
+          id="starCloneUrl"
+          class="github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color"
+          :value="currentStarCloneUrl"
+          @focus="highlightText"
+        >
+      </div>
     </div>
+    <div
+      class="flex flex-1 items-center justify-center w-full bg-grey-lighter"
+      v-if="noRepoSelected">
+      <span class="font-bold text-grey">No Repo Selected</span>
+    </div>
+    <readme
+      v-if="readme"
+      :readme="readme"/>
+    <div
+      class="flex flex-1 items-center justify-center w-full bg-grey-lighter"
+      v-if="repoHasNoReadme">
+      <span class="font-bold text-grey">No README found</span>
+    </div>
+    <notes-editor
+      v-if="notesEditorShowing"
+      @save="doEditStarNotes"
+      :notes="currentStarNotes"/>
   </div>
-  <div class="flex flex-1 items-center justify-center w-full bg-grey-lighter" v-if="noRepoSelected">
-    <span class="font-bold text-grey">No Repo Selected</span>
-  </div>
-  <readme v-if="readme" :readme="readme"></readme>
-  <div class="flex flex-1 items-center justify-center w-full bg-grey-lighter" v-if="repoHasNoReadme">
-    <span class="font-bold text-grey">No README found</span>
-  </div>
-  <notes-editor v-if="notesEditorShowing" @save="doEditStarNotes" :notes="currentStarNotes"></notes-editor>
-</div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'

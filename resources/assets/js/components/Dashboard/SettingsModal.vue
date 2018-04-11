@@ -2,17 +2,22 @@
   <modal name="settings-modal">
     <div class="flex items-center justify-between px-4 py-6">
       <h3>Settings</h3>
-      <button class="text-2xl focus-none" @click="closeModal">&times;</button>
+      <button
+        class="text-2xl focus-none"
+        @click="closeModal">&times;</button>
     </div>
     <div class="px-4 py-6 bg-grey-lightest border-t border-b border-grey-light flex justify-between items-center">
       <span class="leading-normal">Subscribe to Updates</span>
       <div class="relative toggle-switch">
-        <input type="email" placeholder="you@example.com" class="text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-2 px-4 w-64 focus-none appearance-none transition-border-color" />
+        <input
+          type="email"
+          placeholder="you@example.com"
+          class="text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-2 px-4 w-64 focus-none appearance-none transition-border-color" >
       </div>
     </div>
     <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between items-center">
       <span class="leading-normal">Show Language Tags on Stars</span>
-      <toggle-switch v-model="settings.showLanguageTags"></toggle-switch>
+      <toggle-switch v-model="settings.showLanguageTags"/>
     </div>
   </modal>
 </template>
@@ -20,11 +25,11 @@
 import ToggleSwitch from '@/components/ToggleSwitch'
 export default {
   name: 'SettingsModal',
-  props: ['user'],
   components: {
     ToggleSwitch
   },
-  data() {
+  props: ['user'],
+  data () {
     return {
       settings: {
         showLanguageTags: false
@@ -32,7 +37,7 @@ export default {
     }
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$modal.hide('settings-modal')
     }
   }
@@ -63,4 +68,3 @@ export default {
   }
 }
 </style>
-
