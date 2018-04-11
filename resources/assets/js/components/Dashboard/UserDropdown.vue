@@ -1,8 +1,8 @@
 <template>
   <div class="relative ml-auto">
     <div
-      class="flex items-center cursor-pointer"
       v-on-clickaway="hideDropdown"
+      class="flex items-center cursor-pointer"
       @click="visible = !visible">
       <img
         :src="user.avatar_url"
@@ -18,8 +18,8 @@
       />
     </div>
     <div
-      class="user-dropdown-container absolute pin-t pin-r bg-white rounded shadow z-10 overflow-hidden"
-      v-show="visible">
+      v-show="visible"
+      class="user-dropdown-container absolute pin-t pin-r bg-white rounded shadow z-10 overflow-hidden">
       <ul class="list-reset">
         <li>
           <a

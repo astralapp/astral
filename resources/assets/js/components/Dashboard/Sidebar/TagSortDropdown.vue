@@ -1,7 +1,7 @@
 <template>
   <div
-    class="tag-sort-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden"
-    v-show="visible">
+    v-show="visible"
+    class="tag-sort-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden">
     <ul class="tag-sort-items list-reset mv2 pa0">
       <li
         class="tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap"

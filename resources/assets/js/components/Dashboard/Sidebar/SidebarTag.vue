@@ -1,34 +1,34 @@
 <template>
   <sidebar-item
     :badge="tag.stars_count"
-    icon="TagIcon"
-    icon-size="14"
-    class="tag rounded"
     :class="{
       'selected': isSelected,
       'dragging': isHighlighted
     }"
     :title="tag.name"
+    icon="TagIcon"
+    icon-size="14"
+    class="tag rounded"
     @dragover.native.stop.prevent="highlight"
     @dragleave.native.stop.prevent="unhighlight"
     @drop.native.stop.prevent="starsDropped"
   >
     <div
-      class="opacity-0 transition-opacity edit-tag absolute pin-r"
-      :class="{'opacity-100': editTagDropdownShowing}">
+      :class="{'opacity-100': editTagDropdownShowing}"
+      class="opacity-0 transition-opacity edit-tag absolute pin-r">
       <button
-        @click.stop="editTagDropdownShowing = !editTagDropdownShowing"
-        class="text-grey hover:text-white px-2">
+        class="text-grey hover:text-white px-2"
+        @click.stop="editTagDropdownShowing = !editTagDropdownShowing">
         <Icon
           type="MoreHorizontalIcon"
           height="14"
           class="edit-tag-icon stroke-none fill-current relative"/>
       </button>
       <edit-tag-dropdown
+        v-click-outside="hideEditTagDropdown"
         :tag="tag"
         :visible="editTagDropdownShowing"
         @deleteTag="deleteTag"
-        v-click-outside="hideEditTagDropdown"
         @renameTag="renameTag"/>
     </div>
   </sidebar-item>

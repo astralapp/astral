@@ -1,14 +1,18 @@
 <template>
   <div
-    class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg"
     :class="{'selected shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}"
+    class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg"
     @dragstart="starDragged">
     <h3
-      class="repo-name text-base text-brand mb-2 font-bold"
-      v-once>{{ star.node.nameWithOwner }}</h3>
+      v-once
+      class="repo-name text-base text-brand mb-2 font-bold">
+      {{ star.node.nameWithOwner }}
+    </h3>
     <p
-      class="text-dark-grey text-sm"
-      v-once>{{ star.node.description }}</p>
+      v-once
+      class="text-dark-grey text-sm">
+      {{ star.node.description }}
+    </p>
     <star-tags
       :tags="normalizedStarTags"
       :star="star"
@@ -19,21 +23,25 @@
           type="StarIcon"
           class="stroke-current h-4"/>
         <span
-          class="text-xs"
-          v-once>{{ star.node.stargazers.totalCount }}</span>
+          v-once
+          class="text-xs">
+          {{ star.node.stargazers.totalCount }}
+        </span>
       </div>
       <div class="fork-count flex items-center text-grey-dark mr-4">
         <Icon
           type="Share2Icon"
           class="stroke-current h-4"/>
         <span
-          class="text-xs"
-          v-once>{{ star.node.forkCount }}</span>
+          v-once
+          class="text-xs">
+          {{ star.node.forkCount }}
+        </span>
       </div>
       <div class="github-link flex items-center text-grey-dark">
         <a
-          class="text-xs text-grey-dark font-bold hover:no-underline"
           :href="star.node.url"
+          class="text-xs text-grey-dark font-bold hover:no-underline"
           target="_blank"
           rel="noopener"
           @click.stop>View on GitHub</a>

@@ -48051,7 +48051,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     }
   }),
-  methods: __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['fetchUser', 'fetchGitHubStars', 'fetchUserStars', 'cleanupStars'])),
   created: function created() {
     var _this2 = this;
 
@@ -48098,7 +48097,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }, _callee, _this2);
     }))();
-  }
+  },
+
+  methods: __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['fetchUser', 'fetchGitHubStars', 'fetchUserStars', 'cleanupStars']))
 });
 
 /***/ }),
@@ -60419,9 +60420,9 @@ var render = function() {
       },
       attrs: {
         badge: _vm.tag.stars_count,
+        title: _vm.tag.name,
         icon: "TagIcon",
-        "icon-size": "14",
-        title: _vm.tag.name
+        "icon-size": "14"
       },
       nativeOn: {
         dragover: function($event) {
@@ -62351,6 +62352,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -62490,7 +62499,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuex__ = __webpack_require__(8);
 
 
-//
 //
 //
 //
@@ -63365,21 +63373,21 @@ var render = function() {
             _c("input", {
               directives: [
                 {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.newTag,
-                  expression: "newTag"
-                },
-                {
                   name: "show",
                   rawName: "v-show",
                   value: _vm.isEditing,
                   expression: "isEditing"
+                },
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newTag,
+                  expression: "newTag"
                 }
               ],
               ref: "input",
               staticClass: "text-grey-darkest text-sm h-6 focus-none",
-              attrs: { type: "text", placeholder: _vm.placeholder },
+              attrs: { placeholder: _vm.placeholder, type: "text" },
               domProps: { value: _vm.newTag },
               on: {
                 click: function($event) {
@@ -63554,7 +63562,7 @@ var staticRenderFns = [
     return _c(
       "h3",
       { staticClass: "repo-name text-base text-brand mb-2 font-bold" },
-      [_vm._v(_vm._s(_vm.star.node.nameWithOwner))]
+      [_vm._v("\n    " + _vm._s(_vm.star.node.nameWithOwner) + "\n  ")]
     )
   },
   function() {
@@ -63562,7 +63570,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "text-dark-grey text-sm" }, [
-      _vm._v(_vm._s(_vm.star.node.description))
+      _vm._v("\n    " + _vm._s(_vm.star.node.description) + "\n  ")
     ])
   },
   function() {
@@ -63570,7 +63578,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "text-xs" }, [
-      _vm._v(_vm._s(_vm.star.node.stargazers.totalCount))
+      _vm._v(
+        "\n        " + _vm._s(_vm.star.node.stargazers.totalCount) + "\n      "
+      )
     ])
   },
   function() {
@@ -63578,7 +63588,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "text-xs" }, [
-      _vm._v(_vm._s(_vm.star.node.forkCount))
+      _vm._v("\n        " + _vm._s(_vm.star.node.forkCount) + "\n      ")
     ])
   }
 ]
@@ -63671,47 +63681,43 @@ var render = function() {
         _vm._b(
           {
             staticClass: "overflow-y-scroll",
-            attrs: { items: _vm.filteredStars },
-            scopedSlots: _vm._u([
-              {
-                key: "star",
-                fn: function(ref) {
-                  var cell = ref.cell
-                  var item = ref.item
-                  return _c(
-                    "div",
-                    { key: item.value.node.id },
-                    [
-                      _c("Star", {
-                        attrs: {
-                          star: item.value,
-                          "data-id": item.value.node.id,
-                          selected: _vm.starIsCurrentStar(item.value),
-                          draggable: "true"
-                        },
-                        nativeOn: {
-                          dragstart: function($event) {
-                            _vm.starDragged($event)
-                          },
-                          dragend: function($event) {
-                            _vm.clearClonedRepoNodes($event)
-                          },
-                          click: function($event) {
-                            _vm.handleClick($event, item.value)
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                }
-              }
-            ])
+            attrs: { items: _vm.filteredStars }
           },
           "collection-cluster",
           _vm.cluster,
           false
-        )
+        ),
+        [
+          _c(
+            "div",
+            { key: _vm.item.value.node.id },
+            [
+              _vm._v(
+                '\n      slot="star"\n      slot-scope="{cell, item}"\n      '
+              ),
+              _c("Star", {
+                attrs: {
+                  star: _vm.item.value,
+                  "data-id": _vm.item.value.node.id,
+                  selected: _vm.starIsCurrentStar(_vm.item.value),
+                  draggable: "true"
+                },
+                nativeOn: {
+                  dragstart: function($event) {
+                    _vm.starDragged($event)
+                  },
+                  dragend: function($event) {
+                    _vm.clearClonedRepoNodes($event)
+                  },
+                  click: function($event) {
+                    _vm.handleClick($event, _vm.item.value)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        ]
       )
     ],
     1
@@ -64146,6 +64152,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_highlight_js__ = __webpack_require__(238);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_highlight_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_highlight_js__);
+//
+//
 //
 //
 //
@@ -89186,7 +89194,7 @@ var render = function() {
           ],
           staticClass: "repo-notes-status"
         },
-        [_vm._v("Saved")]
+        [_vm._v("\n    Saved\n  ")]
       )
     ]
   )
@@ -89395,9 +89403,9 @@ var render = function() {
                   staticClass:
                     "github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color",
                   attrs: {
+                    id: "starCloneUrl",
                     type: "text",
-                    readonly: "readonly",
-                    id: "starCloneUrl"
+                    readonly: "readonly"
                   },
                   domProps: { value: _vm.currentStarCloneUrl },
                   on: { focus: _vm.highlightText }
@@ -89653,6 +89661,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -89784,7 +89794,7 @@ var render = function() {
   return _c("div", { staticClass: "relative toggle-switch" }, [
     _c("input", {
       staticClass: "absolute invisible",
-      attrs: { type: "checkbox", id: _vm.uid },
+      attrs: { id: _vm.uid, type: "checkbox" },
       domProps: { checked: _vm.checked },
       on: {
         change: function($event) {
@@ -89808,7 +89818,13 @@ var render = function() {
               "inline-block uppercase text-right text-sm font-bold toggle-switch-label select-none",
             class: _vm.checked ? "text-brand" : "text-grey"
           },
-          [_vm._v(_vm._s(_vm.checked ? _vm.onLabel : _vm.offLabel))]
+          [
+            _vm._v(
+              "\n      " +
+                _vm._s(_vm.checked ? _vm.onLabel : _vm.offLabel) +
+                "\n    "
+            )
+          ]
         )
       ]
     )
@@ -89962,8 +89978,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 //
 //
 //
@@ -89985,15 +89999,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Notifier',
   props: ['timeout'],
   data: function data() {
     return {
-      _timeout: null,
+      timer: null,
       show: false,
       mode: 'success',
       message: ''
@@ -90021,13 +90033,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 3000;
 
       this.show = true;
-      clearTimeout(this._timeout);
-      this._timeout = setTimeout(function () {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(function () {
         _this2.show = false;
       }, parseInt(duration, 10) + 500);
     },
     hideNotifier: function hideNotifier() {
-      clearTimeout(this._timeout);
+      clearTimeout(this.timer);
       this.show = false;
     }
   }
@@ -91863,18 +91875,15 @@ module.exports = function (str, opts) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_es6_promise__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_es6_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_es6_promise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mutation_types__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_client_js__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutation_types__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_client_js__ = __webpack_require__(43);
 
 
 
 
 var _mutations;
-
 
 
 
@@ -91895,18 +91904,18 @@ var getters = {
   }
 };
 
-var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_TAGS */], function (state, tags) {
+var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["q" /* SET_TAGS */], function (state, tags) {
   state.tags = tags;
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["j" /* SET_CURRENT_TAG */], function (state, tag) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["j" /* SET_CURRENT_TAG */], function (state, tag) {
   state.currentTag = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign___default()({}, tag);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["a" /* ADD_TAG */], function (state, tag) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["a" /* ADD_TAG */], function (state, tag) {
   state.tags = state.tags.concat([tag]);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["d" /* DELETE_TAG */], function (state, id) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["d" /* DELETE_TAG */], function (state, id) {
   var index = state.tags.findIndex(function (tag) {
     return tag.id === id;
   });
   state.tags.splice(index, 1);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["w" /* UPDATE_TAG */], function (state, _ref) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["w" /* UPDATE_TAG */], function (state, _ref) {
   var id = _ref.id,
       newTag = _ref.newTag;
 
@@ -91923,30 +91932,30 @@ var actions = {
   fetchTags: function fetchTags(_ref2) {
     var commit = _ref2.commit;
 
-    return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().get('/api/tags').then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_TAGS */], res);
+    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().get('/api/tags').then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["q" /* SET_TAGS */], res);
     });
   },
   addTag: function addTag(_ref3, name) {
     var commit = _ref3.commit;
 
-    return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().post('/api/tags', { name: name }).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["a" /* ADD_TAG */], res);
+    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().post('/api/tags', { name: name }).then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["a" /* ADD_TAG */], res);
     });
   },
   setCurrentTag: function setCurrentTag(_ref4, tag) {
     var commit = _ref4.commit;
 
     if (__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(tag).length) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["v" /* SET_VIEWING_UNTAGGED */], false);
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["v" /* SET_VIEWING_UNTAGGED */], false);
     }
-    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["j" /* SET_CURRENT_TAG */], tag);
+    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["j" /* SET_CURRENT_TAG */], tag);
   },
   reorderTags: function reorderTags(_ref5, sortMap) {
     var commit = _ref5.commit;
 
-    return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().put('/api/tags/reorder', { tags: sortMap }).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_TAGS */], res);
+    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().put('/api/tags/reorder', { tags: sortMap }).then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["q" /* SET_TAGS */], res);
     });
   },
   sortTags: function sortTags(_ref6, method) {
@@ -91959,23 +91968,23 @@ var actions = {
 
     switch (method) {
       case 'ALPHA_ASC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['name'], ['asc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['name'], ['asc']);
         break;
       case 'ALPHA_DESC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['name'], ['desc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['name'], ['desc']);
         break;
       case 'STARS_ASC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['stars_count'], ['asc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['stars_count'], ['asc']);
         break;
       case 'STARS_DESC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['stars_count'], ['desc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['stars_count'], ['desc']);
         break;
       default:
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['sort_order'], ['asc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['sort_order'], ['asc']);
         break;
     }
 
-    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_TAGS */], sortedTags);
+    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["q" /* SET_TAGS */], sortedTags);
 
     sortMap = sortedTags.map(function (tag, i) {
       return {
@@ -91991,12 +92000,12 @@ var actions = {
         state = _ref7.state,
         commit = _ref7.commit;
 
-    __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().delete('/api/tags/' + id);
+    __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().delete('/api/tags/' + id);
 
     if (state.currentTag.id === id) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["j" /* SET_CURRENT_TAG */], {});
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["j" /* SET_CURRENT_TAG */], {});
     }
-    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["d" /* DELETE_TAG */], id);
+    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["d" /* DELETE_TAG */], id);
     var starsWithTag = rootState.stars.stars.filter(function (star) {
       return ~star.tags.map(function (tag) {
         return tag.id;
@@ -92009,7 +92018,7 @@ var actions = {
     });
 
     starsWithTag.forEach(function (star) {
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["p" /* SET_STAR_TAGS */], star);
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["p" /* SET_STAR_TAGS */], star);
     });
   },
   renameTag: function renameTag(_ref8, _ref9) {
@@ -92019,12 +92028,12 @@ var actions = {
     var id = _ref9.id,
         name = _ref9.name;
 
-    __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().patch('/api/tags/' + id, { name: name }).then(function (res) {
+    __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().patch('/api/tags/' + id, { name: name }).then(function (res) {
       if (state.currentTag.id === id) {
-        commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["j" /* SET_CURRENT_TAG */], res);
+        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["j" /* SET_CURRENT_TAG */], res);
       }
 
-      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["w" /* UPDATE_TAG */], { id: id, newTag: res });
+      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["w" /* UPDATE_TAG */], { id: id, newTag: res });
 
       var starsWithTag = rootState.stars.stars.filter(function (star) {
         return ~star.tags.map(function (tag) {
@@ -92039,7 +92048,7 @@ var actions = {
       });
 
       starsWithTag.forEach(function (star) {
-        commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["p" /* SET_STAR_TAGS */], star);
+        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["p" /* SET_STAR_TAGS */], star);
       });
     });
   }

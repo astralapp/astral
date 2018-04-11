@@ -1,4 +1,3 @@
-import { Promise } from 'es6-promise'
 import { orderBy } from 'lodash'
 import {
   ADD_TAG,

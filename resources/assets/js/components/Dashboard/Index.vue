@@ -44,14 +44,6 @@ export default {
       })
     }
   },
-  methods: {
-    ...mapActions([
-      'fetchUser',
-      'fetchGitHubStars',
-      'fetchUserStars',
-      'cleanupStars'
-    ])
-  },
   async created () {
     await this.fetchUser()
     await this.fetchUserStars()
@@ -63,6 +55,14 @@ export default {
       })
     }
     await this.cleanupStars()
+  },
+  methods: {
+    ...mapActions([
+      'fetchUser',
+      'fetchGitHubStars',
+      'fetchUserStars',
+      'cleanupStars'
+    ])
   }
 }
 </script>

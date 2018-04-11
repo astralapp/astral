@@ -2,8 +2,10 @@
   <div class="absolute pin-t pin-l pin-b mt-16 w-full bg-white flex flex-col">
     <textarea ref="editor"/>
     <div
-      class="repo-notes-status"
-      v-show="notesSaved">Saved</div>
+      v-show="notesSaved"
+      class="repo-notes-status">
+      Saved
+    </div>
   </div>
 </template>
 <script>

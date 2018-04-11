@@ -1,7 +1,7 @@
 <template>
   <div
-    class="star-tags-editor rounded mt-4"
-    :class="{ 'px-2 pt-2 bg-white border border-grey-light': isEditing }">
+    :class="{ 'px-2 pt-2 bg-white border border-grey-light': isEditing }"
+    class="star-tags-editor rounded mt-4">
     <ul class="star-tags list-reset flex flex-wrap items-center">
       <li
         v-if="star.node.primaryLanguage"
@@ -18,32 +18,31 @@
         <span>{{ tag.name }}</span>
         <span>
           <button
-            class="remove-tag ml-2 text-white text-sm"
             v-show="isEditing"
+            class="remove-tag ml-2 text-white text-sm"
             @click.stop="removeTag(tag)">&times;</button>
         </span>
       </li>
       <li class="mb-2">
         <input
+          v-show="isEditing"
+          ref="input"
+          v-model="newTag"
+          :placeholder="placeholder"
           type="text"
+          class="text-grey-darkest text-sm h-6 focus-none"
           @click.stop
           @keyup.enter.188="addTag(newTag)"
           @keydown.delete.stop="deletePressed"
           @focus="onFocus"
           @blur="onBlur"
-          :placeholder="placeholder"
-          v-model="newTag"
-          v-show="isEditing"
-          ref="input"
-          class="text-grey-darkest text-sm h-6 focus-none"
         >
       </li>
       <li class="mb-2">
         <button
-          @click.stop="startEditing"
           v-show="!isEditing"
           class="text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2"
-        >
+          @click.stop="startEditing">
           Edit Tags
         </button>
       </li>

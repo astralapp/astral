@@ -1,10 +1,10 @@
 <template>
   <div class="sidebar-sortDropdown">
     <button
-      class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none"
+      v-click-outside="hideDropdown"
       :class="{'text-grey': dropdownVisible}"
-      @click.stop="toggleDropdown"
-      v-click-outside="hideDropdown">
+      class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none"
+      @click.stop="toggleDropdown">
       <span>Sort</span>
       <Icon
         type="ChevronDownIcon"

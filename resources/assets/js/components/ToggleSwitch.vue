@@ -1,18 +1,20 @@
 <template>
   <div class="relative toggle-switch">
     <input
-      type="checkbox"
       :id="uid"
       :checked="checked"
-      @change="$emit('change', $event.target.checked)"
-      class="absolute invisible" >
+      type="checkbox"
+      class="absolute invisible"
+      @change="$emit('change', $event.target.checked)">
     <label
       :for="uid"
       class=" flex items-center relative block rounded-full h-6 w-12 bg-grey-light cursor-pointer transition-bg"
     >
       <span
-        class="inline-block uppercase text-right text-sm font-bold toggle-switch-label select-none"
-        :class="checked ? 'text-brand': 'text-grey'">{{ checked ? onLabel : offLabel }}</span>
+        :class="checked ? 'text-brand': 'text-grey'"
+        class="inline-block uppercase text-right text-sm font-bold toggle-switch-label select-none">
+        {{ checked ? onLabel : offLabel }}
+      </span>
     </label>
   </div>
 </template>

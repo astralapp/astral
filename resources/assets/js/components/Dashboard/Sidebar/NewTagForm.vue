@@ -2,9 +2,9 @@
   <div class="dashboard-list-item toggle-new-tag h-10 relative">
     <transition name="new-tag-form">
       <div
+        v-show="!formShowing"
         class="toggle-new-tag-button flex items-center text-base font-semibold text-grey-darker h-10 cursor-pointer transition-color hover:text-grey"
-        @click="showForm"
-        v-show="!formShowing">
+        @click="showForm">
         <Icon
           type="PlusCircleIcon"
           height="14"
@@ -14,16 +14,16 @@
     </transition>
     <transition name="new-tag-form">
       <form
-        class="toggle-new-tag-form flex items-center absolute pin-t pin-l w-full"
         v-show="formShowing"
+        class="toggle-new-tag-form flex items-center absolute pin-t pin-l w-full"
         @submit.prevent="formSubmitted">
         <input
+          ref="form"
+          v-model="tagName"
           class="h-10 text-base rounded bg-white px-2 w-full"
           type="text"
-          v-model="tagName"
-          @blur="formBlurred"
-          ref="form"
-          placeholder="Enter a tag name...">
+          placeholder="Enter a tag name..."
+          @blur="formBlurred">
       </form>
     </transition>
   </div>

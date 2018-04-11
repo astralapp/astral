@@ -15,8 +15,8 @@
         @click.native="resetFilters"
       />
       <sidebar-item
-        class="untagged-stars"
         :class="{ 'selected': viewingUntagged }"
+        class="untagged-stars"
         title="Untagged Stars"
         icon="StarIcon"
         icon-size="16"
@@ -28,8 +28,8 @@
     </sidebar-header>
     <new-tag-form @submit="doAddTag"/>
     <ul
-      class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3"
-      ref="sidebarTags">
+      ref="sidebarTags"
+      class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3">
       <sidebar-tag
         v-for="tag in tags"
         :tag="tag"
@@ -49,8 +49,8 @@
         :key="key"
         :badge="value"
         :title="key"
-        class="language rounded"
         :class="{ 'selected': currentLanguage == key }"
+        class="language rounded"
         @click.native="setCurrentLanguage(key)"
       />
     </ul>

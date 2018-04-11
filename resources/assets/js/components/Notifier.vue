@@ -1,10 +1,9 @@
 <template>
   <transition name="dashboard-notifier">
     <div
-      :class="mode === 'success' ? 'bg-brand' : 'bg-red-dark'"
-      class="dashboard-notifier fixed pin-r pin-b mr-4 mb-4 rounded p-4"
       v-show="show"
-    >
+      :class="mode === 'success' ? 'bg-brand' : 'bg-red-dark'"
+      class="dashboard-notifier fixed pin-r pin-b mr-4 mb-4 rounded p-4">
       <div class="flex items-center">
         <div class="flex-grow text-white">
           {{ message }}
@@ -21,13 +20,12 @@
   </transition>
 </template>
 <script>
-import Vue from 'vue'
 export default {
   name: 'Notifier',
   props: ['timeout'],
   data () {
     return {
-      _timeout: null,
+      timer: null,
       show: false,
       mode: 'success',
       message: ''
@@ -48,13 +46,13 @@ export default {
   methods: {
     showNotifier (duration = 3000) {
       this.show = true
-      clearTimeout(this._timeout)
-      this._timeout = setTimeout(() => {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
         this.show = false
       }, parseInt(duration, 10) + 500)
     },
     hideNotifier () {
-      clearTimeout(this._timeout)
+      clearTimeout(this.timer)
       this.show = false
     }
   }
