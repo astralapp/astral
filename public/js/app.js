@@ -62117,7 +62117,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           height = void 0;
       var el = e.currentTarget;
       var clone = el.cloneNode(true);
-      if (this.currentStars.length > 0) {
+      if (this.currentStars.length > 1) {
         clone.children[0].outerText += ' + ' + (this.currentStars.length - 1) + ' more';
       }
       clone.id = 'repo-clone';
