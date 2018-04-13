@@ -9,9 +9,9 @@
       v-bind="cluster"
       class="overflow-y-scroll">
       <div
-        :key="item.value.node.id">
         slot="star"
-        slot-scope="{cell, item}"
+        :key="item.value.node.id"
+        slot-scope="{cell, item}">
         <Star
           :star="item.value"
           :data-id="item.value.node.id"

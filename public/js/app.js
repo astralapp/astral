@@ -63681,43 +63681,47 @@ var render = function() {
         _vm._b(
           {
             staticClass: "overflow-y-scroll",
-            attrs: { items: _vm.filteredStars }
+            attrs: { items: _vm.filteredStars },
+            scopedSlots: _vm._u([
+              {
+                key: "star",
+                fn: function(ref) {
+                  var cell = ref.cell
+                  var item = ref.item
+                  return _c(
+                    "div",
+                    { key: item.value.node.id },
+                    [
+                      _c("Star", {
+                        attrs: {
+                          star: item.value,
+                          "data-id": item.value.node.id,
+                          selected: _vm.starIsCurrentStar(item.value),
+                          draggable: "true"
+                        },
+                        nativeOn: {
+                          dragstart: function($event) {
+                            _vm.starDragged($event)
+                          },
+                          dragend: function($event) {
+                            _vm.clearClonedRepoNodes($event)
+                          },
+                          click: function($event) {
+                            _vm.handleClick($event, item.value)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                }
+              }
+            ])
           },
           "collection-cluster",
           _vm.cluster,
           false
-        ),
-        [
-          _c(
-            "div",
-            { key: _vm.item.value.node.id },
-            [
-              _vm._v(
-                '\n      slot="star"\n      slot-scope="{cell, item}"\n      '
-              ),
-              _c("Star", {
-                attrs: {
-                  star: _vm.item.value,
-                  "data-id": _vm.item.value.node.id,
-                  selected: _vm.starIsCurrentStar(_vm.item.value),
-                  draggable: "true"
-                },
-                nativeOn: {
-                  dragstart: function($event) {
-                    _vm.starDragged($event)
-                  },
-                  dragend: function($event) {
-                    _vm.clearClonedRepoNodes($event)
-                  },
-                  click: function($event) {
-                    _vm.handleClick($event, _vm.item.value)
-                  }
-                }
-              })
-            ],
-            1
-          )
-        ]
+        )
       )
     ],
     1
