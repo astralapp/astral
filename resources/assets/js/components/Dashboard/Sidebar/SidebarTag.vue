@@ -18,7 +18,7 @@
       class="opacity-0 transition-opacity edit-tag absolute pin-r">
       <button
         class="text-grey hover:text-white px-2"
-        @click.stop="editTagDropdownShowing = !editTagDropdownShowing">
+        @click.stop="toggleEditTagDropdown">
         <Icon
           type="MoreHorizontalIcon"
           height="14"
@@ -26,6 +26,7 @@
       </button>
       <edit-tag-dropdown
         v-click-outside="hideEditTagDropdown"
+        ref="editTagDropdown"
         :tag="tag"
         :visible="editTagDropdownShowing"
         @deleteTag="deleteTag"
@@ -55,6 +56,13 @@ export default {
       isHighlighted: false
     }
   },
+  mounted () {
+    this.$bus.$on('editTagDropdownOpened', (tagId) => {
+      if (tagId !== this.tag.id) {
+        this.hideEditTagDropdown()
+      }
+    })
+  },
   methods: {
     deleteTag () {
       this.$emit('deleteTag', this.tag.id)
@@ -63,6 +71,12 @@ export default {
     renameTag (name) {
       this.$emit('renameTag', { id: this.tag.id, name: name })
       this.hideEditTagDropdown()
+    },
+    toggleEditTagDropdown () {
+      this.editTagDropdownShowing = !this.editTagDropdownShowing
+      if (this.editTagDropdownShowing) {
+        this.$bus.$emit('editTagDropdownOpened', this.tag.id)
+      }
     },
     hideEditTagDropdown () {
       this.editTagDropdownShowing = false
