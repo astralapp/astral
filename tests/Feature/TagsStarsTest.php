@@ -16,19 +16,17 @@ class TagsStarsTest extends TestCase
         parent::setUp();
 
         $this->login();
-
     }
 
     /** @test */
     public function an_existing_tag_can_be_pushed_to_a_stars_tags()
     {
-
         $tag = create('Astral\Models\Tag', ['user_id' => auth()->id()]);
         $star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
 
         $response = $this->postJson('/api/star/tags', [
             'starIds' => [$star->relay_id],
-            'tag' => $tag,
+            'tag'     => $tag,
         ]);
 
         $response->assertStatus(200)->assertJson([
@@ -52,7 +50,7 @@ class TagsStarsTest extends TestCase
 
         $response = $this->putJson('/api/star/tags', [
             'relayId' => $star->relay_id,
-            'tags' => $tags,
+            'tags'    => $tags,
         ]);
 
         $response->assertStatus(200);
