@@ -14,18 +14,21 @@ class StarTagsController extends Controller
 
     public function store(Request $request)
     {
-        $id = $request->input('relayId');
-        $tag_id = $request->input('tagId');
-        $star = auth()->user()->stars()->withRepoId($id)->first();
-        if (!is_null($star)) {
-            $star->tags()->sync([$tag_id], false);
-            $star->save();
-        } else {
-            $star = new Star();
-            $star->relay_id = $id;
-            $star->user_id = auth()->id();
-            $star->save();
-            $star->tags()->attach($tag_id);
+        $starIds = $request->input('starIds');
+        $tagId = $request->input('tag')['id'];
+
+        foreach ($starIds as $id) {
+            $star = auth()->user()->stars()->withRepoId($id)->first();
+            if (!is_null($star)) {
+                $star->tags()->sync([$tagId], false);
+                $star->save();
+            } else {
+                $star = new Star();
+                $star->relay_id = $id;
+                $star->user_id = auth()->id();
+                $star->save();
+                $star->tags()->attach($tagId);
+            }
         }
 
         return [

@@ -39420,20 +39420,20 @@ exports.default = function (obj, key, value) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADD_TAG; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return SET_TAGS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return SET_CURRENT_TAG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_TAG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DELETE_TAG; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return UPDATE_TAG; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return SET_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return RESET_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return SET_TOTAL_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return SET_STARS_PAGE_INFO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return CLEAR_STARS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return PUSH_STAR_TAG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return CLEAR_STARS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ADD_TAG_TO_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return SET_STAR_TAGS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return MAP_USER_STARS_TO_GITHUB_STARS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return MAP_USER_STARS_TO_GITHUB_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SET_CURRENT_LANGUAGE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return SET_USER_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return SET_CURRENT_STAR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ADD_TO_CURRENT_STARS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return ADD_TO_CURRENT_STARS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return SET_README; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return SET_VIEWING_UNTAGGED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return SET_STAR_NOTES; });
@@ -39452,7 +39452,7 @@ var RESET_STARS = 'RESET_STARS';
 var SET_TOTAL_STARS = 'SET_TOTAL_STARS';
 var SET_STARS_PAGE_INFO = 'SET_STARS_PAGE_INFO';
 var CLEAR_STARS = 'CLEAR_STARS';
-var PUSH_STAR_TAG = 'PUSH_STAR_TAG';
+var ADD_TAG_TO_STARS = 'ADD_TAG_TO_STARS';
 var SET_STAR_TAGS = 'SET_STAR_TAGS';
 var MAP_USER_STARS_TO_GITHUB_STARS = 'MAP_USER_STARS_TO_GITHUB_STARS';
 var SET_CURRENT_LANGUAGE = 'SET_CURRENT_LANGUAGE';
@@ -59327,7 +59327,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     });
   },
 
-  methods: __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_11_vuex__["b" /* mapActions */])(['addTag', 'fetchTags', 'setCurrentTag', 'setCurrentLanguage', 'setViewingUntagged', 'pushStarTag', 'reorderTags', 'sortTags', 'deleteTag', 'renameTag', 'fetchGitHubStars', 'cleanupStars']), {
+  methods: __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_11_vuex__["b" /* mapActions */])(['addTag', 'fetchTags', 'setCurrentTag', 'setCurrentLanguage', 'setViewingUntagged', 'addTagToStars', 'reorderTags', 'sortTags', 'deleteTag', 'renameTag', 'fetchGitHubStars', 'cleanupStars']), {
     refreshStars: function refreshStars() {
       var _this2 = this;
 
@@ -59384,23 +59384,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.setCurrentLanguage('');
     },
     tagStarWithData: function tagStarWithData(_ref) {
-      var _this3 = this;
-
       var data = _ref.data,
           id = _ref.id;
 
       var tag = this.tags.find(function (tag) {
         return tag.id === parseInt(id, 10);
       });
-      var pushStar = function pushStar(data) {
-        return _this3.pushStarTag({ starId: data.id, tag: tag });
-      };
       if (Array.isArray(data)) {
-        data.forEach(function (star) {
-          return pushStar(star);
-        });
+        this.addTagToStars({ stars: data, tag: tag });
       } else {
-        pushStar(data);
+        this.addTagToStars({ stars: [data], tag: tag });
       }
     }
   })
@@ -91242,7 +91235,7 @@ var getters = {
 
 var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["m" /* SET_STARS */], function (state, edges) {
   state.stars = state.stars.concat(edges);
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["c" /* CLEAR_STARS */], function (state) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["d" /* CLEAR_STARS */], function (state) {
   state.stars = [];
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["s" /* SET_TOTAL_STARS */], function (state, total) {
   state.totalStars = total;
@@ -91250,23 +91243,27 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
   state.pageInfo = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, info);
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["h" /* SET_CURRENT_LANGUAGE */], function (state, language) {
   state.currentLanguage = language;
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["f" /* PUSH_STAR_TAG */], function (state, _ref) {
-  var starId = _ref.starId,
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["b" /* ADD_TAG_TO_STARS */], function (state, _ref) {
+  var stars = _ref.stars,
       tag = _ref.tag;
 
-  state.stars = state.stars.map(function (star) {
-    if (star.node.id === starId && !star.tags.map(function (tag) {
-      return tag.name;
-    }).includes(tag.name)) {
-      star.tags.push(tag);
-      return star;
-    } else {
-      return star;
-    }
+  stars.forEach(function (_ref2) {
+    var id = _ref2.id;
+
+    state.stars = state.stars.map(function (star) {
+      if (star.node.id === id && !star.tags.map(function (tag) {
+        return tag.name;
+      }).includes(tag.name)) {
+        star.tags.push(tag);
+        return star;
+      } else {
+        return star;
+      }
+    });
   });
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["p" /* SET_STAR_TAGS */], function (state, _ref2) {
-  var starId = _ref2.starId,
-      tags = _ref2.tags;
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["p" /* SET_STAR_TAGS */], function (state, _ref3) {
+  var starId = _ref3.starId,
+      tags = _ref3.tags;
 
   state.stars = state.stars.map(function (star) {
     if (star.node.id === starId) {
@@ -91276,7 +91273,7 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
   });
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["u" /* SET_USER_STARS */], function (state, stars) {
   state.userStars = [].concat(stars);
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["e" /* MAP_USER_STARS_TO_GITHUB_STARS */], function (state) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["f" /* MAP_USER_STARS_TO_GITHUB_STARS */], function (state) {
   var userStars = state.userStars;
   state.stars.map(function (star) {
     var userStar = userStars.find(function (s) {
@@ -91296,15 +91293,15 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
   });
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["i" /* SET_CURRENT_STAR */], function (state, star) {
   state.currentStars = [__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, star)];
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["b" /* ADD_TO_CURRENT_STARS */], function (state, star) {
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["c" /* ADD_TO_CURRENT_STARS */], function (state, star) {
   state.currentStars.push(star);
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["k" /* SET_README */], function (state, readme) {
   state.readme = readme;
 }), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["v" /* SET_VIEWING_UNTAGGED */], function (state, viewing) {
   state.viewingUntagged = viewing;
-}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["o" /* SET_STAR_NOTES */], function (state, _ref3) {
-  var id = _ref3.id,
-      notes = _ref3.notes;
+}), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_6__mutation_types__["o" /* SET_STAR_NOTES */], function (state, _ref4) {
+  var id = _ref4.id,
+      notes = _ref4.notes;
 
   state.stars.map(function (star) {
     if (star.node.id === id) {
@@ -91323,12 +91320,12 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
 }), _mutations);
 
 var actions = {
-  fetchGitHubStars: function fetchGitHubStars(_ref4, _ref5) {
-    var commit = _ref4.commit;
-    var _ref5$cursor = _ref5.cursor,
-        cursor = _ref5$cursor === undefined ? null : _ref5$cursor,
-        _ref5$refresh = _ref5.refresh,
-        refresh = _ref5$refresh === undefined ? false : _ref5$refresh;
+  fetchGitHubStars: function fetchGitHubStars(_ref5, _ref6) {
+    var commit = _ref5.commit;
+    var _ref6$cursor = _ref6.cursor,
+        cursor = _ref6$cursor === undefined ? null : _ref6$cursor,
+        _ref6$refresh = _ref6.refresh,
+        refresh = _ref6$refresh === undefined ? false : _ref6$refresh;
 
     var cursorQs = cursor ? { cursor: cursor } : {};
     var refreshQs = refresh ? { refresh: true } : {};
@@ -91346,32 +91343,34 @@ var actions = {
         commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["s" /* SET_TOTAL_STARS */], res.totalCount);
       }
 
-      commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["e" /* MAP_USER_STARS_TO_GITHUB_STARS */]);
+      commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["f" /* MAP_USER_STARS_TO_GITHUB_STARS */]);
     });
   },
-  fetchUserStars: function fetchUserStars(_ref6) {
-    var commit = _ref6.commit;
+  fetchUserStars: function fetchUserStars(_ref7) {
+    var commit = _ref7.commit;
 
     __WEBPACK_IMPORTED_MODULE_7__api_client_js__["a" /* default */].withAuth().get('/api/stars').then(function (res) {
       commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["u" /* SET_USER_STARS */], res);
     });
   },
-  setCurrentLanguage: function setCurrentLanguage(_ref7, language) {
-    var commit = _ref7.commit;
+  setCurrentLanguage: function setCurrentLanguage(_ref8, language) {
+    var commit = _ref8.commit;
 
     commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["h" /* SET_CURRENT_LANGUAGE */], language);
   },
-  pushStarTag: function pushStarTag(_ref8, _ref9) {
-    var commit = _ref8.commit,
-        rootState = _ref8.rootState;
-    var starId = _ref9.starId,
-        tag = _ref9.tag;
+  addTagToStars: function addTagToStars(_ref9, data) {
+    var commit = _ref9.commit;
 
-    commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["f" /* PUSH_STAR_TAG */], { starId: starId, tag: tag });
-    __WEBPACK_IMPORTED_MODULE_7__api_client_js__["a" /* default */].withAuth().post('/api/star/tags', {
-      relayId: starId,
-      tagId: tag.id
-    }).then(function (res) {
+    commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["b" /* ADD_TAG_TO_STARS */], data);
+
+    var stars = data.stars,
+        tag = data.tag;
+
+    var starIds = stars.map(function (star) {
+      return star.id;
+    });
+
+    __WEBPACK_IMPORTED_MODULE_7__api_client_js__["a" /* default */].withAuth().post('/api/star/tags', { starIds: starIds, tag: tag }).then(function (res) {
       commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["q" /* SET_TAGS */], res.tags);
     });
   },
@@ -91383,7 +91382,7 @@ var actions = {
   addToCurrentStars: function addToCurrentStars(_ref11, star) {
     var commit = _ref11.commit;
 
-    commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["b" /* ADD_TO_CURRENT_STARS */], star);
+    commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["c" /* ADD_TO_CURRENT_STARS */], star);
   },
   fetchReadme: function fetchReadme(_ref12, repoName) {
     var rootState = _ref12.rootState,
@@ -91440,7 +91439,7 @@ var actions = {
 
     __WEBPACK_IMPORTED_MODULE_7__api_client_js__["a" /* default */].withAuth().delete('/api/stars/cleanup').then(function (res) {
       commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["u" /* SET_USER_STARS */], res);
-      commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["e" /* MAP_USER_STARS_TO_GITHUB_STARS */]);
+      commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["f" /* MAP_USER_STARS_TO_GITHUB_STARS */]);
     });
   }
 };
@@ -91914,7 +91913,7 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_help
   state.currentTag = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign___default()({}, tag);
 }), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["a" /* ADD_TAG */], function (state, tag) {
   state.tags = state.tags.concat([tag]);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["d" /* DELETE_TAG */], function (state, id) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["e" /* DELETE_TAG */], function (state, id) {
   var index = state.tags.findIndex(function (tag) {
     return tag.id === id;
   });
@@ -92009,7 +92008,7 @@ var actions = {
     if (state.currentTag.id === id) {
       commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["j" /* SET_CURRENT_TAG */], {});
     }
-    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["d" /* DELETE_TAG */], id);
+    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["e" /* DELETE_TAG */], id);
     var starsWithTag = rootState.stars.stars.filter(function (star) {
       return ~star.tags.map(function (tag) {
         return tag.id;

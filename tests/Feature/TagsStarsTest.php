@@ -16,27 +16,25 @@ class TagsStarsTest extends TestCase
         parent::setUp();
 
         $this->login();
-
-        $this->star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
     }
 
     /** @test */
     public function an_existing_tag_can_be_pushed_to_a_stars_tags()
     {
-        $tag = create('Astral\Models\Tag');
+        $tag = create('Astral\Models\Tag', ['user_id' => auth()->id()]);
+        $star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
 
         $response = $this->postJson('/api/star/tags', [
-            'relayId' => $this->star->relay_id,
-            'tagId'   => $tag->id,
+            'starIds' => [$star->relay_id],
+            'tag'     => $tag,
         ]);
 
-        $response->assertStatus(200);
-        $response->assertJson([
+        $response->assertStatus(200)->assertJson([
             'tags' => [$tag->toArray()],
         ]);
 
-        $this->assertEquals(1, $this->star->tags()->count());
-        $this->assertEquals($tag->name, $this->star->tags->first()->name);
+        $this->assertEquals(1, $star->tags()->count());
+        $this->assertEquals($tag->name, $star->tags->first()->name);
     }
 
     /** @test */
@@ -48,17 +46,19 @@ class TagsStarsTest extends TestCase
             ['name' => 'GraphQL'],
         ];
 
+        $star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
+
         $response = $this->putJson('/api/star/tags', [
-            'relayId' => $this->star->relay_id,
+            'relayId' => $star->relay_id,
             'tags'    => $tags,
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'star' => $this->star->toArray(),
+            'star' => $star->toArray(),
             'tags' => $tags,
         ]);
 
-        $this->assertEquals(3, $this->star->tags()->count());
+        $this->assertEquals(3, $star->tags()->count());
     }
 }

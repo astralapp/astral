@@ -2,7 +2,7 @@ import qs from 'qs'
 import { uniqBy } from 'lodash'
 import {
   CLEAR_STARS,
-  PUSH_STAR_TAG,
+  ADD_TAG_TO_STARS,
   SET_CURRENT_LANGUAGE,
   SET_CURRENT_STAR,
   ADD_TO_CURRENT_STARS,
@@ -50,10 +50,14 @@ const getters = {
       }, {})
   },
   currentLanguage: state => state.currentLanguage,
-  currentStar: state => state.currentStars.length > 0 ? state.currentStars[0] : {},
-  currentStars: state => [...(uniqBy(state.currentStars))],
+  currentStar: state =>
+    state.currentStars.length > 0 ? state.currentStars[0] : {},
+  currentStars: state => [...uniqBy(state.currentStars)],
   currentStarIndex: state => {
-    if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
+    if (
+      state.currentStars[0] !== undefined &&
+      Object.keys(state.currentStars[0]).length
+    ) {
       return state.stars.findIndex(
         star => star.node.id === state.currentStars[0].node.id
       )
@@ -81,17 +85,19 @@ const mutations = {
   [SET_CURRENT_LANGUAGE] (state, language) {
     state.currentLanguage = language
   },
-  [PUSH_STAR_TAG] (state, { starId, tag }) {
-    state.stars = state.stars.map(star => {
-      if (
-        star.node.id === starId &&
-        !star.tags.map(tag => tag.name).includes(tag.name)
-      ) {
-        star.tags.push(tag)
-        return star
-      } else {
-        return star
-      }
+  [ADD_TAG_TO_STARS] (state, { stars, tag }) {
+    stars.forEach(({ id }) => {
+      state.stars = state.stars.map(star => {
+        if (
+          star.node.id === id &&
+          !star.tags.map(tag => tag.name).includes(tag.name)
+        ) {
+          star.tags.push(tag)
+          return star
+        } else {
+          return star
+        }
+      })
     })
   },
   [SET_STAR_TAGS] (state, { starId, tags }) {
@@ -193,14 +199,15 @@ const actions = {
   setCurrentLanguage ({ commit }, language) {
     commit(SET_CURRENT_LANGUAGE, language)
   },
-  pushStarTag ({ commit, rootState }, { starId, tag }) {
-    commit(PUSH_STAR_TAG, { starId, tag })
+  addTagToStars ({ commit }, data) {
+    commit(ADD_TAG_TO_STARS, data)
+
+    const { stars, tag } = data
+    const starIds = stars.map(star => star.id)
+
     client
       .withAuth()
-      .post('/api/star/tags', {
-        relayId: starId,
-        tagId: tag.id
-      })
+      .post('/api/star/tags', { starIds, tag })
       .then(res => {
         commit(SET_TAGS, res.tags)
       })

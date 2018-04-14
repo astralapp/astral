@@ -125,7 +125,7 @@ export default {
       'setCurrentTag',
       'setCurrentLanguage',
       'setViewingUntagged',
-      'pushStarTag',
+      'addTagToStars',
       'reorderTags',
       'sortTags',
       'deleteTag',
@@ -159,11 +159,10 @@ export default {
     },
     tagStarWithData ({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
-      const pushStar = (data) => this.pushStarTag({ starId: data.id, tag: tag })
       if (Array.isArray(data)) {
-        data.forEach((star) => pushStar(star))
+        this.addTagToStars({stars: data, tag})
       } else {
-        pushStar(data)
+        this.addTagToStars({stars: [data], tag})
       }
     }
   }
