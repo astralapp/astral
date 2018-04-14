@@ -51,12 +51,12 @@ class GitHubClient
 GQL;
 
         $response = Zttp::withHeaders([
-      'Authorization' => 'Bearer '.$this->token,
-      'Content-Type'  => 'application/json',
-    ])->post($this->endpoint, [
-      'query'     => $query,
-      'variables' => '',
-    ]);
+            'Authorization' => 'Bearer '.$this->token,
+            'Content-Type'  => 'application/json',
+        ])->post($this->endpoint, [
+            'query'     => $query,
+            'variables' => '',
+        ]);
 
         if ($response->getStatusCode() == 401) {
             throw new InvalidAccessTokenException();
