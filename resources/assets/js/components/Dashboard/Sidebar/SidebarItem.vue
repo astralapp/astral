@@ -40,6 +40,7 @@ export default {
   &-badge {
     transition: background-color 250ms ease, opacity 250ms ease;
     padding: 0.3rem 0.7rem;
+    pointer-events: none;
   }
   svg {
     transition: stroke 250ms ease;

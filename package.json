@@ -1,14 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "dev":
-      "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch":
-      "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "hot":
-      "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod":
-      "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "lint": "eslint resources/assets/js --ext='.js,.vue'",
@@ -17,8 +13,14 @@
     "prepush": "npm test"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "vue"],
-    "setupFiles": ["<rootDir>/resources/assets/js/__tests__/utils/mockument"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "setupFiles": [
+      "<rootDir>/resources/assets/js/__tests__/utils/mockument"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/resources/assets/js/__tests__/utils/"
     ],
@@ -42,11 +44,9 @@
     "lodash": "^4.17.4",
     "nanoid": "^1.0.1",
     "qs": "^6.5.1",
-    "simplemde":
-      "https://github.com/Ionaru/simplemde-markdown-editor/tarball/development",
+    "simplemde": "https://github.com/Ionaru/simplemde-markdown-editor/tarball/development",
     "v-click-outside": "^1.0.4",
     "vue": "^2.5.13",
-    "vue-clickaway": "^2.1.0",
     "vue-collection-cluster": "^1.0.11",
     "vue-feather-icons": "^4.5.0",
     "vue-global-events": "^1.0.2",

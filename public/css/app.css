@@ -783,6 +783,7 @@ to {
   -webkit-transition: background-color 250ms ease, opacity 250ms ease;
   transition: background-color 250ms ease, opacity 250ms ease;
   padding: .3rem .7rem;
+  pointer-events: none;
 }
 .dashboard-list-item svg[data-v-5aba6afa] {
   -webkit-transition: stroke 250ms ease;
@@ -819,7 +820,13 @@ to {
   stroke: #fff;
 }
 .dashboard-list-item.tag.selected .edit-tag-icon {
-  stroke: #21a179;
+  stroke: #b8c2cc;
+}
+.dashboard-list-item.tag.selected .edit-tag-icon:hover {
+  stroke: #fff;
+}
+.dashboard-list-item.tag.editing .dashboard-list-item-badge {
+  opacity: 0;
 }
 .dashboard-list-item.tag.gu-mirror,
 .dashboard-list-item.tag.gu-transit {

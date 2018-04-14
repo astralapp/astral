@@ -4,7 +4,7 @@
       v-click-outside="hideDropdown"
       :class="{'text-grey': dropdownVisible}"
       class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none"
-      @click.stop="toggleDropdown">
+      @click="toggleDropdown">
       <span>Sort</span>
       <Icon
         type="ChevronDownIcon"

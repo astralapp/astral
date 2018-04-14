@@ -5,7 +5,7 @@
         :active="refreshingStars"
         @click.native="refreshStars"/>
     </sidebar-header>
-    <ul class="dashboard-list sidebar-stars list-none m-0 p-0 border-b border-black pb-3">
+    <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
       <sidebar-item
         :class="{ 'selected': noFiltersApplied }"
         class="all-stars"
@@ -29,21 +29,21 @@
     <new-tag-form @submit="doAddTag"/>
     <ul
       ref="sidebarTags"
-      class="dashboard-list sidebar-tags list-none m-0 p-0 border-b border-black pb-3">
+      class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
       <sidebar-tag
         v-for="tag in tags"
         :tag="tag"
         :key="tag.id"
         :is-selected="currentTag.id == tag.id"
         :data-id="tag.id"
-        @click.native="setCurrentTag(tag)"
+        @click.native="doSetCurrentTag(tag, $event)"
         @starsDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
         @renameTag="renameTag"
       />
     </ul>
     <sidebar-header title="Languages"/>
-    <ul class="dashboard-list sidebar-languages list-none m-0 p-0 border-b border-black pb-3">
+    <ul class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
       <sidebar-item
         v-for="(value, key) in languages"
         :key="key"
@@ -151,6 +151,11 @@ export default {
     doDeleteTag (id) {
       // TODO: Ask user to confirm
       this.deleteTag(id)
+    },
+    doSetCurrentTag (tag, e) {
+      if (e.target.classList.contains('dashboard-list-item')) {
+        this.setCurrentTag(tag)
+      }
     },
     resetFilters () {
       this.setViewingUntagged(false)

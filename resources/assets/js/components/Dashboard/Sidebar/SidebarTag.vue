@@ -3,7 +3,8 @@
     :badge="tag.stars_count"
     :class="{
       'selected': isSelected,
-      'dragging': isHighlighted
+      'dragging': isHighlighted,
+      'editing': editTagDropdownShowing
     }"
     :title="tag.name"
     icon="TagIcon"
@@ -14,18 +15,18 @@
     @drop.native.stop.prevent="starsDropped"
   >
     <div
+      v-click-outside="hideEditTagDropdown"
       :class="{'opacity-100': editTagDropdownShowing}"
       class="opacity-0 transition-opacity edit-tag absolute pin-r">
       <button
         class="text-grey hover:text-white px-2"
-        @click.stop="toggleEditTagDropdown">
+        @click="toggleEditTagDropdown">
         <Icon
           type="MoreHorizontalIcon"
           height="14"
           class="edit-tag-icon stroke-none fill-current relative"/>
       </button>
       <edit-tag-dropdown
-        v-click-outside="hideEditTagDropdown"
         ref="editTagDropdown"
         :tag="tag"
         :visible="editTagDropdownShowing"
@@ -56,13 +57,6 @@ export default {
       isHighlighted: false
     }
   },
-  mounted () {
-    this.$bus.$on('editTagDropdownOpened', (tagId) => {
-      if (tagId !== this.tag.id) {
-        this.hideEditTagDropdown()
-      }
-    })
-  },
   methods: {
     deleteTag () {
       this.$emit('deleteTag', this.tag.id)
@@ -74,9 +68,6 @@ export default {
     },
     toggleEditTagDropdown () {
       this.editTagDropdownShowing = !this.editTagDropdownShowing
-      if (this.editTagDropdownShowing) {
-        this.$bus.$emit('editTagDropdownOpened', this.tag.id)
-      }
     },
     hideEditTagDropdown () {
       this.editTagDropdownShowing = false
@@ -118,7 +109,15 @@ export default {
   }
   &.selected {
     .edit-tag-icon {
-      stroke: config('colors.brand');
+      stroke: config('colors.grey');
+      &:hover {
+        stroke: config('colors.white');
+      }
+    }
+  }
+  &.editing {
+    .dashboard-list-item-badge {
+      opacity: 0;
     }
   }
   &.gu-mirror,

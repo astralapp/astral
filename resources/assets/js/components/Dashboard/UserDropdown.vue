@@ -1,9 +1,9 @@
 <template>
   <div class="relative ml-auto">
     <div
-      v-on-clickaway="hideDropdown"
+      v-click-outside="hideDropdown"
       class="flex items-center cursor-pointer"
-      @click="visible = !visible">
+      @click="toggleDropdown">
       <img
         :src="user.avatar_url"
         :alt="user.username"
@@ -52,14 +52,16 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { mixin as clickaway } from 'vue-clickaway'
+import vClickOutside from 'v-click-outside'
 import Icon from '@/components/Icon'
 export default {
   name: 'UserDropdown',
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   components: {
     Icon
   },
-  mixins: [clickaway],
   data () {
     return {
       visible: false
@@ -69,6 +71,10 @@ export default {
     ...mapGetters(['user'])
   },
   methods: {
+    toggleDropdown () {
+      this.$bus.$emit('dropdownOpened', -1)
+      this.visible = !this.visible
+    },
     hideDropdown () {
       this.visible = false
     },
