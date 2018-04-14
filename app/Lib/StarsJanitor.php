@@ -67,7 +67,7 @@ class StarsJanitor
         $token = $this->user()->access_token;
 
         return Zttp::withHeaders([
-      'Accept' => 'application/vnd.github.jean-grey-preview+json',
-    ])->get("https://api.github.com/repositories/{$id}?access_token={$token}")->json();
+            'Accept' => 'application/vnd.github.jean-grey-preview+json',
+        ])->get("https://api.github.com/repositories/{$id}?access_token={$token}")->json();
     }
 }
