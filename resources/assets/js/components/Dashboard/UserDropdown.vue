@@ -19,31 +19,31 @@
     </div>
     <div
       v-show="visible"
-      class="user-dropdown-container absolute pin-t pin-r bg-white rounded shadow z-10 overflow-hidden">
-      <ul class="list-reset">
+      class="dropdown user-dropdown-container">
+      <ul>
         <li>
           <a
-            class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
+            class="dropdown-item"
             href="#"
             @click.prevent="showSettingsModal">Settings</a>
         </li>
         <li>
           <a
-            class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
+            class="dropdown-item"
             href="https://github.com/astralapp/astral"
             target="_blank"
             rel="noopener">GitHub</a>
         </li>
         <li>
           <a
-            class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
+            class="dropdown-item"
             href="https://patreon.com/syropian"
             target="_blank"
             rel="noopener">Patreon</a>
         </li>
         <li>
           <a
-            class="block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest"
+            class="dropdown-item"
             href="#">Logout</a>
         </li>
       </ul>

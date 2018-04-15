@@ -9,10 +9,10 @@
       <input
         v-model="tagName"
         type="text"
-        class="text-sm text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-1 px-2 mb-4 w-full focus-none appearance-none transition-border-color">
-      <button class="text-sm bg-brand hover:bg-brand-light text-white font-bold py-1 px-3 rounded mb-2">Save</button>
+        class="text-input text-sm py-1 px-2 mb-4 w-full">
+      <button class="btn btn-brand text-sm py-1 px-3 mb-2">Save</button>
       <button
-        class="text-sm bg-red hover:bg-red-dark text-white font-bold py-1 px-3 rounded"
+        class="btn btn-danger text-sm py-1 px-3"
         @click.stop.prevent="deleteTag">Delete</button>
     </form>
   </div>

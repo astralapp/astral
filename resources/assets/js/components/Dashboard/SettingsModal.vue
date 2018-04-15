@@ -12,7 +12,7 @@
         <input
           type="email"
           placeholder="you@example.com"
-          class="text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-2 px-4 w-64 focus-none appearance-none transition-border-color" >
+          class="text-input w-64" >
       </div>
     </div>
     <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between items-center">

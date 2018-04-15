@@ -57749,17 +57749,15 @@ var render = function() {
             expression: "visible"
           }
         ],
-        staticClass:
-          "user-dropdown-container absolute pin-t pin-r bg-white rounded shadow z-10 overflow-hidden"
+        staticClass: "dropdown user-dropdown-container"
       },
       [
-        _c("ul", { staticClass: "list-reset" }, [
+        _c("ul", [
           _c("li", [
             _c(
               "a",
               {
-                staticClass:
-                  "block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest",
+                staticClass: "dropdown-item",
                 attrs: { href: "#" },
                 on: {
                   click: function($event) {
@@ -57791,8 +57789,7 @@ var staticRenderFns = [
       _c(
         "a",
         {
-          staticClass:
-            "block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest",
+          staticClass: "dropdown-item",
           attrs: {
             href: "https://github.com/astralapp/astral",
             target: "_blank",
@@ -57811,8 +57808,7 @@ var staticRenderFns = [
       _c(
         "a",
         {
-          staticClass:
-            "block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest",
+          staticClass: "dropdown-item",
           attrs: {
             href: "https://patreon.com/syropian",
             target: "_blank",
@@ -57828,15 +57824,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("li", [
-      _c(
-        "a",
-        {
-          staticClass:
-            "block px-4 py-2 text-grey-darkest no-underline hover:bg-grey-lightest",
-          attrs: { href: "#" }
-        },
-        [_vm._v("Logout")]
-      )
+      _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+        _vm._v("Logout")
+      ])
     ])
   }
 ]
@@ -59108,8 +59098,7 @@ var render = function() {
                 expression: "tagName"
               }
             ],
-            staticClass:
-              "text-sm text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-1 px-2 mb-4 w-full focus-none appearance-none transition-border-color",
+            staticClass: "text-input text-sm py-1 px-2 mb-4 w-full",
             attrs: { type: "text" },
             domProps: { value: _vm.tagName },
             on: {
@@ -59124,18 +59113,14 @@ var render = function() {
           _vm._v(" "),
           _c(
             "button",
-            {
-              staticClass:
-                "text-sm bg-brand hover:bg-brand-light text-white font-bold py-1 px-3 rounded mb-2"
-            },
+            { staticClass: "btn btn-brand text-sm py-1 px-3 mb-2" },
             [_vm._v("Save")]
           ),
           _vm._v(" "),
           _c(
             "button",
             {
-              staticClass:
-                "text-sm bg-red hover:bg-red-dark text-white font-bold py-1 px-3 rounded",
+              staticClass: "btn btn-danger text-sm py-1 px-3",
               on: {
                 click: function($event) {
                   $event.stopPropagation()
@@ -59374,19 +59359,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(175)
+  __webpack_require__(502)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(176)
 /* template */
-var __vue_template__ = __webpack_require__(177)
+var __vue_template__ = __webpack_require__(503)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-20dca718"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -59419,12 +59404,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 175 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 175 */,
 /* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -59462,111 +59442,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 177 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "show",
-          rawName: "v-show",
-          value: _vm.visible,
-          expression: "visible"
-        }
-      ],
-      staticClass:
-        "tag-sort-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden"
-    },
-    [
-      _c("ul", { staticClass: "tag-sort-items list-reset mv2 pa0" }, [
-        _c(
-          "li",
-          {
-            staticClass:
-              "tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap",
-            on: {
-              click: function($event) {
-                _vm.sortTags("ALPHA_ASC")
-              }
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-sort-alpha-down mr1" }),
-            _vm._v(" Alphabetical (A-Z)")
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap",
-            on: {
-              click: function($event) {
-                _vm.sortTags("ALPHA_DESC")
-              }
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-sort-alpha-up mr1" }),
-            _vm._v(" Alphabetical (Z-A)")
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap",
-            on: {
-              click: function($event) {
-                _vm.sortTags("STARS_DESC")
-              }
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-sort-numeric-down mr1" }),
-            _vm._v(" Most Stars")
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass:
-              "tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap",
-            on: {
-              click: function($event) {
-                _vm.sortTags("STARS_ASC")
-              }
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-sort-numeric-up mr1" }),
-            _vm._v(" Fewest Stars")
-          ]
-        )
-      ])
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-20dca718", module.exports)
-  }
-}
-
-/***/ }),
+/* 177 */,
 /* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -62634,8 +62510,7 @@ var render = function() {
                 expression: "currentSearchQuery"
               }
             ],
-            staticClass:
-              "search-input text-grey-darkest h-10 border-2 border-grey-light rounded pr-2 pl-8 w-full focus-none transition-border-color",
+            staticClass: "search-input text-input w-full pl-8",
             attrs: { type: "text", placeholder: "Gaze through your telescope" },
             domProps: { value: _vm.currentSearchQuery },
             on: {
@@ -88512,8 +88387,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "relative toggle-switch" }, [
           _c("input", {
-            staticClass:
-              "text-grey-darkest border-2 border-grey-light focus:border-grey rounded py-2 px-4 w-64 focus-none appearance-none transition-border-color",
+            staticClass: "text-input w-64",
             attrs: { type: "email", placeholder: "you@example.com" }
           })
         ])
@@ -92136,6 +92010,117 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-51d4c052", module.exports)
+  }
+}
+
+/***/ }),
+/* 501 */,
+/* 502 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 503 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.visible,
+          expression: "visible"
+        }
+      ],
+      staticClass: "dropdown tag-sort-dropdown"
+    },
+    [
+      _c("ul", { staticClass: "tag-sort-items" }, [
+        _c(
+          "li",
+          {
+            staticClass:
+              "tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap",
+            on: {
+              click: function($event) {
+                _vm.sortTags("ALPHA_ASC")
+              }
+            }
+          },
+          [
+            _c("i", { staticClass: "fas fa-sort-alpha-down mr1" }),
+            _vm._v(" Alphabetical (A-Z)")
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass:
+              "tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap",
+            on: {
+              click: function($event) {
+                _vm.sortTags("ALPHA_DESC")
+              }
+            }
+          },
+          [
+            _c("i", { staticClass: "fas fa-sort-alpha-up mr1" }),
+            _vm._v(" Alphabetical (Z-A)")
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass:
+              "tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap",
+            on: {
+              click: function($event) {
+                _vm.sortTags("STARS_DESC")
+              }
+            }
+          },
+          [
+            _c("i", { staticClass: "fas fa-sort-numeric-down mr1" }),
+            _vm._v(" Most Stars")
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass:
+              "tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap",
+            on: {
+              click: function($event) {
+                _vm.sortTags("STARS_ASC")
+              }
+            }
+          },
+          [
+            _c("i", { staticClass: "fas fa-sort-numeric-up mr1" }),
+            _vm._v(" Fewest Stars")
+          ]
+        )
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-20dca718", module.exports)
   }
 }
 

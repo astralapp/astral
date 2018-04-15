@@ -124,11 +124,16 @@ let colors = {
   pink: '#f66d9b',
   'pink-light': '#fa7ea8',
   'pink-lighter': '#ffbbca',
-  'pink-lightest': '#ffebef'
-}
+  'pink-lightest': '#ffebef',
 
-colors['brand'] = '#21a179'
-colors['brand-light'] = '#1fbf8d'
+  'brand-darkest': '#0A3024',
+  'brand-darker': '#146149',
+  'brand-dark': '#1E916D',
+  brand: '#21A179',
+  'brand-light': '#64BDA1',
+  'brand-lighter': '#A6D9C9',
+  'brand-lightest': '#E9F6F2'
+}
 
 module.exports = {
   /*

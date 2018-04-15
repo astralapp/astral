@@ -1,19 +1,19 @@
 <template>
   <div
     v-show="visible"
-    class="tag-sort-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden">
-    <ul class="tag-sort-items list-reset mv2 pa0">
+    class="dropdown tag-sort-dropdown">
+    <ul class="tag-sort-items">
       <li
-        class="tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap"
+        class="tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap"
         @click="sortTags('ALPHA_ASC')"><i class="fas fa-sort-alpha-down mr1"/> Alphabetical (A-Z)</li>
       <li
-        class="tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap"
+        class="tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap"
         @click="sortTags('ALPHA_DESC')"><i class="fas fa-sort-alpha-up mr1"/> Alphabetical (Z-A)</li>
       <li
-        class="tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap"
+        class="tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap"
         @click="sortTags('STARS_DESC')"><i class="fas fa-sort-numeric-down mr1"/> Most Stars</li>
       <li
-        class="tag-sort-item text-xs text-grey-darkest hover:bg-grey-lightest cursor-pointer block py-3 pl-3 pr-4 whitespace-no-wrap"
+        class="tag-sort-item dropdown-item text-xs py-3 pl-3 pr-4 whitespace-no-wrap"
         @click="sortTags('STARS_ASC')"><i class="fas fa-sort-numeric-up mr1"/> Fewest Stars</li>
     </ul>
   </div>
@@ -29,11 +29,8 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .tag-sort-dropdown {
-  background-clip: padding-box;
-  border: 1px solid rgba(#364349, 0.1);
-  top: 20px;
-  z-index: 99;
+  margin-top: 20px;
 }
 </style>
