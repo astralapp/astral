@@ -979,10 +979,10 @@ to {
   stroke: #dae1e7;
 }
 
-.github-clone-url {
+.github-clone-url[data-v-51d4c052] {
   width: 300px;
 }
-.github-clone-url:focus {
+.github-clone-url[data-v-51d4c052]:focus {
   border-color: #b8c2cc;
 }
 /**

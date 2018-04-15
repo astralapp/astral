@@ -1,5 +1,9 @@
 <template>
   <div class="stars border-r border-grey-light bg-grey-lighter relative overflow-hidden">
+    <p
+      v-if="!filteredStars.length"
+      class="text-grey font-bold flex flex-col justify-center items-center h-full"
+    >No Results</p>
     <GlobalEvents
       @keyup.down="nextStar"
       @keyup.up="previousStar"

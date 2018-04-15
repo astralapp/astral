@@ -60792,6 +60792,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -62397,6 +62401,17 @@ var render = function() {
         "stars border-r border-grey-light bg-grey-lighter relative overflow-hidden"
     },
     [
+      !_vm.filteredStars.length
+        ? _c(
+            "p",
+            {
+              staticClass:
+                "text-grey font-bold flex flex-col justify-center items-center h-full"
+            },
+            [_vm._v("No Results")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("GlobalEvents", {
         on: {
           keyup: [
@@ -62661,19 +62676,19 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(216)
+  __webpack_require__(499)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(217)
 /* template */
-var __vue_template__ = __webpack_require__(420)
+var __vue_template__ = __webpack_require__(500)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-51d4c052"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -62706,12 +62721,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 216 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 216 */,
 /* 217 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -62730,6 +62740,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_Icon__);
 
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -88089,135 +88107,7 @@ if (false) {
 }
 
 /***/ }),
-/* 420 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "star-info bg-grey-lighter relative flex flex-col" },
-    [
-      !_vm.noRepoSelected
-        ? _c(
-            "div",
-            {
-              staticClass:
-                "star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center"
-            },
-            [
-              _c(
-                "button",
-                {
-                  staticClass:
-                    "bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none",
-                  on: {
-                    click: function($event) {
-                      _vm.notesShowing = !_vm.notesShowing
-                    }
-                  }
-                },
-                [
-                  _c("Icon", {
-                    staticClass:
-                      "mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom",
-                    attrs: {
-                      type: _vm.toggleNotesIcon,
-                      height: "16",
-                      width: "16"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("span", [
-                    _vm._v(
-                      _vm._s(_vm.notesShowing ? "Hide Notes" : "Show Notes")
-                    )
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "ml-auto" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "mr-2 font-bold cursor-pointer",
-                    attrs: { for: "starCloneUrl" }
-                  },
-                  [_vm._v("Clone:")]
-                ),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass:
-                    "github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color",
-                  attrs: {
-                    id: "starCloneUrl",
-                    type: "text",
-                    readonly: "readonly"
-                  },
-                  domProps: { value: _vm.currentStarCloneUrl },
-                  on: { focus: _vm.highlightText }
-                })
-              ])
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.noRepoSelected
-        ? _c(
-            "div",
-            {
-              staticClass:
-                "flex flex-1 items-center justify-center w-full bg-grey-lighter"
-            },
-            [
-              _c("span", { staticClass: "font-bold text-grey" }, [
-                _vm._v("No Repo Selected")
-              ])
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.readme ? _c("readme", { attrs: { readme: _vm.readme } }) : _vm._e(),
-      _vm._v(" "),
-      _vm.repoHasNoReadme
-        ? _c(
-            "div",
-            {
-              staticClass:
-                "flex flex-1 items-center justify-center w-full bg-grey-lighter"
-            },
-            [
-              _c("span", { staticClass: "font-bold text-grey" }, [
-                _vm._v("No README found")
-              ])
-            ]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.notesEditorShowing
-        ? _c("notes-editor", {
-            attrs: { notes: _vm.currentStarNotes },
-            on: { save: _vm.doEditStarNotes }
-          })
-        : _vm._e()
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-51d4c052", module.exports)
-  }
-}
-
-/***/ }),
+/* 420 */,
 /* 421 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -92066,6 +91956,188 @@ var actions = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 500 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "star-info bg-grey-lighter relative flex flex-col" },
+    [
+      !_vm.noRepoSelected
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center"
+            },
+            [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none",
+                  on: {
+                    click: function($event) {
+                      _vm.notesShowing = !_vm.notesShowing
+                    }
+                  }
+                },
+                [
+                  _c("Icon", {
+                    staticClass:
+                      "mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom",
+                    attrs: {
+                      type: _vm.toggleNotesIcon,
+                      height: "16",
+                      width: "16"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v(
+                      _vm._s(_vm.notesShowing ? "Hide Notes" : "Show Notes")
+                    )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "ml-auto" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "mr-2 font-bold cursor-pointer",
+                    attrs: { for: "starCloneUrl" }
+                  },
+                  [_vm._v("Clone:")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass:
+                    "github-clone-url rounded border-2 border-grey-light h-10 px-2 focus-none transition-border-color",
+                  attrs: {
+                    id: "starCloneUrl",
+                    type: "text",
+                    readonly: "readonly"
+                  },
+                  domProps: { value: _vm.currentStarCloneUrl },
+                  on: { focus: _vm.highlightText }
+                })
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.noRepoSelected
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter no-repo-selected"
+            },
+            [
+              _c("img", {
+                staticClass: "w-64 mb-8",
+                attrs: { src: "/images/not-selected.svg" }
+              }),
+              _vm._v(" "),
+              _c(
+                "span",
+                {
+                  staticClass: "font-bold bg-grey px-4 py-2 text-white rounded"
+                },
+                [_vm._v("No Repo Selected")]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.readme ? _c("readme", { attrs: { readme: _vm.readme } }) : _vm._e(),
+      _vm._v(" "),
+      _vm.repoHasNoReadme
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter"
+            },
+            [
+              _c("img", {
+                staticClass: "w-64 mb-8",
+                attrs: { src: "/images/no-readme.svg" }
+              }),
+              _vm._v(" "),
+              _c(
+                "span",
+                {
+                  staticClass: "font-bold bg-grey px-4 py-2 text-white rounded"
+                },
+                [_vm._v("No README Found")]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.notesEditorShowing
+        ? _c("notes-editor", {
+            attrs: { notes: _vm.currentStarNotes },
+            on: { save: _vm.doEditStarNotes }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-51d4c052", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

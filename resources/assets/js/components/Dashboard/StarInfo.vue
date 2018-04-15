@@ -29,16 +29,24 @@
     </div>
     <div
       v-if="noRepoSelected"
-      class="flex flex-1 items-center justify-center w-full bg-grey-lighter">
-      <span class="font-bold text-grey">No Repo Selected</span>
+      class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter no-repo-selected">
+      <img
+        src="/images/not-selected.svg"
+        class="w-64 mb-8"
+      />
+      <span class="font-bold bg-grey px-4 py-2 text-white rounded">No Repo Selected</span>
     </div>
     <readme
       v-if="readme"
       :readme="readme"/>
     <div
       v-if="repoHasNoReadme"
-      class="flex flex-1 items-center justify-center w-full bg-grey-lighter">
-      <span class="font-bold text-grey">No README found</span>
+      class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter">
+      <img
+        src="/images/no-readme.svg"
+        class="w-64 mb-8"
+      />
+      <span class="font-bold bg-grey px-4 py-2 text-white rounded">No README Found</span>
     </div>
     <notes-editor
       v-if="notesEditorShowing"
@@ -102,7 +110,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .github-clone-url {
   width: 300px;
   &:focus {

@@ -7,7 +7,8 @@ module.exports = {
   plugins: ['vue'],
   rules: {
     'vue/require-default-prop': 'off',
-    'vue/require-prop-types': 'off'
+    'vue/require-prop-types': 'off',
+    'vue/html-self-closing': 'off'
   },
   overrides: [
     {
