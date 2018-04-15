@@ -234,6 +234,9 @@ const actions = {
       .then(res => {
         commit(SET_README, res)
       })
+      .catch(() => {
+        commit(SET_README, '')
+      })
   },
   setViewingUntagged ({ commit }, viewing) {
     if (viewing) {

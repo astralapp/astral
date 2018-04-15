@@ -91310,6 +91310,8 @@ var actions = {
       Accept: 'application/vnd.github.v3.html'
     }).then(function (res) {
       commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["k" /* SET_README */], res);
+    }).catch(function () {
+      commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["k" /* SET_README */], '');
     });
   },
   setViewingUntagged: function setViewingUntagged(_ref13, viewing) {
