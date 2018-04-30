@@ -24,11 +24,12 @@
       <button
         :class="[ settings.deleteUserClicked ? 'btn-danger' : 'border-red' ]"
         class="btn text-sm py-1 px-3"
-        @click="deleteUser">{{ settings.deleteUserClicked ? 'Delete Forever!' : 'Are you sure?' }}</button>
+        @click="deleteUserButtonClicked">{{ settings.deleteUserClicked ? 'Delete Forever!' : 'Are you sure?' }}</button>
     </div>
   </modal>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import ToggleSwitch from '@/components/ToggleSwitch'
 export default {
   name: 'SettingsModal',
@@ -45,10 +46,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['deleteUser']),
     closeModal () {
       this.$modal.hide('settings-modal')
     },
-    deleteUser () {
+    deleteUserButtonClicked () {
+      if (this.settings.deleteUserClicked) {
+        this.deleteUser(this.user.id)
+      }
       this.settings.deleteUserClicked = !this.settings.deleteUserClicked
     }
   }

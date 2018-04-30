@@ -10,6 +10,7 @@
 Route::get('auth/me', 'AuthController@me');
 Route::get('auth/refresh', 'AuthController@refresh');
 Route::get('auth/logout', 'AuthController@logout');
+Route::delete('auth/delete', 'AuthController@destroy');
 
 Route::get('/tags', 'TagsController@index');
 Route::post('/tags', 'TagsController@store');

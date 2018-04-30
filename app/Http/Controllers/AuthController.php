@@ -3,6 +3,7 @@
 namespace Astral\Http\Controllers;
 
 use Astral\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
@@ -72,5 +73,16 @@ class AuthController extends Controller
     public function guard()
     {
         return Auth::guard();
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        if (\Auth::user()->id === $request->get('id')) {
+            auth()->user()->tags()->delete();
+            auth()->user()->stars()->delete();
+            auth()->user()->delete();
+        }
+
+        return response()->json(204);
     }
 }
