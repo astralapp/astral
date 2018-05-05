@@ -144,7 +144,7 @@ export default {
         this.awesomplete.destroy()
         if (tagsHaveChanged) {
           this.syncStarTags({
-            relayId: this.star.node.id,
+            id: this.star.node.databaseId,
             tags: tagsToSync
           })
         }

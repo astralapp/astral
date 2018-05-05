@@ -25,13 +25,13 @@ class AddsNotesToStarTest extends TestCase
     public function notes_can_be_added_to_a_star()
     {
         $response = $this->postJson('/api/star/notes', [
-            'id'    => $this->star->relay_id,
+            'id'    => $this->star->repo_id,
             'notes' => 'A fancy note.',
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'relay_id' => $this->star->relay_id,
+            'repo_id' => $this->star->repo_id,
             'notes'    => 'A fancy note.',
         ]);
 

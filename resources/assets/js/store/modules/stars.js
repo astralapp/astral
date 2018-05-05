@@ -59,7 +59,7 @@ const getters = {
       Object.keys(state.currentStars[0]).length
     ) {
       return state.stars.findIndex(
-        star => star.node.id === state.currentStars[0].node.id
+        star => star.node.databaseId === state.currentStars[0].node.databaseId
       )
     } else {
       return -1
@@ -89,7 +89,7 @@ const mutations = {
     stars.forEach(({ id }) => {
       state.stars = state.stars.map(star => {
         if (
-          star.node.id === id &&
+          star.node.databaseId === id &&
           !star.tags.map(tag => tag.name).includes(tag.name)
         ) {
           star.tags.push(tag)
@@ -102,7 +102,7 @@ const mutations = {
   },
   [SET_STAR_TAGS] (state, { starId, tags }) {
     state.stars = state.stars.map(star => {
-      if (star.node.id === starId) {
+      if (star.node.databaseId === starId) {
         star.tags = [].concat(tags)
       }
       return star
@@ -114,7 +114,7 @@ const mutations = {
   [MAP_USER_STARS_TO_GITHUB_STARS] (state) {
     const userStars = state.userStars
     state.stars.map(star => {
-      const userStar = userStars.find(s => s.relay_id === star.node.id)
+      const userStar = userStars.find(s => s.repo_id === star.node.databaseId)
       if (userStar && (userStar.tags.length || userStar.notes)) {
         if (userStar.tags.length) {
           star.tags = userStar.tags
@@ -142,7 +142,7 @@ const mutations = {
   },
   [SET_STAR_NOTES] (state, { id, notes }) {
     state.stars.map(star => {
-      if (star.node.id === id) {
+      if (star.node.databaseId === id) {
         star.notes = notes
       }
 
@@ -203,8 +203,7 @@ const actions = {
     commit(ADD_TAG_TO_STARS, data)
 
     const { stars, tag } = data
-    const starIds = stars.map(star => star.id)
-
+    const starIds = stars.map(star => star.databaseId)
     client
       .withAuth()
       .post('/api/star/tags', { starIds, tag })
@@ -244,31 +243,31 @@ const actions = {
     }
     commit(SET_VIEWING_UNTAGGED, viewing)
   },
-  syncStarTags ({ commit }, { relayId, tags }) {
+  syncStarTags ({ commit }, { id, tags }) {
     client
       .withAuth()
       .put('/api/star/tags', {
-        relayId,
+        id,
         tags
       })
       .then(res => {
         commit(SET_TAGS, res.tags)
         commit(SET_STAR_TAGS, {
-          starId: relayId,
+          starId: id,
           tags: res.star.tags
         })
       })
   },
-  editStarNotes ({ commit }, { relayId, notes }) {
+  editStarNotes ({ commit }, { id, notes }) {
     client
       .withAuth()
       .post('/api/star/notes', {
-        id: relayId,
+        id,
         notes
       })
       .then(res => {
         commit(SET_STAR_NOTES, {
-          id: relayId,
+          id,
           notes
         })
       })

@@ -24,7 +24,7 @@ class StarTagsController extends Controller
                 $star->save();
             } else {
                 $star = new Star();
-                $star->relay_id = $id;
+                $star->repo_id = $id;
                 $star->user_id = auth()->id();
                 $star->save();
                 $star->tags()->attach($tagId);
@@ -38,18 +38,19 @@ class StarTagsController extends Controller
 
     public function update(Request $request)
     {
-        $relayIds = [];
-        if ($request->input('relayId') !== null) {
-            $relayIds = [$request->input('relayId')];
+        $ids = [];
+        $id = $request->input('id', null);
+        if ($id !== null) {
+            $ids = [$id];
         } else {
-            $relayIds = $request->input('relayIds');
+            $ids = $id;
         }
-        foreach ($relayIds as $relayId) {
-            $star = auth()->user()->stars()->withRepoId($relayId)->first();
+        foreach ($ids as $starId) {
+            $star = auth()->user()->stars()->withRepoId($starId)->first();
 
             if (!$star) {
                 $star = new Star();
-                $star->relay_id = $relayId;
+                $star->repo_id = $starId;
                 $star->user_id = auth()->id();
                 $star->save();
             }
