@@ -49,7 +49,7 @@ class TagsStarsTest extends TestCase
         $star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
 
         $response = $this->putJson('/api/star/tags', [
-            'id' => $star->repo_id,
+            'id'      => $star->repo_id,
             'tags'    => $tags,
         ]);
 

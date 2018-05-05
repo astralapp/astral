@@ -31,7 +31,7 @@ class AddsNotesToStarTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson([
-            'repo_id' => $this->star->repo_id,
+            'repo_id'  => $this->star->repo_id,
             'notes'    => 'A fancy note.',
         ]);
 
