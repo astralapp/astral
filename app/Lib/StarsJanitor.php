@@ -4,7 +4,6 @@ namespace Astral\Lib;
 
 use Astral\Models\User;
 use Illuminate\Support\Facades\Cache;
-use Zttp\Zttp;
 
 class StarsJanitor
 {
@@ -42,5 +41,4 @@ class StarsJanitor
 
         return $this;
     }
-
 }
