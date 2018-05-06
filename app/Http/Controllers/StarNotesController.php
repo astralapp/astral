@@ -20,7 +20,7 @@ class StarNotesController extends Controller
 
         if (!$star) {
             $star = new Star();
-            $star->relay_id = $id;
+            $star->repo_id = $id;
             $star->user_id = auth()->id();
         }
 

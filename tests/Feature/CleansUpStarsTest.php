@@ -22,12 +22,12 @@ class CleansUpStarsTest extends TestCase
     {
         $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
 
-        $validStar = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][0]['node']['id'], 'user_id' => auth()->id()]);
+        $validStar = create('Astral\Models\Star', ['repo_id' => $sampleStars['edges'][0]['node']['databaseId'], 'user_id' => auth()->id()]);
         $validStar->syncTags([['name' => 'Testo']]);
 
-        $unstarredStar = create('Astral\Models\Star', ['relay_id' => 'abc123', 'user_id' => auth()->id()]);
+        $unstarredStar = create('Astral\Models\Star', ['repo_id' => 'abc123', 'user_id' => auth()->id()]);
 
-        $emptyStar = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][0]['node']['id'], 'user_id' => auth()->id(), 'notes' => null]);
+        $emptyStar = create('Astral\Models\Star', ['repo_id' => $sampleStars['edges'][0]['node']['databaseId'], 'user_id' => auth()->id(), 'notes' => null]);
 
         $this->assertCount(3, auth()->user()->stars);
 

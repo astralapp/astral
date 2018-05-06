@@ -27,9 +27,9 @@ class StarsJanitorTest extends TestCase
     {
         $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
 
-        $star1 = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][0]['node']['id'], 'user_id' => auth()->id()]);
-        $star2 = create('Astral\Models\Star', ['relay_id' => $sampleStars['edges'][1]['node']['id'], 'user_id' => auth()->id()]);
-        $star3 = create('Astral\Models\Star', ['relay_id' => 'abc123', 'user_id' => auth()->id()]);
+        $star1 = create('Astral\Models\Star', ['repo_id' => $sampleStars['edges'][0]['node']['databaseId'], 'user_id' => auth()->id()]);
+        $star2 = create('Astral\Models\Star', ['repo_id' => $sampleStars['edges'][1]['node']['databaseId'], 'user_id' => auth()->id()]);
+        $star3 = create('Astral\Models\Star', ['repo_id' => 'abc123', 'user_id' => auth()->id()]);
 
         $this->assertCount(3, auth()->user()->stars);
 

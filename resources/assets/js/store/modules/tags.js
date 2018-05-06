@@ -127,7 +127,7 @@ const actions = {
         const filteredTags = star.tags.filter(tag => {
           return tag.id !== id
         })
-        return { starId: star.node.id, tags: filteredTags }
+        return { starId: star.node.databaseId, tags: filteredTags }
       })
 
     starsWithTag.forEach(star => {
@@ -154,7 +154,7 @@ const actions = {
               tag.name = name
               return tag
             })
-            return { starId: star.node.id, tags }
+            return { starId: star.node.databaseId, tags }
           })
 
         starsWithTag.forEach(star => {

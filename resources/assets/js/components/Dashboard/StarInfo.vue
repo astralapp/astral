@@ -100,7 +100,7 @@ export default {
     ...mapActions(['editStarNotes']),
     doEditStarNotes (notes) {
       this.editStarNotes({
-        relayId: this.currentStar.node.id,
+        id: this.currentStar.node.databaseId,
         notes
       })
     },

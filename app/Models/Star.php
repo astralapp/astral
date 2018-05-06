@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Star extends Model
 {
-    protected $fillable = ['relay_id'];
+    protected $fillable = ['repo_id'];
 
     public function user()
     {
@@ -21,7 +21,7 @@ class Star extends Model
 
     public function scopeWithRepoId($query, $id)
     {
-        return $query->where('relay_id', $id);
+        return $query->where('repo_id', $id);
     }
 
     public function syncTags($tags = [])

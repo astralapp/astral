@@ -14,11 +14,11 @@
       class="overflow-y-scroll">
       <div
         slot="star"
-        :key="item.value.node.id"
+        :key="item.value.node.databaseId"
         slot-scope="{cell, item}">
         <Star
           :star="item.value"
-          :data-id="item.value.node.id"
+          :data-id="item.value.node.databaseId"
           :selected="starIsCurrentStar(item.value)"
           draggable="true"
           @dragstart.native="starDragged($event)"
@@ -101,7 +101,7 @@ export default {
       }
 
       if (
-        !(Object.keys(oldValue).length && oldValue.node.id === newValue.node.id)
+        !(Object.keys(oldValue).length && oldValue.node.databaseId === newValue.node.databaseId)
       ) {
         this.fetchReadme(newValue.node.nameWithOwner)
       }
@@ -128,7 +128,7 @@ export default {
     starIsCurrentStar (star) {
       return (
         (!!Object.keys(this.currentStar).length &&
-        this.currentStar.node.id === star.node.id) ||
+        this.currentStar.node.databaseId === star.node.databaseId) ||
         this.currentStars.includes(star)
       )
     },

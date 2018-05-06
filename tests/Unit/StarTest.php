@@ -38,10 +38,10 @@ class StarTest extends TestCase
     {
         create('Astral\Models\Star', ['user_id' => auth()->id()], 5);
 
-        $firstId = Star::all()->first()->relay_id;
+        $firstId = Star::all()->first()->repo_id;
         $star = Star::withRepoId($firstId)->first();
 
-        $this->assertEquals($firstId, $star->first()->relay_id);
+        $this->assertEquals($firstId, $star->first()->repo_id);
     }
 
     /** @test */
