@@ -77,7 +77,7 @@ class AuthController extends Controller
 
     public function destroy(Request $request): JsonResponse
     {
-        if (\Auth::user()->id === $request->get('id')) {
+        if (auth()->id === $request->get('id')) {
             auth()->user()->tags()->delete();
             auth()->user()->stars()->delete();
             auth()->user()->delete();

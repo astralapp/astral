@@ -18,7 +18,6 @@ const mutations = {
   },
   [DELETE_USER] (state) {
     state.user = {}
-    router.push('auth/logout')
   }
 }
 
@@ -37,6 +36,8 @@ const actions = {
       .delete('/api/auth/delete', { id })
       .then(res => {
         commit(DELETE_USER, res)
+        router.push('auth/logout')
+        ls.clear()
       })
   }
 }
