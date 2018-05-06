@@ -77,12 +77,12 @@ class AuthController extends Controller
 
     public function destroy(Request $request): JsonResponse
     {
-        if (auth()->id === $request->get('id')) {
+        if (auth()->user()->id === $request->input('id')) {
             auth()->user()->tags()->delete();
             auth()->user()->stars()->delete();
             auth()->user()->delete();
         }
 
-        return response()->json(204);
+        return response()->json([], 204);
     }
 }
