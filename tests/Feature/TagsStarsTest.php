@@ -25,7 +25,7 @@ class TagsStarsTest extends TestCase
         $star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
 
         $response = $this->postJson('/api/star/tags', [
-            'starIds' => [$star->relay_id],
+            'starIds' => [$star->repo_id],
             'tag'     => $tag,
         ]);
 
@@ -49,7 +49,7 @@ class TagsStarsTest extends TestCase
         $star = create('Astral\Models\Star', ['user_id' => auth()->id()]);
 
         $response = $this->putJson('/api/star/tags', [
-            'relayId' => $star->relay_id,
+            'id'      => $star->repo_id,
             'tags'    => $tags,
         ]);
 

@@ -39,10 +39,11 @@ mix
   )
   .options({
     extractVueStyles: true,
+    processCssUrls: false,
     postCss: [tailwindcss('tailwind.js')]
   })
   .purgeCss()
-  .then(function() {
+  .then(function () {
     fs.unlinkSync('resources/assets/sass/temp/preflight.css')
     fs.unlinkSync('resources/assets/sass/temp/app.css')
   })
