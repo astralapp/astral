@@ -99,4 +99,22 @@ class AuthenticatesUsersTest extends TestCase
 
         $this->assertGuest();
     }
+
+    /** @test */
+    public function a_user_can_be_removed()
+    {
+        $this->login();
+        $this->assertAuthenticated();
+
+        $id = auth()->user()->id;
+        create('Astral\Models\Tag', ['user_id' => $id], 5);
+        create('Astral\Models\Star', ['user_id' => $id], 5);
+
+        $response = $this->deleteJson('/api/auth/delete', ['id' => $id])
+                        ->assertStatus(204);
+
+        $this->assertDatabaseMissing('users', ['id' => $id]);
+        $this->assertDatabaseMissing('tags', ['user_id' => $id]);
+        $this->assertDatabaseMissing('stars', ['user_id' => $id]);
+    }
 }

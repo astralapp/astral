@@ -1,6 +1,7 @@
 import ls from 'local-storage'
-import { SET_USER } from '../mutation-types'
+import { SET_USER, DELETE_USER } from '../mutation-types'
 import client from '../api/client'
+import router from '@/router'
 
 const state = {
   user: {}
@@ -14,6 +15,9 @@ const getters = {
 const mutations = {
   [SET_USER] (state, user) {
     state.user = user
+  },
+  [DELETE_USER] (state) {
+    state.user = {}
   }
 }
 
@@ -24,6 +28,16 @@ const actions = {
       .get('/api/auth/me')
       .then(res => {
         commit(SET_USER, res)
+      })
+  },
+  deleteUser ({ commit }, id) {
+    return client
+      .withAuth()
+      .delete('/api/auth/delete', { id })
+      .then(res => {
+        commit(DELETE_USER, res)
+        router.push('auth/logout')
+        ls.clear()
       })
   }
 }
