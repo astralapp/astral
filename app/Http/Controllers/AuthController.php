@@ -2,12 +2,13 @@
 
 namespace Astral\Http\Controllers;
 
-use Astral\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use JWTAuth;
 use Socialite;
+use Astral\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -78,6 +79,7 @@ class AuthController extends Controller
     public function destroy(Request $request): JsonResponse
     {
         if (auth()->user()->id === $request->input('id')) {
+            Cache::forget(auth()->user()->starsCacheKey());
             auth()->user()->tags()->delete();
             auth()->user()->stars()->delete();
             auth()->user()->delete();

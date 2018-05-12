@@ -58,3 +58,8 @@
 .transition-opacity {
   transition: opacity 150ms ease;
 }
+
+[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}

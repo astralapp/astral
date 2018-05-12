@@ -1,5 +1,7 @@
 <template>
-  <modal name="settings-modal">
+  <modal
+    name="settings-modal"
+    height="auto">
     <div class="flex items-center justify-between px-4 py-6">
       <h3>Settings</h3>
       <button
@@ -19,12 +21,25 @@
       <span class="leading-normal">Show Language Tags on Stars</span>
       <toggle-switch v-model="settings.showLanguageTags"/>
     </div>
-    <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between items-center">
-      <span class="leading-normal">Delete All User Data</span>
-      <button
-        :class="[ settings.deleteUserClicked ? 'btn-danger' : 'border-red' ]"
-        class="btn text-sm py-1 px-3"
-        @click="deleteUserButtonClicked">{{ settings.deleteUserClicked ? 'Delete Forever!' : 'Are you sure?' }}</button>
+    <div class="px-4 py-6 bg-white border-b border-grey-light">
+      <div class="flex justify-between items-center mb-4">
+        <span class="leading-normal">Delete Account</span>
+        <div>
+          <input
+            v-show="deleteUserClicked"
+            v-model="deleteConfirmation"
+            type="text"
+            placeholder="Enter your username to confirm"
+            class="text-input text-sm px-2 w-64">
+          <button
+            :disabled="deleteButtonDisabled"
+            class="btn text-sm py-2 px-4 btn-danger ml-2"
+            @click="deleteUserButtonClicked">{{ deleteUserClicked ? 'Confirm Deletion' : 'Delete My Account' }}</button>
+        </div>
+      </div>
+      <div class="flex justify-between items-center mt-2">
+        <p class="text-sm text-red-light">This will permanently delete all of your data. Be careful!</p>
+      </div>
     </div>
   </modal>
 </template>
@@ -39,10 +54,16 @@ export default {
   props: ['user'],
   data () {
     return {
+      deleteUserClicked: false,
+      deleteConfirmation: '',
       settings: {
-        showLanguageTags: false,
-        deleteUserClicked: false
+        showLanguageTags: false
       }
+    }
+  },
+  computed: {
+    deleteButtonDisabled () {
+      return (this.deleteUserClicked && this.deleteConfirmation.trim() !== this.user.username)
     }
   },
   methods: {
@@ -51,10 +72,12 @@ export default {
       this.$modal.hide('settings-modal')
     },
     deleteUserButtonClicked () {
-      if (this.settings.deleteUserClicked) {
-        this.deleteUser(this.user.id)
+      if (this.deleteUserClicked) {
+        this.deleteUser(this.user.id).then(() => {
+          this.$router.push('auth/logout')
+        })
       }
-      this.settings.deleteUserClicked = !this.settings.deleteUserClicked
+      this.deleteUserClicked = !this.settings.deleteUserClicked
     }
   }
 }
