@@ -74,7 +74,7 @@ class Tag extends Model
      */
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', $name)->where('user_id', Auth::id());
+        return $query->whereRaw('LOWER(name) = LOWER(?)', [strtolower($name)])->where('user_id', Auth::id());
     }
 
     protected static function boot()
