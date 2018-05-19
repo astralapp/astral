@@ -5,6 +5,7 @@ namespace Astral\Http\Controllers;
 use Astral\Lib\GitHubClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Astral\Models\Star;
 
 class GitHubStarsController extends Controller
 {
@@ -19,7 +20,8 @@ class GitHubStarsController extends Controller
     public function index(Request $request)
     {
         $key = auth()->user()->starsCacheKey();
-
+        $starsToReturn = [];
+        
         if ($request->has('refresh')) {
             Cache::forget($key);
         }
@@ -31,7 +33,7 @@ class GitHubStarsController extends Controller
 
             if ((bool) $cached['pageInfo']['hasNextPage'] == false) {
                 // We already have all their stars so just return them
-                return $cached;
+                $starsToReturn =  $cached;
             } else {
                 // Get the next page
                 $next = $this->client->fetchStars($cached['pageInfo']['endCursor']);
@@ -54,14 +56,43 @@ class GitHubStarsController extends Controller
                 Cache::put($key, $new, $expiry);
 
                 // If they passed a cursor just return the new edges, else return the combined version
-                return $cursor ? $next : $new;
+                $starsToReturn = $cursor ? $next : $new;
             }
         } else {
             $cursor = null;
             $fetched = $this->client->fetchStars($cursor);
             Cache::put($key, $fetched, $expiry);
 
-            return $fetched;
+            $starsToReturn = $fetched;
         }
+
+        if (auth()->user()->autotag_topics) {
+            $this->tagStarsByTopic($starsToReturn);
+        }
+        
+        return $starsToReturn;
+    }
+
+    private function tagStarsByTopic($stars)
+    {
+        collect($stars['edges'])->each(function($star) {
+            $starId = $star['node']['databaseId'];
+            $topics = collect($star['node']['repositoryTopics']['edges'])->map(function($edge) {
+                return ['name' => $edge['node']['topic']['name']];
+            });
+
+
+            if(count($topics)) {
+                $userStar = auth()->user()->stars()->withRepoId($starId)->first();
+    
+                if (!$userStar) {
+                    $userStar = new Star();
+                    $userStar->repo_id = $starId;
+                    $userStar->user_id = auth()->id();
+                    $userStar->save();
+                }
+                $userStar->syncTags($topics, false);
+            }
+        });
     }
 }
