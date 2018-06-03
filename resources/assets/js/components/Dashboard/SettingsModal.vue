@@ -41,10 +41,19 @@
         <p class="text-sm text-red-light">This will permanently delete all of your data. Be careful!</p>
       </div>
     </div>
+    <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between">
+      <span class="leading-normal">Export Stars As JSON</span>
+      <a
+        :href="exportUrl"
+        target="_blank"
+        rel="noopener"
+        class="btn text-sm py-2 px-4 btn-flat ml-2 no-underline">Export</a>
+    </div>
   </modal>
 </template>
 <script>
 import { mapActions } from 'vuex'
+import ls from 'local-storage'
 import ToggleSwitch from '@/components/ToggleSwitch'
 export default {
   name: 'SettingsModal',
@@ -58,7 +67,8 @@ export default {
       deleteConfirmation: '',
       settings: {
         showLanguageTags: false
-      }
+      },
+      exportUrl: `/api/stars/export?token=${ls('jwt')}`
     }
   },
   computed: {
