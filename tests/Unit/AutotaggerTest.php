@@ -1,22 +1,24 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use Astral\Lib\Autotagger;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
-class AutotagsWithTopicsTest extends TestCase
+class AutotaggerTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $autotagger;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $user = create('Astral\Models\User', ['autotag_topics' => true]);
-        $this->login($user);
+        $this->login();
+
+        $this->autotagger = new Autotagger(auth()->user());
     }
 
     /** @test */
@@ -30,16 +32,12 @@ class AutotagsWithTopicsTest extends TestCase
 
         $star->syncTags([['name' => 'foo'], ['name' => 'bar'], ['name' => 'javascript']]);
 
-        Cache::shouldReceive('get')->with(auth()->user()->starsCacheKey())->andReturn($sampleStars);
-
-
-        $this->putJson('/api/stars/autotag')->assertStatus(200);
+        $this->autotagger->tagByTopic($sampleStars);
 
         $this->assertCount(5, auth()->user()->stars);
         $this->assertEquals(
             auth()->user()->stars()->with('tags')->first()->tags->map->name->toArray(),
             ['foo', 'bar', 'javascript', 'drag-and-drop', 'draggable', 'es6']
         );
-
     }
 }

@@ -38,7 +38,7 @@ class GitHubClient
                 totalCount
               }
               forkCount,
-              repositoryTopics(first: 10) {
+              repositoryTopics(first: 5) {
                 edges {
                   node {
                     topic {

@@ -18,6 +18,7 @@ class CreateStarsTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->integer('repo_id');
             $table->text('notes')->nullable();
+            $table->boolean('autotagged_by_topic')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

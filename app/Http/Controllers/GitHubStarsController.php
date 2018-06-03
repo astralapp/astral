@@ -66,32 +66,6 @@ class GitHubStarsController extends Controller
             $starsToReturn = $fetched;
         }
 
-        if (auth()->user()->autotag_topics) {
-            $this->tagStarsByTopic($starsToReturn);
-        }
-
         return $starsToReturn;
-    }
-
-    private function tagStarsByTopic($stars)
-    {
-        collect($stars['edges'])->each(function ($star) {
-            $starId = $star['node']['databaseId'];
-            $topics = collect($star['node']['repositoryTopics']['edges'])->map(function ($edge) {
-                return ['name' => $edge['node']['topic']['name']];
-            });
-
-            if (count($topics)) {
-                $userStar = auth()->user()->stars()->withRepoId($starId)->first();
-
-                if (!$userStar) {
-                    $userStar = new Star();
-                    $userStar->repo_id = $starId;
-                    $userStar->user_id = auth()->id();
-                    $userStar->save();
-                }
-                $userStar->syncTags($topics, false);
-            }
-        });
     }
 }
