@@ -26,7 +26,7 @@ class ExportsStarsToJsonTest extends TestCase
 
         $response = $this->getJson('/api/stars/export')
             ->assertStatus(200);
-        $path = storage_path('app/public/' . auth()->user()->username . '_astral_data.json');
+        $path = storage_path('app/public/'.auth()->user()->username.'_astral_data.json');
         $fileOutput = file_get_contents($path);
 
         $this->assertTrue($fileOutput === auth()->user()->stars()->with('tags')->get()->reverse()->toJson());
