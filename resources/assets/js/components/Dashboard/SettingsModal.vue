@@ -47,7 +47,7 @@
         :href="exportUrl"
         target="_blank"
         rel="noopener"
-        class="btn text-sm py-2 px-4 btn-flat ml-2 no-underline">Export</a>
+        class="btn text-sm py-2 px-4 btn-flat ml-2 no-underline text-grey">Export</a>
     </div>
   </modal>
 </template>

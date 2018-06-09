@@ -23,6 +23,6 @@ class StarsController extends Controller
         $jsonPath = auth()->user()->username.'_astral_data.json';
         Storage::disk('public')->put($jsonPath, $stars);
 
-        return response()->download(public_path().'/storage/'.$jsonPath)->deleteFileAfterSend(true);
+        return response()->download(storage_path("app/public/{$jsonPath}"))->deleteFileAfterSend(true);
     }
 }
