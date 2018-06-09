@@ -24,6 +24,7 @@ Route::post('/star/tags', 'StarTagsController@store');
 Route::post('/star/notes', 'StarNotesController@store');
 
 Route::get('/stars', 'StarsController@index');
+Route::get('/stars/export', 'StarsController@export');
 
 Route::get('stars/github', 'GitHubStarsController@index');
 
