@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('access_token')->nullable();
             $table->string('avatar_url')->nullable();
             $table->boolean('autotag_topics')->default(false);
+            $table->boolean('show_language_tags')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -19,7 +19,10 @@
     </div> -->
     <div class="px-4 py-6 bg-white border-b border-t border-grey-light flex justify-between items-center">
       <span class="leading-normal">Show Language Tags on Stars</span>
-      <toggle-switch v-model="settings.showLanguageTags"/>
+      <toggle-switch
+        v-model="user.show_language_tags"
+        @change="setShowLanguageTags(user.show_language_tags)"
+      />
     </div>
     <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between">
       <span class="leading-normal">Export Stars As JSON</span>
@@ -68,10 +71,7 @@ export default {
     return {
       deleteUserClicked: false,
       deleteConfirmation: '',
-      settings: {
-        showLanguageTags: false
-      },
-      exportUrl: `/api/stars/export?token=${ls('jwt')}`
+      exportUrl: `/api/stars/export?token=${ls('jwt')}`,
     }
   },
   computed: {
@@ -80,7 +80,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteUser']),
+    ...mapActions(['deleteUser', 'setShowLanguageTags']),
+    foo () {
+      alert('Suh')
+    },
     closeModal () {
       this.$modal.hide('settings-modal')
     },

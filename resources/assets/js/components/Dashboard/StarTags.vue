@@ -4,7 +4,7 @@
     class="star-tags-editor rounded mt-4">
     <ul class="star-tags list-reset flex flex-wrap items-center">
       <li
-        v-if="star.node.primaryLanguage"
+        v-if="star.node.primaryLanguage && user.show_language_tags"
         v-show="!isEditing"
         class="text-xs text-white bg-brand rounded-full py-1 px-2 mr-2 mb-2"
       >
@@ -70,7 +70,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allTags: 'tags'
+      allTags: 'tags',
+      user: 'user'
     }),
     suggestions () {
       return differenceBy(this.allTags, this.mutableTags, 'name').map(

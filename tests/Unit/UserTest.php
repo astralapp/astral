@@ -65,6 +65,16 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_the_show_language_tags_setting()
+    {
+        $this->user->setShowLanguageTags(false);
+        $this->assertEquals(false, $this->user->show_language_tags);
+        
+        $this->user->setShowLanguageTags(true);
+        $this->assertEquals(true, $this->user->show_language_tags);
+    }
+
+    /** @test */
     public function it_can_fetch_the_user_specific_cache_key_for_stars()
     {
         $id = $this->user->id;

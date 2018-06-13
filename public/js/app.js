@@ -61373,7 +61373,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   computed: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_6_vuex__["c" /* mapGetters */])({
-    allTags: 'tags'
+    allTags: 'tags',
+    user: 'user'
   }), {
     suggestions: function suggestions() {
       return Object(__WEBPACK_IMPORTED_MODULE_5_lodash__["differenceBy"])(this.allTags, this.mutableTags, 'name').map(function (tag) {
@@ -62108,7 +62109,7 @@ var render = function() {
         "ul",
         { staticClass: "star-tags list-reset flex flex-wrap items-center" },
         [
-          _vm.star.node.primaryLanguage
+          _vm.star.node.primaryLanguage && _vm.user.show_language_tags
             ? _c(
                 "li",
                 {
@@ -88436,6 +88437,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -88450,9 +88454,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       deleteUserClicked: false,
       deleteConfirmation: '',
-      settings: {
-        showLanguageTags: false
-      },
       exportUrl: '/api/stars/export?token=' + __WEBPACK_IMPORTED_MODULE_2_local_storage___default()('jwt')
     };
   },
@@ -88462,7 +88463,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return this.deleteUserClicked && this.deleteConfirmation.trim() !== this.user.username;
     }
   },
-  methods: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['deleteUser']), {
+  methods: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['deleteUser', 'setShowLanguageTags']), {
+    foo: function foo() {
+      alert('Suh');
+    },
     closeModal: function closeModal() {
       this.$modal.hide('settings-modal');
     },
@@ -88772,12 +88776,17 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("toggle-switch", {
+          on: {
+            change: function($event) {
+              _vm.setShowLanguageTags(_vm.user.show_language_tags)
+            }
+          },
           model: {
-            value: _vm.settings.showLanguageTags,
+            value: _vm.user.show_language_tags,
             callback: function($$v) {
-              _vm.$set(_vm.settings, "showLanguageTags", $$v)
+              _vm.$set(_vm.user, "show_language_tags", $$v)
             },
-            expression: "settings.showLanguageTags"
+            expression: "user.show_language_tags"
           }
         })
       ],
@@ -89211,6 +89220,13 @@ var actions = {
       commit(__WEBPACK_IMPORTED_MODULE_2__mutation_types__["f" /* DELETE_USER */], res);
       __WEBPACK_IMPORTED_MODULE_4__router__["a" /* default */].push('auth/logout');
       __WEBPACK_IMPORTED_MODULE_1_local_storage___default.a.clear();
+    });
+  },
+  setShowLanguageTags: function setShowLanguageTags(_ref3, show) {
+    var commit = _ref3.commit;
+
+    return __WEBPACK_IMPORTED_MODULE_3__api_client__["a" /* default */].withAuth().put('/api/user/show-language-tags', { show: show }).then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_2__mutation_types__["u" /* SET_USER */], res);
     });
   }
 };

@@ -12,6 +12,8 @@ Route::get('auth/refresh', 'AuthController@refresh');
 Route::get('auth/logout', 'AuthController@logout');
 Route::delete('auth/delete', 'AuthController@destroy');
 
+Route::put('user/show-language-tags', 'UserSettingsController@setShowLanguagetags');
+
 Route::get('tags', 'TagsController@index');
 Route::post('tags', 'TagsController@store');
 Route::delete('tags/{tag}', 'TagsController@destroy');

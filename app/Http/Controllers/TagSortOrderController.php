@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class TagSortOrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+    
     public function update(Request $request)
     {
         $tags = $request->input('tags');

@@ -39,6 +39,14 @@ const actions = {
         router.push('auth/logout')
         ls.clear()
       })
+  },
+  setShowLanguageTags ({ commit }, show) {
+    return client
+      .withAuth()
+      .put('/api/user/show-language-tags', { show })
+      .then(res => {
+        commit(SET_USER, res)
+      })
   }
 }
 

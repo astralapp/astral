@@ -50,6 +50,12 @@ class User extends Authenticatable implements JWTSubject
         $this->save();
     }
 
+    public function setShowLanguageTags($show)
+    {
+        $this->show_language_tags = (bool)$show;
+        $this->save();
+    }
+
     public function starsCacheKey()
     {
         return "user_{$this->id}.github_stars";
