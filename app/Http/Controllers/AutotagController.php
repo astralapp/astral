@@ -2,8 +2,8 @@
 
 namespace Astral\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Astral\Lib\Autotagger;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class AutotagController extends Controller
@@ -15,16 +15,16 @@ class AutotagController extends Controller
         $this->middleware('auth:api');
         $this->autotagger = $autotagger;
     }
-    
+
     public function update(Request $request)
     {
         $stars = Cache::get(auth()->user()->starsCacheKey());
-        
+
         $this->autotagger->tagByTopic($stars);
 
         return [
-            'stars' => auth()->user()->stars()->with('tags')->get(), 
-            'tags' => auth()->user()->tags()->withStarCount()->get(),
+            'stars' => auth()->user()->stars()->with('tags')->get(),
+            'tags'  => auth()->user()->tags()->withStarCount()->get(),
         ];
     }
 }

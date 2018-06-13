@@ -2,9 +2,9 @@
 
 namespace Astral\Providers;
 
+use Astral\Lib\Autotagger;
 use Astral\Lib\GitHubClient;
 use Astral\Lib\StarsJanitor;
-use Astral\Lib\Autotagger;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
