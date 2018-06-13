@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Astral\Lib\Autotagger;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
@@ -23,7 +22,7 @@ class AutotagsWithTopicsTest extends TestCase
     public function it_autotags_stars_with_their_topics()
     {
         $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
-        
+
         $star = auth()->user()->stars()->create([
             'repo_id' => $sampleStars['edges'][0]['node']['databaseId'],
         ]);
@@ -32,7 +31,6 @@ class AutotagsWithTopicsTest extends TestCase
 
         Cache::shouldReceive('get')->with(auth()->user()->starsCacheKey())->andReturn($sampleStars);
 
-
         $this->putJson('/api/stars/autotag')->assertStatus(200);
 
         $this->assertCount(5, auth()->user()->stars);
@@ -40,6 +38,5 @@ class AutotagsWithTopicsTest extends TestCase
             auth()->user()->stars()->with('tags')->first()->tags->map->name->toArray(),
             ['foo', 'bar', 'javascript', 'drag-and-drop', 'draggable', 'es6']
         );
-
     }
 }

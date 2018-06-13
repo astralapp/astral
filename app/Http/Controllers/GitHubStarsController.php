@@ -3,7 +3,6 @@
 namespace Astral\Http\Controllers;
 
 use Astral\Lib\GitHubClient;
-use Astral\Models\Star;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
