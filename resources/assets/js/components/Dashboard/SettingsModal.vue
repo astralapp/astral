@@ -8,7 +8,7 @@
         class="text-2xl focus-none"
         @click="closeModal">&times;</button>
     </div>
-    <div class="px-4 py-6 bg-grey-lightest border-t border-b border-grey-light flex justify-between items-center">
+    <!-- <div class="px-4 py-6 bg-grey-lightest border-t border-b border-grey-light flex justify-between items-center">
       <span class="leading-normal">Subscribe to Updates</span>
       <div class="relative toggle-switch">
         <input
@@ -16,13 +16,21 @@
           placeholder="you@example.com"
           class="text-input w-64">
       </div>
-    </div>
-    <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between items-center">
+    </div> -->
+    <div class="px-4 py-6 bg-white border-b border-t border-grey-light flex justify-between items-center">
       <span class="leading-normal">Show Language Tags on Stars</span>
       <toggle-switch v-model="settings.showLanguageTags"/>
     </div>
-    <div class="px-4 py-6 bg-white border-b border-grey-light">
-      <div class="flex justify-between items-center mb-4">
+    <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between">
+      <span class="leading-normal">Export Stars As JSON</span>
+      <a
+        :href="exportUrl"
+        target="_blank"
+        rel="noopener"
+        class="btn btn-grey">Export</a>
+    </div>
+    <div class="px-4 py-6 bg-white">
+      <div class="flex justify-between items-center">
         <span class="leading-normal">Delete Account</span>
         <div>
           <input
@@ -37,17 +45,12 @@
             @click="deleteUserButtonClicked">{{ deleteUserClicked ? 'Confirm Deletion' : 'Delete My Account' }}</button>
         </div>
       </div>
-      <div class="flex justify-between items-center mt-2">
+      <div
+        v-show="deleteUserClicked"
+        class="flex justify-end mt-6"
+      >
         <p class="text-sm text-red-light">This will permanently delete all of your data. Be careful!</p>
       </div>
-    </div>
-    <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between">
-      <span class="leading-normal">Export Stars As JSON</span>
-      <a
-        :href="exportUrl"
-        target="_blank"
-        rel="noopener"
-        class="btn text-sm py-2 px-4 btn-flat ml-2 no-underline text-grey">Export</a>
     </div>
   </modal>
 </template>
