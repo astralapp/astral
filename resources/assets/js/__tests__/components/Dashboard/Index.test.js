@@ -3,6 +3,10 @@ import flushPromises from 'flush-promises'
 import DashboardIndex from '@/components/Dashboard/Index'
 import Vuex from 'vuex'
 
+const $bus = {
+  $emit: jest.fn((e, data) => data)
+}
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -44,7 +48,8 @@ describe('Dashboard Index', () => {
     it('is fetches all user-related data', async () => {
       shallow(DashboardIndex, {
         localVue,
-        store
+        store,
+        mocks: { $bus }
       })
       expect(actions.fetchUser).toHaveBeenCalled()
       await flushPromises()
@@ -60,7 +65,8 @@ describe('Dashboard Index', () => {
     it('stars that contain the current tag', () => {
       const wrapper = shallow(DashboardIndex, {
         localVue,
-        store
+        store,
+        mocks: { $bus }
       })
 
       expect(wrapper.vm.starsWithCurrentTag).toEqual([

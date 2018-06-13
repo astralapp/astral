@@ -280,6 +280,16 @@ const actions = {
         commit(SET_USER_STARS, res)
         commit(MAP_USER_STARS_TO_GITHUB_STARS)
       })
+  },
+  autotagStars ({ commit }) {
+    client
+      .withAuth()
+      .put('/api/stars/autotag')
+      .then(res => {
+        commit(SET_TAGS, res.tags)
+        commit(SET_USER_STARS, res.stars)
+        commit(MAP_USER_STARS_TO_GITHUB_STARS)
+      })
   }
 }
 

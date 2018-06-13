@@ -37,7 +37,16 @@ class GitHubClient
               stargazers {
                 totalCount
               }
-              forkCount
+              forkCount,
+              repositoryTopics(first: 5) {
+                edges {
+                  node {
+                    topic {
+                      name
+                    }
+                  }
+                }
+              }
             }
             cursor
           }

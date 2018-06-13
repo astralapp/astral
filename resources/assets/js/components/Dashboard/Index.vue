@@ -46,6 +46,7 @@ export default {
   },
   async created () {
     await this.fetchUser()
+    this.$bus.$emit('STATUS', 'Fetching stars...')
     await this.fetchUserStars()
     await this.fetchGitHubStars({ cursor: null, refresh: false })
     while (this.pageInfo.hasNextPage) {
@@ -54,14 +55,21 @@ export default {
         refresh: false
       })
     }
+    if (this.user.autotag_topics) {
+      this.$bus.$emit('STATUS', 'Applying repository tags...')
+      await this.autotagStars()
+    }
+    this.$bus.$emit('STATUS', 'Cleaning up...')
     await this.cleanupStars()
+    this.$bus.$emit('STATUS', '')
   },
   methods: {
     ...mapActions([
       'fetchUser',
       'fetchGitHubStars',
       'fetchUserStars',
-      'cleanupStars'
+      'cleanupStars',
+      'autotagStars'
     ])
   }
 }

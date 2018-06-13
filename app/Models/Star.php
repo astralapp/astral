@@ -24,7 +24,7 @@ class Star extends Model
         return $query->where('repo_id', $id);
     }
 
-    public function syncTags($tags = [])
+    public function syncTags($tags = [], $detach = true)
     {
         $ids = [];
         if (empty($tags)) {
@@ -37,7 +37,7 @@ class Star extends Model
                     $userTag = Tag::create(['name' => $name]);
                 }
                 array_push($ids, $userTag->id);
-                $this->tags()->sync($ids);
+                $this->tags()->sync($ids, $detach);
             }
         }
     }
