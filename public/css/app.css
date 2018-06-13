@@ -634,7 +634,7 @@ button,
   cursor: pointer;
 }
 
-.taco {
+.jdfhksdhfjksdf {
   display: none;
 }
 
@@ -5876,6 +5876,35 @@ body {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.spin {
+  -webkit-animation: spin 1s infinite linear;
+          animation: spin 1s infinite linear;
 }
 
 .bg-white-10 {
