@@ -58182,33 +58182,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.refreshingStars = true;
-                _context2.next = 3;
+                _this2.$bus.$emit('STATUS', 'Refreshing stars...');
+                _context2.next = 4;
                 return _this2.fetchGitHubStars({ cursor: false, refresh: true });
 
-              case 3:
+              case 4:
                 if (!_this2.pageInfo.hasNextPage) {
-                  _context2.next = 8;
+                  _context2.next = 9;
                   break;
                 }
 
-                _context2.next = 6;
+                _context2.next = 7;
                 return _this2.fetchGitHubStars({
                   cursor: _this2.pageInfo.endCursor,
                   refresh: false
                 });
 
-              case 6:
-                _context2.next = 3;
+              case 7:
+                _context2.next = 4;
                 break;
 
-              case 8:
-                _context2.next = 10;
+              case 9:
+                _context2.next = 11;
                 return _this2.cleanupStars();
 
-              case 10:
-                _this2.refreshingStars = false;
-
               case 11:
+                _this2.refreshingStars = false;
+                _this2.$bus.$emit('STATUS', '');
+
+              case 13:
               case 'end':
                 return _context2.stop();
             }

@@ -148,6 +148,7 @@ export default {
     ]),
     async refreshStars () {
       this.refreshingStars = true
+      this.$bus.$emit('STATUS', 'Refreshing stars...')
       await this.fetchGitHubStars({ cursor: false, refresh: true })
       while (this.pageInfo.hasNextPage) {
         await this.fetchGitHubStars({
@@ -157,6 +158,7 @@ export default {
       }
       await this.cleanupStars()
       this.refreshingStars = false
+      this.$bus.$emit('STATUS', '')
     },
     doAddTag (name) {
       this.addTag(name)
