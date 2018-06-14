@@ -88464,9 +88464,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['deleteUser', 'setShowLanguageTags']), {
-    foo: function foo() {
-      alert('Suh');
-    },
     closeModal: function closeModal() {
       this.$modal.hide('settings-modal');
     },
@@ -88478,7 +88475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this.$router.push('auth/logout');
         });
       }
-      this.deleteUserClicked = !this.settings.deleteUserClicked;
+      this.deleteUserClicked = !this.deleteUserClicked;
     }
   })
 });
@@ -88754,15 +88751,26 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("modal", { attrs: { name: "settings-modal", height: "auto" } }, [
-    _c("div", { staticClass: "flex items-center justify-between px-4 py-6" }, [
-      _c("h3", [_vm._v("Settings")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "text-2xl focus-none", on: { click: _vm.closeModal } },
-        [_vm._v("×")]
-      )
-    ]),
+    _c(
+      "div",
+      {
+        staticClass:
+          "flex items-center justify-between px-4 py-3 bg-grey-lightest leading-none"
+      },
+      [
+        _c("h3", [_vm._v("Settings")]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass:
+              "text-2xl focus-none rounded-full w-8 h-8 bg-transparent indent-px hover:bg-grey-light transition-bg",
+            on: { click: _vm.closeModal }
+          },
+          [_vm._v("×")]
+        )
+      ]
+    ),
     _vm._v(" "),
     _c(
       "div",

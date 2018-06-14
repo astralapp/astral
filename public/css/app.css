@@ -5954,7 +5954,7 @@ body {
   transition: border-color 150ms ease;
 }
 
-.tansition-color-bg {
+.transition-color-bg {
   -webkit-transition: background-color 150ms ease, color 150ms ease;
   transition: background-color 150ms ease, color 150ms ease;
 }
@@ -5977,6 +5977,10 @@ body {
 [disabled] {
   opacity: .5;
   pointer-events: none;
+}
+
+.indent-px {
+  text-indent: 1px;
 }
 
 @media (min-width: 576px) {

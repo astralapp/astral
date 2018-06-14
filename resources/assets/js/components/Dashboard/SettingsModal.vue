@@ -2,10 +2,10 @@
   <modal
     name="settings-modal"
     height="auto">
-    <div class="flex items-center justify-between px-4 py-6">
+    <div class="flex items-center justify-between px-4 py-3 bg-grey-lightest leading-none">
       <h3>Settings</h3>
       <button
-        class="text-2xl focus-none"
+        class="text-2xl focus-none rounded-full w-8 h-8 bg-transparent indent-px hover:bg-grey-light transition-bg"
         @click="closeModal">&times;</button>
     </div>
     <!-- <div class="px-4 py-6 bg-grey-lightest border-t border-b border-grey-light flex justify-between items-center">
@@ -71,7 +71,7 @@ export default {
     return {
       deleteUserClicked: false,
       deleteConfirmation: '',
-      exportUrl: `/api/stars/export?token=${ls('jwt')}`,
+      exportUrl: `/api/stars/export?token=${ls('jwt')}`
     }
   },
   computed: {
@@ -81,9 +81,6 @@ export default {
   },
   methods: {
     ...mapActions(['deleteUser', 'setShowLanguageTags']),
-    foo () {
-      alert('Suh')
-    },
     closeModal () {
       this.$modal.hide('settings-modal')
     },
@@ -93,7 +90,7 @@ export default {
           this.$router.push('auth/logout')
         })
       }
-      this.deleteUserClicked = !this.settings.deleteUserClicked
+      this.deleteUserClicked = !this.deleteUserClicked
     }
   }
 }

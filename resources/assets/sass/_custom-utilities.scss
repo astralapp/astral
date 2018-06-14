@@ -42,7 +42,7 @@
   transition: border-color 150ms ease;
 }
 
-.tansition-color-bg {
+.transition-color-bg {
   transition: background-color 150ms ease, color 150ms ease;
 }
 
@@ -62,4 +62,8 @@
 [disabled] {
   opacity: 0.5;
   pointer-events: none;
+}
+
+.indent-px {
+  text-indent: 1px;
 }
