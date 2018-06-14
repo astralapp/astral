@@ -58004,10 +58004,10 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_array_from__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_array_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_array_from__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_array_from__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_array_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_array_from__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_core_js_object_keys__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_core_js_object_keys___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_core_js_object_keys__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends__ = __webpack_require__(7);
@@ -58124,54 +58124,85 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this = this;
 
-    this.fetchTags();
+    return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+      var queryTag;
+      return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _this.$bus.$on('TAGS_SORTED', function (method) {
+                _this.sortTags(method);
+              });
 
-    this.$bus.$on('TAGS_SORTED', function (method) {
-      _this.sortTags(method);
-    });
+              _this.drake = __WEBPACK_IMPORTED_MODULE_12_dragula___default()([_this.$refs.sidebarTags]).on('drop', function (el, target, source, sibling) {
+                var sortMap = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_array_from___default()(source.children).map(function (el, i) {
+                  return {
+                    id: el.dataset.id,
+                    sort_order: i
+                  };
+                });
+                _this.reorderTags(sortMap);
+              });
 
-    this.drake = __WEBPACK_IMPORTED_MODULE_12_dragula___default()([this.$refs.sidebarTags]).on('drop', function (el, target, source, sibling) {
-      var sortMap = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_array_from___default()(source.children).map(function (el, i) {
-        return {
-          id: el.dataset.id,
-          sort_order: i
-        };
-      });
-      _this.reorderTags(sortMap);
-    });
+              _context.next = 4;
+              return _this.fetchTags();
+
+            case 4:
+
+              if (_this.$route.query.tag) {
+                queryTag = _this.tags.find(function (tag) {
+                  return tag.name === _this.$route.query.tag;
+                });
+
+                if (queryTag) {
+                  _this.setCurrentTag(queryTag);
+                }
+              }
+
+              if (_this.$route.query.language) {
+                _this.setCurrentLanguage(_this.$route.query.language);
+              }
+
+            case 6:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this);
+    }))();
   },
 
   methods: __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_11_vuex__["b" /* mapActions */])(['addTag', 'fetchTags', 'setCurrentTag', 'setCurrentLanguage', 'setViewingUntagged', 'addTagToStars', 'reorderTags', 'sortTags', 'deleteTag', 'renameTag', 'fetchGitHubStars', 'cleanupStars']), {
     refreshStars: function refreshStars() {
       var _this2 = this;
 
-      return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+      return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.refreshingStars = true;
-                _context.next = 3;
+                _context2.next = 3;
                 return _this2.fetchGitHubStars({ cursor: false, refresh: true });
 
               case 3:
                 if (!_this2.pageInfo.hasNextPage) {
-                  _context.next = 8;
+                  _context2.next = 8;
                   break;
                 }
 
-                _context.next = 6;
+                _context2.next = 6;
                 return _this2.fetchGitHubStars({
                   cursor: _this2.pageInfo.endCursor,
                   refresh: false
                 });
 
               case 6:
-                _context.next = 3;
+                _context2.next = 3;
                 break;
 
               case 8:
-                _context.next = 10;
+                _context2.next = 10;
                 return _this2.cleanupStars();
 
               case 10:
@@ -58179,10 +58210,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
               case 11:
               case 'end':
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, _this2);
+        }, _callee2, _this2);
       }))();
     },
     doAddTag: function doAddTag(name) {
@@ -61352,6 +61383,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -61396,7 +61429,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     this.mutableTags = [].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(this.tags));
   },
 
-  methods: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_6_vuex__["b" /* mapActions */])(['syncStarTags']), {
+  methods: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_6_vuex__["b" /* mapActions */])(['syncStarTags', 'setCurrentTag', 'setCurrentLanguage']), {
     startEditing: function startEditing() {
       var _this = this;
 
@@ -62122,7 +62155,13 @@ var render = function() {
                     }
                   ],
                   staticClass:
-                    "text-xs text-white bg-brand rounded-full py-1 px-2 mr-2 mb-2"
+                    "text-xs text-white bg-brand hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2",
+                  on: {
+                    click: function($event) {
+                      $event.stopPropagation()
+                      _vm.setCurrentLanguage(_vm.star.node.primaryLanguage.name)
+                    }
+                  }
                 },
                 [
                   _vm._v(
@@ -62140,7 +62179,13 @@ var render = function() {
               {
                 key: tag.id,
                 staticClass:
-                  "text-xs text-white bg-indigo rounded-full py-1 px-2 mr-2 mb-2"
+                  "text-xs text-white bg-indigo hover:bg-indigo-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2",
+                on: {
+                  click: function($event) {
+                    $event.stopPropagation()
+                    _vm.setCurrentTag(tag)
+                  }
+                }
               },
               [
                 _c("span", [_vm._v(_vm._s(tag.name))]),
@@ -91351,12 +91396,14 @@ module.exports = function spread(callback) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mutation_types__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api_client_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__router__ = __webpack_require__(30);
 
 
 
 
 
 var _mutations;
+
 
 
 
@@ -91436,13 +91483,13 @@ var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_help
       tag = _ref.tag;
 
   stars.forEach(function (_ref2) {
-    var id = _ref2.id;
+    var databaseId = _ref2.databaseId;
 
     state.stars = state.stars.map(function (star) {
-      if (star.node.databaseId === id && !star.tags.map(function (tag) {
+      if (star.node.databaseId === databaseId && !star.tags.map(function (tag) {
         return tag.name;
       }).includes(tag.name)) {
-        star.tags.push(tag);
+        star.tags = star.tags.concat([tag]);
         return star;
       } else {
         return star;
@@ -91544,6 +91591,11 @@ var actions = {
   setCurrentLanguage: function setCurrentLanguage(_ref8, language) {
     var commit = _ref8.commit;
 
+    __WEBPACK_IMPORTED_MODULE_8__router__["a" /* default */].replace({
+      query: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, __WEBPACK_IMPORTED_MODULE_8__router__["a" /* default */].currentRoute.query, {
+        language: language || undefined
+      })
+    });
     commit(__WEBPACK_IMPORTED_MODULE_6__mutation_types__["i" /* SET_CURRENT_LANGUAGE */], language);
   },
   addTagToStars: function addTagToStars(_ref9, data) {
@@ -92076,15 +92128,20 @@ module.exports = function (str, opts) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutation_types__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_client_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_extends__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mutation_types__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_client_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__router__ = __webpack_require__(30);
+
 
 
 
 
 var _mutations;
+
 
 
 
@@ -92105,18 +92162,19 @@ var getters = {
   }
 };
 
-var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["r" /* SET_TAGS */], function (state, tags) {
+var mutations = (_mutations = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["r" /* SET_TAGS */], function (state, tags) {
   state.tags = tags;
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["k" /* SET_CURRENT_TAG */], function (state, tag) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["k" /* SET_CURRENT_TAG */], function (state, tag) {
+  __WEBPACK_IMPORTED_MODULE_7__router__["a" /* default */].replace({ query: __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_extends___default()({}, __WEBPACK_IMPORTED_MODULE_7__router__["a" /* default */].currentRoute.query, { tag: tag.name }) });
   state.currentTag = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_assign___default()({}, tag);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["a" /* ADD_TAG */], function (state, tag) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["a" /* ADD_TAG */], function (state, tag) {
   state.tags = state.tags.concat([tag]);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["e" /* DELETE_TAG */], function (state, id) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["e" /* DELETE_TAG */], function (state, id) {
   var index = state.tags.findIndex(function (tag) {
     return tag.id === id;
   });
   state.tags.splice(index, 1);
-}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutation_types__["x" /* UPDATE_TAG */], function (state, _ref) {
+}), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_mutations, __WEBPACK_IMPORTED_MODULE_5__mutation_types__["x" /* UPDATE_TAG */], function (state, _ref) {
   var id = _ref.id,
       newTag = _ref.newTag;
 
@@ -92133,30 +92191,30 @@ var actions = {
   fetchTags: function fetchTags(_ref2) {
     var commit = _ref2.commit;
 
-    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().get('/api/tags').then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["r" /* SET_TAGS */], res);
+    return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().get('/api/tags').then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["r" /* SET_TAGS */], res);
     });
   },
   addTag: function addTag(_ref3, name) {
     var commit = _ref3.commit;
 
-    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().post('/api/tags', { name: name }).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["a" /* ADD_TAG */], res);
+    return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().post('/api/tags', { name: name }).then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["a" /* ADD_TAG */], res);
     });
   },
   setCurrentTag: function setCurrentTag(_ref4, tag) {
     var commit = _ref4.commit;
 
     if (__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(tag).length) {
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["w" /* SET_VIEWING_UNTAGGED */], false);
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["w" /* SET_VIEWING_UNTAGGED */], false);
     }
-    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["k" /* SET_CURRENT_TAG */], tag);
+    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["k" /* SET_CURRENT_TAG */], tag);
   },
   reorderTags: function reorderTags(_ref5, sortMap) {
     var commit = _ref5.commit;
 
-    return __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().put('/api/tags/reorder', { tags: sortMap }).then(function (res) {
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["r" /* SET_TAGS */], res);
+    return __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().put('/api/tags/reorder', { tags: sortMap }).then(function (res) {
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["r" /* SET_TAGS */], res);
     });
   },
   sortTags: function sortTags(_ref6, method) {
@@ -92169,23 +92227,23 @@ var actions = {
 
     switch (method) {
       case 'ALPHA_ASC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['name'], ['asc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['name'], ['asc']);
         break;
       case 'ALPHA_DESC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['name'], ['desc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['name'], ['desc']);
         break;
       case 'STARS_ASC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['stars_count'], ['asc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['stars_count'], ['asc']);
         break;
       case 'STARS_DESC':
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['stars_count'], ['desc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['stars_count'], ['desc']);
         break;
       default:
-        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_3_lodash__["orderBy"])(state.tags, ['sort_order'], ['asc']);
+        sortedTags = Object(__WEBPACK_IMPORTED_MODULE_4_lodash__["orderBy"])(state.tags, ['sort_order'], ['asc']);
         break;
     }
 
-    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["r" /* SET_TAGS */], sortedTags);
+    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["r" /* SET_TAGS */], sortedTags);
 
     sortMap = sortedTags.map(function (tag, i) {
       return {
@@ -92201,12 +92259,12 @@ var actions = {
         state = _ref7.state,
         commit = _ref7.commit;
 
-    __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().delete('/api/tags/' + id);
+    __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().delete('/api/tags/' + id);
 
     if (state.currentTag.id === id) {
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["k" /* SET_CURRENT_TAG */], {});
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["k" /* SET_CURRENT_TAG */], {});
     }
-    commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["e" /* DELETE_TAG */], id);
+    commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["e" /* DELETE_TAG */], id);
     var starsWithTag = rootState.stars.stars.filter(function (star) {
       return ~star.tags.map(function (tag) {
         return tag.id;
@@ -92219,7 +92277,7 @@ var actions = {
     });
 
     starsWithTag.forEach(function (star) {
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["q" /* SET_STAR_TAGS */], star);
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_STAR_TAGS */], star);
     });
   },
   renameTag: function renameTag(_ref8, _ref9) {
@@ -92229,12 +92287,12 @@ var actions = {
     var id = _ref9.id,
         name = _ref9.name;
 
-    __WEBPACK_IMPORTED_MODULE_5__api_client_js__["a" /* default */].withAuth().patch('/api/tags/' + id, { name: name }).then(function (res) {
+    __WEBPACK_IMPORTED_MODULE_6__api_client_js__["a" /* default */].withAuth().patch('/api/tags/' + id, { name: name }).then(function (res) {
       if (state.currentTag.id === id) {
-        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["k" /* SET_CURRENT_TAG */], res);
+        commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["k" /* SET_CURRENT_TAG */], res);
       }
 
-      commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["x" /* UPDATE_TAG */], { id: id, newTag: res });
+      commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["x" /* UPDATE_TAG */], { id: id, newTag: res });
 
       var starsWithTag = rootState.stars.stars.filter(function (star) {
         return ~star.tags.map(function (tag) {
@@ -92249,7 +92307,7 @@ var actions = {
       });
 
       starsWithTag.forEach(function (star) {
-        commit(__WEBPACK_IMPORTED_MODULE_4__mutation_types__["q" /* SET_STAR_TAGS */], star);
+        commit(__WEBPACK_IMPORTED_MODULE_5__mutation_types__["q" /* SET_STAR_TAGS */], star);
       });
     });
   }

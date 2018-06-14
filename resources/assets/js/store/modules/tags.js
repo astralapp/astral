@@ -10,6 +10,7 @@ import {
 } from '../mutation-types'
 
 import client from './../api/client.js'
+import router from './../../router'
 
 const state = {
   tags: [],
@@ -26,6 +27,7 @@ const mutations = {
     state.tags = tags
   },
   [SET_CURRENT_TAG] (state, tag) {
+    router.replace({ query: { ...router.currentRoute.query, tag: tag.name } })
     state.currentTag = Object.assign({}, tag)
   },
   [ADD_TAG] (state, tag) {

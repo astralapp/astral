@@ -98,9 +98,7 @@ export default {
       )
     }
   },
-  mounted () {
-    this.fetchTags()
-
+  async mounted () {
     this.$bus.$on('TAGS_SORTED', method => {
       this.sortTags(method)
     })
@@ -117,6 +115,21 @@ export default {
         this.reorderTags(sortMap)
       }
     )
+
+    await this.fetchTags()
+
+    if (this.$route.query.tag) {
+      const queryTag = this.tags.find(tag => {
+        return tag.name === this.$route.query.tag
+      })
+      if (queryTag) {
+        this.setCurrentTag(queryTag)
+      }
+    }
+
+    if (this.$route.query.language) {
+      this.setCurrentLanguage(this.$route.query.language)
+    }
   },
   methods: {
     ...mapActions([

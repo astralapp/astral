@@ -21,6 +21,7 @@ import {
 } from '../mutation-types'
 
 import client from './../api/client.js'
+import router from './../../router'
 
 const state = {
   userStars: [],
@@ -86,13 +87,13 @@ const mutations = {
     state.currentLanguage = language
   },
   [ADD_TAG_TO_STARS] (state, { stars, tag }) {
-    stars.forEach(({ id }) => {
+    stars.forEach(({ databaseId }) => {
       state.stars = state.stars.map(star => {
         if (
-          star.node.databaseId === id &&
+          star.node.databaseId === databaseId &&
           !star.tags.map(tag => tag.name).includes(tag.name)
         ) {
-          star.tags.push(tag)
+          star.tags = star.tags.concat([tag])
           return star
         } else {
           return star
@@ -197,6 +198,12 @@ const actions = {
       })
   },
   setCurrentLanguage ({ commit }, language) {
+    router.replace({
+      query: {
+        ...router.currentRoute.query,
+        language: language || undefined
+      }
+    })
     commit(SET_CURRENT_LANGUAGE, language)
   },
   addTagToStars ({ commit }, data) {

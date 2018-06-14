@@ -6,14 +6,16 @@
       <li
         v-if="star.node.primaryLanguage && user.show_language_tags"
         v-show="!isEditing"
-        class="text-xs text-white bg-brand rounded-full py-1 px-2 mr-2 mb-2"
+        class="text-xs text-white bg-brand hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
+        @click.stop="setCurrentLanguage(star.node.primaryLanguage.name)"
       >
         {{ star.node.primaryLanguage.name }}
       </li>
       <li
         v-for="tag in mutableTags"
         :key="tag.id"
-        class="text-xs text-white bg-indigo rounded-full py-1 px-2 mr-2 mb-2"
+        class="text-xs text-white bg-indigo hover:bg-indigo-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
+        @click.stop="setCurrentTag(tag)"
       >
         <span>{{ tag.name }}</span>
         <span>
@@ -93,7 +95,7 @@ export default {
     this.mutableTags = [...this.tags]
   },
   methods: {
-    ...mapActions(['syncStarTags']),
+    ...mapActions(['syncStarTags', 'setCurrentTag', 'setCurrentLanguage']),
     startEditing () {
       this.isEditing = true
       this.initAwesomplete()
