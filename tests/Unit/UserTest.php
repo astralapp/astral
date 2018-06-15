@@ -69,7 +69,7 @@ class UserTest extends TestCase
     {
         $this->user->setShowLanguageTags(false);
         $this->assertEquals(false, $this->user->show_language_tags);
-        
+
         $this->user->setShowLanguageTags(true);
         $this->assertEquals(true, $this->user->show_language_tags);
     }

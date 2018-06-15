@@ -14,7 +14,7 @@ class UserSettingsController extends Controller
     public function setShowLanguagetags(Request $request)
     {
         auth()->user()->setShowLanguageTags($request->input('show'));
-        
+
         return auth()->user();
     }
 }
