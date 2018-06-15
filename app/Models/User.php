@@ -52,7 +52,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function setShowLanguageTags($show)
     {
-        $this->show_language_tags = (bool)$show;
+        $this->show_language_tags = (bool) $show;
         $this->save();
     }
 

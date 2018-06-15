@@ -10,7 +10,7 @@ class TagSortOrderController extends Controller
     {
         $this->middleware('auth:api');
     }
-    
+
     public function update(Request $request)
     {
         $tags = $request->input('tags');
