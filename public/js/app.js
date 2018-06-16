@@ -60947,13 +60947,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['setCurrentStar', 'fetchReadme', 'addToCurrentStars']), {
-    starDragged: function starDragged(e) {
+    starDragged: function starDragged(e, star) {
       var width = void 0,
           height = void 0;
       var el = e.currentTarget;
       var clone = el.cloneNode(true);
-      if (this.currentStars.length > 1) {
-        clone.children[0].outerText += ' + ' + (this.currentStars.length - 1) + ' more';
+      if (this.currentStars.length > 1 && this.starIsCurrentStar(star)) {
+        clone.children[0].innerText += ' + ' + (this.currentStars.length - 1) + ' more';
       }
       clone.id = 'repo-clone';
       document.body.appendChild(clone);
@@ -60965,7 +60965,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       document.getElementById('repo-clone').remove();
     },
     starIsCurrentStar: function starIsCurrentStar(star) {
-      return !!__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(this.currentStar).length && this.currentStar.node.databaseId === star.node.databaseId || this.currentStars.includes(star);
+      return this.currentStars.length && this.currentStar.node.databaseId === star.node.databaseId || this.currentStars.includes(star);
     },
     previousStar: function previousStar(e) {
       if (this.shouldDisableKeyShortcuts(e)) {
@@ -61221,12 +61221,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
         });
       }
+    },
+    starInSelectedStars: function starInSelectedStars() {
+      return this.currentStars.includes(this.star);
     }
   }),
   methods: {
     starDragged: function starDragged(e) {
       var data = '';
-      if (this.currentStars.length !== 0) {
+      if (this.starInSelectedStars) {
         data = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_json_stringify___default()(this.currentStars.map(function (star) {
           return star.node;
         }));
@@ -62562,7 +62565,7 @@ var render = function() {
                         },
                         nativeOn: {
                           dragstart: function($event) {
-                            _vm.starDragged($event)
+                            _vm.starDragged($event, item.value)
                           },
                           dragend: function($event) {
                             _vm.clearClonedRepoNodes($event)

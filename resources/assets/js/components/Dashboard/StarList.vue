@@ -21,7 +21,7 @@
           :data-id="item.value.node.databaseId"
           :selected="starIsCurrentStar(item.value)"
           draggable="true"
-          @dragstart.native="starDragged($event)"
+          @dragstart.native="starDragged($event, item.value)"
           @dragend.native="clearClonedRepoNodes"
           @click.native="handleClick($event, item.value)"
         />
@@ -109,12 +109,12 @@ export default {
   },
   methods: {
     ...mapActions(['setCurrentStar', 'fetchReadme', 'addToCurrentStars']),
-    starDragged (e) {
+    starDragged (e, star) {
       let width, height
       const el = e.currentTarget
       const clone = el.cloneNode(true)
-      if (this.currentStars.length > 1) {
-        clone.children[0].outerText += ` + ${this.currentStars.length - 1} more`
+      if (this.currentStars.length > 1 && this.starIsCurrentStar(star)) {
+        clone.children[0].innerText += ` + ${this.currentStars.length - 1} more`
       }
       clone.id = 'repo-clone'
       document.body.appendChild(clone)
@@ -127,7 +127,7 @@ export default {
     },
     starIsCurrentStar (star) {
       return (
-        (!!Object.keys(this.currentStar).length &&
+        (this.currentStars.length &&
         this.currentStar.node.databaseId === star.node.databaseId) ||
         this.currentStars.includes(star)
       )

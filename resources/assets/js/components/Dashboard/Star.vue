@@ -77,12 +77,15 @@ export default {
           }
         })
       }
+    },
+    starInSelectedStars () {
+      return this.currentStars.includes(this.star)
     }
   },
   methods: {
     starDragged (e) {
       let data = ''
-      if (this.currentStars.length !== 0) {
+      if (this.starInSelectedStars) {
         data = JSON.stringify(this.currentStars.map(star => star.node))
       } else {
         data = JSON.stringify(this.star.node)
