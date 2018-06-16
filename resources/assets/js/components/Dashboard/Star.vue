@@ -14,7 +14,6 @@
       {{ star.node.description }}
     </p>
     <star-tags
-      :tags="normalizedStarTags"
       :star="star"
     />
     <div class="star-meta flex items-center mt-4">
@@ -61,23 +60,7 @@ export default {
   },
   props: ['star', 'selected'],
   computed: {
-    ...mapGetters(['currentStars']),
-    normalizedStarTags () {
-      if (!this.star.tags.length) {
-        return this.star.tags
-      } else {
-        return this.star.tags.filter(tag => {
-          if (!this.star.node.primaryLanguage) {
-            return true
-          } else {
-            return (
-              tag.name.toLowerCase() !==
-              this.star.node.primaryLanguage.name.toLowerCase()
-            )
-          }
-        })
-      }
-    },
+    ...mapGetters(['currentStars', 'user']),
     starInSelectedStars () {
       return this.currentStars.includes(this.star)
     }

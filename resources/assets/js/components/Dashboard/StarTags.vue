@@ -83,7 +83,7 @@ export default {
   },
   watch: {
     tags () {
-      this.mutableTags = [...this.tags]
+      this.mutableTags = [...this.star.tags]
     },
     mutableTags () {
       if (this.awesomplete) {
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted () {
-    this.mutableTags = [...this.tags]
+    this.mutableTags = [...this.star.tags]
   },
   methods: {
     ...mapActions(['syncStarTags', 'setCurrentTag', 'setCurrentLanguage']),
@@ -135,9 +135,9 @@ export default {
 
       const tagsHaveChanged = !!differenceBy(
         this.mutableTags,
-        this.tags,
+        this.star.tags,
         'name'
-      ).concat(differenceBy(this.tags, this.mutableTags, 'name')).length
+      ).concat(differenceBy(this.star.tags, this.mutableTags, 'name')).length
 
       if (this.newTag === '' && !isDeletingTag) {
         const tagsToSync = this.mutableTags.map(tag => {

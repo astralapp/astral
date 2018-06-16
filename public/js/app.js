@@ -61194,7 +61194,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -61206,22 +61205,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     StarTags: __WEBPACK_IMPORTED_MODULE_3__components_Dashboard_StarTags___default.a
   },
   props: ['star', 'selected'],
-  computed: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapGetters */])(['currentStars']), {
-    normalizedStarTags: function normalizedStarTags() {
-      var _this = this;
-
-      if (!this.star.tags.length) {
-        return this.star.tags;
-      } else {
-        return this.star.tags.filter(function (tag) {
-          if (!_this.star.node.primaryLanguage) {
-            return true;
-          } else {
-            return tag.name.toLowerCase() !== _this.star.node.primaryLanguage.name.toLowerCase();
-          }
-        });
-      }
-    },
+  computed: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapGetters */])(['currentStars', 'user']), {
     starInSelectedStars: function starInSelectedStars() {
       return this.currentStars.includes(this.star);
     }
@@ -61422,7 +61406,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   }),
   watch: {
     tags: function tags() {
-      this.mutableTags = [].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(this.tags));
+      this.mutableTags = [].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(this.star.tags));
     },
     mutableTags: function mutableTags() {
       if (this.awesomplete) {
@@ -61431,7 +61415,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   mounted: function mounted() {
-    this.mutableTags = [].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(this.tags));
+    this.mutableTags = [].concat(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_toConsumableArray___default()(this.star.tags));
   },
 
   methods: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_6_vuex__["b" /* mapActions */])(['syncStarTags', 'setCurrentTag', 'setCurrentLanguage']), {
@@ -61475,7 +61459,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     onBlur: function onBlur(e) {
       var isDeletingTag = e.relatedTarget && e.relatedTarget.classList.contains('remove-tag');
 
-      var tagsHaveChanged = !!Object(__WEBPACK_IMPORTED_MODULE_5_lodash__["differenceBy"])(this.mutableTags, this.tags, 'name').concat(Object(__WEBPACK_IMPORTED_MODULE_5_lodash__["differenceBy"])(this.tags, this.mutableTags, 'name')).length;
+      var tagsHaveChanged = !!Object(__WEBPACK_IMPORTED_MODULE_5_lodash__["differenceBy"])(this.mutableTags, this.star.tags, 'name').concat(Object(__WEBPACK_IMPORTED_MODULE_5_lodash__["differenceBy"])(this.star.tags, this.mutableTags, 'name')).length;
 
       if (this.newTag === '' && !isDeletingTag) {
         var tagsToSync = this.mutableTags.map(function (tag) {
@@ -62342,9 +62326,7 @@ var render = function() {
       _vm._v(" "),
       _vm._m(1),
       _vm._v(" "),
-      _c("star-tags", {
-        attrs: { tags: _vm.normalizedStarTags, star: _vm.star }
-      }),
+      _c("star-tags", { attrs: { star: _vm.star } }),
       _vm._v(" "),
       _c("div", { staticClass: "star-meta flex items-center mt-4" }, [
         _c(
