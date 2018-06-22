@@ -36,7 +36,6 @@ class StarsJanitor
         $userStarIds = $this->user->stars->map->repo_id->toArray();
 
         $idsToDelete = array_diff($userStarIds, $ids);
-
         $this->user->stars()->whereIn('repo_id', $idsToDelete)->get()->each->delete();
 
         return $this;
