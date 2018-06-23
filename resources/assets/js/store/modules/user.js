@@ -35,7 +35,7 @@ const actions = {
       .withAuth()
       .delete('/api/auth/delete', { id })
       .then(res => {
-        commit(DELETE_USER, res)
+        commit(DELETE_USER)
         router.push('auth/logout')
         ls.clear()
       })
