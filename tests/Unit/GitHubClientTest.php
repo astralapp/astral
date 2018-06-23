@@ -39,9 +39,9 @@ class GitHubClientTest extends TestCase
     public function it_can_pass_a_cursor_to_fetch_a_certain_page_of_stars()
     {
         $cursor = $this->sampleStars['edges'][0]['cursor'];
-        
+
         $stars = $this->client->fetchStars($cursor, 1);
-        
+
         $this->assertEquals($this->sampleStars['edges'][1]['node']['databaseId'], $stars['edges'][0]['node']['databaseId']);
     }
 
