@@ -5,10 +5,6 @@ php:
   - 7.1
   - 7.2
 
-env:
-  APP_KEY: XTe0nzaJt90Utv23jJQ3zti4RXYrIiyP
-  JWT_SECRET: YuJwjOCrWGWIdyq95yP89qUKPTvQ3BQK
-
 sudo: false
 
 cache:

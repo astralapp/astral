@@ -16,7 +16,7 @@ class GitHubClientTest extends TestCase
         parent::setUp();
 
         $this->client = new GitHubClient(env('GITHUB_TEST_ACCESS_TOKEN'));
-        $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
+        $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars_with_cursor.json'), true);
     }
 
     /** @test */
@@ -39,9 +39,9 @@ class GitHubClientTest extends TestCase
     public function it_can_pass_a_cursor_to_fetch_a_certain_page_of_stars()
     {
         $cursor = $this->sampleStars['edges'][0]['cursor'];
-
+        
         $stars = $this->client->fetchStars($cursor, 1);
-
+        
         $this->assertEquals($this->sampleStars['edges'][1]['node']['databaseId'], $stars['edges'][0]['node']['databaseId']);
     }
 
