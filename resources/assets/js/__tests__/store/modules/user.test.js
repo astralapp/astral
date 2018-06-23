@@ -71,7 +71,7 @@ describe('User Module', () => {
       await fetchUser(ctx)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.get).toHaveBeenCalled()
+      expect(client.get).toHaveBeenCalledWith('/api/auth/me')
       expect(ctx.commit).toHaveBeenCalledWith('SET_USER', res)
     })
 
