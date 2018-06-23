@@ -14,6 +14,7 @@ const state = { ...user.state }
 const getters = user.getters
 const { SET_USER, DELETE_USER } = user.mutations
 const { fetchUser, deleteUser, setShowLanguageTags } = user.actions
+const ctx = { commit: jest.fn() }
 
 describe('User Module', () => {
   beforeEach(() => {
@@ -64,7 +65,6 @@ describe('User Module', () => {
 
   describe('User actions', () => {
     it('fetches the authenticated user', async () => {
-      const ctx = { commit: jest.fn() }
       const res = { username: 'syropian' }
       client.get.mockResolvedValue(res)
 
@@ -76,8 +76,6 @@ describe('User Module', () => {
     })
 
     it('deletes the authenticated user', async () => {
-      const ctx = { commit: jest.fn() }
-
       await deleteUser(ctx, 1)
 
       expect(client.withAuth).toHaveBeenCalled()
@@ -88,7 +86,6 @@ describe('User Module', () => {
     })
 
     it('sets the users language tag visibility option', async () => {
-      const ctx = { commit: jest.fn() }
       const res = { username: 'syropian' }
       client.put.mockResolvedValue(res)
 
