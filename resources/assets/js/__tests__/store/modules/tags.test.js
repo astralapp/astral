@@ -41,8 +41,11 @@ describe('Tags Module', () => {
   })
 
   describe('Tags getters', () => {
-    it('returns the user', () => {
+    it('returns the tags', () => {
       expect(getters.tags(state)).toEqual(state.tags)
+    })
+
+    it('returns the current tag', () => {
       expect(getters.currentTag(state)).toEqual(state.currentTag)
     })
   })
