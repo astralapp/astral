@@ -9,8 +9,8 @@ import {
   SET_STAR_TAGS
 } from '../mutation-types'
 
-import client from './../api/client.js'
-import router from './../../router'
+import client from '@/store/api/client'
+import router from '@/router'
 
 const state = {
   tags: [],
@@ -27,7 +27,6 @@ const mutations = {
     state.tags = tags
   },
   [SET_CURRENT_TAG] (state, tag) {
-    router.replace({ query: { ...router.currentRoute.query, tag: tag.name } })
     state.currentTag = Object.assign({}, tag)
   },
   [ADD_TAG] (state, tag) {
@@ -72,6 +71,7 @@ const actions = {
       commit(SET_VIEWING_UNTAGGED, false)
     }
     commit(SET_CURRENT_TAG, tag)
+    router.replace({ query: { ...router.currentRoute.query, tag: tag.name } })
   },
   reorderTags ({ commit }, sortMap) {
     return client
@@ -123,7 +123,7 @@ const actions = {
     commit(DELETE_TAG, id)
     const starsWithTag = rootState.stars.stars
       .filter(star => {
-        return ~star.tags.map(tag => tag.id).indexOf(id)
+        return star.tags.map(tag => tag.id).includes(id)
       })
       .map(star => {
         const filteredTags = star.tags.filter(tag => {
