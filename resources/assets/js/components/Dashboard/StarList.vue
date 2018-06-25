@@ -14,8 +14,8 @@
       class="overflow-y-scroll">
       <div
         slot="star"
-        :key="item.value.node.databaseId"
-        slot-scope="{cell, item}">
+        slot-scope="{cell, item}"
+        :key="item.value.node.databaseId">
         <Star
           :star="item.value"
           :data-id="item.value.node.databaseId"
