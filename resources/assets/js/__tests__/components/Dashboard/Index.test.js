@@ -1,4 +1,4 @@
-import { shallow, createLocalVue } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
 import DashboardIndex from '@/components/Dashboard/Index'
 import Vuex from 'vuex'
@@ -25,10 +25,7 @@ describe('Dashboard Index', () => {
     store = new Vuex.Store({
       state: {},
       getters: {
-        stars: () => [
-          { name: 'vuejs/vue', tags: [{ name: 'VueJS' }] },
-          { name: 'other/repo', tags: [] }
-        ],
+        stars: () => [{ name: 'vuejs/vue', tags: [{ name: 'VueJS' }] }, { name: 'other/repo', tags: [] }],
         pageInfo: () => {
           return {
             hasNextPage: false
@@ -46,7 +43,7 @@ describe('Dashboard Index', () => {
   })
   describe('on component created', () => {
     it('is fetches all user-related data', async () => {
-      shallow(DashboardIndex, {
+      shallowMount(DashboardIndex, {
         localVue,
         store,
         mocks: { $bus }
@@ -63,7 +60,7 @@ describe('Dashboard Index', () => {
 
   describe('computed props', () => {
     it('stars that contain the current tag', () => {
-      const wrapper = shallow(DashboardIndex, {
+      const wrapper = shallowMount(DashboardIndex, {
         localVue,
         store,
         mocks: { $bus }

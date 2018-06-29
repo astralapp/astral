@@ -1,10 +1,10 @@
-import { shallow } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import NewTagForm from '@/components/Dashboard/Sidebar/NewTagForm'
 
 describe('New Tag Form', () => {
   describe('methods', () => {
     it('shows the form when clicking the button', () => {
-      const wrapper = shallow(NewTagForm)
+      const wrapper = shallowMount(NewTagForm)
       const $btn = wrapper.find('.toggle-new-tag-button')
       const $form = wrapper.find('.toggle-new-tag-form')
 
@@ -20,7 +20,7 @@ describe('New Tag Form', () => {
     })
 
     it('hides the form when blurring the text input', () => {
-      const wrapper = shallow(NewTagForm)
+      const wrapper = shallowMount(NewTagForm)
       const $input = wrapper.find('.toggle-new-tag-form input[type=text]')
 
       wrapper.setData({ formShowing: true })
@@ -33,7 +33,7 @@ describe('New Tag Form', () => {
     })
 
     it('emits an event with the form value when submitting the form', () => {
-      const wrapper = shallow(NewTagForm)
+      const wrapper = shallowMount(NewTagForm)
       const $form = wrapper.find('.toggle-new-tag-form')
 
       wrapper.setData({ tagName: 'Testing' })

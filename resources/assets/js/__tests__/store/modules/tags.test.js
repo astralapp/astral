@@ -35,8 +35,10 @@ describe('Tags Module', () => {
 
   describe('Tags state', () => {
     it('returns the tag-related state', () => {
-      expect(state.tags).toEqual([])
-      expect(state.currentTag).toEqual({})
+      expect(state).toEqual({
+        tags: [],
+        currentTag: {}
+      })
     })
   })
 

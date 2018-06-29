@@ -1,9 +1,9 @@
-import { shallow } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import ToggleSwitch from '@/components/ToggleSwitch'
 
 describe('Toggle Switch', () => {
   it('is not checked by default', () => {
-    const wrapper = shallow(ToggleSwitch)
+    const wrapper = shallowMount(ToggleSwitch)
 
     expect(wrapper.vm.checked).toBe(false)
     expect(wrapper.find('input[type=checkbox]').element.checked).toBe(false)
@@ -11,7 +11,7 @@ describe('Toggle Switch', () => {
   })
 
   it('emits a change event', () => {
-    const wrapper = shallow(ToggleSwitch)
+    const wrapper = shallowMount(ToggleSwitch)
 
     const $checkbox = wrapper.find('input[type=checkbox]')
     $checkbox.trigger('click')
@@ -20,7 +20,7 @@ describe('Toggle Switch', () => {
   })
 
   it('sets the correct label and class', () => {
-    const wrapper = shallow(ToggleSwitch, {
+    const wrapper = shallowMount(ToggleSwitch, {
       propsData: {
         checked: true,
         onLabel: 'Yes',
@@ -29,15 +29,11 @@ describe('Toggle Switch', () => {
     })
 
     expect(wrapper.find('.toggle-switch-label').text()).toBe('Yes')
-    expect(wrapper.find('.toggle-switch-label').classes()).toContain(
-      'text-brand'
-    )
+    expect(wrapper.find('.toggle-switch-label').classes()).toContain('text-brand')
 
     wrapper.setProps({ checked: false })
 
     expect(wrapper.find('.toggle-switch-label').text()).toBe('No')
-    expect(wrapper.find('.toggle-switch-label').classes()).toContain(
-      'text-grey'
-    )
+    expect(wrapper.find('.toggle-switch-label').classes()).toContain('text-grey')
   })
 })

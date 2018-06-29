@@ -1,4 +1,4 @@
-import { shallow } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import TagSortDropdown from '@/components/Dashboard/Sidebar/TagSortDropdown'
 
 const $bus = {
@@ -7,7 +7,7 @@ const $bus = {
 
 describe('Tag Sort Dropdown', () => {
   it('shows if visibility is true', () => {
-    const wrapper = shallow(TagSortDropdown, {
+    const wrapper = shallowMount(TagSortDropdown, {
       propsData: {
         visible: true
       },
@@ -17,7 +17,7 @@ describe('Tag Sort Dropdown', () => {
     expect(wrapper.find('.tag-sort-dropdown').isVisible()).toBe(true)
   })
   it('is hidden if visibility is false', () => {
-    const wrapper = shallow(TagSortDropdown, {
+    const wrapper = shallowMount(TagSortDropdown, {
       propsData: {
         visible: false
       },
@@ -27,7 +27,7 @@ describe('Tag Sort Dropdown', () => {
     expect(wrapper.find('.tag-sort-dropdown').isVisible()).toBe(false)
   })
   it('emits an event when a sort method is clicked', () => {
-    const wrapper = shallow(TagSortDropdown, {
+    const wrapper = shallowMount(TagSortDropdown, {
       propsData: {
         visible: false
       },

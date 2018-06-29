@@ -24,7 +24,7 @@ describe('User Module', () => {
 
   describe('User state', () => {
     it('returns the user-related state', () => {
-      expect(state.user).toEqual({})
+      expect(state).toEqual({ user: {} })
     })
   })
 

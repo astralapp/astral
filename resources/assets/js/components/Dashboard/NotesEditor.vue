@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import SimpleMDE from 'simplemde'
+import EasyMDE from 'easymde'
 import { debounce } from 'lodash'
 import 'highlight.js'
 export default {
@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted () {
-    this.editor = new SimpleMDE({
+    this.editor = new EasyMDE({
       element: this.$refs.editor,
       initialValue: this.notes,
       forceSync: true,
@@ -49,70 +49,70 @@ export default {
       toolbar: [
         {
           name: 'bold',
-          action: SimpleMDE.toggleBold,
+          action: EasyMDE.toggleBold,
           className: 'fas fa-bold',
           title: 'Bold'
         },
         {
           name: 'italic',
-          action: SimpleMDE.toggleItalic,
+          action: EasyMDE.toggleItalic,
           className: 'fas fa-italic',
           title: 'Italic'
         },
         {
           name: 'heading',
-          action: SimpleMDE.toggleHeadingSmaller,
+          action: EasyMDE.toggleHeadingSmaller,
           className: 'fas fa-heading',
           title: 'Heading'
         },
         '|',
         {
           name: 'code',
-          action: SimpleMDE.toggleCodeBlock,
+          action: EasyMDE.toggleCodeBlock,
           className: 'fas fa-code',
           title: 'Code'
         },
         {
           name: 'quote',
-          action: SimpleMDE.toggleBlockquote,
+          action: EasyMDE.toggleBlockquote,
           className: 'fas fa-quote-left',
           title: 'Quote'
         },
         {
           name: 'unordered-list',
-          action: SimpleMDE.toggleUnorderedList,
+          action: EasyMDE.toggleUnorderedList,
           className: 'fas fa-list-ul',
           title: 'Unordered List'
         },
         {
           name: 'ordered-list',
-          action: SimpleMDE.toggleOrderedList,
+          action: EasyMDE.toggleOrderedList,
           className: 'fas fa-list-ol',
           title: 'Ordered List'
         },
         '|',
         {
           name: 'link',
-          action: SimpleMDE.drawLink,
+          action: EasyMDE.drawLink,
           className: 'fas fa-link',
           title: 'Link'
         },
         {
           name: 'image',
-          action: SimpleMDE.drawImage,
+          action: EasyMDE.drawImage,
           className: 'fas fa-image',
           title: 'Image'
         },
         '|',
         {
           name: 'preview',
-          action: SimpleMDE.togglePreview,
+          action: EasyMDE.togglePreview,
           className: 'fas fa-eye',
           title: 'Preview'
         },
         {
           name: 'fullscreen',
-          action: SimpleMDE.toggleFullScreen,
+          action: EasyMDE.toggleFullScreen,
           className: 'fas fa-arrows-alt',
           title: 'Image'
         }
@@ -143,14 +143,14 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~simplemde/dist/simplemde.min.css';
+@import "~easymde/dist/easymde.min.css";
 .editor-toolbar {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border: none;
-  border-bottom: 1px solid config('colors.grey-light');
+  border-bottom: 1px solid config("colors.grey-light");
   button {
-    color: config('colors.grey-dark');
+    color: config("colors.grey-dark");
   }
 }
 .CodeMirror {

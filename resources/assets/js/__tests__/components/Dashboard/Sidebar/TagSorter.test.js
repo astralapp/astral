@@ -1,4 +1,4 @@
-import { shallow } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import TagSorter from '@/components/Dashboard/Sidebar/TagSorter'
 
 const $bus = {
@@ -7,7 +7,7 @@ const $bus = {
 
 describe('Tag Sorter', () => {
   it('toggles the dropdown state when clicking the button', () => {
-    const wrapper = shallow(TagSorter, {
+    const wrapper = shallowMount(TagSorter, {
       mocks: { $bus }
     })
     const $btn = wrapper.find('button')
@@ -21,7 +21,7 @@ describe('Tag Sorter', () => {
     expect(wrapper.vm.dropdownVisible).toBe(false)
   })
   it('hides the dropdown', () => {
-    const wrapper = shallow(TagSorter, {
+    const wrapper = shallowMount(TagSorter, {
       mocks: { $bus }
     })
 

@@ -51,17 +51,11 @@ const getters = {
       }, {})
   },
   currentLanguage: state => state.currentLanguage,
-  currentStar: state =>
-    state.currentStars.length > 0 ? state.currentStars[0] : {},
-  currentStars: state => [...uniqBy(state.currentStars)],
+  currentStar: state => (state.currentStars.length > 0 ? state.currentStars[0] : {}),
+  currentStars: state => [...uniqBy(state.currentStars, 'node.databaseId')],
   currentStarIndex: state => {
-    if (
-      state.currentStars[0] !== undefined &&
-      Object.keys(state.currentStars[0]).length
-    ) {
-      return state.stars.findIndex(
-        star => star.node.databaseId === state.currentStars[0].node.databaseId
-      )
+    if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
+      return state.stars.findIndex(star => star.node.databaseId === state.currentStars[0].node.databaseId)
     } else {
       return -1
     }
@@ -89,44 +83,42 @@ const mutations = {
   [ADD_TAG_TO_STARS] (state, { stars, tag }) {
     stars.forEach(({ databaseId }) => {
       state.stars = state.stars.map(star => {
-        if (
-          star.node.databaseId === databaseId &&
-          !star.tags.map(tag => tag.name).includes(tag.name)
-        ) {
-          star.tags = star.tags.concat([tag])
-          return star
-        } else {
-          return star
+        let tags = []
+        if (star.node.databaseId === databaseId && !star.tags.map(tag => tag.name).includes(tag.name)) {
+          tags = star.tags.concat([tag])
         }
+        return { ...star, tags }
       })
     })
   },
   [SET_STAR_TAGS] (state, { starId, tags }) {
     state.stars = state.stars.map(star => {
       if (star.node.databaseId === starId) {
-        star.tags = [].concat(tags)
-      }
-      return star
-    })
-  },
-  [SET_USER_STARS] (state, stars) {
-    state.userStars = [].concat(stars)
-  },
-  [MAP_USER_STARS_TO_GITHUB_STARS] (state) {
-    const userStars = state.userStars
-    state.stars.map(star => {
-      const userStar = userStars.find(s => s.repo_id === star.node.databaseId)
-      if (userStar && (userStar.tags.length || userStar.notes)) {
-        if (userStar.tags.length) {
-          star.tags = userStar.tags
-        }
-        if (userStar.notes) {
-          star.notes = userStar.notes
-        }
-        return star
+        return { ...star, tags }
       } else {
         return star
       }
+    })
+  },
+  [SET_USER_STARS] (state, stars) {
+    state.userStars = [...stars]
+  },
+  [MAP_USER_STARS_TO_GITHUB_STARS] (state) {
+    const userStars = state.userStars
+    state.stars = state.stars.map(star => {
+      let tags = []
+      let notes = {}
+      const userStar = userStars.find(s => s.repo_id === star.node.databaseId)
+      if (userStar && (userStar.tags.length || userStar.notes)) {
+        if (userStar.tags.length) {
+          tags = userStar.tags
+        }
+        if (userStar.notes) {
+          notes = userStar.notes
+        }
+      }
+
+      return { ...star, tags, notes }
     })
   },
   [SET_CURRENT_STAR] (state, star) {
@@ -141,10 +133,10 @@ const mutations = {
   [SET_VIEWING_UNTAGGED] (state, viewing) {
     state.viewingUntagged = viewing
   },
-  [SET_STAR_NOTES] (state, { id, notes }) {
-    state.stars.map(star => {
+  [SET_STAR_NOTES] (state, { id, notes = '' }) {
+    state.stars = state.stars.map(star => {
       if (star.node.databaseId === id) {
-        star.notes = notes
+        star = { ...star, notes }
       }
 
       return star
@@ -169,9 +161,7 @@ const actions = {
     }
     return client
       .withAuth()
-      .get(
-        `/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`
-      )
+      .get(`/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`)
       .then(res => {
         commit(
           SET_STARS,
@@ -226,12 +216,10 @@ const actions = {
   },
   fetchReadme ({ rootState, commit }, repoName) {
     const accessToken = rootState.user.user.access_token
-    client
+    return client
       .withoutAuth()
       .get(
-        `https://api.github.com/repos/${repoName}/readme?access_token=${
-          accessToken
-        }`,
+        `https://api.github.com/repos/${repoName}/readme?access_token=${accessToken}`,
         {},
         {
           Accept: 'application/vnd.github.v3.html'

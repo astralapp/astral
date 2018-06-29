@@ -1,9 +1,9 @@
-import { shallow } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
 
 describe('Sidebar refresh button', () => {
   it('applies the active class when the prop is true', () => {
-    const wrapper = shallow(RefreshButton, {
+    const wrapper = shallowMount(RefreshButton, {
       propsData: {
         active: true
       }
@@ -13,7 +13,7 @@ describe('Sidebar refresh button', () => {
   })
 
   it('does not apply the active class when the prop is false', () => {
-    const wrapper = shallow(RefreshButton, {
+    const wrapper = shallowMount(RefreshButton, {
       propsData: {
         active: false
       }

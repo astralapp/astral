@@ -1,9 +1,9 @@
-import { shallow, mount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
 
 describe('Sidebar Item', () => {
   it('renders a title', () => {
-    const wrapper = shallow(SidebarItem, {
+    const wrapper = shallowMount(SidebarItem, {
       propsData: {
         title: 'Testing',
         icon: 'PlayIcon'

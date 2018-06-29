@@ -1,5 +1,5 @@
-import { shallow } from '@vue/test-utils'
-import SimpleMDE from 'simplemde'
+import { shallowMount } from '@vue/test-utils'
+import EasyMDE from 'easymde'
 import flushPromises from 'flush-promises'
 import NotesEditor from '@/components/Dashboard/NotesEditor'
 
@@ -15,25 +15,23 @@ describe('Notes Editor', () => {
   })
 
   describe('on component mounted', () => {
-    it('creates a SimpleMDE instance', () => {
-      const wrapper = shallow(NotesEditor, {
+    it('creates an EasyMDE instance', () => {
+      const wrapper = shallowMount(NotesEditor, {
         propsData: {
           notes: 'Lorem Ipsum'
         }
       })
-      expect(wrapper.vm.editor instanceof SimpleMDE).toBe(true)
+      expect(wrapper.vm.editor instanceof EasyMDE).toBe(true)
     })
     it('sets and saves the notes on change', async () => {
-      const wrapper = shallow(NotesEditor, {
+      const wrapper = shallowMount(NotesEditor, {
         propsData: {
           notes: 'Lorem Ipsum'
         }
       })
-      const valueSpy = jest
-        .spyOn(wrapper.vm.editor, 'value')
-        .mockImplementation(() => {
-          return 'New value'
-        })
+      const valueSpy = jest.spyOn(wrapper.vm.editor, 'value').mockImplementation(() => {
+        return 'New value'
+      })
       const saveSpy = jest.spyOn(wrapper.vm, 'saveNotes')
 
       wrapper.vm.editor.codemirror.setValue('New value')
@@ -48,16 +46,14 @@ describe('Notes Editor', () => {
 
   describe('watchers', () => {
     it('toggles the preview when notes change', () => {
-      const wrapper = shallow(NotesEditor, {
+      const wrapper = shallowMount(NotesEditor, {
         propsData: {
           notes: 'Lorem Ipsum'
         }
       })
-      const previewActiveSpy = jest
-        .spyOn(wrapper.vm.editor, 'isPreviewActive')
-        .mockImplementation(() => {
-          return true
-        })
+      const previewActiveSpy = jest.spyOn(wrapper.vm.editor, 'isPreviewActive').mockImplementation(() => {
+        return true
+      })
       const togglePreviewSpy = jest.spyOn(wrapper.vm.editor, 'togglePreview')
       const valueSpy = jest.spyOn(wrapper.vm.editor, 'value')
 
@@ -71,7 +67,7 @@ describe('Notes Editor', () => {
 
   describe('component methods', () => {
     it('saves notes', () => {
-      const wrapper = shallow(NotesEditor, {
+      const wrapper = shallowMount(NotesEditor, {
         propsData: {
           notes: 'Lorem Ipsum'
         }

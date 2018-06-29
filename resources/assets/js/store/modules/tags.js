@@ -27,10 +27,10 @@ const mutations = {
     state.tags = tags
   },
   [SET_CURRENT_TAG] (state, tag) {
-    state.currentTag = Object.assign({}, tag)
+    state.currentTag = { ...tag }
   },
   [ADD_TAG] (state, tag) {
-    state.tags = state.tags.concat([tag])
+    state.tags = [...state.tags, ...[tag]]
   },
   [DELETE_TAG] (state, id) {
     const index = state.tags.findIndex(tag => {
