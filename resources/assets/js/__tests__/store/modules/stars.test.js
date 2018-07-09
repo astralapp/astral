@@ -200,7 +200,7 @@ describe('Stars Module', () => {
       }))
 
       ADD_TAG_TO_STARS(state, {
-        stars: [sampleStars.edges[0].gsnode],
+        stars: [sampleStars.edges[0].node],
         tag: sampleTags[0]
       })
 
