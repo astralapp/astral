@@ -51,11 +51,17 @@ const getters = {
       }, {})
   },
   currentLanguage: state => state.currentLanguage,
-  currentStar: state => (state.currentStars.length > 0 ? state.currentStars[0] : {}),
+  currentStar: state =>
+    state.currentStars.length > 0 ? state.currentStars[0] : {},
   currentStars: state => [...uniqBy(state.currentStars, 'node.databaseId')],
   currentStarIndex: state => {
-    if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
-      return state.stars.findIndex(star => star.node.databaseId === state.currentStars[0].node.databaseId)
+    if (
+      state.currentStars[0] !== undefined &&
+      Object.keys(state.currentStars[0]).length
+    ) {
+      return state.stars.findIndex(
+        star => star.node.databaseId === state.currentStars[0].node.databaseId
+      )
     } else {
       return -1
     }
@@ -83,8 +89,11 @@ const mutations = {
   [ADD_TAG_TO_STARS] (state, { stars, tag }) {
     stars.forEach(({ databaseId }) => {
       state.stars = state.stars.map(star => {
-        let tags = []
-        if (star.node.databaseId === databaseId && !star.tags.map(tag => tag.name).includes(tag.name)) {
+        let tags = star.tags
+        if (
+          star.node.databaseId === databaseId &&
+          !star.tags.map(tag => tag.name).includes(tag.name)
+        ) {
           tags = star.tags.concat([tag])
         }
         return { ...star, tags }
@@ -161,7 +170,9 @@ const actions = {
     }
     return client
       .withAuth()
-      .get(`/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`)
+      .get(
+        `/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`
+      )
       .then(res => {
         commit(
           SET_STARS,

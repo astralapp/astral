@@ -59,7 +59,7 @@ import { differenceBy } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'StarTags',
-  props: ['star', 'tags'],
+  props: ['star'],
   data () {
     return {
       awesomplete: null,
@@ -82,8 +82,11 @@ export default {
     }
   },
   watch: {
-    tags () {
-      this.mutableTags = [...this.star.tags]
+    star: {
+      handler (newVal, oldVal) {
+        this.mutableTags = [...this.star.tags]
+      },
+      deep: true
     },
     mutableTags () {
       if (this.awesomplete) {

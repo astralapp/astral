@@ -37,7 +37,7 @@
     "axios": "^0.17",
     "cuid": "^2.1.1",
     "dragula": "^3.7.2",
-    "easymde": "https://github.com/Ionaru/easy-markdown-editor/tarball/development",
+    "easymde": "^2.2.2",
     "es6-promise": "^4.1.1",
     "fuzzysearch": "^1.0.3",
     "highlight.js": "^9.12.0",

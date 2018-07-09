@@ -5,8 +5,7 @@ const state = {
   tokenizedSearchQuery: {
     query: '',
     tags: [],
-    strings: [],
-    languages: []
+    strings: []
   }
 }
 
