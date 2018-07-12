@@ -25,28 +25,13 @@ mix.webpackConfig({
 
 mix
   .js('resources/assets/js/app.js', 'public/js')
-  .sass('resources/assets/sass/app.scss', './../resources/assets/sass/temp')
-  .sass(
-    'resources/assets/sass/preflight.scss',
-    './../resources/assets/sass/temp'
-  )
-  .combine(
-    [
-      'resources/assets/sass/temp/preflight.css',
-      'resources/assets/sass/temp/app.css'
-    ],
-    'public/css/app.css'
-  )
+  .sass('resources/assets/sass/app.scss', 'public/css/app.css')
   .options({
     extractVueStyles: true,
     processCssUrls: false,
-    postCss: [tailwindcss('tailwind.js')]
+    postCss: [tailwindcss('tailwind.config.js')]
   })
   .purgeCss()
-  .then(function () {
-    fs.unlinkSync('resources/assets/sass/temp/preflight.css')
-    fs.unlinkSync('resources/assets/sass/temp/app.css')
-  })
 
 if (mix.inProduction()) {
   mix.version()
