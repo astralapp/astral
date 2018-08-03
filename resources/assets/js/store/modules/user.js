@@ -9,7 +9,7 @@ const state = {
 
 const getters = {
   user: state => state.user,
-  isAuthenticated: state => !!ls('jwt') && ls('jwt_expiry')
+  isAuthenticated: state => !!ls('jwt')
 }
 
 const mutations = {
