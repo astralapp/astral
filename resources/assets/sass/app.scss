@@ -1,5 +1,5 @@
-@import 'components';
-
+@tailwind preflight;
+@import "components";
 @tailwind utilities;
 
 html {
@@ -9,12 +9,12 @@ html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
-  -moz-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
-  -moz-font-feature-settings: 'calt=1, liga=1, clig=1, kern=1';
-  -ms-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
-  -o-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
-  -webkit-font-feature-settings: 'calt', 'liga', 'clig', 'kern';
-  font-feature-settings: 'calt', 'liga', 'clig', 'kern';
+  -moz-font-feature-settings: "calt", "liga", "clig", "kern";
+  -moz-font-feature-settings: "calt=1, liga=1, clig=1, kern=1";
+  -ms-font-feature-settings: "calt", "liga", "clig", "kern";
+  -o-font-feature-settings: "calt", "liga", "clig", "kern";
+  -webkit-font-feature-settings: "calt", "liga", "clig", "kern";
+  font-feature-settings: "calt", "liga", "clig", "kern";
 }
 
 html,
@@ -24,11 +24,10 @@ body {
   position: relative;
 }
 body {
-  background: config('colors.brand');
-  font-family: config('fonts.sans');
+  background: config("colors.brand");
+  font-family: config("fonts.sans");
   min-height: 100%;
 }
 
-@import 'animations';
-
-@import 'custom-utilities';
+@import "animations";
+@import "custom-utilities";
