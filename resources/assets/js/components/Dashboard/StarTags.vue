@@ -83,10 +83,10 @@ export default {
   },
   watch: {
     star: {
-      handler (newVal, oldVal) {
+      handler () {
         this.mutableTags = [...this.star.tags]
       },
-      deep: true
+      immediate: true
     },
     mutableTags () {
       if (this.awesomplete) {
@@ -231,8 +231,8 @@ export default {
         color: #fff;
       }
     }
-    > li[aria-selected='true'] {
-      background: config('colors.brand');
+    > li[aria-selected="true"] {
+      background: config("colors.brand");
       color: #fff;
     }
   }
@@ -244,7 +244,7 @@ export default {
     background: transparent;
     font-weight: bold;
   }
-  li[aria-selected='true'] mark {
+  li[aria-selected="true"] mark {
     background: transparent;
     font-weight: bold;
     color: inherit;
