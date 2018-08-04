@@ -1,4 +1,4 @@
-# Astral [![Build Status](https://travis-ci.org/astralapp/astral.svg?branch=v3)](https://travis-ci.org/astralapp/astral)
+# Astral [![Build Status](https://travis-ci.org/astralapp/astral.svg?branch=master)](https://travis-ci.org/astralapp/astral)
 
 An open source application that allows you to organize your GitHub Stars with ease. Check it out at [https://astralapp.com](https://astralapp.com).
 
