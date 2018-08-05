@@ -42,9 +42,9 @@
             rel="noopener">Patreon</a>
         </li>
         <li>
-          <a
+          <router-link
             class="dropdown-item"
-            href="#">Logout</a>
+            to="/auth/logout">Logout</router-link>
         </li>
       </ul>
     </div>
