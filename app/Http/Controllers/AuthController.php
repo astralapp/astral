@@ -42,7 +42,7 @@ class AuthController extends Controller
         $jwt = JWTAuth::fromUser($user);
         $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
 
-        return redirect('/auth?token=' . $jwt . '&token_expiry=' . $jwtExpiry);
+        return redirect('/auth?token='.$jwt.'&token_expiry='.$jwtExpiry);
     }
 
     public function me(Request $request)
@@ -59,8 +59,8 @@ class AuthController extends Controller
     {
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60,
+            'token_type'   => 'bearer',
+            'expires_in'   => $this->guard()->factory()->getTTL() * 60,
         ]);
     }
 
