@@ -79,7 +79,7 @@ describe('Tags Module', () => {
       expect(state.tags).toEqual(['Vue', 'React'])
     })
 
-    it('deletes a tag by id', () => {
+    it('deletes a tag', () => {
       state.tags = state.tags.concat([
         {
           id: 1,
@@ -99,7 +99,7 @@ describe('Tags Module', () => {
       expect(state.tags.findIndex(t => t.id === 1)).toBe(-1)
     })
 
-    it('updates a tag by id with a new tag', () => {
+    it('updates a tag', () => {
       state.tags = state.tags.concat([
         {
           id: 1,
@@ -330,7 +330,7 @@ describe('Tags Module', () => {
               name: 'vuejs/vue',
               databaseId: 1234
             },
-            tags: [{ id: 1, name: 'Vue' }]
+            tags: [{ id: 1, name: 'Vue' }, { id: 2, name: 'SPA' }]
           }
         ])
 
@@ -338,7 +338,7 @@ describe('Tags Module', () => {
 
         expect(ctx.commit).toHaveBeenNthCalledWith(2, 'SET_STAR_TAGS', {
           starId: 1234,
-          tags: [{ id: 1, name: 'VueJS' }]
+          tags: [{ id: 1, name: 'VueJS' }, { id: 2, name: 'SPA' }]
         })
       })
     })

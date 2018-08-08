@@ -149,11 +149,14 @@ const actions = {
 
         const starsWithTag = rootState.stars.stars
           .filter(star => {
-            return ~star.tags.map(tag => tag.id).indexOf(id)
+            return star.tags.map(tag => tag.id).includes(id)
           })
           .map(star => {
             const tags = star.tags.map(tag => {
-              tag.name = name
+              if (tag.id === id) {
+                tag.name = name
+              }
+
               return tag
             })
             return { starId: star.node.databaseId, tags }
