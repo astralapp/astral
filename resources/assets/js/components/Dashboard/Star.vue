@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{'selected shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}"
-    class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg"
+    class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg group"
     @dragstart="starDragged">
     <h3
       v-once
@@ -84,8 +84,8 @@ export default {
   &::before {
     transition: transform 150ms ease-in-out;
     transform: translate3d(-4px, 0, 0);
-    background-color: config('colors.brand');
-    content: '';
+    background-color: config("colors.brand");
+    content: "";
     display: block;
     width: 4px;
     position: absolute;
