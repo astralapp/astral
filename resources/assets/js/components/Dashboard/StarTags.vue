@@ -43,7 +43,7 @@
       <li class="mb-2">
         <button
           v-show="!isEditing"
-          class="text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2"
+          class="transition-opacity text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2 opacity-0 group-hover:opacity-100"
           @click.stop="startEditing">
           Edit Tags
         </button>
