@@ -116,7 +116,7 @@ const mutations = {
     const userStars = state.userStars
     state.stars = state.stars.map(star => {
       let tags = []
-      let notes = {}
+      let notes = ''
       const userStar = userStars.find(s => s.repo_id === star.node.databaseId)
       if (userStar && (userStar.tags.length || userStar.notes)) {
         if (userStar.tags.length) {

@@ -1,6 +1,6 @@
 <template>
   <div class="absolute pin-t pin-l pin-b mt-16 w-full bg-white flex flex-col">
-    <textarea ref="editor"/>
+    <textarea ref="editor" />
     <div
       v-show="notesSaved"
       class="repo-notes-status">
@@ -24,13 +24,16 @@ export default {
   },
   watch: {
     notes (val) {
-      if (this.editor.isPreviewActive()) {
-        this.editor.togglePreview()
+      console.log(val)
+      if (this.editor) {
+        if (this.editor.isPreviewActive()) {
+          this.editor.togglePreview()
+        }
+        if (val === this.editor.value()) {
+          return
+        }
+        this.editor.value(val)
       }
-      if (val === this.editor.value()) {
-        return
-      }
-      this.editor.value(val)
     }
   },
   mounted () {
@@ -143,6 +146,7 @@ export default {
 }
 </script>
 <style lang="scss">
+/* purgecss start ignore */
 @import "~easymde/dist/easymde.min.css";
 .editor-toolbar {
   border-top-left-radius: 0;
@@ -157,4 +161,5 @@ export default {
   flex-grow: 1;
   border: none;
 }
+/* purgecss end ignore */
 </style>
