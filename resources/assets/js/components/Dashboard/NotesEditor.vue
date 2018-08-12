@@ -24,7 +24,6 @@ export default {
   },
   watch: {
     notes (val) {
-      console.log(val)
       if (this.editor) {
         if (this.editor.isPreviewActive()) {
           this.editor.togglePreview()
@@ -146,7 +145,6 @@ export default {
 }
 </script>
 <style lang="scss">
-/* purgecss start ignore */
 @import "~easymde/dist/easymde.min.css";
 .editor-toolbar {
   border-top-left-radius: 0;
@@ -161,5 +159,4 @@ export default {
   flex-grow: 1;
   border: none;
 }
-/* purgecss end ignore */
 </style>
