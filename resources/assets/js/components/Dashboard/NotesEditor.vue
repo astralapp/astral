@@ -1,6 +1,6 @@
 <template>
   <div class="absolute pin-t pin-l pin-b mt-16 w-full bg-white flex flex-col">
-    <textarea ref="editor"/>
+    <textarea ref="editor" />
     <div
       v-show="notesSaved"
       class="repo-notes-status">
@@ -24,13 +24,15 @@ export default {
   },
   watch: {
     notes (val) {
-      if (this.editor.isPreviewActive()) {
-        this.editor.togglePreview()
+      if (this.editor) {
+        if (this.editor.isPreviewActive()) {
+          this.editor.togglePreview()
+        }
+        if (val === this.editor.value()) {
+          return
+        }
+        this.editor.value(val)
       }
-      if (val === this.editor.value()) {
-        return
-      }
-      this.editor.value(val)
     }
   },
   mounted () {

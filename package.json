@@ -33,6 +33,7 @@
   "dependencies": {
     "awesomplete": "^1.1.2",
     "axios": "^0.17",
+    "codemirror": "^5.39.2",
     "cuid": "^2.1.1",
     "dragula": "^3.7.2",
     "easymde": "^2.2.2",

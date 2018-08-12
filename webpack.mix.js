@@ -31,7 +31,13 @@ mix
     processCssUrls: false,
     postCss: [tailwindcss('tailwind.config.js')]
   })
-  .purgeCss()
+  .purgeCss({
+    extensions: ['html', 'js', 'php', 'vue', 'scss', 'css'],
+    globs: [
+      path.join(__dirname, 'node_modules/easymde/dist/easymde.min.css'),
+      path.join(__dirname, 'node_modules/easymde/dist/easymde.min.js')
+    ]
+  })
 
 if (mix.inProduction()) {
   mix.version()
