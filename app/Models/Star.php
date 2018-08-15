@@ -32,7 +32,7 @@ class Star extends Model
         } else {
             foreach ($tags as $tag) {
                 $name = $tag['name'];
-                $userTag = Tag::whereName($name)->first();
+                $userTag = Tag::whereName($name)->where('user_id', auth()->id())->first();
                 if (!$userTag) {
                     $userTag = Tag::create(['name' => $name]);
                 }
