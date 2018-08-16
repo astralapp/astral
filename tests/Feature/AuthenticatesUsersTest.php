@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
+use Astral\Lib\GitHubClient;
 use Astral\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use JWTAuth;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery;
 use Tests\TestCase;
-use Astral\Lib\GitHubClient;
 
 class AuthenticatesUsersTest extends TestCase
 {
