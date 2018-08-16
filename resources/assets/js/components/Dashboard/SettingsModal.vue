@@ -8,15 +8,6 @@
         class="text-2xl focus-none rounded-full w-8 h-8 bg-transparent indent-px hover:bg-grey-light transition-bg"
         @click="closeModal">&times;</button>
     </div>
-    <!-- <div class="px-4 py-6 bg-grey-lightest border-t border-b border-grey-light flex justify-between items-center">
-      <span class="leading-normal">Subscribe to Updates</span>
-      <div class="relative toggle-switch">
-        <input
-          type="email"
-          placeholder="you@example.com"
-          class="text-input w-64">
-      </div>
-    </div> -->
     <div class="px-4 py-6 bg-white border-b border-t border-grey-light flex justify-between items-center">
       <span class="leading-normal">Show Language Tags on Stars</span>
       <toggle-switch
@@ -31,6 +22,19 @@
         target="_blank"
         rel="noopener"
         class="btn btn-grey">Export</a>
+    </div>
+    <div class="px-4 py-6 bg-white border-b border-grey-light">
+      <div class="flex justify-between items-center">
+        <span class="leading-normal">GitHub Access</span>
+        <div>
+          <button
+            class="btn text-sm py-2 px-4 btn-danger ml-2"
+            @click="revokeAccessButtonClicked">Revoke Access</button>
+        </div>
+      </div>
+      <div class="flex justify-end mt-6">
+        <p class="text-sm text-grey-darker">This will log you out and revoke your authorization granted to Astral for accessing your GitHub account. You will not lose any data. </p>
+      </div>
     </div>
     <div class="px-4 py-6 bg-white">
       <div class="flex justify-between items-center">
@@ -80,17 +84,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteUser', 'setShowLanguageTags']),
+    ...mapActions(['deleteUser', 'setShowLanguageTags', 'revokeUserAccess']),
     closeModal () {
       this.$modal.hide('settings-modal')
     },
-    deleteUserButtonClicked () {
+    async deleteUserButtonClicked () {
       if (this.deleteUserClicked) {
-        this.deleteUser(this.user.id).then(() => {
-          this.$router.push('auth/logout')
-        })
+        await this.deleteUser()
+        this.$router.push('auth/logout')
       }
       this.deleteUserClicked = !this.deleteUserClicked
+    },
+    async revokeAccessButtonClicked () {
+      await this.revokeUserAccess()
     }
   }
 }
@@ -100,7 +106,7 @@ export default {
   label {
     &::before {
       transition: transform 150ms ease-in-out;
-      content: '';
+      content: "";
       display: block;
       border-radius: 50%;
       position: absolute;
@@ -108,12 +114,12 @@ export default {
       left: 2px;
       width: 20px;
       height: 20px;
-      background: config('colors.grey-lightest');
+      background: config("colors.grey-lightest");
       transform: translate3d(0, 0, 0);
     }
   }
   input:checked + label {
-    background: config('colors.brand');
+    background: config("colors.brand");
     &::before {
       transform: translate3d(24px, 0, 0);
     }

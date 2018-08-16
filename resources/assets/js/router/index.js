@@ -37,7 +37,7 @@ const router = new Router({
             requiresAuth: true
           },
           beforeEnter: (to, from, next) => {
-            ls.remove('jwt')
+            ls.clear()
             next('auth')
           }
         }

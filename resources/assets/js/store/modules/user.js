@@ -30,14 +30,21 @@ const actions = {
         commit(SET_USER, res)
       })
   },
-  deleteUser ({ commit }, id) {
+  deleteUser ({ commit }) {
     return client
       .withAuth()
-      .delete('/api/auth/delete', { id })
+      .delete('/api/auth/delete')
       .then(res => {
         commit(DELETE_USER)
         router.push('auth/logout')
-        ls.clear()
+      })
+  },
+  revokeUserAccess ({ commit }) {
+    return client
+      .withAuth()
+      .get('/api/auth/revoke')
+      .then(res => {
+        router.push('auth/logout')
       })
   },
   setShowLanguageTags ({ commit }, show) {
