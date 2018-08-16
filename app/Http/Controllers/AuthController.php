@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Astral\Lib\GitHubClient;
 use JWTAuth;
 use Socialite;
 
@@ -42,7 +43,7 @@ class AuthController extends Controller
         $jwt = JWTAuth::fromUser($user);
         $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
 
-        return redirect('/auth?token='.$jwt.'&token_expiry='.$jwtExpiry);
+        return redirect('/auth?token=' . $jwt . '&token_expiry=' . $jwtExpiry);
     }
 
     public function me(Request $request)
@@ -59,8 +60,8 @@ class AuthController extends Controller
     {
         return response()->json([
             'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => $this->guard()->factory()->getTTL() * 60,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60,
         ]);
     }
 
@@ -78,11 +79,14 @@ class AuthController extends Controller
 
     public function destroy(Request $request) : JsonResponse
     {
-        if (auth()->user()->id === $request->input('id')) {
-            Cache::forget(auth()->user()->starsCacheKey());
-            auth()->user()->tags()->delete();
-            auth()->user()->stars()->delete();
-            auth()->user()->delete();
+        $user = auth()->user();
+        if ($user->id === $request->input('id')) {
+            $client = app()->make('Astral\Lib\GitHubClient');
+            $client->revokeApplicationGrant();
+            Cache::forget($user->starsCacheKey());
+            $user->tags()->delete();
+            $user->stars()->delete();
+            $user->delete();
         }
 
         return response()->json([], 204);
