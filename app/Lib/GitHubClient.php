@@ -73,4 +73,18 @@ GQL;
 
         return $response->json()['data']['viewer']['starredRepositories'];
     }
+
+    public function revokeApplicationGrant()
+    {
+        $clientId = config('services.github.client_id');
+        $clientSecret = config('services.github.client_secret');
+
+        $response = Zttp::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$this->token}");
+
+        if ($response->getStatusCode() == 404) {
+            throw new InvalidAccessTokenException();
+        }
+
+        return true;
+    }
 }

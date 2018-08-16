@@ -78,13 +78,27 @@ class AuthController extends Controller
 
     public function destroy(Request $request) : JsonResponse
     {
-        if (auth()->user()->id === $request->input('id')) {
-            Cache::forget(auth()->user()->starsCacheKey());
-            auth()->user()->tags()->delete();
-            auth()->user()->stars()->delete();
-            auth()->user()->delete();
-        }
+        $user = auth()->user();
+        $this->revokeUserAccess();
+        Cache::forget($user->starsCacheKey());
+        $user->tags()->delete();
+        $user->stars()->delete();
+        $user->delete();
 
         return response()->json([], 204);
+    }
+
+    public function revokeApplicationGrant()
+    {
+        $this->revokeUserAccess();
+        $this->guard()->logout();
+
+        return response()->json([], 204);
+    }
+
+    protected function revokeUserAccess()
+    {
+        $client = app()->make('Astral\Lib\GitHubClient');
+        $client->revokeApplicationGrant();
     }
 }

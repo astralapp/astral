@@ -10,6 +10,7 @@
 Route::get('auth/me', 'AuthController@me');
 Route::get('auth/refresh', 'AuthController@refresh');
 Route::get('auth/logout', 'AuthController@logout');
+Route::get('auth/revoke', 'AuthController@revokeApplicationGrant');
 Route::delete('auth/delete', 'AuthController@destroy');
 
 Route::put('user/show-language-tags', 'UserSettingsController@setShowLanguagetags');
