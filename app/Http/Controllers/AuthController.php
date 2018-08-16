@@ -92,6 +92,7 @@ class AuthController extends Controller
     {
         $this->revokeUserAccess();
         $this->guard()->logout();
+
         return response()->json([], 204);
     }
 
