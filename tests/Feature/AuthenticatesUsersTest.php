@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Astral\Lib\GitHubClient;
 use Astral\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use JWTAuth;
@@ -106,15 +107,33 @@ class AuthenticatesUsersTest extends TestCase
         $this->login();
         $this->assertAuthenticated();
 
+        $githubClientMock = Mockery::mock('Astral\Lib\GitHubClient', [auth()->user()->access_token])->makePartial();
+        $githubClientMock->shouldReceive('revokeApplicationGrant')->once()->andReturn(true);
+        $this->app->instance(GitHubClient::class, $githubClientMock);
+
         $id = auth()->user()->id;
         create('Astral\Models\Tag', ['user_id' => $id], 5);
         create('Astral\Models\Star', ['user_id' => $id], 5);
 
-        $response = $this->deleteJson('/api/auth/delete', ['id' => $id])
-                        ->assertStatus(204);
+        $response = $this->deleteJson('/api/auth/delete')
+            ->assertStatus(204);
 
         $this->assertDatabaseMissing('users', ['id' => $id]);
         $this->assertDatabaseMissing('tags', ['user_id' => $id]);
         $this->assertDatabaseMissing('stars', ['user_id' => $id]);
+    }
+
+    /** @test */
+    public function a_user_can_revoke_their_application_grant()
+    {
+        $this->login();
+
+        $githubClientMock = Mockery::mock('Astral\Lib\GitHubClient', [auth()->user()->access_token])->makePartial();
+        $githubClientMock->shouldReceive('revokeApplicationGrant')->once()->andReturn(true);
+        $this->app->instance(GitHubClient::class, $githubClientMock);
+
+        $response = $this->getJson('/api/auth/revoke')
+            ->assertStatus(204);
+        $this->assertGuest();
     }
 }
