@@ -96,7 +96,7 @@ class AuthenticatesUsersTest extends TestCase
         $this->assertAuthenticated();
 
         $this->getJson('/api/auth/logout')
-            ->assertStatus(205);
+            ->assertStatus(204);
 
         $this->assertGuest();
     }
@@ -111,7 +111,8 @@ class AuthenticatesUsersTest extends TestCase
         $githubClientMock->shouldReceive('revokeApplicationGrant')->once()->andReturn(true);
         $this->app->instance(GitHubClient::class, $githubClientMock);
 
-        $id = auth()->user()->id;
+        $id = auth()->id();
+
         create('Astral\Models\Tag', ['user_id' => $id], 5);
         create('Astral\Models\Star', ['user_id' => $id], 5);
 
