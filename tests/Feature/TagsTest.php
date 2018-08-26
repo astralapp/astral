@@ -32,7 +32,7 @@ class TagsTest extends TestCase
     public function a_user_can_add_a_new_tag()
     {
         $response = $this->postJson('/api/tags', ['name' => 'Laravel'])
-            ->assertStatus(200)
+            ->assertStatus(201)
             ->assertJson(['name' => 'Laravel']);
     }
 

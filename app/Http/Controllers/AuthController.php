@@ -3,9 +3,7 @@
 namespace Astral\Http\Controllers;
 
 use Astral\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use JWTAuth;
 use Socialite;
@@ -40,19 +38,19 @@ class AuthController extends Controller
         } // If no user was found, create a new one
         $user->mapGitHubUser($githubUser);
         $jwt = JWTAuth::fromUser($user);
-        $jwtExpiry = $this->guard()->factory()->getTTL() * 60;
+        $jwtExpiry = auth()->factory()->getTTL() * 60;
 
         return redirect('/auth?token='.$jwt.'&token_expiry='.$jwtExpiry);
     }
 
     public function me(Request $request)
     {
-        return response()->json($this->guard()->user());
+        return response()->json(auth()->user());
     }
 
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithToken(auth()->refresh());
     }
 
     protected function respondWithToken($token)
@@ -60,23 +58,18 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'expires_in'   => $this->guard()->factory()->getTTL() * 60,
+            'expires_in'   => auth()->factory()->getTTL() * 60,
         ]);
     }
 
     public function logout()
     {
-        $this->guard()->logout();
+        auth()->logout();
 
-        return response()->json([], 205);
+        return response()->json([], 204);
     }
 
-    public function guard()
-    {
-        return Auth::guard();
-    }
-
-    public function destroy(Request $request) : JsonResponse
+    public function destroy(Request $request)
     {
         $user = auth()->user();
         $this->revokeUserAccess();
@@ -91,7 +84,7 @@ class AuthController extends Controller
     public function revokeApplicationGrant()
     {
         $this->revokeUserAccess();
-        $this->guard()->logout();
+        auth()->logout();
 
         return response()->json([], 204);
     }
