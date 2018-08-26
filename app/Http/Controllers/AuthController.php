@@ -2,11 +2,11 @@
 
 namespace Astral\Http\Controllers;
 
-use JWTAuth;
-use Socialite;
 use Astral\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use JWTAuth;
+use Socialite;
 
 class AuthController extends Controller
 {
@@ -40,7 +40,7 @@ class AuthController extends Controller
         $jwt = JWTAuth::fromUser($user);
         $jwtExpiry = auth()->factory()->getTTL() * 60;
 
-        return redirect('/auth?token=' . $jwt . '&token_expiry=' . $jwtExpiry);
+        return redirect('/auth?token='.$jwt.'&token_expiry='.$jwtExpiry);
     }
 
     public function me(Request $request)
@@ -57,8 +57,8 @@ class AuthController extends Controller
     {
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60,
         ]);
     }
 

@@ -62,8 +62,8 @@ class TagsTest extends TestCase
             $i++;
 
             return [
-                'name' => $tag->name,
-                'id' => $tag->id,
+                'name'       => $tag->name,
+                'id'         => $tag->id,
                 'sort_order' => $tag->sort_order,
             ];
         })->toArray();
@@ -130,7 +130,7 @@ class TagsTest extends TestCase
             'name' => 'New Tag',
         ])->assertStatus(200)
             ->assertJson([
-                'id' => $id,
+                'id'   => $id,
                 'name' => 'New Tag',
             ]);
         $this->assertEquals('New Tag', $tag->fresh()->name);
