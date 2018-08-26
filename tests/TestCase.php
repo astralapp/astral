@@ -13,9 +13,9 @@ abstract class TestCase extends BaseTestCase
 
     protected function login(User $user = null)
     {
-        $user = $user ? : create('Astral\Models\User');
+        $user = $user ?: create('Astral\Models\User');
         $token = auth()->login($user);
-        $this->headers['Authorization'] = 'Bearer ' . $token;
+        $this->headers['Authorization'] = 'Bearer '.$token;
 
         return $this;
     }
