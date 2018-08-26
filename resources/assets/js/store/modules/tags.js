@@ -87,10 +87,10 @@ const actions = {
 
     switch (method) {
       case 'ALPHA_ASC':
-        sortedTags = orderBy(state.tags, ['name'], ['asc'])
+        sortedTags = orderBy(state.tags, [tag => tag.name.toLowerCase()], ['asc'])
         break
       case 'ALPHA_DESC':
-        sortedTags = orderBy(state.tags, ['name'], ['desc'])
+        sortedTags = orderBy(state.tags, [tag => tag.name.toLowerCase()], ['desc'])
         break
       case 'STARS_ASC':
         sortedTags = orderBy(state.tags, ['stars_count'], ['asc'])
