@@ -51,9 +51,9 @@ class GitHubStarsController extends Controller
                 $totalUntagged = $next['totalUntagged'];
                 // Create our new response and put it in the Cache
                 $new = [
-                    'edges'      => $edges,
-                    'pageInfo'   => $pageInfo,
-                    'totalCount' => $totalCount,
+                    'edges'         => $edges,
+                    'pageInfo'      => $pageInfo,
+                    'totalCount'    => $totalCount,
                     'totalUntagged' => $totalUntagged,
                 ];
                 Cache::put($key, $new, $expiry);
