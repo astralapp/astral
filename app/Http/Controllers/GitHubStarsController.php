@@ -36,6 +36,7 @@ class GitHubStarsController extends Controller
             } else {
                 // Get the next page
                 $next = $this->client->fetchStars($cached['pageInfo']['endCursor']);
+                $next['totalUntagged'] = ($next['totalCount'] - auth()->user()->stars()->with('tags')->count());
 
                 $oldEdges = $cached['edges'];
                 $newEdges = $next['edges'];
@@ -46,11 +47,13 @@ class GitHubStarsController extends Controller
                 // Grab the new page info
                 $pageInfo = $next['pageInfo'];
                 $totalCount = $next['totalCount'];
+                $totalUntagged = $next['totalUntagged'];
                 // Create our new response and put it in the Cache
                 $new = [
                     'edges'      => $edges,
                     'pageInfo'   => $pageInfo,
                     'totalCount' => $totalCount,
+                    'totalUntagged' => $totalUntagged,
                 ];
                 Cache::put($key, $new, $expiry);
 
