@@ -2,10 +2,13 @@ export const SET_USER = 'SET_USER'
 export const DELETE_USER = 'DELETE_USER'
 
 export const ADD_TAG = 'ADD_TAG'
+export const ADD_TAG_ERROR = 'ADD_TAG_ERROR'
 export const SET_TAGS = 'SET_TAGS'
 export const SET_CURRENT_TAG = 'SET_CURRENT_TAG'
 export const DELETE_TAG = 'DELETE_TAG'
+export const DELETE_TAG_ERROR = 'DELETE_TAG_ERROR'
 export const UPDATE_TAG = 'UPDATE_TAG'
+export const UPDATE_TAG_ERROR = 'UPDATE_TAG_ERROR'
 
 export const SET_STARS = 'SET_STARS'
 export const RESET_STARS = 'RESET_STARS'

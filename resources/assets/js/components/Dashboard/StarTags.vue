@@ -73,7 +73,8 @@ export default {
   computed: {
     ...mapGetters({
       allTags: 'tags',
-      user: 'user'
+      user: 'user',
+      updateTagsError: 'updateTagsError'
     }),
     suggestions () {
       return differenceBy(this.allTags, this.mutableTags, 'name').map(
@@ -152,14 +153,7 @@ export default {
           this.syncStarTags({
             id: this.star.node.databaseId,
             tags: tagsToSync
-          }).then(() => this.$bus.$emit('NOTIFICATION', 'Tags updated.'))
-            .catch(error =>
-              this.$bus.$emit(
-                'NOTIFICATION',
-                `Failed to update tags. ${error.errors.name[0] || ''}`,
-                'error'
-              )
-            )
+          })
         }
       }
     },
@@ -188,6 +182,17 @@ export default {
             this.newTag = ''
           }, 0)
         }, 0)
+      }
+    },
+    watch: {
+      updateTagsError(errors) {
+        errors.length
+          ? this.$bus.$emit(
+            'NOTIFICATION',
+              `Failed to update tags. ${error.errors.name[0] || ''}`,
+              'error'
+            )
+          : this.$bus.$emit('NOTIFICATION', 'Tags updated.')
       }
     }
   }

@@ -88,7 +88,10 @@ export default {
       'languages',
       'currentLanguage',
       'viewingUntagged',
-      'pageInfo'
+      'pageInfo',
+      'addTagErrors',
+      'deleteTagErrors',
+      'updateTagErrors',
     ]),
     noFiltersApplied () {
       return (
@@ -163,27 +166,24 @@ export default {
     notifyFailure (errorText) {
       this.$bus.$emit('NOTIFICATION', `Failed to ${errorText}`, 'error')
     },
+    notify(operation, successOperation, error) {
+      this.$bus.$emit(
+        'NOTIFICATION',
+        error.length
+          ? `Failed to ${operation} tag. ${error[0]}`
+          : `Tag ${successOperation}.`,
+        error.length ? 'error' : 'success'
+      )
+    },
     doAddTag (name) {
       this.addTag(name)
-        .then(() => this.$bus.$emit('NOTIFICATION', 'Tag added!'))
-        .catch(error =>
-          this.notifyFailure(`add tag. ${error.errors.name[0] || ''}`)
-        )
     },
     doDeleteTag (id) {
       // TODO: Ask user to confirm
       this.deleteTag(id)
-        .then(() => this.$bus.$emit('NOTIFICATION', 'Tag deleted.'))
-        .catch(error =>
-          this.notifyFailure(`delete tag. ${error.errors.name[0] || ''}`)
-        )
     },
     doRenameTag (id) {
       this.renameTag(id)
-        .then(() => this.$bus.$emit('NOTIFICATION', 'Tag renamed.'))
-        .catch(error =>
-          this.notifyFailure(`rename tag. ${error.errors.name[0] || ''}`)
-        )
     },
     doSetCurrentTag (tag, e) {
       if (e.target.classList.contains('dashboard-list-item')) {
@@ -203,6 +203,17 @@ export default {
         this.addTagToStars({stars: [data], tag})
       }
     }
+  },
+  watch: {
+    addTagErrors(errors) {
+      this.notify('add', 'added', errors)
+    },
+    deleteTagErrors(errors) {
+      this.notify('delete', 'deleted', errors)
+    },
+    updateTagErrors(errors) {
+      this.notify('update', 'updated', errors)
+    },
   }
 }
 </script>
