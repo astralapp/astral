@@ -118,7 +118,7 @@ export default {
           )
         : this.$bus.$emit('NOTIFICATION', 'Notes updated.')
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

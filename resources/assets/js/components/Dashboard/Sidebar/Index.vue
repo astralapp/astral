@@ -91,7 +91,7 @@ export default {
       'pageInfo',
       'addTagErrors',
       'deleteTagErrors',
-      'updateTagErrors',
+      'updateTagErrors'
     ]),
     noFiltersApplied () {
       return (
@@ -166,7 +166,7 @@ export default {
     notifyFailure (errorText) {
       this.$bus.$emit('NOTIFICATION', `Failed to ${errorText}`, 'error')
     },
-    notify(operation, successOperation, error) {
+    notify (operation, successOperation, error) {
       this.$bus.$emit(
         'NOTIFICATION',
         error.length
@@ -205,13 +205,13 @@ export default {
     }
   },
   watch: {
-    addTagErrors(errors) {
+    addTagErrors (errors) {
       this.notify('add', 'added', errors)
     },
-    deleteTagErrors(errors) {
+    deleteTagErrors (errors) {
       this.notify('delete', 'deleted', errors)
     },
-    updateTagErrors(errors) {
+    updateTagErrors (errors) {
       this.notify('update', 'updated', errors)
     },
   }
