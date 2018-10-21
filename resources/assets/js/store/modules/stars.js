@@ -167,6 +167,7 @@ const mutations = {
     state.totalStars = 0
     state.stars = []
     state.currentStars = []
+    state.errors.notesErrors = []
   }
 }
 
