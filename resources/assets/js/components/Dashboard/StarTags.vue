@@ -74,7 +74,7 @@ export default {
     ...mapGetters({
       allTags: 'tags',
       user: 'user',
-      updateTagsError: 'updateTagsError'
+      updateTagErrors: 'updateTagErrors'
     }),
     suggestions () {
       return differenceBy(this.allTags, this.mutableTags, 'name').map(
@@ -93,6 +93,15 @@ export default {
       if (this.awesomplete) {
         this.awesomplete.list = this.suggestions
       }
+    },
+    updateTagErrors (errors) {
+      errors.length
+        ? this.$bus.$emit(
+          'NOTIFICATION',
+            `Failed to update tags. ${error.errors.name[0] || ''}`,
+            'error'
+          )
+        : this.$bus.$emit('NOTIFICATION', 'Tags updated.')
     }
   },
   mounted () {
@@ -184,17 +193,6 @@ export default {
         }, 0)
       }
     },
-    watch: {
-      updateTagsError(errors) {
-        errors.length
-          ? this.$bus.$emit(
-            'NOTIFICATION',
-              `Failed to update tags. ${error.errors.name[0] || ''}`,
-              'error'
-            )
-          : this.$bus.$emit('NOTIFICATION', 'Tags updated.')
-      }
-    }
   }
 }
 </script>
