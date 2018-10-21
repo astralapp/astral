@@ -39,7 +39,7 @@
         @click.native="doSetCurrentTag(tag, $event)"
         @starsDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
-        @renameTag="renameTag"
+        @renameTag="doRenameTag"
       />
     </ul>
     <sidebar-header title="Languages"/>
@@ -160,12 +160,30 @@ export default {
       this.refreshingStars = false
       this.$bus.$emit('STATUS', '')
     },
+    notifyFailure (errorText) {
+      this.$bus.$emit('NOTIFICATION', `Failed to ${errorText}`, 'error')
+    },
     doAddTag (name) {
       this.addTag(name)
+        .then(() => this.$bus.$emit('NOTIFICATION', 'Tag added!'))
+        .catch((error) =>
+          this.notifyFailure(`add tag. ${error.errors.name[0] || ''}`)
+        )
     },
     doDeleteTag (id) {
       // TODO: Ask user to confirm
       this.deleteTag(id)
+        .then(() => this.$bus.$emit('NOTIFICATION', 'Tag deleted.'))
+        .catch((error) =>
+          this.notifyFailure(`delete tag. ${error.errors.name[0] || ''}`)
+        )
+    },
+    doRenameTag (id) {
+      this.renameTag(id)
+        .then(() => this.$bus.$emit('NOTIFICATION', 'Tag renamed.'))
+        .catch((error) =>
+          this.notifyFailure(`rename tag. ${error.errors.name[0] || ''}`)
+        )
     },
     doSetCurrentTag (tag, e) {
       if (e.target.classList.contains('dashboard-list-item')) {
