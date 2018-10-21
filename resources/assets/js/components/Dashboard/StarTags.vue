@@ -152,7 +152,14 @@ export default {
           this.syncStarTags({
             id: this.star.node.databaseId,
             tags: tagsToSync
-          })
+          }).then(() => this.$bus.$emit('NOTIFICATION', 'Tags updated.'))
+            .catch(error =>
+              this.$bus.$emit(
+                'NOTIFICATION',
+                `Failed to update tags. ${error.errors.name[0] || ''}`,
+                'error'
+              )
+            )
         }
       }
     },

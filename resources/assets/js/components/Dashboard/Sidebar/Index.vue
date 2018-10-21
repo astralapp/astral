@@ -166,7 +166,7 @@ export default {
     doAddTag (name) {
       this.addTag(name)
         .then(() => this.$bus.$emit('NOTIFICATION', 'Tag added!'))
-        .catch((error) =>
+        .catch(error =>
           this.notifyFailure(`add tag. ${error.errors.name[0] || ''}`)
         )
     },
@@ -174,14 +174,14 @@ export default {
       // TODO: Ask user to confirm
       this.deleteTag(id)
         .then(() => this.$bus.$emit('NOTIFICATION', 'Tag deleted.'))
-        .catch((error) =>
+        .catch(error =>
           this.notifyFailure(`delete tag. ${error.errors.name[0] || ''}`)
         )
     },
     doRenameTag (id) {
       this.renameTag(id)
         .then(() => this.$bus.$emit('NOTIFICATION', 'Tag renamed.'))
-        .catch((error) =>
+        .catch(error =>
           this.notifyFailure(`rename tag. ${error.errors.name[0] || ''}`)
         )
     },
