@@ -92,7 +92,7 @@ export default {
       'viewingUntagged',
       'pageInfo',
       'totalStars',
-      'totalUntaggedStars',
+      'totalUntaggedStars'
     ]),
     noFiltersApplied () {
       return (
