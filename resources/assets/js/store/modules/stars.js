@@ -13,7 +13,6 @@ import {
   SET_STAR_TAGS,
   SET_TAGS,
   SET_TOTAL_STARS,
-  SET_TOTAL_UNTAGGED_STARS,
   SET_USER_STARS,
   SET_VIEWING_UNTAGGED,
   MAP_USER_STARS_TO_GITHUB_STARS,
@@ -29,7 +28,6 @@ const state = {
   stars: [],
   pageInfo: {},
   totalStars: 0,
-  totalUntaggedStars: 0,
   currentLanguage: '',
   currentStars: [],
   readme: '',
@@ -83,9 +81,6 @@ const mutations = {
   },
   [SET_TOTAL_STARS] (state, total) {
     state.totalStars = total
-  },
-  [SET_TOTAL_UNTAGGED_STARS] (state, total) {
-    state.totalUntaggedStars = total
   },
   [SET_STARS_PAGE_INFO] (state, info) {
     state.pageInfo = { ...info }
@@ -163,7 +158,6 @@ const mutations = {
     state.readme = ''
     state.pageInfo = {}
     state.totalStars = 0
-    state.totalUntaggedStars = 0
     state.stars = []
     state.currentStars = []
   }
@@ -193,7 +187,6 @@ const actions = {
         commit(SET_STARS_PAGE_INFO, res.pageInfo)
         if (!cursor) {
           commit(SET_TOTAL_STARS, res.totalCount)
-          commit(SET_TOTAL_UNTAGGED_STARS, res.totalUntagged)
         }
 
         commit(MAP_USER_STARS_TO_GITHUB_STARS)
