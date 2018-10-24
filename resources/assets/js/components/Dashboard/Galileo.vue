@@ -4,7 +4,7 @@
       <input
         v-model="currentSearchQuery"
         type="text"
-        class="search-input text-input w-full pl-8"
+        class="search-input text-input w-full pl-8 pr-8"
         placeholder="Gaze through your telescope">
       <Icon
         type="SearchIcon"
