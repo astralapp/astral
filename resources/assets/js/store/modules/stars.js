@@ -38,6 +38,8 @@ const getters = {
   stars: state => state.stars,
   pageInfo: state => state.pageInfo,
   totalStars: state => state.totalStars,
+  totalUntaggedStars: state =>
+    state.stars.filter(star => !star.tags.length).length,
   languages: state => {
     return state.stars
       .map(star => {
