@@ -10,6 +10,10 @@
         type="SearchIcon"
         class="search-input-icon absolute fill-none stroke-grey transition-stroke"
         height="18"/>
+        <button
+        v-if="query"
+        class="clear-search-icon absolute text-1xl focus-none rounded-full w-6 h-6 bg-transparent hover:bg-grey-light transition-bg"
+        @click="resetSearch">&times;</button>
     </div>
   </div>
 </template>
@@ -36,7 +40,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setSearchQuery'])
+    ...mapActions(['setSearchQuery']),
+    resetSearch () {
+      this.setSearchQuery('')
+    }
   }
 }
 </script>
@@ -50,6 +57,11 @@ export default {
 .search-input-icon {
   top: 11px;
   left: 8px;
+  stroke: config('colors.grey-light');
+}
+.clear-search-icon {
+  top: 7px;
+  right: 7px;
   stroke: config('colors.grey-light');
 }
 </style>
