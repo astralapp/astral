@@ -10,6 +10,7 @@
         :class="{ 'selected': noFiltersApplied }"
         class="all-stars"
         title="All Stars"
+        :badge="totalStars"
         icon="InboxIcon"
         icon-size="16"
         @click.native="resetFilters"
@@ -18,6 +19,7 @@
         :class="{ 'selected': viewingUntagged }"
         class="untagged-stars"
         title="Untagged Stars"
+        :badge="totalUntaggedStars"
         icon="StarIcon"
         icon-size="16"
         @click.native="setViewingUntagged(true)"
@@ -92,6 +94,8 @@ export default {
       'addTagErrors',
       'deleteTagErrors',
       'updateTagErrors'
+      'totalStars',
+      'totalUntaggedStars'
     ]),
     noFiltersApplied () {
       return (
