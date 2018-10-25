@@ -97,6 +97,12 @@ describe('Stars Module', () => {
       expect(getters.totalStars(state)).toEqual(state.totalStars)
     })
 
+    it('returns total untagged stars', () => {
+      expect(getters.totalUntaggedStars(state)).toEqual(
+        state.stars.filter(star => !star.tags.length).length
+      )
+    })
+
     it('returns a list of all star languages with counts', () => {
       state.stars = [...sampleStars.edges]
       expect(getters.languages(state)).toEqual({
