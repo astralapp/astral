@@ -72,7 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['readme', 'currentStar', 'notesErrors']),
+    ...mapGetters(['readme', 'currentStar']),
     noRepoSelected () {
       return !Object.keys(this.currentStar).length
     },
@@ -106,17 +106,6 @@ export default {
     },
     highlightText (e) {
       e.currentTarget.select()
-    }
-  },
-  watch: {
-    notesErrors (errors) {
-      errors.length
-        ? this.$bus.$emit(
-          'NOTIFICATION',
-            `Failed to update notes. ${error.errors.name[0] || ''}`,
-            'error'
-          )
-        : this.$bus.$emit('NOTIFICATION', 'Notes updated.')
     }
   }
 }

@@ -41,7 +41,7 @@
         @click.native="doSetCurrentTag(tag, $event)"
         @starsDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
-        @renameTag="doRenameTag"
+        @renameTag="renameTag"
       />
     </ul>
     <sidebar-header title="Languages"/>
@@ -91,9 +91,6 @@ export default {
       'currentLanguage',
       'viewingUntagged',
       'pageInfo',
-      'addTagErrors',
-      'deleteTagErrors',
-      'updateTagErrors'
       'totalStars',
       'totalUntaggedStars'
     ]),
@@ -167,27 +164,12 @@ export default {
       this.refreshingStars = false
       this.$bus.$emit('STATUS', '')
     },
-    notifyFailure (errorText) {
-      this.$bus.$emit('NOTIFICATION', `Failed to ${errorText}`, 'error')
-    },
-    notify (operation, successOperation, error) {
-      this.$bus.$emit(
-        'NOTIFICATION',
-        error.length
-          ? `Failed to ${operation} tag. ${error[0]}`
-          : `Tag ${successOperation}.`,
-        error.length ? 'error' : 'success'
-      )
-    },
     doAddTag (name) {
       this.addTag(name)
     },
     doDeleteTag (id) {
       // TODO: Ask user to confirm
       this.deleteTag(id)
-    },
-    doRenameTag (id) {
-      this.renameTag(id)
     },
     doSetCurrentTag (tag, e) {
       if (e.target.classList.contains('dashboard-list-item')) {
@@ -207,17 +189,6 @@ export default {
         this.addTagToStars({stars: [data], tag})
       }
     }
-  },
-  watch: {
-    addTagErrors (errors) {
-      this.notify('add', 'added', errors)
-    },
-    deleteTagErrors (errors) {
-      this.notify('delete', 'deleted', errors)
-    },
-    updateTagErrors (errors) {
-      this.notify('update', 'updated', errors)
-    },
   }
 }
 </script>
