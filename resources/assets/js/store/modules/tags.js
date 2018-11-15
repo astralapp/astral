@@ -1,15 +1,12 @@
 import { orderBy } from 'lodash'
 import {
   ADD_TAG,
-  ADD_TAG_ERROR,
   SET_TAGS,
   SET_CURRENT_TAG,
   SET_VIEWING_UNTAGGED,
   DELETE_TAG,
-  DELETE_TAG_ERROR,
   UPDATE_TAG,
-  SET_STAR_TAGS,
-  UPDATE_TAG_ERROR
+  SET_STAR_TAGS
 } from '../mutation-types'
 
 import client from '@/store/api/client'
@@ -17,20 +14,12 @@ import router from '@/router'
 
 const state = {
   tags: [],
-  currentTag: {},
-  errors: {
-    add: [],
-    delete: [],
-    update: []
-  }
+  currentTag: {}
 }
 
 const getters = {
   tags: state => state.tags,
-  currentTag: state => state.currentTag,
-  addTagErrors: state => state.errors.add,
-  deleteTagErrors: state => state.errors.delete,
-  updateTagErrors: state => state.errors.update
+  currentTag: state => state.currentTag
 }
 
 const mutations = {
@@ -42,20 +31,12 @@ const mutations = {
   },
   [ADD_TAG] (state, tag) {
     state.tags = [...state.tags, ...[tag]]
-    state.errors.delete = []
-  },
-  [ADD_TAG_ERROR] (state, errors) {
-    state.errors.add = errors
   },
   [DELETE_TAG] (state, id) {
     const index = state.tags.findIndex(tag => {
       return tag.id === id
     })
     state.tags.splice(index, 1)
-    state.errors.delete = []
-  },
-  [DELETE_TAG_ERROR] (state, errors) {
-    state.errors.delete = errors
   },
   [UPDATE_TAG] (state, { id, newTag }) {
     state.tags = state.tags.map(tag => {
@@ -65,10 +46,6 @@ const mutations = {
 
       return tag
     })
-    state.errors.update = []
-  },
-  [UPDATE_TAG_ERROR] (state, errors) {
-    state.errors.update = errors
   }
 }
 
@@ -139,9 +116,6 @@ const actions = {
   },
   deleteTag ({ rootState, state, commit }, id) {
     client.withAuth().delete(`/api/tags/${id}`)
-      .catch(error => {
-        commit(DELETE_TAG_ERROR, error.errors.name)
-      })
 
     if (state.currentTag.id === id) {
       commit(SET_CURRENT_TAG, {})
@@ -191,8 +165,6 @@ const actions = {
         starsWithTag.forEach(star => {
           commit(SET_STAR_TAGS, star)
         })
-      }).catch(error => {
-        commit(UPDATE_TAG_ERROR, error.errors.name)
       })
   }
 }

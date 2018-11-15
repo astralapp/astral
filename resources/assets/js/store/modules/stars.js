@@ -17,7 +17,6 @@ import {
   SET_VIEWING_UNTAGGED,
   MAP_USER_STARS_TO_GITHUB_STARS,
   SET_STAR_NOTES,
-  SET_STAR_NOTES_ERROR,
   RESET_STARS
 } from '../mutation-types'
 
@@ -32,10 +31,7 @@ const state = {
   currentLanguage: '',
   currentStars: [],
   readme: '',
-  viewingUntagged: false,
-  errors: {
-    notesErrors: []
-  }
+  viewingUntagged: false
 }
 
 const getters = {
@@ -73,8 +69,7 @@ const getters = {
     }
   },
   readme: state => state.readme,
-  viewingUntagged: state => state.viewingUntagged,
-  notesErrors: state => state.errors.notesErrors
+  viewingUntagged: state => state.viewingUntagged
 }
 
 const mutations = {
@@ -158,10 +153,6 @@ const mutations = {
       return star
     })
     state.currentStars = [{ ...state.currentStars[0], notes }]
-    state.errors.notesErrors = []
-  },
-  [SET_STAR_NOTES_ERROR] (state, errors) {
-    state.errors.notesErrors = errors
   },
   [RESET_STARS] (state) {
     state.readme = ''
@@ -169,9 +160,6 @@ const mutations = {
     state.totalStars = 0
     state.stars = []
     state.currentStars = []
-    state.errors = {
-      notesErrors: []
-    }
   }
 }
 
@@ -290,9 +278,6 @@ const actions = {
           id,
           notes
         })
-      })
-      .catch(error => {
-        commit(SET_STAR_NOTES_ERROR, error.errors.name)
       })
   },
   cleanupStars ({ commit }) {

@@ -136,6 +136,10 @@ export default {
   methods: {
     saveNotes () {
       this.$emit('save', this.currentNotes)
+      this.notesSaved = true
+      setTimeout(() => {
+        this.notesSaved = false
+      }, 3000)
     }
   }
 }
