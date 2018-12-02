@@ -1,25 +1,23 @@
 <template>
   <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
     <sidebar-header title="Stars">
-      <refresh-button
-        :active="refreshingStars"
-        @click.native="refreshStars"/>
+      <refresh-button :active="refreshingStars" @click.native="refreshStars"/>
     </sidebar-header>
     <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
       <sidebar-item
         :class="{ 'selected': noFiltersApplied }"
+        :badge="totalStars"
         class="all-stars"
         title="All Stars"
-        :badge="totalStars"
         icon="InboxIcon"
         icon-size="16"
         @click.native="resetFilters"
       />
       <sidebar-item
         :class="{ 'selected': viewingUntagged }"
+        :badge="totalUntaggedStars"
         class="untagged-stars"
         title="Untagged Stars"
-        :badge="totalUntaggedStars"
         icon="StarIcon"
         icon-size="16"
         @click.native="setViewingUntagged(true)"
@@ -29,9 +27,7 @@
       <tag-sorter/>
     </sidebar-header>
     <new-tag-form @submit="doAddTag"/>
-    <ul
-      ref="sidebarTags"
-      class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
+    <ul ref="sidebarTags" class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
       <sidebar-tag
         v-for="tag in tags"
         :tag="tag"
@@ -41,19 +37,19 @@
         @click.native="doSetCurrentTag(tag, $event)"
         @starsDropped="tagStarWithData"
         @deleteTag="doDeleteTag"
-        @renameTag="renameTag"
+        @renameTag="doRenameTag"
       />
     </ul>
     <sidebar-header title="Languages"/>
     <ul class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
       <sidebar-item
-        v-for="(value, key) in languages"
-        :key="key"
-        :badge="value"
-        :title="key"
-        :class="{ 'selected': currentLanguage == key }"
+        v-for="lang in languages"
+        :key="lang.name"
+        :badge="lang.count"
+        :title="lang.name"
+        :class="{ 'selected': currentLanguage == lang.name }"
         class="language rounded"
-        @click.native="setCurrentLanguage(key)"
+        @click.native="setCurrentLanguage(lang.name)"
       />
     </ul>
   </div>
@@ -164,12 +160,19 @@ export default {
       this.refreshingStars = false
       this.$bus.$emit('STATUS', '')
     },
-    doAddTag (name) {
-      this.addTag(name)
+    async doAddTag (name) {
+      await this.addTag(name)
+      this.$bus.$emit('NOTIFICATION', `${name} tag added!`)
     },
-    doDeleteTag (id) {
-      // TODO: Ask user to confirm
-      this.deleteTag(id)
+    async doDeleteTag ({ id, name }) {
+      await this.deleteTag(id)
+      this.$bus.$emit('NOTIFICATION', `${name} tag deleted!`)
+    },
+    async doRenameTag (data) {
+      const { id, name } = data
+      const oldName = this.tags.find(s => s.id === id).name
+      await this.renameTag(data)
+      this.$bus.$emit('NOTIFICATION', `${oldName} tag renamed to ${name}!`)
     },
     doSetCurrentTag (tag, e) {
       if (e.target.classList.contains('dashboard-list-item')) {
@@ -181,12 +184,14 @@ export default {
       this.setCurrentTag({})
       this.setCurrentLanguage('')
     },
-    tagStarWithData ({ data, id }) {
+    async tagStarWithData ({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
       if (Array.isArray(data)) {
-        this.addTagToStars({stars: data, tag})
+        await this.addTagToStars({stars: data, tag})
+        this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.length} stars!`)
       } else {
-        this.addTagToStars({stars: [data], tag})
+        await this.addTagToStars({stars: [data], tag})
+        this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.nameWithOwner}!`)
       }
     }
   }

@@ -1,11 +1,7 @@
 <template>
   <div class="absolute pin-t pin-l pin-b mt-16 w-full bg-white flex flex-col">
-    <textarea ref="editor" />
-    <div
-      v-show="notesSaved"
-      class="repo-notes-status">
-      Saved
-    </div>
+    <button class="btn btn-brand absolute pin-r mt-2 mr-4 z-10 focus-none" @click="saveNotes">Save</button>
+    <textarea ref="editor"/>
   </div>
 </template>
 <script>
@@ -136,10 +132,6 @@ export default {
   methods: {
     saveNotes () {
       this.$emit('save', this.currentNotes)
-      this.notesSaved = true
-      setTimeout(() => {
-        this.notesSaved = false
-      }, 3000)
     }
   }
 }

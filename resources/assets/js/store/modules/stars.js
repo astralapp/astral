@@ -38,32 +38,33 @@ const getters = {
   stars: state => state.stars,
   pageInfo: state => state.pageInfo,
   totalStars: state => state.totalStars,
-  totalUntaggedStars: state =>
-    state.stars.filter(star => !star.tags.length).length,
+  totalUntaggedStars: state => state.stars.filter(star => !star.tags.length).length,
   languages: state => {
-    return state.stars
-      .map(star => {
-        return star.node.primaryLanguage || null
+    return Object.entries(
+      state.stars
+        .map(star => {
+          return star.node.primaryLanguage || null
+        })
+        .filter(Boolean)
+        .map(repo => repo.name)
+        .reduce((totals, lang) => {
+          return { ...totals, [lang]: (totals[lang] || 0) + 1 }
+        }, {})
+    )
+      .map(entry => {
+        return {
+          name: entry[0],
+          count: entry[1]
+        }
       })
-      .filter(Boolean)
-      .map(repo => repo.name)
-      .reduce((prev, cur) => {
-        prev[cur] = (prev[cur] || 0) + 1
-        return prev
-      }, {})
+      .sort((a, b) => b.count - a.count)
   },
   currentLanguage: state => state.currentLanguage,
-  currentStar: state =>
-    state.currentStars.length > 0 ? state.currentStars[0] : {},
+  currentStar: state => (state.currentStars.length > 0 ? state.currentStars[0] : {}),
   currentStars: state => [...uniqBy(state.currentStars, 'node.databaseId')],
   currentStarIndex: state => {
-    if (
-      state.currentStars[0] !== undefined &&
-      Object.keys(state.currentStars[0]).length
-    ) {
-      return state.stars.findIndex(
-        star => star.node.databaseId === state.currentStars[0].node.databaseId
-      )
+    if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
+      return state.stars.findIndex(star => star.node.databaseId === state.currentStars[0].node.databaseId)
     } else {
       return -1
     }
@@ -92,10 +93,7 @@ const mutations = {
     stars.forEach(({ databaseId }) => {
       state.stars = state.stars.map(star => {
         let tags = star.tags
-        if (
-          star.node.databaseId === databaseId &&
-          !star.tags.map(tag => tag.name).includes(tag.name)
-        ) {
+        if (star.node.databaseId === databaseId && !star.tags.map(tag => tag.name).includes(tag.name)) {
           tags = star.tags.concat([tag])
         }
         return { ...star, tags }
@@ -172,9 +170,7 @@ const actions = {
     }
     return client
       .withAuth()
-      .get(
-        `/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`
-      )
+      .get(`/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`)
       .then(res => {
         commit(
           SET_STARS,
