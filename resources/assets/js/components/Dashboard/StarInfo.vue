@@ -2,21 +2,22 @@
   <div class="star-info bg-grey-lighter relative flex flex-col">
     <div
       v-if="!noRepoSelected"
-      class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center">
+      class="star-info-bar flex bg-white border-b border-grey-light h-16 px-4 items-center"
+    >
       <button
         class="bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none"
-        @click="notesShowing = !notesShowing">
+        @click="notesShowing = !notesShowing"
+      >
         <Icon
           :type="toggleNotesIcon"
           height="16"
           width="16"
-          class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"/>
+          class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"
+        />
         <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
       </button>
       <div class="ml-auto">
-        <label
-          for="starCloneUrl"
-          class="mr-2 font-bold cursor-pointer">Clone:</label>
+        <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
         <input
           id="starCloneUrl"
           :value="currentStarCloneUrl"
@@ -29,29 +30,20 @@
     </div>
     <div
       v-if="noRepoSelected"
-      class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter no-repo-selected">
-      <img
-        src="/images/not-selected.svg"
-        class="w-64 mb-8"
-      />
+      class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter no-repo-selected"
+    >
+      <img src="/images/not-selected.svg" class="w-64 mb-8">
       <span class="font-bold bg-grey px-4 py-2 text-white rounded">No Repo Selected</span>
     </div>
-    <readme
-      v-if="readme"
-      :readme="readme"/>
+    <readme v-if="readme" :readme="readme"/>
     <div
       v-if="repoHasNoReadme"
-      class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter">
-      <img
-        src="/images/no-readme.svg"
-        class="w-64 mb-8"
-      />
+      class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter"
+    >
+      <img src="/images/no-readme.svg" class="w-64 mb-8">
       <span class="font-bold bg-grey px-4 py-2 text-white rounded">No README Found</span>
     </div>
-    <notes-editor
-      v-if="notesEditorShowing"
-      :notes="currentStarNotes"
-      @save="doEditStarNotes"/>
+    <notes-editor v-if="notesEditorShowing" :notes="currentStarNotes" @save="doEditStarNotes"/>
   </div>
 </template>
 <script>
@@ -98,11 +90,12 @@ export default {
   },
   methods: {
     ...mapActions(['editStarNotes']),
-    doEditStarNotes (notes) {
+    async doEditStarNotes (notes) {
       this.editStarNotes({
         id: this.currentStar.node.databaseId,
         notes
       })
+      this.$bus.$emit('NOTIFICATION', 'Notes saved!')
     },
     highlightText (e) {
       e.currentTarget.select()

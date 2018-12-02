@@ -13,16 +13,16 @@ const getters = {
 }
 
 const mutations = {
-  [SET_USER] (state, user) {
+  [SET_USER](state, user) {
     state.user = user
   },
-  [DELETE_USER] (state) {
+  [DELETE_USER](state) {
     state.user = {}
   }
 }
 
 const actions = {
-  fetchUser ({ commit }) {
+  fetchUser({ commit }) {
     return client
       .withAuth()
       .get('/api/auth/me')
@@ -30,7 +30,7 @@ const actions = {
         commit(SET_USER, res)
       })
   },
-  deleteUser ({ commit }) {
+  deleteUser({ commit }) {
     return client
       .withAuth()
       .delete('/api/auth/delete')
@@ -39,7 +39,7 @@ const actions = {
         router.push('auth/logout')
       })
   },
-  revokeUserAccess ({ commit }) {
+  revokeUserAccess({ commit }) {
     return client
       .withAuth()
       .get('/api/auth/revoke')
@@ -47,7 +47,7 @@ const actions = {
         router.push('auth/logout')
       })
   },
-  setShowLanguageTags ({ commit }, show) {
+  setShowLanguageTags({ commit }, show) {
     return client
       .withAuth()
       .put('/api/user/show-language-tags', { show })

@@ -1,10 +1,10 @@
 <template>
-  <sidebar-item
+  <SidebarItem
     :badge="tag.stars_count"
     :class="{
-      'selected': isSelected,
-      'dragging': isHighlighted,
-      'editing': editTagDropdownShowing
+      selected: isSelected,
+      dragging: isHighlighted,
+      editing: editTagDropdownShowing
     }"
     :title="tag.name"
     icon="TagIcon"
@@ -17,23 +17,24 @@
     <div
       v-click-outside="hideEditTagDropdown"
       :class="{'opacity-100': editTagDropdownShowing}"
-      class="opacity-0 transition-opacity edit-tag absolute pin-r">
-      <button
-        class="text-grey hover:text-white px-2"
-        @click="toggleEditTagDropdown">
+      class="opacity-0 transition-opacity edit-tag absolute pin-r"
+    >
+      <button class="text-grey hover:text-white px-2" @click="toggleEditTagDropdown">
         <Icon
           type="MoreHorizontalIcon"
           height="14"
-          class="edit-tag-icon stroke-none fill-current relative"/>
+          class="edit-tag-icon stroke-none fill-current relative"
+        />
       </button>
       <edit-tag-dropdown
         ref="editTagDropdown"
         :tag="tag"
         :visible="editTagDropdownShowing"
         @deleteTag="deleteTag"
-        @renameTag="renameTag"/>
+        @renameTag="renameTag"
+      />
     </div>
-  </sidebar-item>
+  </SidebarItem>
 </template>
 <script>
 import vClickOutside from 'v-click-outside'
@@ -51,34 +52,34 @@ export default {
     Icon
   },
   props: ['tag', 'isSelected'],
-  data () {
+  data() {
     return {
       editTagDropdownShowing: false,
       isHighlighted: false
     }
   },
   methods: {
-    deleteTag () {
-      this.$emit('deleteTag', this.tag.id)
+    deleteTag() {
+      this.$emit('deleteTag', { id: this.tag.id, name: this.tag.name })
       this.hideEditTagDropdown()
     },
-    renameTag (name) {
+    renameTag(name) {
       this.$emit('renameTag', { id: this.tag.id, name: name })
       this.hideEditTagDropdown()
     },
-    toggleEditTagDropdown () {
+    toggleEditTagDropdown() {
       this.editTagDropdownShowing = !this.editTagDropdownShowing
     },
-    hideEditTagDropdown () {
+    hideEditTagDropdown() {
       this.editTagDropdownShowing = false
     },
-    highlight () {
+    highlight() {
       this.isHighlighted = true
     },
-    unhighlight () {
+    unhighlight() {
       this.isHighlighted = false
     },
-    starsDropped (e) {
+    starsDropped(e) {
       const dropData = JSON.parse(e.dataTransfer.getData('text'))
       this.unhighlight()
       this.$emit('starsDropped', { data: dropData, id: this.tag.id })

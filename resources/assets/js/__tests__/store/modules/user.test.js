@@ -76,13 +76,18 @@ describe('User Module', () => {
     })
 
     it('deletes the authenticated user', async () => {
-      await deleteUser(ctx, 1)
+      const user = {
+        id: 1,
+        username: 'syropian'
+      }
+      SET_USER(state, user)
+
+      await deleteUser(ctx)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.delete).toHaveBeenCalledWith('/api/auth/delete', { id: 1 })
+      expect(client.delete).toHaveBeenCalledWith('/api/auth/delete')
       expect(ctx.commit).toHaveBeenCalledWith('DELETE_USER')
       expect(router.push).toHaveBeenCalledWith('auth/logout')
-      expect(ls.clear).toHaveBeenCalled()
     })
 
     it('sets the users language tag visibility option', async () => {

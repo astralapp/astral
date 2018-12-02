@@ -1,19 +1,25 @@
 .btn {
-  @apply transition-bg text-sm font-bold py-2 px-4 rounded no-underline;
+  @apply transition-bg text-sm font-bold py-2 px-4 rounded no-underline cursor-pointer;
+
   &-brand {
     @apply bg-brand text-white;
+
     &:hover {
       @apply bg-brand-dark;
     }
   }
+
   &-grey {
     @apply bg-grey-light text-grey-darkest;
+
     &:hover {
       @apply bg-grey;
     }
   }
+
   &-danger {
     @apply bg-red text-white;
+
     &:hover {
       @apply bg-red-dark;
     }
@@ -22,18 +28,23 @@
 
 .text-input {
   @apply appearance-none bg-grey-lightest border-2 border-grey-light rounded py-2 px-4 text-grey-darker transition-color-bg-border;
+
   &:focus {
     @apply border-grey;
+
     outline: none;
   }
 }
 
 .dropdown {
   @apply absolute pin-t pin-r rounded shadow z-10 overflow-hidden;
+
   > ul {
     @apply list-reset;
+
     .dropdown-item {
       @apply block cursor-pointer px-4 py-2 bg-white text-grey-darkest no-underline;
+
       &:hover {
         @apply bg-indigo text-white;
       }

@@ -1,14 +1,14 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 8
+    ecmaVersion: 2018
   },
-  extends: ['standard', 'plugin:vue/recommended'],
-  plugins: ['vue'],
+  extends: ['prettier', 'plugin:vue/recommended'],
+  plugins: ['prettier', 'vue'],
   rules: {
+    'prettier/prettier': 'error',
     'vue/require-default-prop': 'off',
-    'vue/require-prop-types': 'off',
-    'vue/html-self-closing': 'off'
+    'vue/require-prop-types': 'off'
   },
   overrides: [
     {
