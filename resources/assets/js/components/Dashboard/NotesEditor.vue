@@ -11,15 +11,14 @@ import 'highlight.js'
 export default {
   name: 'NotesEditor',
   props: ['notes'],
-  data () {
+  data() {
     return {
       editor: null,
-      currentNotes: '',
-      notesSaved: false
+      currentNotes: ''
     }
   },
   watch: {
-    notes (val) {
+    notes(val) {
       if (this.editor) {
         if (this.editor.isPreviewActive()) {
           this.editor.togglePreview()
@@ -31,7 +30,7 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.editor = new EasyMDE({
       element: this.$refs.editor,
       initialValue: this.notes,
@@ -126,11 +125,11 @@ export default {
       }, 1000)
     )
   },
-  destroyed () {
+  destroyed() {
     this.editor = null
   },
   methods: {
-    saveNotes () {
+    saveNotes() {
       this.$emit('save', this.currentNotes)
     }
   }

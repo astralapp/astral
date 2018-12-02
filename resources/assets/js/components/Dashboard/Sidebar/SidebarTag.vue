@@ -34,7 +34,7 @@
         @renameTag="renameTag"
       />
     </div>
-  </sidebar-item>
+  </SidebarItem>
 </template>
 <script>
 import vClickOutside from 'v-click-outside'

@@ -98,17 +98,12 @@ describe('Stars Module', () => {
     })
 
     it('returns total untagged stars', () => {
-      expect(getters.totalUntaggedStars(state)).toEqual(
-        state.stars.filter(star => !star.tags.length).length
-      )
+      expect(getters.totalUntaggedStars(state)).toEqual(state.stars.filter(star => !star.tags.length).length)
     })
 
     it('returns a list of all star languages with counts', () => {
       state.stars = [...sampleStars.edges]
-      expect(getters.languages(state)).toEqual({
-        JavaScript: 3,
-        PHP: 2
-      })
+      expect(getters.languages(state)).toEqual([{ name: 'JavaScript', count: 3 }, { name: 'PHP', count: 2 }])
     })
 
     it('returns the current language', () => {
@@ -116,11 +111,7 @@ describe('Stars Module', () => {
     })
 
     it('returns the first current star or an empty object if there is none', () => {
-      state.currentStars = [
-        { name: 'First' },
-        { name: 'Second' },
-        { name: 'Third' }
-      ]
+      state.currentStars = [{ name: 'First' }, { name: 'Second' }, { name: 'Third' }]
       expect(getters.currentStar(state)).toEqual({ name: 'First' })
 
       state.currentStars = []
@@ -194,11 +185,7 @@ describe('Stars Module', () => {
     })
 
     it('adds tags to stars', () => {
-      const sampleTags = [
-        { name: 'VueJS' },
-        { name: 'React' },
-        { name: 'Angular' }
-      ]
+      const sampleTags = [{ name: 'VueJS' }, { name: 'React' }, { name: 'Angular' }]
       state.tags = sampleTags
       state.stars = [...sampleStars.edges].map(s => ({
         ...s,
@@ -214,11 +201,7 @@ describe('Stars Module', () => {
     })
 
     it('sets multiple tags  on a single star', () => {
-      const sampleTags = [
-        { name: 'VueJS' },
-        { name: 'React' },
-        { name: 'Angular' }
-      ]
+      const sampleTags = [{ name: 'VueJS' }, { name: 'React' }, { name: 'Angular' }]
       state.stars = [...sampleStars.edges.map(s => ({ ...s, tags: [] }))]
 
       SET_STAR_TAGS(state, {
@@ -241,11 +224,7 @@ describe('Stars Module', () => {
     })
 
     it('maps the user stars to the users GitHub stars', () => {
-      const sampleTags = [
-        { name: 'VueJS' },
-        { name: 'React' },
-        { name: 'Angular' }
-      ]
+      const sampleTags = [{ name: 'VueJS' }, { name: 'React' }, { name: 'Angular' }]
       const sampleUserStars = [
         {
           name: sampleStars.edges[0].node.nameWithOwner,
@@ -285,10 +264,7 @@ describe('Stars Module', () => {
 
       ADD_TO_CURRENT_STARS(state, sampleStars.edges[1])
 
-      expect(state.currentStars).toEqual([
-        sampleStars.edges[0],
-        sampleStars.edges[1]
-      ])
+      expect(state.currentStars).toEqual([sampleStars.edges[0], sampleStars.edges[1]])
     })
 
     it('can set the readme', () => {
@@ -353,26 +329,16 @@ describe('Stars Module', () => {
         expect(client.get).toHaveBeenCalledWith('/api/stars/github?')
         expect(ctx.commit).not.toHaveBeenCalledWith('RESET_STARS')
         expect(ctx.commit).toHaveBeenCalledWith('SET_STARS', sampleRes)
-        expect(ctx.commit).toHaveBeenCalledWith(
-          'SET_STARS_PAGE_INFO',
-          sampleStars.pageInfo
-        )
-        expect(ctx.commit).toHaveBeenCalledWith(
-          'SET_TOTAL_STARS',
-          sampleStars.totalCount
-        )
-        expect(ctx.commit).toHaveBeenCalledWith(
-          'MAP_USER_STARS_TO_GITHUB_STARS'
-        )
+        expect(ctx.commit).toHaveBeenCalledWith('SET_STARS_PAGE_INFO', sampleStars.pageInfo)
+        expect(ctx.commit).toHaveBeenCalledWith('SET_TOTAL_STARS', sampleStars.totalCount)
+        expect(ctx.commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
       })
 
       it('resets the star-related state if refresh is true', async () => {
         await fetchGitHubStars(ctx, { cursor: null, refresh: true })
 
         expect(ctx.commit).toHaveBeenCalledWith('RESET_STARS')
-        expect(client.get).toHaveBeenCalledWith(
-          '/api/stars/github?refresh=true'
-        )
+        expect(client.get).toHaveBeenCalledWith('/api/stars/github?refresh=true')
       })
 
       it('does not set the total count state if a cursor is passed', async () => {
@@ -385,9 +351,7 @@ describe('Stars Module', () => {
         await fetchGitHubStars(ctx, { cursor: 'abc123', refresh: false })
 
         expect(ctx.commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
-        expect(client.get).toHaveBeenCalledWith(
-          '/api/stars/github?cursor=abc123'
-        )
+        expect(client.get).toHaveBeenCalledWith('/api/stars/github?cursor=abc123')
       })
     })
 
@@ -398,18 +362,12 @@ describe('Stars Module', () => {
 
       expect(client.withAuth).toHaveBeenCalled()
       expect(client.get).toHaveBeenCalledWith('/api/stars')
-      expect(ctx.commit).toHaveBeenCalledWith(
-        'SET_USER_STARS',
-        sampleStars.edges
-      )
+      expect(ctx.commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
     })
 
     it('sets the current language', async () => {
       await setCurrentLanguage(ctx, 'JavaScript')
-      expect(ctx.commit).toHaveBeenCalledWith(
-        'SET_CURRENT_LANGUAGE',
-        'JavaScript'
-      )
+      expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_LANGUAGE', 'JavaScript')
       expect(router.replace).toHaveBeenCalledWith({
         query: { language: 'JavaScript' }
       })
@@ -447,10 +405,7 @@ describe('Stars Module', () => {
 
       await addToCurrentStars(ctx, currentStar)
 
-      expect(ctx.commit).toHaveBeenCalledWith(
-        'ADD_TO_CURRENT_STARS',
-        currentStar
-      )
+      expect(ctx.commit).toHaveBeenCalledWith('ADD_TO_CURRENT_STARS', currentStar)
     })
 
     describe('fetching repo readmes', () => {
@@ -461,9 +416,7 @@ describe('Stars Module', () => {
 
         expect(client.withoutAuth).toHaveBeenCalled()
         expect(client.get).toHaveBeenCalledWith(
-          `https://api.github.com/repos/astralapp/astral/readme?access_token=${
-            ctx.rootState.user.user.access_token
-          }`,
+          `https://api.github.com/repos/astralapp/astral/readme?access_token=${ctx.rootState.user.user.access_token}`,
           {},
           { Accept: 'application/vnd.github.v3.html' }
         )
@@ -537,10 +490,7 @@ describe('Stars Module', () => {
 
       expect(client.withAuth).toHaveBeenCalled()
       expect(client.delete).toHaveBeenCalledWith('/api/stars/cleanup')
-      expect(ctx.commit).toHaveBeenCalledWith(
-        'SET_USER_STARS',
-        sampleStars.edges
-      )
+      expect(ctx.commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
       expect(ctx.commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
     })
 
