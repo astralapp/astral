@@ -13,7 +13,7 @@ jest.mock('@/router', () => ({
 const state = { ...user.state }
 const getters = user.getters
 const { SET_USER, DELETE_USER } = user.mutations
-const { fetchUser, deleteUser, setShowLanguageTags } = user.actions
+const { fetchUser, deleteUser, setShowLanguageTags, setAutosaveNotes } = user.actions
 const ctx = { commit: jest.fn() }
 
 describe('User Module', () => {
@@ -97,7 +97,18 @@ describe('User Module', () => {
       await setShowLanguageTags(ctx, true)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.put).toHaveBeenCalledWith('/api/user/show-language-tags', { show: true })
+      expect(client.put).toHaveBeenCalledWith('/api/user/show-language-tags', { flag: true })
+      expect(ctx.commit).toHaveBeenCalledWith('SET_USER', res)
+    })
+
+    it('sets the users auto-save notes option', async () => {
+      const res = { username: 'syropian' }
+      client.put.mockResolvedValue(res)
+
+      await setAutosaveNotes(ctx, true)
+
+      expect(client.withAuth).toHaveBeenCalled()
+      expect(client.put).toHaveBeenCalledWith('/api/user/autosave-notes', { flag: true })
       expect(ctx.commit).toHaveBeenCalledWith('SET_USER', res)
     })
   })

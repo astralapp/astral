@@ -50,9 +50,15 @@ class User extends Authenticatable implements JWTSubject
         $this->save();
     }
 
-    public function setShowLanguageTags($show)
+    public function setShowLanguageTags($flag)
     {
-        $this->show_language_tags = (bool) $show;
+        $this->show_language_tags = (bool) $flag;
+        $this->save();
+    }
+
+    public function setAutosaveNotes($flag)
+    {
+        $this->autosave_notes = (bool) $flag;
         $this->save();
     }
 

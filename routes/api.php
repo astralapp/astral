@@ -14,6 +14,7 @@ Route::get('auth/revoke', 'AuthController@revokeApplicationGrant');
 Route::delete('auth/delete', 'AuthController@destroy');
 
 Route::put('user/show-language-tags', 'UserSettingsController@setShowLanguagetags');
+Route::put('user/autosave-notes', 'UserSettingsController@setAutosaveNotes');
 
 Route::get('tags', 'TagsController@index');
 Route::post('tags', 'TagsController@store');
