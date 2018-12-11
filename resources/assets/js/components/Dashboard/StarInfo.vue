@@ -43,7 +43,7 @@
       <img src="/images/no-readme.svg" class="w-64 mb-8">
       <span class="font-bold bg-grey px-4 py-2 text-white rounded">No README Found</span>
     </div>
-    <notes-editor v-if="notesEditorShowing" :notes="currentStarNotes" @save="doEditStarNotes"/>
+    <notes-editor v-if="notesEditorShowing" :notes="currentStarNotes" :autosave="user.autosave_notes" @save="doEditStarNotes"/>
   </div>
 </template>
 <script>
@@ -58,46 +58,46 @@ export default {
     NotesEditor,
     Readme
   },
-  data () {
+  data() {
     return {
       notesShowing: false
     }
   },
   computed: {
-    ...mapGetters(['readme', 'currentStar']),
-    noRepoSelected () {
+    ...mapGetters(['readme', 'currentStar', 'user']),
+    noRepoSelected() {
       return !Object.keys(this.currentStar).length
     },
-    repoHasNoReadme () {
+    repoHasNoReadme() {
       return Object.keys(this.currentStar).length && !this.readme
     },
-    currentStarCloneUrl () {
+    currentStarCloneUrl() {
       return `git@github.com:${this.currentStar.node.nameWithOwner}.git`
     },
-    currentStarNotes () {
+    currentStarNotes() {
       if (!this.noRepoSelected && this.currentStar.hasOwnProperty('notes')) {
         return this.currentStar.notes
       } else {
         return ''
       }
     },
-    notesEditorShowing () {
+    notesEditorShowing() {
       return this.notesShowing && !this.noRepoSelected
     },
-    toggleNotesIcon () {
+    toggleNotesIcon() {
       return this.currentStarNotes ? 'FileTextIcon' : 'FileIcon'
     }
   },
   methods: {
     ...mapActions(['editStarNotes']),
-    async doEditStarNotes (notes) {
+    async doEditStarNotes(notes) {
       this.editStarNotes({
         id: this.currentStar.node.databaseId,
         notes
       })
       this.$bus.$emit('NOTIFICATION', 'Notes saved!')
     },
-    highlightText (e) {
+    highlightText(e) {
       e.currentTarget.select()
     }
   }

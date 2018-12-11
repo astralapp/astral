@@ -47,10 +47,18 @@ const actions = {
         router.push('auth/logout')
       })
   },
-  setShowLanguageTags({ commit }, show) {
+  setShowLanguageTags({ commit }, flag) {
     return client
       .withAuth()
-      .put('/api/user/show-language-tags', { show })
+      .put('/api/user/show-language-tags', { flag })
+      .then(res => {
+        commit(SET_USER, res)
+      })
+  },
+  setAutosaveNotes({ commit }, flag) {
+    return client
+      .withAuth()
+      .put('/api/user/autosave-notes', { flag })
       .then(res => {
         commit(SET_USER, res)
       })
