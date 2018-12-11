@@ -13,7 +13,14 @@ class UserSettingsController extends Controller
 
     public function setShowLanguagetags(Request $request)
     {
-        auth()->user()->setShowLanguageTags($request->input('show'));
+        auth()->user()->setShowLanguageTags($request->input('flag'));
+
+        return auth()->user();
+    }
+
+    public function setAutosaveNotes(Request $request)
+    {
+        auth()->user()->setAutosaveNotes($request->input('flag'));
 
         return auth()->user();
     }

@@ -15,6 +15,13 @@
         @change="setShowLanguageTags(user.show_language_tags)"
       />
     </div>
+    <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between items-center">
+      <span class="leading-normal">Auto-Save Notes</span>
+      <toggle-switch
+        v-model="user.autosave_notes"
+        @change="setAutosaveNotes(user.autosave_notes)"
+      />
+    </div>
     <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between">
       <span class="leading-normal">Export Stars As JSON</span>
       <a
@@ -71,7 +78,7 @@ export default {
     ToggleSwitch
   },
   props: ['user'],
-  data () {
+  data() {
     return {
       deleteUserClicked: false,
       deleteConfirmation: '',
@@ -79,23 +86,23 @@ export default {
     }
   },
   computed: {
-    deleteButtonDisabled () {
-      return (this.deleteUserClicked && this.deleteConfirmation.trim() !== this.user.username)
+    deleteButtonDisabled() {
+      return this.deleteUserClicked && this.deleteConfirmation.trim() !== this.user.username
     }
   },
   methods: {
-    ...mapActions(['deleteUser', 'setShowLanguageTags', 'revokeUserAccess']),
-    closeModal () {
+    ...mapActions(['deleteUser', 'setShowLanguageTags', 'setAutosaveNotes', 'revokeUserAccess']),
+    closeModal() {
       this.$modal.hide('settings-modal')
     },
-    async deleteUserButtonClicked () {
+    async deleteUserButtonClicked() {
       if (this.deleteUserClicked) {
         await this.deleteUser()
         this.$router.push('auth/logout')
       }
       this.deleteUserClicked = !this.deleteUserClicked
     },
-    async revokeAccessButtonClicked () {
+    async revokeAccessButtonClicked() {
       await this.revokeUserAccess()
     }
   }

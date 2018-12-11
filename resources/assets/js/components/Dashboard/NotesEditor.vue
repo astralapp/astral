@@ -10,7 +10,7 @@ import { debounce } from 'lodash'
 import 'highlight.js'
 export default {
   name: 'NotesEditor',
-  props: ['notes'],
+  props: ['notes', 'autosave'],
   data() {
     return {
       editor: null,
@@ -28,7 +28,17 @@ export default {
         }
         this.editor.value(val)
       }
+    },
+    currentNotes(newVal, oldVal) {
+      if (this.autosave) {
+        this.$nextTick(() => {
+          this.debounceSaveNotes()
+        })
+      }
     }
+  },
+  created() {
+    this.debounceSaveNotes = debounce(this.saveNotes, 1000)
   },
   mounted() {
     this.editor = new EasyMDE({
@@ -115,15 +125,9 @@ export default {
         }
       ]
     })
-    this.editor.codemirror.on(
-      'change',
-      debounce(() => {
-        this.currentNotes = this.editor.value()
-        this.$nextTick(() => {
-          this.saveNotes()
-        })
-      }, 1000)
-    )
+    this.editor.codemirror.on('change', () => {
+      this.currentNotes = this.editor.value()
+    })
   },
   destroyed() {
     this.editor = null
