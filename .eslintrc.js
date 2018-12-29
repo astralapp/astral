@@ -3,12 +3,13 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018
   },
-  extends: ['prettier', 'plugin:vue/recommended'],
-  plugins: ['prettier', 'vue'],
+  extends: ['standard', 'plugin:vue/recommended'],
+  plugins: ['standard', 'vue'],
   rules: {
-    'prettier/prettier': 'error',
     'vue/require-default-prop': 'off',
-    'vue/require-prop-types': 'off'
+    'vue/require-prop-types': 'off',
+    'vue/no-v-html': 'off',
+    'space-before-function-paren': 'off'
   },
   overrides: [
     {

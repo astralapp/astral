@@ -1,9 +1,10 @@
 <template>
-  <transition name="dashboard-notifier">
+  <Transition name="dashboard-notifier">
     <div
       v-show="show"
       :class="mode === 'success' ? 'bg-brand' : 'bg-red-dark'"
-      class="dashboard-notifier fixed pin-r pin-b mr-4 mb-4 rounded p-4">
+      class="dashboard-notifier fixed pin-r pin-b mr-4 mb-4 rounded p-4"
+    >
       <div class="flex items-center">
         <div class="flex-grow text-white">
           {{ message }}
@@ -17,7 +18,7 @@
         </div>
       </div>
     </div>
-  </transition>
+  </Transition>
 </template>
 <script>
 export default {

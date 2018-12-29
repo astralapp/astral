@@ -1,10 +1,13 @@
 <template>
   <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
-    <sidebar-header title="Stars">
-      <refresh-button :active="refreshingStars" @click.native="refreshStars"/>
-    </sidebar-header>
+    <SidebarHeader title="Stars">
+      <RefreshButton
+        :active="refreshingStars"
+        @click.native="refreshStars"
+      />
+    </SidebarHeader>
     <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
-      <sidebar-item
+      <SidebarItem
         :class="{ 'selected': noFiltersApplied }"
         :badge="totalStars"
         class="all-stars"
@@ -13,7 +16,7 @@
         icon-size="16"
         @click.native="resetFilters"
       />
-      <sidebar-item
+      <SidebarItem
         :class="{ 'selected': viewingUntagged }"
         :badge="totalUntaggedStars"
         class="untagged-stars"
@@ -23,15 +26,18 @@
         @click.native="setViewingUntagged(true)"
       />
     </ul>
-    <sidebar-header title="Tags">
-      <tag-sorter/>
-    </sidebar-header>
-    <new-tag-form @submit="doAddTag"/>
-    <ul ref="sidebarTags" class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
-      <sidebar-tag
+    <SidebarHeader title="Tags">
+      <TagSorter />
+    </SidebarHeader>
+    <NewTagForm @submit="doAddTag" />
+    <ul
+      ref="sidebarTags"
+      class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3"
+    >
+      <SidebarTag
         v-for="tag in tags"
-        :tag="tag"
         :key="tag.id"
+        :tag="tag"
         :is-selected="currentTag.id == tag.id"
         :data-id="tag.id"
         @click.native="doSetCurrentTag(tag, $event)"
@@ -40,9 +46,9 @@
         @renameTag="doRenameTag"
       />
     </ul>
-    <sidebar-header title="Languages"/>
+    <SidebarHeader title="Languages" />
     <ul class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
-      <sidebar-item
+      <SidebarItem
         v-for="lang in languages"
         :key="lang.name"
         :badge="lang.count"
@@ -187,10 +193,10 @@ export default {
     async tagStarWithData ({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
       if (Array.isArray(data)) {
-        await this.addTagToStars({stars: data, tag})
+        await this.addTagToStars({ stars: data, tag })
         this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.length} stars!`)
       } else {
-        await this.addTagToStars({stars: [data], tag})
+        await this.addTagToStars({ stars: [data], tag })
         this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.nameWithOwner}!`)
       }
     }

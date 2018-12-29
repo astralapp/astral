@@ -19,14 +19,17 @@
       :class="{'opacity-100': editTagDropdownShowing}"
       class="opacity-0 transition-opacity edit-tag absolute pin-r"
     >
-      <button class="text-grey hover:text-white px-2" @click="toggleEditTagDropdown">
+      <button
+        class="text-grey hover:text-white px-2"
+        @click="toggleEditTagDropdown"
+      >
         <Icon
           type="MoreHorizontalIcon"
           height="14"
           class="edit-tag-icon stroke-none fill-current relative"
         />
       </button>
-      <edit-tag-dropdown
+      <EditTagDropdown
         ref="editTagDropdown"
         :tag="tag"
         :visible="editTagDropdownShowing"

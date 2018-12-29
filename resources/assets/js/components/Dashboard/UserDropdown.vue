@@ -3,13 +3,16 @@
     <div
       v-click-outside="hideDropdown"
       class="flex items-center cursor-pointer"
-      @click="toggleDropdown">
+      @click="toggleDropdown"
+    >
       <img
         :src="user.avatar_url"
         :alt="user.username"
         class="rounded-full w-10 h-10"
       >
-      <span class="text-white ml-1">{{ user.username }}</span>
+      <span class="text-white ml-1">
+        {{ user.username }}
+      </span>
       <Icon
         type="ChevronDownIcon"
         height="16"
@@ -19,32 +22,45 @@
     </div>
     <div
       v-show="visible"
-      class="dropdown user-dropdown-container">
+      class="dropdown user-dropdown-container"
+    >
       <ul>
         <li>
           <a
             class="dropdown-item"
             href="#"
-            @click.prevent="showSettingsModal">Settings</a>
+            @click.prevent="showSettingsModal"
+          >
+            Settings
+          </a>
         </li>
         <li>
           <a
             class="dropdown-item"
             href="https://github.com/astralapp/astral"
             target="_blank"
-            rel="noopener">GitHub</a>
+            rel="noopener"
+          >
+            GitHub
+          </a>
         </li>
         <li>
           <a
             class="dropdown-item"
             href="https://patreon.com/syropian"
             target="_blank"
-            rel="noopener">Patreon</a>
+            rel="noopener"
+          >
+            Patreon
+          </a>
         </li>
         <li>
-          <router-link
+          <RouterLink
             class="dropdown-item"
-            to="/auth/logout">Logout</router-link>
+            to="/auth/logout"
+          >
+            Logout
+          </RouterLink>
         </li>
       </ul>
     </div>

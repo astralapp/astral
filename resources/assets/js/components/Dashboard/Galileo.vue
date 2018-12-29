@@ -19,8 +19,8 @@
         class="clear-search-icon absolute text-1xl text-grey-darker focus-none rounded-full w-6 h-6 bg-transparent hover:bg-grey-light transition-bg"
         @click="resetSearch"
       >
-&times;
-</button>
+        &times;
+      </button>
     </div>
   </div>
 </template>

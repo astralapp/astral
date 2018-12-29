@@ -1,31 +1,37 @@
 <template>
   <div class="dashboard-list-item toggle-new-tag h-10 relative">
-    <transition name="new-tag-form">
+    <Transition name="new-tag-form">
       <div
         v-show="!formShowing"
         class="toggle-new-tag-button flex items-center text-base font-semibold text-grey-darker h-10 cursor-pointer transition-color hover:text-grey"
-        @click="showForm">
+        @click="showForm"
+      >
         <Icon
           type="PlusCircleIcon"
           height="14"
-          class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"/>
-        <span class="dashboard-list-item-name relative flex-grow">Add a tag...</span>
+          class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"
+        />
+        <span class="dashboard-list-item-name relative flex-grow">
+          Add a tag...
+        </span>
       </div>
-    </transition>
-    <transition name="new-tag-form">
+    </Transition>
+    <Transition name="new-tag-form">
       <form
         v-show="formShowing"
         class="toggle-new-tag-form flex items-center absolute pin-t pin-l w-full"
-        @submit.prevent="formSubmitted">
+        @submit.prevent="formSubmitted"
+      >
         <input
           ref="form"
           v-model="tagName"
           class="h-10 text-base rounded bg-white px-2 w-full"
           type="text"
           placeholder="Enter a tag name..."
-          @blur="formBlurred">
+          @blur="formBlurred"
+        >
       </form>
-    </transition>
+    </Transition>
   </div>
 </template>
 

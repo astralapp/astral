@@ -1,7 +1,8 @@
 <template>
   <button
     :class="{ 'active': active }"
-    class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none">
+    class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none"
+  >
     <Icon
       type="RefreshCwIcon"
       height="16"
