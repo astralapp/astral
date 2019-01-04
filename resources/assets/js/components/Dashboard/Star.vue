@@ -16,9 +16,7 @@
     >
       {{ star.node.description }}
     </p>
-    <StarTags
-      :star="star"
-    />
+    <StarTags :star="star" />
     <div class="star-meta flex items-center mt-4">
       <div class="stargazers-count flex items-center text-grey-dark mr-2">
         <Icon
@@ -71,12 +69,12 @@ export default {
   props: ['star', 'selected'],
   computed: {
     ...mapGetters(['currentStars', 'user']),
-    starInSelectedStars () {
-      return this.currentStars.includes(this.star)
+    starInSelectedStars() {
+      return this.currentStars.some(star => star.node.databaseId === this.star.node.databaseId)
     }
   },
   methods: {
-    starDragged (e) {
+    starDragged(e) {
       let data = ''
       if (this.starInSelectedStars) {
         data = JSON.stringify(this.currentStars.map(star => star.node))

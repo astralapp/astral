@@ -7,6 +7,7 @@ use Astral\Lib\GitHubClient;
 use Astral\Lib\StarsJanitor;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Astral\Providers\TelescopeServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if ($this->app->isLocal()) {
+            $this->app->register(TelescopeServiceProvider::class);
+        }
+
         $this->app->bind(GitHubClient::class, function () {
             return new GitHubClient(auth()->user()->access_token);
         });

@@ -1,5 +1,5 @@
 <template>
-  <Modal
+  <VueModal
     name="settings-modal"
     height="auto"
   >
@@ -94,7 +94,7 @@
         </p>
       </div>
     </div>
-  </Modal>
+  </VueModal>
 </template>
 <script>
 import { mapActions } from 'vuex'

@@ -79,7 +79,7 @@ export default {
     SidebarTag,
     TagSorter
   },
-  data () {
+  data() {
     return {
       refreshingStars: false,
       drake: null
@@ -96,31 +96,24 @@ export default {
       'totalStars',
       'totalUntaggedStars'
     ]),
-    noFiltersApplied () {
-      return (
-        !Object.keys(this.currentTag).length &&
-        this.currentLanguage === '' &&
-        !this.viewingUntagged
-      )
+    noFiltersApplied() {
+      return !Object.keys(this.currentTag).length && this.currentLanguage === '' && !this.viewingUntagged
     }
   },
-  async mounted () {
+  async mounted() {
     this.$bus.$on('TAGS_SORTED', method => {
       this.sortTags(method)
     })
 
-    this.drake = dragula([this.$refs.sidebarTags]).on(
-      'drop',
-      (el, target, source, sibling) => {
-        let sortMap = Array.from(source.children).map((el, i) => {
-          return {
-            id: el.dataset.id,
-            sort_order: i
-          }
-        })
-        this.reorderTags(sortMap)
-      }
-    )
+    this.drake = dragula([this.$refs.sidebarTags]).on('drop', (el, target, source, sibling) => {
+      let sortMap = Array.from(source.children).map((el, i) => {
+        return {
+          id: el.dataset.id,
+          sort_order: i
+        }
+      })
+      this.reorderTags(sortMap)
+    })
 
     await this.fetchTags()
 
@@ -152,7 +145,7 @@ export default {
       'fetchGitHubStars',
       'cleanupStars'
     ]),
-    async refreshStars () {
+    async refreshStars() {
       this.refreshingStars = true
       this.$bus.$emit('STATUS', 'Refreshing stars...')
       await this.fetchGitHubStars({ cursor: false, refresh: true })
@@ -166,31 +159,31 @@ export default {
       this.refreshingStars = false
       this.$bus.$emit('STATUS', '')
     },
-    async doAddTag (name) {
+    async doAddTag(name) {
       await this.addTag(name)
       this.$bus.$emit('NOTIFICATION', `${name} tag added!`)
     },
-    async doDeleteTag ({ id, name }) {
+    async doDeleteTag({ id, name }) {
       await this.deleteTag(id)
       this.$bus.$emit('NOTIFICATION', `${name} tag deleted!`)
     },
-    async doRenameTag (data) {
+    async doRenameTag(data) {
       const { id, name } = data
       const oldName = this.tags.find(s => s.id === id).name
       await this.renameTag(data)
       this.$bus.$emit('NOTIFICATION', `${oldName} tag renamed to ${name}!`)
     },
-    doSetCurrentTag (tag, e) {
+    doSetCurrentTag(tag, e) {
       if (e.target.classList.contains('dashboard-list-item')) {
         this.setCurrentTag(tag)
       }
     },
-    resetFilters () {
+    resetFilters() {
       this.setViewingUntagged(false)
       this.setCurrentTag({})
       this.setCurrentLanguage('')
     },
-    async tagStarWithData ({ data, id }) {
+    async tagStarWithData({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
       if (Array.isArray(data)) {
         await this.addTagToStars({ stars: data, tag })
