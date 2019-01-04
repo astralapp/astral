@@ -4,12 +4,18 @@
       v-if="icon"
       :type="icon"
       :height="iconSize"
-      class="mr-1 pointer-events-none stroke-current fill-none relative"/>
-    <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">{{ title }}</span>
-    <slot/>
+      class="mr-1 pointer-events-none stroke-current fill-none relative"
+    />
+    <span class="dashboard-list-item-name flex-grow truncate pointer-events-none">
+      {{ title }}
+    </span>
+    <slot />
     <span
       v-if="!!badge"
-      class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1">{{ badge }}</span>
+      class="dashboard-list-item-badge text-white bg-white-10 rounded-full inline-block text-xs font-semibold pointer-events-none ml-1"
+    >
+      {{ badge }}
+    </span>
   </li>
 </template>
 <script>

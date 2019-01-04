@@ -3,10 +3,14 @@
     <img
       src="/images/logo.svg"
       alt="Astral"
-      class="h-16 mb-8" >
+      class="h-16 mb-8"
+    >
     <a
       href="/auth/github"
-      class="auth-button inline-block rounded border border-white text-white text-center no-underline">Sign In</a>
+      class="auth-button inline-block rounded border border-white text-white text-center no-underline"
+    >
+      Sign In
+    </a>
   </div>
 </template>
 <style lang="scss">

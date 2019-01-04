@@ -12,3 +12,4 @@ These generous folks are supporting Astral monthly on [Patreon](https://patreon.
 - David Nicholson - **$1**
 - Christopher Brown - **$1**
 - Jonathon - **$1**
+- Roy Mosby - **$1**

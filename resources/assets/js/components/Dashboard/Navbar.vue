@@ -2,7 +2,8 @@
   <header class="bg-brand flex items-center px-8">
     <img
       class="block self-center h-8 mr-16"
-      src="/images/logo.svg">
+      src="/images/logo.svg"
+    >
     <div
       v-show="!!status"
       class="flex items-center ml-6 text-white"
@@ -13,9 +14,10 @@
         alt="..."
         class="ml-2 spin"
         width="16"
-        height="16" />
+        height="16"
+      >
     </div>
-    <user-dropdown/>
+    <UserDropdown />
   </header>
 </template>
 <script>

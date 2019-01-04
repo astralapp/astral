@@ -3,19 +3,23 @@
     <p
       v-if="!filteredStars.length"
       class="text-grey font-bold flex flex-col justify-center items-center h-full"
-    >No Results</p>
+    >
+      No Results
+    </p>
     <GlobalEvents
       @keyup.down="nextStar"
       @keyup.up="previousStar"
     />
-    <collection-cluster
+    <CollectionCluster
       :items="filteredStars"
       v-bind="cluster"
-      class="overflow-y-scroll">
+      class="overflow-y-scroll"
+    >
       <div
         slot="star"
+        :key="item.value.node.databaseId"
         slot-scope="{cell, item}"
-        :key="item.value.node.databaseId">
+      >
         <Star
           :star="item.value"
           :data-id="item.value.node.databaseId"
@@ -26,7 +30,7 @@
           @click.native="handleClick($event, item.value)"
         />
       </div>
-    </collection-cluster>
+    </CollectionCluster>
   </div>
 </template>
 <script>

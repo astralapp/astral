@@ -5,14 +5,16 @@
       :checked="checked"
       type="checkbox"
       class="absolute invisible"
-      @change="$emit('change', $event.target.checked)">
+      @change="$emit('change', $event.target.checked)"
+    >
     <label
       :for="uid"
       class=" flex items-center relative block rounded-full h-6 w-12 bg-grey-light cursor-pointer transition-bg"
     >
       <span
         :class="checked ? 'text-brand': 'text-grey'"
-        class="toggle-switch-label inline-block uppercase text-right text-sm font-bold select-none">
+        class="toggle-switch-label inline-block uppercase text-right text-sm font-bold select-none"
+      >
         {{ checked ? onLabel : offLabel }}
       </span>
     </label>

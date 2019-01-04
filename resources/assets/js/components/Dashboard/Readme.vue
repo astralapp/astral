@@ -2,7 +2,8 @@
   <div
     ref="readme"
     class="repo-readme flex-1 p-4 text-grey-darkest bg-white w-full overflow-y-scroll"
-    v-html="readme" />
+    v-html="readme"
+  />
 </template>
 <script>
 export default {

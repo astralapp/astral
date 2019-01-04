@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <transition
+    <Transition
       name="screen-fade"
       mode="out-in"
-      appear>
-      <router-view/>
-    </transition>
+      appear
+    >
+      <RouterView />
+    </Transition>
   </div>
 </template>
 <script>

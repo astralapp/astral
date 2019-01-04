@@ -1,12 +1,12 @@
 <template>
   <div class="dashboard w-screen h-screen overflow-hidden">
-    <navbar/>
-    <sidebar/>
-    <galileo/>
-    <star-list :stars="starsWithCurrentTag"/>
-    <star-info/>
-    <div><notifier timeout="3000"/></div>
-    <settings-modal :user="user"/>
+    <Navbar />
+    <Sidebar />
+    <Galileo />
+    <StarList :stars="starsWithCurrentTag" />
+    <StarInfo />
+    <div><Notifier timeout="3000" /></div>
+    <SettingsModal :user="user" />
   </div>
 </template>
 <script>

@@ -2,38 +2,43 @@
   <div
     :class="{'selected shadow-inner bg-grey-lightest': selected, 'bg-white': !selected}"
     class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg group"
-    @dragstart="starDragged">
+    @dragstart="starDragged"
+  >
     <h3
       v-once
-      class="repo-name text-base text-brand mb-2 font-bold">
+      class="repo-name text-base text-brand mb-2 font-bold"
+    >
       {{ star.node.nameWithOwner }}
     </h3>
     <p
       v-once
-      class="text-dark-grey text-sm">
+      class="text-dark-grey text-sm"
+    >
       {{ star.node.description }}
     </p>
-    <star-tags
-      :star="star"
-    />
+    <StarTags :star="star" />
     <div class="star-meta flex items-center mt-4">
       <div class="stargazers-count flex items-center text-grey-dark mr-2">
         <Icon
           type="StarIcon"
-          class="stroke-current h-4"/>
+          class="stroke-current h-4"
+        />
         <span
           v-once
-          class="text-xs">
+          class="text-xs"
+        >
           {{ star.node.stargazers.totalCount }}
         </span>
       </div>
       <div class="fork-count flex items-center text-grey-dark mr-4">
         <Icon
           type="Share2Icon"
-          class="stroke-current h-4"/>
+          class="stroke-current h-4"
+        />
         <span
           v-once
-          class="text-xs">
+          class="text-xs"
+        >
           {{ star.node.forkCount }}
         </span>
       </div>
@@ -43,7 +48,10 @@
           class="text-xs text-grey-dark font-bold hover:no-underline"
           target="_blank"
           rel="noopener"
-          @click.stop>View on GitHub</a>
+          @click.stop
+        >
+          View on GitHub
+        </a>
       </div>
     </div>
   </div>
@@ -61,12 +69,12 @@ export default {
   props: ['star', 'selected'],
   computed: {
     ...mapGetters(['currentStars', 'user']),
-    starInSelectedStars () {
-      return this.currentStars.includes(this.star)
+    starInSelectedStars() {
+      return this.currentStars.some(star => star.node.databaseId === this.star.node.databaseId)
     }
   },
   methods: {
-    starDragged (e) {
+    starDragged(e) {
       let data = ''
       if (this.starInSelectedStars) {
         data = JSON.stringify(this.currentStars.map(star => star.node))

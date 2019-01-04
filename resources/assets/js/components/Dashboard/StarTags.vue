@@ -1,7 +1,8 @@
 <template>
   <div
     :class="{ 'px-2 pt-2 bg-white border border-grey-light': isEditing }"
-    class="star-tags-editor rounded mt-4">
+    class="star-tags-editor rounded mt-4"
+  >
     <ul class="star-tags list-reset flex flex-wrap items-center">
       <li
         v-if="star.node.primaryLanguage && user.show_language_tags"
@@ -22,7 +23,10 @@
           <button
             v-show="isEditing"
             class="remove-tag ml-2 text-white text-sm"
-            @click.stop="removeTag(tag)">&times;</button>
+            @click.stop="removeTag(tag)"
+          >
+            &times;
+          </button>
         </span>
       </li>
       <li class="mb-2">
@@ -44,7 +48,8 @@
         <button
           v-show="!isEditing"
           class="transition-opacity text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2 opacity-0 group-hover:opacity-100"
-          @click.stop="startEditing">
+          @click.stop="startEditing"
+        >
           Edit Tags
         </button>
       </li>
