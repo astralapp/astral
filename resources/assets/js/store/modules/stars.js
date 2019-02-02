@@ -5,7 +5,8 @@ import {
   ADD_TAG_TO_STARS,
   SET_CURRENT_LANGUAGE,
   SET_CURRENT_STAR,
-  ADD_TO_CURRENT_STARS,
+  SELECT_STARS,
+  PUSH_TO_CURRENT_STARS,
   SET_CURRENT_TAG,
   SET_README,
   SET_STARS_PAGE_INFO,
@@ -133,8 +134,20 @@ const mutations = {
   [SET_CURRENT_STAR](state, star) {
     state.currentStars = [{ ...star }]
   },
-  [ADD_TO_CURRENT_STARS](state, star) {
-    state.currentStars.push(star)
+  [PUSH_TO_CURRENT_STARS](state, stars) {
+    const starIds = stars.map(star => star.node.databaseId)
+    state.currentStars = state.currentStars
+      .filter(star => {
+        return !starIds.includes(star.node.databaseId)
+      })
+      .concat(
+        stars.filter(star => {
+          return !state.currentStars.map(s => s.node.databaseId).includes(star.node.databaseId)
+        })
+      )
+  },
+  [SELECT_STARS](state, stars) {
+    state.currentStars = stars
   },
   [SET_README](state, readme) {
     state.readme = readme
@@ -220,8 +233,11 @@ const actions = {
   setCurrentStar({ commit }, star) {
     commit(SET_CURRENT_STAR, star)
   },
-  addToCurrentStars({ commit }, star) {
-    commit(ADD_TO_CURRENT_STARS, star)
+  pushToCurrentStars({ commit }, star) {
+    commit(PUSH_TO_CURRENT_STARS, star)
+  },
+  selectStars({ commit }, stars) {
+    commit(SELECT_STARS, stars)
   },
   fetchReadme({ rootState, commit }, repoName) {
     const accessToken = rootState.user.user.access_token

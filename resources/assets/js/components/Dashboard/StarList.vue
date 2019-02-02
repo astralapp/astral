@@ -3,23 +3,10 @@
     <p
       v-if="!filteredStars.length"
       class="text-grey font-bold flex flex-col justify-center items-center h-full"
-    >
-      No Results
-    </p>
-    <GlobalEvents
-      @keyup.down="nextStar"
-      @keyup.up="previousStar"
-    />
-    <CollectionCluster
-      :items="filteredStars"
-      v-bind="cluster"
-      class="overflow-y-scroll"
-    >
-      <div
-        slot="star"
-        :key="item.value.node.databaseId"
-        slot-scope="{cell, item}"
-      >
+    >No Results</p>
+    <GlobalEvents @keyup.down="nextStar" @keyup.up="previousStar"/>
+    <CollectionCluster :items="filteredStars" v-bind="cluster" class="overflow-y-scroll">
+      <div slot="star" :key="item.value.node.databaseId" slot-scope="{cell, item}">
         <Star
           :star="item.value"
           :data-id="item.value.node.databaseId"
@@ -112,7 +99,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentStar', 'fetchReadme', 'addToCurrentStars']),
+    ...mapActions(['setCurrentStar', 'fetchReadme', 'pushToCurrentStars', 'selectStars']),
     starDragged (e, star) {
       let width, height
       const el = e.currentTarget
@@ -163,9 +150,33 @@ export default {
     },
     handleClick (e, star) {
       if (e.shiftKey) {
-        this.addToCurrentStars(star)
+        const starIndex = this.filteredStars.findIndex(s => {
+          return s.value.node.databaseId === star.node.databaseId
+        })
+        const starsToPush = []
+        if (!this.currentStars.length) {
+          for (let i = 0; i <= starIndex; i++) {
+            starsToPush.push(this.filteredStars[i].value)
+          }
+          this.selectStars(starsToPush)
+        } else {
+          const currentStarIndexes = this.currentStars.map(star => {
+            return this.filteredStars.findIndex(s => {
+              return s.value.node.databaseId === star.node.databaseId
+            })
+          })
+          let currentMax = Math.max.apply(Math, currentStarIndexes)
+          for (let i = Math.min(currentMax, starIndex); i <= Math.max(currentMax, starIndex); i++) {
+            starsToPush.push(this.filteredStars[i].value)
+          }
+          this.selectStars(starsToPush)
+        }
       } else {
-        this.setCurrentStar(star)
+        if ((e.ctrlKey || e.metaKey)) {
+          this.pushToCurrentStars([star])
+        } else {
+          this.setCurrentStar(star)
+        }
       }
     }
   }
