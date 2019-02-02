@@ -6,7 +6,7 @@ import NotesEditor from '@/components/Dashboard/NotesEditor'
 jest.unmock('lodash')
 
 const lodash = require.requireActual('lodash')
-lodash.debounce = jest.fn(fn => fn)
+lodash.debounce = jest.fn((fn, __ms) => fn)
 
 describe('Notes Editor', () => {
   describe('on component mounted', () => {
@@ -38,7 +38,7 @@ describe('Notes Editor', () => {
       expect(wrapper.vm.currentNotes).toBe('New value')
       await flushPromises()
       expect(debouncedSaveSpy).toHaveBeenCalled()
-      expect(debounceSpy).toHaveBeenCalled()
+      expect(debounceSpy).toHaveBeenCalledWith(wrapper.vm.saveNotes, 1000)
     })
   })
 
