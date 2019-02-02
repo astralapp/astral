@@ -173,7 +173,7 @@ export default {
         }
       } else {
         if ((e.ctrlKey || e.metaKey)) {
-          this.pushToCurrentStars([star])
+          this.pushToCurrentStars(star)
         } else {
           this.setCurrentStar(star)
         }

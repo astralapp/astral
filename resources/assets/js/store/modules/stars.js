@@ -134,17 +134,14 @@ const mutations = {
   [SET_CURRENT_STAR](state, star) {
     state.currentStars = [{ ...star }]
   },
-  [PUSH_TO_CURRENT_STARS](state, stars) {
-    const starIds = stars.map(star => star.node.databaseId)
-    state.currentStars = state.currentStars
-      .filter(star => {
-        return !starIds.includes(star.node.databaseId)
-      })
-      .concat(
-        stars.filter(star => {
-          return !state.currentStars.map(s => s.node.databaseId).includes(star.node.databaseId)
-        })
-      )
+  [PUSH_TO_CURRENT_STARS](state, star) {
+    const starId = star.node.databaseId
+    const starIndex = state.currentStars.findIndex(star => star.node.databaseId === starId)
+    if (starIndex > -1) {
+      state.currentStars.splice(starIndex, 1)
+    } else {
+      state.currentStars = state.currentStars.concat([star])
+    }
   },
   [SELECT_STARS](state, stars) {
     state.currentStars = stars

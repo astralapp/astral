@@ -17,7 +17,8 @@ const {
   ADD_TAG_TO_STARS,
   SET_CURRENT_LANGUAGE,
   SET_CURRENT_STAR,
-  ADD_TO_CURRENT_STARS,
+  PUSH_TO_CURRENT_STARS,
+  SELECT_STARS,
   SET_README,
   SET_STARS_PAGE_INFO,
   SET_STARS,
@@ -35,7 +36,8 @@ const {
   setCurrentLanguage,
   addTagToStars,
   setCurrentStar,
-  addToCurrentStars,
+  pushToCurrentStars,
+  selectStars,
   fetchReadme,
   setViewingUntagged,
   syncStarTags,
@@ -255,14 +257,26 @@ describe('Stars Module', () => {
       expect(state.currentStars).toEqual([star])
     })
 
-    it('can add multiple stars to the current stars selection', () => {
+    it('can push or remove a star to or from the selected stars list', () => {
       SET_STARS(state, sampleStars.edges)
 
-      ADD_TO_CURRENT_STARS(state, sampleStars.edges[0])
+      PUSH_TO_CURRENT_STARS(state, sampleStars.edges[0])
 
       expect(state.currentStars).toEqual([sampleStars.edges[0]])
 
-      ADD_TO_CURRENT_STARS(state, sampleStars.edges[1])
+      PUSH_TO_CURRENT_STARS(state, sampleStars.edges[1])
+
+      expect(state.currentStars).toEqual([sampleStars.edges[0], sampleStars.edges[1]])
+
+      PUSH_TO_CURRENT_STARS(state, sampleStars.edges[0])
+
+      expect(state.currentStars).toEqual([sampleStars.edges[1]])
+    })
+
+    it('can append multiple stars to the selected stars list', () => {
+      SET_STARS(state, sampleStars.edges)
+
+      SELECT_STARS(state, [sampleStars.edges[0], sampleStars.edges[1]])
 
       expect(state.currentStars).toEqual([sampleStars.edges[0], sampleStars.edges[1]])
     })
@@ -400,12 +414,12 @@ describe('Stars Module', () => {
       expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_STAR', currentStar)
     })
 
-    it('adds the current star list', async () => {
+    it('can push to the selected stars list', async () => {
       const currentStar = sampleStars.edges[0]
 
-      await addToCurrentStars(ctx, currentStar)
+      await pushToCurrentStars(ctx, currentStar)
 
-      expect(ctx.commit).toHaveBeenCalledWith('ADD_TO_CURRENT_STARS', currentStar)
+      expect(ctx.commit).toHaveBeenCalledWith('PUSH_TO_CURRENT_STARS', currentStar)
     })
 
     describe('fetching repo readmes', () => {
