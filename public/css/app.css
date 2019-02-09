@@ -5984,6 +5984,10 @@ body {
   top: 1px;
 }
 
+.nudge-up-t {
+  top: -1px;
+}
+
 .nudge-r {
   right: 1px;
 }

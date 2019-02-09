@@ -63234,9 +63234,11 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Icon__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Icon__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_global_events__ = __webpack_require__(192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_global_events___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_global_events__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Icon__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Icon___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Icon__);
 
 //
 //
@@ -63264,6 +63266,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -63271,9 +63283,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Galileo',
   components: {
-    Icon: __WEBPACK_IMPORTED_MODULE_2__components_Icon___default.a
+    GlobalEvents: __WEBPACK_IMPORTED_MODULE_1_vue_global_events___default.a,
+    Icon: __WEBPACK_IMPORTED_MODULE_3__components_Icon___default.a
   },
-  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapGetters */])({
+  data: function data() {
+    return {
+      inputFocused: false
+    };
+  },
+
+  computed: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapGetters */])({
     query: 'searchQuery'
   }), {
     currentSearchQuery: {
@@ -63285,7 +63304,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     }
   }),
-  methods: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['setSearchQuery']), {
+  methods: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapActions */])(['setSearchQuery']), {
+    focusInput: function focusInput() {
+      this.$refs.searchInput.focus();
+    },
     resetSearch: function resetSearch() {
       this.setSearchQuery('');
     }
@@ -63307,6 +63329,31 @@ var render = function() {
         "search-container bg-white border-b border-r border-grey-light h-16 px-4 flex items-center justify-center"
     },
     [
+      _c("GlobalEvents", {
+        attrs: {
+          filter: function(event, handler, eventName) {
+            return !["INPUT", "TEXTAREA"].includes(event.target.tagName)
+          }
+        },
+        on: {
+          keyup: function($event) {
+            if (!("button" in $event) && $event.keyCode !== 191) {
+              return null
+            }
+            $event.preventDefault()
+            if (
+              $event.ctrlKey ||
+              $event.shiftKey ||
+              $event.altKey ||
+              $event.metaKey
+            ) {
+              return null
+            }
+            return _vm.focusInput($event)
+          }
+        }
+      }),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "relative w-full" },
@@ -63320,10 +63367,17 @@ var render = function() {
                 expression: "currentSearchQuery"
               }
             ],
+            ref: "searchInput",
             staticClass: "search-input text-input w-full pl-8 pr-8",
             attrs: { type: "text", placeholder: "Gaze through your telescope" },
             domProps: { value: _vm.currentSearchQuery },
             on: {
+              focus: function($event) {
+                _vm.inputFocused = true
+              },
+              blur: function($event) {
+                _vm.inputFocused = false
+              },
               input: function($event) {
                 if ($event.target.composing) {
                   return
@@ -63347,13 +63401,31 @@ var render = function() {
                     "clear-search-icon absolute text-1xl text-grey-darker focus-none rounded-full w-6 h-6 bg-transparent hover:bg-grey-light transition-bg",
                   on: { click: _vm.resetSearch }
                 },
-                [_vm._v("\n      ×\n    ")]
+                [_vm._v("×")]
               )
-            : _vm._e()
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !_vm.inputFocused && !_vm.query,
+                  expression: "!inputFocused && !query"
+                }
+              ],
+              staticClass:
+                "w-6 h-6 bg-transparent text-grey-light border-grey-light border rounded-sm flex justify-center items-center absolute pin-t pin-r mt-2 nudge-up-t mr-2 pointer-events-none"
+            },
+            [_vm._v("/")]
+          )
         ],
         1
       )
-    ]
+    ],
+    1
   )
 }
 var staticRenderFns = []
