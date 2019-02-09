@@ -4,7 +4,11 @@
       v-if="!filteredStars.length"
       class="text-grey font-bold flex flex-col justify-center items-center h-full"
     >No Results</p>
-    <GlobalEvents @keyup.down="nextStar" @keyup.up="previousStar"/>
+    <GlobalEvents
+      :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event)"
+      @keyup.down="nextStar"
+      @keyup.up="previousStar"
+    />
     <CollectionCluster :items="filteredStars" v-bind="cluster" class="overflow-y-scroll">
       <div slot="star" :key="item.value.node.databaseId" slot-scope="{cell, item}">
         <Star
@@ -26,6 +30,7 @@ import CollectionCluster from 'vue-collection-cluster'
 import { mapGetters, mapActions } from 'vuex'
 import Star from '@/components/Dashboard/Star'
 import galileo from '@/filters/galileo'
+import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 export default {
   name: 'StarList',
   components: {
@@ -33,6 +38,7 @@ export default {
     GlobalEvents,
     Star
   },
+  mixins: [shouldDisableKeyboardShortcutsMixin],
   props: ['stars'],
   data () {
     return {
@@ -124,29 +130,17 @@ export default {
       )
     },
     previousStar (e) {
-      if (this.shouldDisableKeyShortcuts(e)) {
-        return false
-      }
       if (this.currentStarIndex === 0) return
       const previousStar = this.stars[this.currentStarIndex - 1]
       this.setCurrentStar(previousStar)
     },
     nextStar (e) {
-      if (this.shouldDisableKeyShortcuts(e)) {
-        return false
-      }
       if (this.currentStarIndex === this.stars.length - 1) return
       const nextStar =
         this.currentStarIndex === -1
           ? this.stars[0]
           : this.stars[this.currentStarIndex + 1]
       this.setCurrentStar(nextStar)
-    },
-    shouldDisableKeyShortcuts (e) {
-      return (
-        e.target.tagName === 'INPUT' ||
-        document.querySelector('.CodeMirror-focused')
-      )
     },
     handleClick (e, star) {
       if (e.shiftKey) {

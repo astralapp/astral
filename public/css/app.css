@@ -240,7 +240,7 @@ to {
   -webkit-transform: translate3d(-4px, 0, 0);
           transform: translate3d(-4px, 0, 0);
   background-color: #21a179;
-  content: "";
+  content: '';
   display: block;
   width: 4px;
   position: absolute;
@@ -299,7 +299,7 @@ to {
   background: rgba(31, 157, 85, .7);
   color: #fff;
 }
-.awesomplete > ul > li[aria-selected="true"] {
+.awesomplete > ul > li[aria-selected='true'] {
   background: #21a179;
   color: #fff;
 }
@@ -311,7 +311,7 @@ to {
   background: transparent;
   font-weight: bold;
 }
-.awesomplete li[aria-selected="true"] mark {
+.awesomplete li[aria-selected='true'] mark {
   background: transparent;
   font-weight: bold;
   color: inherit;

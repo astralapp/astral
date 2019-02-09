@@ -3,7 +3,7 @@
     class="search-container bg-white border-b border-r border-grey-light h-16 px-4 flex items-center justify-center"
   >
     <GlobalEvents
-      :filter="(event, handler, eventName) => !['INPUT', 'TEXTAREA'].includes(event.target.tagName)"
+      :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event)"
       @keyup.prevent.191.exact="focusInput"
     />
     <div class="relative w-full">
@@ -37,6 +37,7 @@
 import GlobalEvents from 'vue-global-events'
 import { mapActions, mapGetters } from 'vuex'
 import Icon from '@/components/Icon'
+import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 
 export default {
   name: 'Galileo',
@@ -44,6 +45,7 @@ export default {
     GlobalEvents,
     Icon
   },
+  mixins: [shouldDisableKeyboardShortcutsMixin],
   data() {
     return {
       inputFocused: false
