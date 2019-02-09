@@ -38,8 +38,10 @@
           type="text"
           class="text-grey-darkest text-sm h-6 focus-none"
           @click.stop
-          @keyup.enter.188="addTag(newTag)"
+          @keyup.188="addTag(newTag)"
+          @keyup.enter.stop="enterPressed"
           @keydown.delete.stop="deletePressed"
+          @keyup.esc="escapePressed"
           @focus="onFocus"
           @blur="onBlur"
         >
@@ -76,7 +78,8 @@ export default {
       newTag: '',
       placeholder: 'Add a tag',
       tagList: [],
-      isEditing: false
+      isEditing: false,
+      canSaveTags: true
     }
   },
   computed: {
@@ -142,6 +145,16 @@ export default {
         this.removeTagAtIndex(this.mutableTags.length - 1)
       }
     },
+    escapePressed() {
+      this.mutableTags = []
+      this.newTag = ''
+      this.isEditing = false
+    },
+    enterPressed() {
+      if (this.canSaveTags) {
+        this.isEditing = false
+      }
+    },
     onFocus () {
       this.$emit('focus')
     },
@@ -192,6 +205,10 @@ export default {
           this.addTag(tagName)
           setTimeout(() => {
             this.newTag = ''
+            this.canSaveTags = false
+            setTimeout(() => {
+              this.canSaveTags = true
+            }, 100)
           }, 0)
         }, 0)
       }

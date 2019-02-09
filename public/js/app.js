@@ -61925,6 +61925,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -61947,7 +61949,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       newTag: '',
       placeholder: 'Add a tag',
       tagList: [],
-      isEditing: false
+      isEditing: false,
+      canSaveTags: true
     };
   },
 
@@ -62018,6 +62021,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.removeTagAtIndex(this.mutableTags.length - 1);
       }
     },
+    escapePressed: function escapePressed() {
+      this.mutableTags = [];
+      this.newTag = '';
+      this.isEditing = false;
+    },
+    enterPressed: function enterPressed() {
+      if (this.canSaveTags) {
+        this.isEditing = false;
+      }
+    },
     onFocus: function onFocus() {
       this.$emit('focus');
     },
@@ -62062,6 +62075,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           _this2.addTag(tagName);
           setTimeout(function () {
             _this2.newTag = '';
+            _this2.canSaveTags = false;
+            setTimeout(function () {
+              _this2.canSaveTags = true;
+            }, 100);
           }, 0);
         }, 0);
       }
@@ -62811,16 +62828,33 @@ var render = function() {
                 click: function($event) {
                   $event.stopPropagation()
                 },
-                keyup: function($event) {
-                  if (
-                    !("button" in $event) &&
-                    $event.keyCode !== 188 &&
-                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                  ) {
-                    return null
+                keyup: [
+                  function($event) {
+                    if (!("button" in $event) && $event.keyCode !== 188) {
+                      return null
+                    }
+                    _vm.addTag(_vm.newTag)
+                  },
+                  function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    $event.stopPropagation()
+                    return _vm.enterPressed($event)
+                  },
+                  function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "esc", 27, $event.key, "Escape")
+                    ) {
+                      return null
+                    }
+                    return _vm.escapePressed($event)
                   }
-                  _vm.addTag(_vm.newTag)
-                },
+                ],
                 keydown: function($event) {
                   if (
                     !("button" in $event) &&
