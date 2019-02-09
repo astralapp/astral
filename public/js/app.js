@@ -63501,24 +63501,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -89101,7 +89083,7 @@ var render = function() {
                     staticClass: "mr-2 font-bold cursor-pointer",
                     attrs: { for: "starCloneUrl" }
                   },
-                  [_vm._v("\n        Clone:\n      ")]
+                  [_vm._v("Clone:")]
                 ),
                 _vm._v(" "),
                 _c("input", {
@@ -89138,13 +89120,15 @@ var render = function() {
                 {
                   staticClass: "font-bold bg-grey px-4 py-2 text-white rounded"
                 },
-                [_vm._v("\n      No Repo Selected\n    ")]
+                [_vm._v("No Repo Selected")]
               )
             ]
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.readme ? _c("Readme", { attrs: { readme: _vm.readme } }) : _vm._e(),
+      _vm.readme && !_vm.noRepoSelected
+        ? _c("Readme", { attrs: { readme: _vm.readme } })
+        : _vm._e(),
       _vm._v(" "),
       _vm.repoHasNoReadme
         ? _c(
@@ -89164,7 +89148,7 @@ var render = function() {
                 {
                   staticClass: "font-bold bg-grey px-4 py-2 text-white rounded"
                 },
-                [_vm._v("\n      No README Found\n    ")]
+                [_vm._v("No README Found")]
               )
             ]
           )
