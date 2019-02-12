@@ -9,7 +9,12 @@
       @keyup.down="nextStar"
       @keyup.up="previousStar"
     />
-    <CollectionCluster :items="filteredStars" v-bind="cluster" class="overflow-y-scroll">
+    <CollectionCluster
+      :items="filteredStars"
+      v-bind="cluster"
+      class="overflow-y-scroll"
+      ref="collection"
+    >
       <div slot="star" :key="item.value.node.databaseId" slot-scope="{cell, item}">
         <Star
           :star="item.value"
@@ -96,7 +101,10 @@ export default {
       if (!Object.keys(newValue).length) {
         return false
       }
-
+      const starIndex = this.filteredStars.findIndex(s => {
+        return s.value.node.databaseId === newValue.node.databaseId
+      })
+      this.$refs.collection.scrollTo(starIndex)
       if (
         !(Object.keys(oldValue).length && oldValue.node.databaseId === newValue.node.databaseId)
       ) {
@@ -148,6 +156,7 @@ export default {
           return s.value.node.databaseId === star.node.databaseId
         })
         const starsToPush = []
+        // If no stars are selected simply select from index 0 to wherever they clicked
         if (!this.currentStars.length) {
           for (let i = 0; i <= starIndex; i++) {
             starsToPush.push(this.filteredStars[i].value)
@@ -160,10 +169,21 @@ export default {
             })
           })
           let currentMax = Math.max.apply(Math, currentStarIndexes)
-          for (let i = Math.min(currentMax, starIndex); i <= Math.max(currentMax, starIndex); i++) {
-            starsToPush.push(this.filteredStars[i].value)
+          let currentMin = Math.min.apply(Math, currentStarIndexes)
+          if (starIndex < currentMax && starIndex >= currentMin) {
+            for (let i = starIndex; i <= currentMax - 1; i++) {
+              starsToPush.push(this.filteredStars[i].value)
+            }
+          } else if (starIndex < currentMin) {
+            for (let i = starIndex; i <= currentMin - 1; i++) {
+              starsToPush.push(this.filteredStars[i].value)
+            }
+          } else {
+            for (let i = currentMax + 1; i <= starIndex; i++) {
+              starsToPush.push(this.filteredStars[i].value)
+            }
           }
-          this.selectStars(starsToPush)
+          this.selectStars(this.currentStars.concat(starsToPush))
         }
       } else {
         if ((e.ctrlKey || e.metaKey)) {
