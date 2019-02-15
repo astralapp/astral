@@ -18,7 +18,7 @@ class GitHubClient
 
     public function fetchStars($cursor = null, $perPage = 100)
     {
-        $cursorString = $cursor ? 'after:"' . $cursor . '"' : 'after: null';
+        $cursorString = $cursor ? 'after:"'.$cursor.'"' : 'after: null';
         $query = <<<GQL
     query {
         viewer {
@@ -63,10 +63,10 @@ class GitHubClient
 GQL;
 
         $response = Zttp::withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer '.$this->token,
+            'Content-Type'  => 'application/json',
         ])->post($this->endpoint, [
-            'query' => $query,
+            'query'     => $query,
             'variables' => '',
         ]);
 
