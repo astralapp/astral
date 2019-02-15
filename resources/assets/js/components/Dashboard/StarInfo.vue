@@ -48,6 +48,7 @@
     <Readme
       v-if="readme"
       :readme="readme"
+      :star="currentStar"
     />
     <div
       v-if="repoHasNoReadme"
