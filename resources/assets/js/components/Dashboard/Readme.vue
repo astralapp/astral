@@ -24,9 +24,6 @@ export default {
       immediate: true
     }
   },
-  mounted() {
-    window.URI = URI
-  },
   methods: {
     bindAnchors() {
       Array.from(document.querySelectorAll('.repo-readme a')).forEach(anchor => {
