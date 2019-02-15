@@ -7,7 +7,6 @@ use Astral\Lib\GitHubClient;
 use Astral\Lib\StarsJanitor;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Astral\Providers\TelescopeServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
