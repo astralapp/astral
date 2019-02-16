@@ -6,7 +6,7 @@ import NotesEditor from '@/components/Dashboard/NotesEditor'
 jest.unmock('lodash')
 
 const lodash = require.requireActual('lodash')
-lodash.debounce = jest.fn(fn => fn)
+lodash.debounce = jest.fn((fn, __ms) => fn)
 
 describe('Notes Editor', () => {
   describe('on component mounted', () => {
@@ -21,13 +21,15 @@ describe('Notes Editor', () => {
     it('sets and saves the notes on change', async () => {
       const wrapper = shallowMount(NotesEditor, {
         propsData: {
-          notes: 'Lorem Ipsum'
+          notes: 'Lorem Ipsum',
+          autosave: true
         }
       })
       const valueSpy = jest.spyOn(wrapper.vm.editor, 'value').mockImplementation(() => {
         return 'New value'
       })
-      const saveSpy = jest.spyOn(wrapper.vm, 'saveNotes')
+      const debouncedSaveSpy = jest.spyOn(wrapper.vm, 'debounceSaveNotes')
+      const debounceSpy = jest.spyOn(lodash, 'debounce')
 
       wrapper.vm.editor.codemirror.setValue('New value')
       wrapper.vm.editor.codemirror.refresh()
@@ -35,7 +37,8 @@ describe('Notes Editor', () => {
       expect(valueSpy).toHaveBeenCalled()
       expect(wrapper.vm.currentNotes).toBe('New value')
       await flushPromises()
-      expect(saveSpy).toHaveBeenCalled()
+      expect(debouncedSaveSpy).toHaveBeenCalled()
+      expect(debounceSpy).toHaveBeenCalledWith(wrapper.vm.saveNotes, 1000)
     })
   })
 

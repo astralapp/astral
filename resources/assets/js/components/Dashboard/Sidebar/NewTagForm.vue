@@ -11,9 +11,7 @@
           height="14"
           class="mr-1 pointer-events-none stroke-current fill-none transition-stroke"
         />
-        <span class="dashboard-list-item-name relative flex-grow">
-          Add a tag...
-        </span>
+        <span class="dashboard-list-item-name relative flex-grow">Add a tag...</span>
       </div>
     </Transition>
     <Transition name="new-tag-form">

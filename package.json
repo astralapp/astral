@@ -20,6 +20,7 @@
     "setupFiles": [
       "<rootDir>/resources/assets/js/__tests__/utils/mockument"
     ],
+    "setupTestFrameworkScriptFile": "<rootDir>/resources/assets/js/__tests__/utils/setup",
     "testPathIgnorePatterns": [
       "<rootDir>/resources/assets/js/__tests__/utils/"
     ],
@@ -56,7 +57,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/test-utils": "^1.0.0-beta.13",
+    "@vue/test-utils": "^1.0.0-beta.28",
     "babel-jest": "^22.4.3",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -77,6 +78,6 @@
     "laravel-mix-purgecss": "^2.2.0",
     "prettier": "^1.15.3",
     "tailwindcss": "^0.6.3",
-    "vue-jest": "^2.3.0"
+    "vue-jest": "^3.0.2"
   }
 }

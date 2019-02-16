@@ -17,12 +17,7 @@
         <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
       </button>
       <div class="ml-auto">
-        <label
-          for="starCloneUrl"
-          class="mr-2 font-bold cursor-pointer"
-        >
-          Clone:
-        </label>
+        <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
         <input
           id="starCloneUrl"
           :value="currentStarCloneUrl"
@@ -37,16 +32,11 @@
       v-if="noRepoSelected"
       class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter no-repo-selected"
     >
-      <img
-        src="/images/not-selected.svg"
-        class="w-64 mb-8"
-      >
-      <span class="font-bold bg-grey px-4 py-2 text-white rounded">
-        No Repo Selected
-      </span>
+      <img src="/images/not-selected.svg" class="w-64 mb-8">
+      <span class="font-bold bg-grey px-4 py-2 text-white rounded">No Repo Selected</span>
     </div>
     <Readme
-      v-if="readme"
+      v-if="readme && !noRepoSelected"
       :readme="readme"
       :star="currentStar"
     />
@@ -54,13 +44,8 @@
       v-if="repoHasNoReadme"
       class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter"
     >
-      <img
-        src="/images/no-readme.svg"
-        class="w-64 mb-8"
-      >
-      <span class="font-bold bg-grey px-4 py-2 text-white rounded">
-        No README Found
-      </span>
+      <img src="/images/no-readme.svg" class="w-64 mb-8">
+      <span class="font-bold bg-grey px-4 py-2 text-white rounded">No README Found</span>
     </div>
     <NotesEditor
       v-if="notesEditorShowing"

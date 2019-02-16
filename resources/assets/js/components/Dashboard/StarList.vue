@@ -3,10 +3,9 @@
     <p
       v-if="!filteredStars.length"
       class="text-grey font-bold flex flex-col justify-center items-center h-full"
-    >
-      No Results
-    </p>
+    >No Results</p>
     <GlobalEvents
+      :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event)"
       @keyup.down="nextStar"
       @keyup.up="previousStar"
     />
@@ -14,12 +13,9 @@
       :items="filteredStars"
       v-bind="cluster"
       class="overflow-y-scroll"
+      ref="collection"
     >
-      <div
-        slot="star"
-        :key="item.value.node.databaseId"
-        slot-scope="{cell, item}"
-      >
+      <div slot="star" :key="item.value.node.databaseId" slot-scope="{cell, item}">
         <Star
           :star="item.value"
           :data-id="item.value.node.databaseId"
@@ -39,6 +35,7 @@ import CollectionCluster from 'vue-collection-cluster'
 import { mapGetters, mapActions } from 'vuex'
 import Star from '@/components/Dashboard/Star'
 import galileo from '@/filters/galileo'
+import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 export default {
   name: 'StarList',
   components: {
@@ -46,6 +43,7 @@ export default {
     GlobalEvents,
     Star
   },
+  mixins: [shouldDisableKeyboardShortcutsMixin],
   props: ['stars'],
   data () {
     return {
@@ -103,7 +101,10 @@ export default {
       if (!Object.keys(newValue).length) {
         return false
       }
-
+      const starIndex = this.filteredStars.findIndex(s => {
+        return s.value.node.databaseId === newValue.node.databaseId
+      })
+      this.$refs.collection.scrollTo(starIndex)
       if (
         !(Object.keys(oldValue).length && oldValue.node.databaseId === newValue.node.databaseId)
       ) {
@@ -112,7 +113,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setCurrentStar', 'fetchReadme', 'addToCurrentStars']),
+    ...mapActions(['setCurrentStar', 'fetchReadme', 'pushToCurrentStars', 'selectStars']),
     starDragged (e, star) {
       let width, height
       const el = e.currentTarget
@@ -137,17 +138,11 @@ export default {
       )
     },
     previousStar (e) {
-      if (this.shouldDisableKeyShortcuts(e)) {
-        return false
-      }
       if (this.currentStarIndex === 0) return
       const previousStar = this.stars[this.currentStarIndex - 1]
       this.setCurrentStar(previousStar)
     },
     nextStar (e) {
-      if (this.shouldDisableKeyShortcuts(e)) {
-        return false
-      }
       if (this.currentStarIndex === this.stars.length - 1) return
       const nextStar =
         this.currentStarIndex === -1
@@ -155,17 +150,47 @@ export default {
           : this.stars[this.currentStarIndex + 1]
       this.setCurrentStar(nextStar)
     },
-    shouldDisableKeyShortcuts (e) {
-      return (
-        e.target.tagName === 'INPUT' ||
-        document.querySelector('.CodeMirror-focused')
-      )
-    },
     handleClick (e, star) {
       if (e.shiftKey) {
-        this.addToCurrentStars(star)
+        const starIndex = this.filteredStars.findIndex(s => {
+          return s.value.node.databaseId === star.node.databaseId
+        })
+        const starsToPush = []
+        // If no stars are selected simply select from index 0 to wherever they clicked
+        if (!this.currentStars.length) {
+          for (let i = 0; i <= starIndex; i++) {
+            starsToPush.push(this.filteredStars[i].value)
+          }
+          this.selectStars(starsToPush)
+        } else {
+          const currentStarIndexes = this.currentStars.map(star => {
+            return this.filteredStars.findIndex(s => {
+              return s.value.node.databaseId === star.node.databaseId
+            })
+          })
+          let currentMax = Math.max.apply(Math, currentStarIndexes)
+          let currentMin = Math.min.apply(Math, currentStarIndexes)
+          if (starIndex < currentMax && starIndex >= currentMin) {
+            for (let i = starIndex; i <= currentMax - 1; i++) {
+              starsToPush.push(this.filteredStars[i].value)
+            }
+          } else if (starIndex < currentMin) {
+            for (let i = starIndex; i <= currentMin - 1; i++) {
+              starsToPush.push(this.filteredStars[i].value)
+            }
+          } else {
+            for (let i = currentMax + 1; i <= starIndex; i++) {
+              starsToPush.push(this.filteredStars[i].value)
+            }
+          }
+          this.selectStars(this.currentStars.concat(starsToPush))
+        }
       } else {
-        this.setCurrentStar(star)
+        if ((e.ctrlKey || e.metaKey)) {
+          this.pushToCurrentStars(star)
+        } else {
+          this.setCurrentStar(star)
+        }
       }
     }
   }

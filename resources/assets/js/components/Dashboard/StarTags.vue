@@ -3,15 +3,17 @@
     :class="{ 'px-2 pt-2 bg-white border border-grey-light': isEditing }"
     class="star-tags-editor rounded mt-4"
   >
+    <GlobalEvents
+      :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event) && isOnlySelectedStar"
+      @keyup.t="startEditing"
+    />
     <ul class="star-tags list-reset flex flex-wrap items-center">
       <li
         v-if="star.node.primaryLanguage && user.show_language_tags"
         v-show="!isEditing"
         class="text-xs text-white bg-brand hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
         @click.stop="setCurrentLanguage(star.node.primaryLanguage.name)"
-      >
-        {{ star.node.primaryLanguage.name }}
-      </li>
+      >{{ star.node.primaryLanguage.name }}</li>
       <li
         v-for="tag in mutableTags"
         :key="tag.id"
@@ -24,9 +26,7 @@
             v-show="isEditing"
             class="remove-tag ml-2 text-white text-sm"
             @click.stop="removeTag(tag)"
-          >
-            &times;
-          </button>
+          >&times;</button>
         </span>
       </li>
       <li class="mb-2">
@@ -38,8 +38,10 @@
           type="text"
           class="text-grey-darkest text-sm h-6 focus-none"
           @click.stop
-          @keyup.enter.188="addTag(newTag)"
+          @keyup.188="addTag(newTag)"
+          @keyup.enter.stop="enterPressed"
           @keydown.delete.stop="deletePressed"
+          @keyup.esc="escapePressed"
           @focus="onFocus"
           @blur="onBlur"
         >
@@ -49,21 +51,25 @@
           v-show="!isEditing"
           class="transition-opacity text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2 opacity-0 group-hover:opacity-100"
           @click.stop="startEditing"
-        >
-          Edit Tags
-        </button>
+        >Edit Tags</button>
       </li>
     </ul>
   </div>
 </template>
 <script>
+import GlobalEvents from 'vue-global-events'
 import nanoid from 'nanoid'
 import fuzzysearch from 'fuzzysearch'
 import Awesomplete from 'awesomplete'
 import { differenceBy } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
+import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 export default {
   name: 'StarTags',
+  components: {
+    GlobalEvents
+  },
+  mixins: [shouldDisableKeyboardShortcutsMixin],
   props: ['star'],
   data () {
     return {
@@ -72,18 +78,23 @@ export default {
       newTag: '',
       placeholder: 'Add a tag',
       tagList: [],
-      isEditing: false
+      isEditing: false,
+      canSaveTags: true
     }
   },
   computed: {
     ...mapGetters({
       allTags: 'tags',
-      user: 'user'
+      user: 'user',
+      currentStars: 'currentStars'
     }),
     suggestions () {
       return differenceBy(this.allTags, this.mutableTags, 'name').map(
         tag => tag.name
       )
+    },
+    isOnlySelectedStar() {
+      return this.currentStars.length === 1 && this.currentStars[0].node.databaseId === this.star.node.databaseId
     }
   },
   watch: {
@@ -132,6 +143,16 @@ export default {
     deletePressed () {
       if (this.newTag === '' && this.mutableTags.length) {
         this.removeTagAtIndex(this.mutableTags.length - 1)
+      }
+    },
+    escapePressed() {
+      this.mutableTags = []
+      this.newTag = ''
+      this.isEditing = false
+    },
+    enterPressed() {
+      if (this.canSaveTags) {
+        this.isEditing = false
       }
     },
     onFocus () {
@@ -184,6 +205,10 @@ export default {
           this.addTag(tagName)
           setTimeout(() => {
             this.newTag = ''
+            this.canSaveTags = false
+            setTimeout(() => {
+              this.canSaveTags = true
+            }, 100)
           }, 0)
         }, 0)
       }
@@ -236,8 +261,8 @@ export default {
         color: #fff;
       }
     }
-    > li[aria-selected="true"] {
-      background: config("colors.brand");
+    > li[aria-selected='true'] {
+      background: config('colors.brand');
       color: #fff;
     }
   }
@@ -249,7 +274,7 @@ export default {
     background: transparent;
     font-weight: bold;
   }
-  li[aria-selected="true"] mark {
+  li[aria-selected='true'] mark {
     background: transparent;
     font-weight: bold;
     color: inherit;
