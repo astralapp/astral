@@ -83,7 +83,6 @@
     "sass": "^1.16.1",
     "sass-loader": "^7.1.0",
     "tailwindcss": "^0.6.3",
-    "typescript": "^3.3.1",
     "vue-jest": "4.0.0-beta.2",
     "vue-template-compiler": "^2.6.0"
   }
