@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "modules": false
       }
@@ -9,18 +9,9 @@
   ],
   "env": {
     "test": {
-      "plugins": ["transform-object-rest-spread"],
-      "presets": [
-        [
-          "env",
-          {
-            "targets": {
-              "node": "current"
-            }
-          }
-        ]
-      ]
+      "plugins": ["@babel/plugin-proposal-object-rest-spread"],
+      "presets": ["@babel/preset-env"]
     }
   },
-  "plugins": ["transform-async-to-generator", "transform-runtime"]
+  "plugins": ["@babel/plugin-transform-async-to-generator", "@babel/plugin-transform-runtime"]
 }
