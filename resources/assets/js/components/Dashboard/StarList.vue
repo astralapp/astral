@@ -15,7 +15,11 @@
       class="overflow-y-scroll"
       ref="collection"
     >
-      <div slot="star" :key="item.value.node.databaseId" slot-scope="{cell, item}">
+      <div
+        slot="star"
+        :key="item.value.node.databaseId"
+        slot-scope="{cell, item}"
+      >
         <Star
           :star="item.value"
           :data-id="item.value.node.databaseId"
@@ -45,7 +49,7 @@ export default {
   },
   mixins: [shouldDisableKeyboardShortcutsMixin],
   props: ['stars'],
-  data () {
+  data() {
     return {
       cluster: {
         heightType: 'automatic',
@@ -57,13 +61,13 @@ export default {
     ...mapGetters([
       'currentTag',
       'currentStar',
-      'currentStarIndex',
+      'currentStarIndexes',
       'currentStars',
       'currentLanguage',
       'viewingUntagged',
       'tokenizedSearchQuery'
     ]),
-    filteredStars () {
+    filteredStars() {
       const stars = this.stars
         .filter(star => {
           if (!Object.keys(this.currentTag).length) {
@@ -76,10 +80,7 @@ export default {
           if (this.currentLanguage === '') {
             return true
           } else {
-            return (
-              star.node.primaryLanguage &&
-              star.node.primaryLanguage.name === this.currentLanguage
-            )
+            return star.node.primaryLanguage && star.node.primaryLanguage.name === this.currentLanguage
           }
         })
         .filter(star => {
@@ -97,24 +98,22 @@ export default {
     }
   },
   watch: {
-    currentStar (newValue, oldValue) {
-      if (!Object.keys(newValue).length) {
+    currentStar(newValue, oldValue) {
+      if (!Object.keys(newValue).length || this.currentStars.length > 1) {
         return false
       }
       const starIndex = this.filteredStars.findIndex(s => {
         return s.value.node.databaseId === newValue.node.databaseId
       })
-      this.$refs.collection.scrollTo(starIndex)
-      if (
-        !(Object.keys(oldValue).length && oldValue.node.databaseId === newValue.node.databaseId)
-      ) {
+      this.$refs.collection.scrollTo(this.currentStarIndexes[0])
+      if (!(Object.keys(oldValue).length && oldValue.node.databaseId === newValue.node.databaseId)) {
         this.fetchReadme(newValue.node.nameWithOwner)
       }
     }
   },
   methods: {
     ...mapActions(['setCurrentStar', 'fetchReadme', 'pushToCurrentStars', 'selectStars']),
-    starDragged (e, star) {
+    starDragged(e, star) {
       let width, height
       const el = e.currentTarget
       const clone = el.cloneNode(true)
@@ -127,30 +126,29 @@ export default {
       height = clone.offsetHeight
       e.dataTransfer.setDragImage(clone, width / 2, height / 2)
     },
-    clearClonedRepoNodes () {
+    clearClonedRepoNodes() {
       document.getElementById('repo-clone').remove()
     },
-    starIsCurrentStar (star) {
+    starIsCurrentStar(star) {
       return (
-        (this.currentStars.length &&
-        this.currentStar.node.databaseId === star.node.databaseId) ||
+        (this.currentStars.length && this.currentStar.node.databaseId === star.node.databaseId) ||
         this.currentStars.includes(star)
       )
     },
-    previousStar (e) {
-      if (this.currentStarIndex === 0) return
-      const previousStar = this.stars[this.currentStarIndex - 1]
+    previousStar(e) {
+      if (this.currentStarIndexes[0] === 0 || !this.currentStarIndexes.length) return
+      const lowestIndex = Math.min.apply(Math, this.currentStarIndexes)
+      const previousStar = this.stars[lowestIndex - 1]
       this.setCurrentStar(previousStar)
     },
-    nextStar (e) {
+    nextStar(e) {
       if (this.currentStarIndex === this.stars.length - 1) return
-      const nextStar =
-        this.currentStarIndex === -1
-          ? this.stars[0]
-          : this.stars[this.currentStarIndex + 1]
+      const nextStar = this.currentStarIndexes.length
+        ? this.stars[Math.max.apply(Math, this.currentStarIndexes) + 1]
+        : this.stars[0]
       this.setCurrentStar(nextStar)
     },
-    handleClick (e, star) {
+    handleClick(e, star) {
       if (e.shiftKey) {
         const starIndex = this.filteredStars.findIndex(s => {
           return s.value.node.databaseId === star.node.databaseId
@@ -163,13 +161,8 @@ export default {
           }
           this.selectStars(starsToPush)
         } else {
-          const currentStarIndexes = this.currentStars.map(star => {
-            return this.filteredStars.findIndex(s => {
-              return s.value.node.databaseId === star.node.databaseId
-            })
-          })
-          let currentMax = Math.max.apply(Math, currentStarIndexes)
-          let currentMin = Math.min.apply(Math, currentStarIndexes)
+          let currentMax = Math.max.apply(Math, this.currentStarIndexes)
+          let currentMin = Math.min.apply(Math, this.currentStarIndexes)
           if (starIndex < currentMax && starIndex >= currentMin) {
             for (let i = starIndex; i <= currentMax - 1; i++) {
               starsToPush.push(this.filteredStars[i].value)
@@ -186,7 +179,7 @@ export default {
           this.selectStars(this.currentStars.concat(starsToPush))
         }
       } else {
-        if ((e.ctrlKey || e.metaKey)) {
+        if (e.ctrlKey || e.metaKey) {
           this.pushToCurrentStars(star)
         } else {
           this.setCurrentStar(star)

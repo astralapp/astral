@@ -130,13 +130,13 @@ describe('Stars Module', () => {
       expect(getters.currentStars(state)).toEqual(stars)
     })
 
-    it('returns the current star index if it exists or defaults to -1 if it does not', () => {
+    it('returns the current star indexes if they exist or defaults to an empty array if no stars are selected', () => {
       state.stars = sampleStars.edges
       state.currentStars = [sampleStars.edges[0]]
-      expect(getters.currentStarIndex(state)).toEqual(0)
+      expect(getters.currentStarIndexes(state)).toEqual([0])
 
       state.currentStars = []
-      expect(getters.currentStarIndex(state)).toEqual(-1)
+      expect(getters.currentStarIndexes(state)).toEqual([])
     })
 
     it('returns the readme', () => {

@@ -34,6 +34,7 @@ describe('Stars List', () => {
       getters: {
         currentStar: () => ({}),
         currentStars: () => [],
+        currentStarIndex: () => [],
         currentTag: () => ({}),
         currentLanguage: () => '',
         tokenizedSearchQuery: () => ({
@@ -97,7 +98,8 @@ describe('Stars List', () => {
               ...store,
               getters: {
                 ...store.getters,
-                currentStars: [stars[0], stars[4]]
+                currentStars: [stars[0], stars[4]],
+                currentStarIndexes: [0, 4]
               }
             },
             stubs: ['CollectionCluster'],
@@ -117,7 +119,8 @@ describe('Stars List', () => {
               ...store,
               getters: {
                 ...store.getters,
-                currentStars: [stars[3], stars[4]]
+                currentStars: [stars[3], stars[4]],
+                currentStarIndexes: [3, 4]
               }
             },
             stubs: ['CollectionCluster'],
@@ -137,7 +140,8 @@ describe('Stars List', () => {
               ...store,
               getters: {
                 ...store.getters,
-                currentStars: [stars[1]]
+                currentStars: [stars[1]],
+                currentStarIndexes: [1]
               }
             },
             stubs: ['CollectionCluster'],

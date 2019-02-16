@@ -63,11 +63,15 @@ const getters = {
   currentLanguage: state => state.currentLanguage,
   currentStar: state => (state.currentStars.length > 0 ? state.currentStars[0] : {}),
   currentStars: state => [...uniqBy(state.currentStars, 'node.databaseId')],
-  currentStarIndex: state => {
-    if (state.currentStars[0] !== undefined && Object.keys(state.currentStars[0]).length) {
-      return state.stars.findIndex(star => star.node.databaseId === state.currentStars[0].node.databaseId)
+  currentStarIndexes: state => {
+    if (state.currentStars.length) {
+      return [
+        ...state.currentStars.map(star => {
+          return state.stars.findIndex(s => s.node.databaseId === star.node.databaseId)
+        })
+      ]
     } else {
-      return -1
+      return []
     }
   },
   readme: state => state.readme,
