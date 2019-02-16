@@ -21,41 +21,44 @@ class GitHubClient
         $cursorString = $cursor ? 'after:"'.$cursor.'"' : 'after: null';
         $query = <<<GQL
     query {
-      viewer {
+        viewer {
         starredRepositories(first: {$perPage}, orderBy: {field: STARRED_AT, direction: DESC},  {$cursorString}) {
-          totalCount
-          edges {
+            totalCount
+            edges {
             node {
-              id
-              nameWithOwner
-              description
-              url
-              databaseId
-              primaryLanguage {
+                id
+                nameWithOwner
+                description
+                url
+                databaseId
+                defaultBranchRef {
                 name
-              }
-              stargazers {
-                totalCount
-              }
-              forkCount,
-              repositoryTopics(first: 5) {
-                edges {
-                  node {
-                    topic {
-                      name
-                    }
-                  }
+          	    }
+                primaryLanguage {
+                name
                 }
-              }
+                stargazers {
+                totalCount
+                }
+                forkCount,
+                repositoryTopics(first: 5) {
+                edges {
+                    node {
+                    topic {
+                        name
+                    }
+                    }
+                }
+                }
             }
             cursor
-          }
-          pageInfo {
+            }
+            pageInfo {
             endCursor
             hasNextPage
-          }
+            }
         }
-      }
+        }
     }
 GQL;
 

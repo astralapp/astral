@@ -6,41 +6,50 @@
   />
 </template>
 <script>
+import URI from 'urijs'
 export default {
   name: 'Readme',
-  props: ['readme'],
+  props: ['star', 'readme'],
   watch: {
     readme: {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         if (oldVal !== newVal) {
           setTimeout(() => {
             this.$refs.readme.scrollTop = 0
-            Array.from(document.querySelectorAll('.repo-readme a')).forEach(
-              anchor => {
-                anchor.addEventListener(
-                  'click',
-                  e => {
-                    const $target = e.currentTarget
-                    if (
-                      $target.classList.contains('anchor') ||
-                      $target.getAttribute('href').startsWith('#')
-                    ) {
-                      e.preventDefault()
-                      const target = $target.getAttribute('href')
-                      const section = document.querySelector(
-                        `.repo-readme #user-content-${target.substring(1)}`
-                      )
-                      this.$refs.readme.scrollTop = section.offsetTop - 74
-                    }
-                  },
-                  false
-                )
-              }
-            )
+            this.bindAnchors()
+            this.fixRelativeImagePaths()
           }, 0)
         }
       },
       immediate: true
+    }
+  },
+  methods: {
+    bindAnchors() {
+      Array.from(document.querySelectorAll('.repo-readme a')).forEach(anchor => {
+        anchor.addEventListener(
+          'click',
+          e => {
+            const $target = e.currentTarget
+            if ($target.classList.contains('anchor') || $target.getAttribute('href').startsWith('#')) {
+              e.preventDefault()
+              const target = $target.getAttribute('href')
+              const section = document.querySelector(`.repo-readme #user-content-${target.substring(1)}`)
+              this.$refs.readme.scrollTop = section.offsetTop - 74
+            }
+          },
+          false
+        )
+      })
+    },
+    fixRelativeImagePaths() {
+      Array.from(document.querySelectorAll('.repo-readme img[src]')).forEach(img => {
+        const src = URI(img.src)
+        const star = this.star.node
+        if (src.origin() === window.location.origin) {
+          img.src = `${star.url}/raw/${star.defaultBranchRef.name}/${src.path()}`
+        }
+      })
     }
   }
 }

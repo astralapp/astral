@@ -35,7 +35,15 @@
       <img src="/images/not-selected.svg" class="w-64 mb-8">
       <span class="font-bold bg-grey px-4 py-2 text-white rounded">No Repo Selected</span>
     </div>
+<<<<<<< HEAD
     <Readme v-if="readme && !noRepoSelected" :readme="readme"/>
+=======
+    <Readme
+      v-if="readme"
+      :readme="readme"
+      :star="currentStar"
+    />
+>>>>>>> master
     <div
       v-if="repoHasNoReadme"
       class="flex flex-col flex-1 items-center justify-center w-full bg-grey-lighter"
