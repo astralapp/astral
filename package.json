@@ -20,6 +20,7 @@
     "setupFiles": [
       "<rootDir>/resources/assets/js/__tests__/utils/mockument"
     ],
+    "setupTestFrameworkScriptFile": "<rootDir>/resources/assets/js/__tests__/utils/setup",
     "testPathIgnorePatterns": [
       "<rootDir>/resources/assets/js/__tests__/utils/"
     ],

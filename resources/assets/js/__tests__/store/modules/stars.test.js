@@ -279,6 +279,10 @@ describe('Stars Module', () => {
       SELECT_STARS(state, [sampleStars.edges[0], sampleStars.edges[1]])
 
       expect(state.currentStars).toEqual([sampleStars.edges[0], sampleStars.edges[1]])
+
+      SELECT_STARS(state, [sampleStars.edges[3], sampleStars.edges[4]])
+
+      expect(state.currentStars).toEqual([sampleStars.edges[3], sampleStars.edges[4]])
     })
 
     it('can set the readme', () => {
@@ -414,12 +418,20 @@ describe('Stars Module', () => {
       expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_STAR', currentStar)
     })
 
+    it('can set the currently selected stars', async () => {
+      const stars = [sampleStars.edges[0], sampleStars.edges[1]]
+
+      await selectStars(ctx, stars)
+
+      expect(ctx.commit).toHaveBeenCalledWith('SELECT_STARS', stars)
+    })
+
     it('can push to the selected stars list', async () => {
-      const currentStar = sampleStars.edges[0]
+      const star = sampleStars.edges[0]
 
-      await pushToCurrentStars(ctx, currentStar)
+      await pushToCurrentStars(ctx, star)
 
-      expect(ctx.commit).toHaveBeenCalledWith('PUSH_TO_CURRENT_STARS', currentStar)
+      expect(ctx.commit).toHaveBeenCalledWith('PUSH_TO_CURRENT_STARS', star)
     })
 
     describe('fetching repo readmes', () => {
