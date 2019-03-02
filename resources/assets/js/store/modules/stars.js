@@ -21,8 +21,9 @@ import {
   RESET_STARS
 } from '../mutation-types'
 
-import client from './../api/client.js'
-import router from './../../router'
+import client from '@/store/api/client'
+import router from '@/router'
+import galileo from '@/filters/galileo'
 
 const state = {
   userStars: [],
@@ -37,6 +38,35 @@ const state = {
 
 const getters = {
   stars: state => state.stars,
+  filteredStars: (state, __getters, rootState) => {
+    const stars = state.stars
+      .filter(star => {
+        if (!Object.keys(rootState.tags.currentTag).length) {
+          return true
+        } else {
+          return star.tags.map(tag => tag.name).includes(rootState.tags.currentTag.name)
+        }
+      })
+      .filter(star => {
+        if (state.currentLanguage === '') {
+          return true
+        } else {
+          return star.node.primaryLanguage && star.node.primaryLanguage.name === state.currentLanguage
+        }
+      })
+      .filter(star => {
+        if (!state.viewingUntagged) {
+          return true
+        }
+
+        return !star.tags.length
+      })
+      .map(star => {
+        return { type: 'star', value: star }
+      })
+
+    return galileo(stars, rootState.galileo.tokenizedSearchQuery)
+  },
   pageInfo: state => state.pageInfo,
   totalStars: state => state.totalStars,
   totalUntaggedStars: state => state.stars.filter(star => !star.tags.length).length,
@@ -63,11 +93,11 @@ const getters = {
   currentLanguage: state => state.currentLanguage,
   currentStar: state => (state.currentStars.length > 0 ? state.currentStars[0] : {}),
   currentStars: state => [...uniqBy(state.currentStars, 'node.databaseId')],
-  currentStarIndexes: state => {
+  currentStarIndexes: (state, getters) => {
     if (state.currentStars.length) {
       return [
         ...state.currentStars.map(star => {
-          return state.stars.findIndex(s => s.node.databaseId === star.node.databaseId)
+          return getters.filteredStars.findIndex(s => s.value.node.databaseId === star.node.databaseId)
         })
       ]
     } else {

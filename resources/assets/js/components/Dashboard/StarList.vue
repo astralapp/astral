@@ -63,39 +63,11 @@ export default {
       'currentStar',
       'currentStarIndexes',
       'currentStars',
+      'filteredStars',
       'currentLanguage',
       'viewingUntagged',
       'tokenizedSearchQuery'
-    ]),
-    filteredStars() {
-      const stars = this.stars
-        .filter(star => {
-          if (!Object.keys(this.currentTag).length) {
-            return true
-          } else {
-            return star.tags.map(tag => tag.name).includes(this.currentTag.name)
-          }
-        })
-        .filter(star => {
-          if (this.currentLanguage === '') {
-            return true
-          } else {
-            return star.node.primaryLanguage && star.node.primaryLanguage.name === this.currentLanguage
-          }
-        })
-        .filter(star => {
-          if (!this.viewingUntagged) {
-            return true
-          }
-
-          return !star.tags.length
-        })
-        .map(star => {
-          return { type: 'star', value: star }
-        })
-
-      return galileo(stars, this.tokenizedSearchQuery)
-    }
+    ])
   },
   watch: {
     currentStar(newValue, oldValue) {
@@ -138,14 +110,14 @@ export default {
     previousStar(e) {
       if (this.currentStarIndexes[0] === 0 || !this.currentStarIndexes.length) return
       const lowestIndex = Math.min.apply(Math, this.currentStarIndexes)
-      const previousStar = this.stars[lowestIndex - 1]
+      const previousStar = this.filteredStars[lowestIndex - 1].value
       this.setCurrentStar(previousStar)
     },
     nextStar(e) {
-      if (this.currentStarIndex === this.stars.length - 1) return
+      if (this.currentStarIndex === this.filteredStars.length - 1) return
       const nextStar = this.currentStarIndexes.length
-        ? this.stars[Math.max.apply(Math, this.currentStarIndexes) + 1]
-        : this.stars[0]
+        ? this.filteredStars[Math.max.apply(Math, this.currentStarIndexes) + 1].value
+        : this.filteredStars[0].value
       this.setCurrentStar(nextStar)
     },
     handleClick(e, star) {

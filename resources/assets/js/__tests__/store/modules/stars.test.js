@@ -57,6 +57,7 @@ describe('Stars Module', () => {
     ctx = {
       commit: jest.fn(),
       state,
+      getters,
       dispatch: jest.fn(),
       rootState: {
         user: {
@@ -66,6 +67,16 @@ describe('Stars Module', () => {
         },
         stars: {
           stars: []
+        },
+        tags: {
+          currentTag: {}
+        },
+        galileo: {
+          tokenizedSearchQuery: {
+            query: '',
+            tags: [],
+            strings: []
+          }
         }
       }
     }
@@ -133,10 +144,14 @@ describe('Stars Module', () => {
     it('returns the current star indexes if they exist or defaults to an empty array if no stars are selected', () => {
       state.stars = sampleStars.edges
       state.currentStars = [sampleStars.edges[0]]
-      expect(getters.currentStarIndexes(state)).toEqual([0])
+      getters.filteredStars = state.stars.map(star => {
+        return { value: star }
+      })
+
+      expect(getters.currentStarIndexes(state, getters)).toEqual([0])
 
       state.currentStars = []
-      expect(getters.currentStarIndexes(state)).toEqual([])
+      expect(getters.currentStarIndexes(state, getters)).toEqual([])
     })
 
     it('returns the readme', () => {

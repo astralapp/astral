@@ -34,6 +34,7 @@ describe('Stars List', () => {
       getters: {
         currentStar: () => ({}),
         currentStars: () => [],
+        filteredStars: () => mockStars,
         currentStarIndex: () => [],
         currentTag: () => ({}),
         currentLanguage: () => '',
