@@ -21,7 +21,7 @@ class FetchesGitHubStarsTest extends TestCase
 
         $this->login();
 
-        $this->sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
+        $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
 
         $this->clientMock = Mockery::mock(GitHubClient::class, [auth()->user()->access_token]);
 

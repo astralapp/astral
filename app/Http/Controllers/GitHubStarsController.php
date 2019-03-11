@@ -30,7 +30,7 @@ class GitHubStarsController extends Controller
         if (Cache::has($key)) {
             $cached = Cache::get($key);
 
-            if ((bool)$cached['pageInfo']['hasNextPage'] == false) {
+            if ((bool) $cached['pageInfo']['hasNextPage'] == false) {
                 // We already have all their stars so just return them
                 $starsToReturn = $cached;
             } else {
