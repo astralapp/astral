@@ -21,7 +21,7 @@ class AutotagsWithTopicsTest extends TestCase
     /** @test */
     public function it_autotags_stars_with_their_topics()
     {
-        $sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
+        $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
 
         $star = auth()->user()->stars()->create([
             'repo_id' => $sampleStars['edges'][0]['node']['databaseId'],
