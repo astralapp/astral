@@ -1,5 +1,5 @@
 {
-  "name": "Astral",
+  "name": "astralapp/astral",
   "description": "Organize yur GitHub Stars with Ease",
   "keywords": [
     "github",
@@ -23,7 +23,7 @@
     "codedungeon/phpunit-result-printer": "^0.6.0",
     "filp/whoops": "~2.0",
     "fzaninotto/faker": "~1.4",
-    "laravel/telescope": "^1.0",
+    "laravel/telescope": "^2.0",
     "mockery/mockery": "~1.0",
     "phpunit/phpunit": "^7.0"
   },

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4b95100ff2359742b0cf40c35074345",
+    "content-hash": "145a21e89a8c97d572bcf4a8a8d338de",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3800,21 +3800,21 @@
         },
         {
             "name": "laravel/telescope",
-            "version": "v1.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/telescope.git",
-                "reference": "925386780c756d6aa7c18ae185bb7a756c122460"
+                "reference": "2b976e5d6f5273d8ac86e2db9487386dd27a19ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/telescope/zipball/925386780c756d6aa7c18ae185bb7a756c122460",
-                "reference": "925386780c756d6aa7c18ae185bb7a756c122460",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/2b976e5d6f5273d8ac86e2db9487386dd27a19ef",
+                "reference": "2b976e5d6f5273d8ac86e2db9487386dd27a19ef",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "laravel/framework": "~5.7.7|~5.8.0",
+                "laravel/framework": "~5.8.0",
                 "moontoast/math": "^1.1",
                 "php": "^7.1.3",
                 "symfony/var-dumper": "^4.1"
@@ -3826,7 +3826,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "3.0-dev"
                 },
                 "laravel": {
                     "providers": [
@@ -3859,7 +3859,7 @@
                 "laravel",
                 "monitoring"
             ],
-            "time": "2019-02-18T22:02:39+00:00"
+            "time": "2019-03-05T14:07:56+00:00"
         },
         {
             "name": "mockery/mockery",
