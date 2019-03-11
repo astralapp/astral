@@ -21,7 +21,7 @@ class FetchesGitHubStarsTest extends TestCase
 
         $this->login();
 
-        $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
+        $this->sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
 
         $this->clientMock = Mockery::mock(GitHubClient::class, [auth()->user()->access_token]);
 
@@ -44,7 +44,7 @@ class FetchesGitHubStarsTest extends TestCase
 
         Cache::shouldReceive('has')->with($cacheKey)->andReturn(false);
         Cache::shouldReceive('get')->with($cacheKey);
-        Cache::shouldReceive('put')->with($cacheKey, $this->sampleStars, 120);
+        Cache::shouldReceive('put')->with($cacheKey, $this->sampleStars, 7200);
 
         $this->clientMock->shouldReceive('fetchStars')->with(null)->andReturn($this->sampleStars);
 
