@@ -12,7 +12,7 @@ class AutotaggerTest extends TestCase
 
     protected $autotagger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

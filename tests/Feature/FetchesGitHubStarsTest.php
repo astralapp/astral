@@ -15,7 +15,7 @@ class FetchesGitHubStarsTest extends TestCase
     protected $sampleStars;
     protected $clientMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +28,7 @@ class FetchesGitHubStarsTest extends TestCase
         $this->app->instance(GitHubClient::class, $this->clientMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
 
@@ -44,7 +44,7 @@ class FetchesGitHubStarsTest extends TestCase
 
         Cache::shouldReceive('has')->with($cacheKey)->andReturn(false);
         Cache::shouldReceive('get')->with($cacheKey);
-        Cache::shouldReceive('put')->with($cacheKey, $this->sampleStars, 120);
+        Cache::shouldReceive('put')->with($cacheKey, $this->sampleStars, 7200);
 
         $this->clientMock->shouldReceive('fetchStars')->with(null)->andReturn($this->sampleStars);
 

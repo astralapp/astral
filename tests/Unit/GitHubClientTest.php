@@ -11,7 +11,7 @@ class GitHubClientTest extends TestCase
     protected $client;
     protected $sampleStars;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

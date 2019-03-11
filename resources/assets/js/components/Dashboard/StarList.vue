@@ -3,17 +3,19 @@
     <p
       v-if="!filteredStars.length"
       class="text-grey font-bold flex flex-col justify-center items-center h-full"
-    >No Results</p>
+    >
+      No Results
+    </p>
     <GlobalEvents
       :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event)"
       @keyup.down="nextStar"
       @keyup.up="previousStar"
     />
     <CollectionCluster
+      ref="collection"
       :items="filteredStars"
       v-bind="cluster"
       class="overflow-y-scroll"
-      ref="collection"
     >
       <div
         slot="star"
@@ -38,7 +40,6 @@ import GlobalEvents from 'vue-global-events'
 import CollectionCluster from 'vue-collection-cluster'
 import { mapGetters, mapActions } from 'vuex'
 import Star from '@/components/Dashboard/Star'
-import galileo from '@/filters/galileo'
 import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 export default {
   name: 'StarList',
@@ -74,10 +75,9 @@ export default {
       if (!Object.keys(newValue).length || this.currentStars.length > 1) {
         return false
       }
-      const starIndex = this.filteredStars.findIndex(s => {
-        return s.value.node.databaseId === newValue.node.databaseId
-      })
+
       this.$refs.collection.scrollTo(this.currentStarIndexes[0])
+
       if (!(Object.keys(oldValue).length && oldValue.node.databaseId === newValue.node.databaseId)) {
         this.fetchReadme(newValue.node.nameWithOwner)
       }

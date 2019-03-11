@@ -13,7 +13,7 @@ class StarsJanitorTest extends TestCase
 
     protected $janitor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

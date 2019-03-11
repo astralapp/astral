@@ -40,7 +40,7 @@ export default {
     }
   },
   computed: {
-    uid () {
+    uid() {
       return cuid()
     }
   }
