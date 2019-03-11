@@ -13,7 +13,9 @@
         v-show="!isEditing"
         class="text-xs text-white bg-brand hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
         @click.stop="setCurrentLanguage(star.node.primaryLanguage.name)"
-      >{{ star.node.primaryLanguage.name }}</li>
+      >
+        {{ star.node.primaryLanguage.name }}
+      </li>
       <li
         v-for="tag in mutableTags"
         :key="tag.id"
@@ -51,7 +53,9 @@
           v-show="!isEditing"
           class="transition-opacity text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2 opacity-0 group-hover:opacity-100"
           @click.stop="startEditing"
-        >Edit Tags</button>
+        >
+          Edit Tags
+        </button>
       </li>
     </ul>
   </div>

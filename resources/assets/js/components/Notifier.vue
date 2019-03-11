@@ -24,7 +24,7 @@
 export default {
   name: 'Notifier',
   props: ['timeout'],
-  data () {
+  data() {
     return {
       timer: null,
       show: false,
@@ -32,27 +32,24 @@ export default {
       message: ''
     }
   },
-  created () {
-    this.$bus.$on(
-      'NOTIFICATION',
-      (message, mode = 'success', duration = '3000') => {
-        this.message = message
-        this.mode = mode
-        this.$nextTick(() => {
-          this.showNotifier(duration)
-        })
-      }
-    )
+  created() {
+    this.$bus.$on('NOTIFICATION', (message, mode = 'success', duration = '3000') => {
+      this.message = message
+      this.mode = mode
+      this.$nextTick(() => {
+        this.showNotifier(duration)
+      })
+    })
   },
   methods: {
-    showNotifier (duration = 3000) {
+    showNotifier(duration = 3000) {
       this.show = true
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.show = false
       }, parseInt(duration, 10) + 500)
     },
-    hideNotifier () {
+    hideNotifier() {
       clearTimeout(this.timer)
       this.show = false
     }

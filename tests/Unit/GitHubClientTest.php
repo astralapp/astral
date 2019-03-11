@@ -11,12 +11,12 @@ class GitHubClientTest extends TestCase
     protected $client;
     protected $sampleStars;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = new GitHubClient(env('GITHUB_TEST_ACCESS_TOKEN'));
-        $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars_with_cursor.json'), true);
+        $this->sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars_with_cursor.json'), true);
     }
 
     /** @test */
