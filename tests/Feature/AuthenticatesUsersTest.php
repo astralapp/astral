@@ -14,7 +14,7 @@ class AuthenticatesUsersTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
 

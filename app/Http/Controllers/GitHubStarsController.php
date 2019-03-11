@@ -26,11 +26,11 @@ class GitHubStarsController extends Controller
         }
 
         $cursor = $request->has('cursor') ? $request->input('cursor') : null;
-        $expiry = env('APP_ENV') == 'local' ? 60 * 8 : 60 * 2;
+        $expiry = env('APP_ENV') == 'local' ? 3600 * 8 : 3600 * 2;
         if (Cache::has($key)) {
             $cached = Cache::get($key);
 
-            if ((bool) $cached['pageInfo']['hasNextPage'] == false) {
+            if ((bool)$cached['pageInfo']['hasNextPage'] == false) {
                 // We already have all their stars so just return them
                 $starsToReturn = $cached;
             } else {

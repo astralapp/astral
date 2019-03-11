@@ -12,7 +12,7 @@ class TagTest extends TestCase
 
     protected $star;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

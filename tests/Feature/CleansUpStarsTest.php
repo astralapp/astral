@@ -10,7 +10,7 @@ class CleansUpStarsTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -20,7 +20,7 @@ class CleansUpStarsTest extends TestCase
     /** @test */
     public function it_deletes_db_stars_that_no_longer_exist_in_users_github_stars_list()
     {
-        $sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
+        $sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
 
         $validStar = create('Astral\Models\Star', ['repo_id' => $sampleStars['edges'][0]['node']['databaseId'], 'user_id' => auth()->id()]);
         $validStar->syncTags([['name' => 'Testo']]);

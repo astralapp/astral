@@ -13,11 +13,11 @@
     "php": ">=7.0.0",
     "fideloper/proxy": "^4.0",
     "kitetail/zttp": "^0.3.0",
-    "laravel/framework": "5.7.*",
-    "laravel/socialite": "^3.0",
+    "laravel/framework": "5.8.*",
+    "laravel/socialite": "^4.0",
     "laravel/tinker": "~1.0",
     "predis/predis": "^1.1",
-    "tymon/jwt-auth": "1.0.0-rc.3"
+    "tymon/jwt-auth": "dev-develop#f72b8eb as 1.0.0-rc.3.2"
   },
   "require-dev": {
     "codedungeon/phpunit-result-printer": "^0.6.0",
@@ -46,7 +46,9 @@
   },
   "extra": {
     "laravel": {
-      "dont-discover": []
+      "dont-discover": [
+        "laravel/telescope"
+      ]
     }
   },
   "scripts": {

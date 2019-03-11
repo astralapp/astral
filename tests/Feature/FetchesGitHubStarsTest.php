@@ -15,20 +15,20 @@ class FetchesGitHubStarsTest extends TestCase
     protected $sampleStars;
     protected $clientMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->login();
 
-        $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars.json'), true);
+        $this->sampleStars = json_decode(file_get_contents(__DIR__ . '/../Blobs/stars.json'), true);
 
         $this->clientMock = Mockery::mock(GitHubClient::class, [auth()->user()->access_token]);
 
         $this->app->instance(GitHubClient::class, $this->clientMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
 
