@@ -25,11 +25,15 @@
         v-if="query"
         class="clear-search-icon absolute text-1xl text-grey-darker focus-none rounded-full w-6 h-6 bg-transparent hover:bg-grey-light transition-bg"
         @click="resetSearch"
-      >&times;</button>
+      >
+        &times;
+      </button>
       <div
         v-show="!inputFocused && !query"
         class="w-6 h-6 bg-transparent text-grey-light border-grey-light border rounded-sm flex justify-center items-center absolute pin-t pin-r mt-2 nudge-up-t mr-2 pointer-events-none"
-      >/</div>
+      >
+        /
+      </div>
     </div>
   </div>
 </template>
