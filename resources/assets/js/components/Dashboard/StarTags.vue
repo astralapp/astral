@@ -75,13 +75,12 @@ export default {
   },
   mixins: [shouldDisableKeyboardShortcutsMixin],
   props: ['star'],
-  data () {
+  data() {
     return {
       awesomplete: null,
       mutableTags: [],
       newTag: '',
       placeholder: 'Add a tag',
-      tagList: [],
       isEditing: false,
       canSaveTags: true
     }
@@ -92,10 +91,8 @@ export default {
       user: 'user',
       currentStars: 'currentStars'
     }),
-    suggestions () {
-      return differenceBy(this.allTags, this.mutableTags, 'name').map(
-        tag => tag.name
-      )
+    suggestions() {
+      return differenceBy(this.allTags, this.mutableTags, 'name').map(tag => tag.name)
     },
     isOnlySelectedStar() {
       return this.currentStars.length === 1 && this.currentStars[0].node.databaseId === this.star.node.databaseId
@@ -103,30 +100,30 @@ export default {
   },
   watch: {
     star: {
-      handler () {
+      handler() {
         this.mutableTags = [...this.star.tags]
       },
       immediate: true
     },
-    mutableTags () {
+    mutableTags() {
       if (this.awesomplete) {
         this.awesomplete.list = this.suggestions
       }
     }
   },
-  mounted () {
+  mounted() {
     this.mutableTags = [...this.star.tags]
   },
   methods: {
     ...mapActions(['syncStarTags', 'setCurrentTag', 'setCurrentLanguage']),
-    startEditing () {
+    startEditing() {
       this.isEditing = true
       this.initAwesomplete()
       this.$nextTick(() => {
         this.$refs.input.focus()
       })
     },
-    addTag (name, e) {
+    addTag(name) {
       if (name.trim() !== '') {
         this.mutableTags.push({
           name: name.trim().replace(',', ''),
@@ -136,15 +133,15 @@ export default {
       }
       this.$refs.input.focus()
     },
-    removeTagAtIndex (index) {
+    removeTagAtIndex(index) {
       this.$delete(this.mutableTags, index)
     },
-    removeTag (tag) {
+    removeTag(tag) {
       this.$refs.input.focus()
       const index = this.mutableTags.findIndex(t => t.name === tag.name)
       this.removeTagAtIndex(index)
     },
-    deletePressed () {
+    deletePressed() {
       if (this.newTag === '' && this.mutableTags.length) {
         this.removeTagAtIndex(this.mutableTags.length - 1)
       }
@@ -156,21 +153,21 @@ export default {
     },
     enterPressed() {
       if (this.canSaveTags) {
+        if (this.newTag.trim() !== '') {
+          this.addTag(this.newTag)
+        }
         this.isEditing = false
       }
     },
-    onFocus () {
+    onFocus() {
       this.$emit('focus')
     },
-    onBlur (e) {
-      const isDeletingTag =
-        e.relatedTarget && e.relatedTarget.classList.contains('remove-tag')
+    onBlur(e) {
+      const isDeletingTag = e.relatedTarget && e.relatedTarget.classList.contains('remove-tag')
 
-      const tagsHaveChanged = !!differenceBy(
-        this.mutableTags,
-        this.star.tags,
-        'name'
-      ).concat(differenceBy(this.star.tags, this.mutableTags, 'name')).length
+      const tagsHaveChanged = !!differenceBy(this.mutableTags, this.star.tags, 'name').concat(
+        differenceBy(this.star.tags, this.mutableTags, 'name')
+      ).length
 
       if (this.newTag === '' && !isDeletingTag) {
         const tagsToSync = this.mutableTags.map(tag => {
@@ -186,22 +183,18 @@ export default {
         }
       }
     },
-    initAwesomplete () {
+    initAwesomplete() {
       this.awesomplete = new Awesomplete(this.$refs.input, {
         autoFirst: true,
-        filter (text, input) {
+        filter(text, input) {
           return fuzzysearch(input.toLowerCase(), text.toLowerCase())
         },
         list: this.suggestions
       })
 
-      this.$refs.input.addEventListener(
-        'awesomplete-select',
-        this.suggestionSelected,
-        false
-      )
+      this.$refs.input.addEventListener('awesomplete-select', this.suggestionSelected, false)
     },
-    suggestionSelected (e) {
+    suggestionSelected(e) {
       e.stopPropagation()
       if (e.target === this.$refs.input) {
         setTimeout(() => {
