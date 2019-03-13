@@ -17,7 +17,7 @@
     "laravel/socialite": "^4.0",
     "laravel/tinker": "~1.0",
     "predis/predis": "^1.1",
-    "tymon/jwt-auth": "dev-develop#f72b8eb as 1.0.0-rc.3.2"
+    "tymon/jwt-auth": "1.0.0-rc.4"
   },
   "require-dev": {
     "codedungeon/phpunit-result-printer": "^0.6.0",
