@@ -1,10 +1,10 @@
 module.exports = {
   root: true,
   parserOptions: {
+    parser: 'babel-eslint',
     ecmaVersion: 2018
   },
-  extends: ['standard', 'plugin:vue/recommended'],
-  plugins: ['standard', 'vue'],
+  extends: ['plugin:vue/recommended', 'plugin:prettier/recommended', '@vue/prettier'],
   rules: {
     'vue/require-default-prop': 'off',
     'vue/require-prop-types': 'off',
