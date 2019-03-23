@@ -60,7 +60,7 @@ import GlobalEvents from 'vue-global-events'
 import nanoid from 'nanoid'
 import fuzzysearch from 'fuzzysearch'
 import Awesomplete from 'awesomplete'
-import { differenceBy } from 'lodash'
+import { differenceBy, cloneDeep } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 export default {
@@ -96,7 +96,7 @@ export default {
   watch: {
     star: {
       handler() {
-        this.mutableTags = [...this.star.tags]
+        this.mutableTags = cloneDeep(this.star.tags)
       },
       immediate: true
     },
@@ -107,7 +107,7 @@ export default {
     }
   },
   mounted() {
-    this.mutableTags = [...this.star.tags]
+    this.mutableTags = cloneDeep(this.star.tags)
   },
   methods: {
     ...mapActions(['syncStarTags', 'setCurrentTag', 'setCurrentLanguage']),
@@ -142,7 +142,7 @@ export default {
       }
     },
     escapePressed() {
-      this.mutableTags = this.star.tags
+      this.mutableTags = cloneDeep(this.star.tags)
       this.newTag = ''
       this.isEditing = false
     },
