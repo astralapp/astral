@@ -1,10 +1,7 @@
 <template>
   <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
     <SidebarHeader title="Stars">
-      <RefreshButton
-        :active="refreshingStars"
-        @click.native="refreshStars"
-      />
+      <RefreshButton :active="refreshingStars" @click.native="refreshStars"/>
     </SidebarHeader>
     <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
       <SidebarItem
@@ -26,43 +23,55 @@
         @click.native="setViewingUntagged(true)"
       />
     </ul>
-    <SidebarHeader title="Tags">
-      <TagSorter />
-    </SidebarHeader>
-    <NewTagForm @submit="doAddTag" />
-    <ul
-      ref="sidebarTags"
-      class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3"
-    >
-      <SidebarTag
-        v-for="tag in tags"
-        :key="tag.id"
-        :tag="tag"
-        :is-selected="currentTag.id == tag.id"
-        :data-id="tag.id"
-        @click.native="doSetCurrentTag(tag, $event)"
-        @starsDropped="tagStarWithData"
-        @deleteTag="doDeleteTag"
-        @renameTag="doRenameTag"
-      />
-    </ul>
-    <SidebarHeader title="Languages" />
-    <ul class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
-      <SidebarItem
-        v-for="lang in languages"
-        :key="lang.name"
-        :badge="lang.count"
-        :title="lang.name"
-        :class="{ 'selected': currentLanguage == lang.name }"
-        class="language rounded"
-        @click.native="setCurrentLanguage(lang.name)"
-      />
-    </ul>
+    <SidebarGroup :collapsible="true">
+      <template v-slot:header="{ toggleCollapsed }">
+        <SidebarHeader title="Tags" @click.native.stop="toggleCollapsed">
+          <TagSorter/>
+        </SidebarHeader>
+      </template>
+      <template v-slot:content="{ isCollapsed }">
+        <div v-show="!isCollapsed">
+          <NewTagForm @submit="doAddTag"/>
+          <ul ref="sidebarTags" class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
+            <SidebarTag
+              v-for="tag in tags"
+              :key="tag.id"
+              :tag="tag"
+              :is-selected="currentTag.id == tag.id"
+              :data-id="tag.id"
+              @click.native="doSetCurrentTag(tag, $event)"
+              @starsDropped="tagStarWithData"
+              @deleteTag="doDeleteTag"
+              @renameTag="doRenameTag"
+            />
+          </ul>
+        </div>
+      </template>
+    </SidebarGroup>
+    <SidebarGroup :collapsible="true">
+      <template v-slot:header="{ toggleCollapsed }">
+        <SidebarHeader title="Languages" @click.native="toggleCollapsed"/>
+      </template>
+      <template v-slot:content="{ isCollapsed }">
+        <ul class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3" v-show="!isCollapsed">
+          <SidebarItem
+            v-for="lang in languages"
+            :key="lang.name"
+            :badge="lang.count"
+            :title="lang.name"
+            :class="{ 'selected': currentLanguage == lang.name }"
+            class="language rounded"
+            @click.native="setCurrentLanguage(lang.name)"
+          />
+        </ul>
+      </template>
+    </SidebarGroup>
   </div>
 </template>
 <script>
 import NewTagForm from '@/components/Dashboard/Sidebar/NewTagForm'
 import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
+import SidebarGroup from '@/components/Dashboard/Sidebar/SidebarGroup'
 import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
 import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
 import SidebarTag from '@/components/Dashboard/Sidebar/SidebarTag'
@@ -74,6 +83,7 @@ export default {
   components: {
     NewTagForm,
     RefreshButton,
+    SidebarGroup,
     SidebarHeader,
     SidebarItem,
     SidebarTag,
