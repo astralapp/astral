@@ -85,6 +85,35 @@ export default {
     margin-bottom: 1em;
   }
 
+  table {
+    border: 1px solid config('colors.grey-light');
+  }
+
+  thead {
+    background-color: config('colors.grey-lighter');
+    border-bottom: 1px solid config('colors.grey-light');
+    line-height: 2;
+  }
+
+  th {
+    border-right: 1px solid config('colors.grey-light');
+    padding: 0 15px;
+  }
+
+  tr {
+    border-bottom: 1px solid config('colors.grey-light');
+    line-height: 2;
+
+    &:nth-child(even) {
+      background-color: config('colors.grey-lightest');
+    }
+  }
+
+  td {
+    border-right: 1px solid config('colors.grey-light');
+    padding: 0 15px;
+  }
+
   pre {
     font-size: 14px;
     margin-bottom: 0;
