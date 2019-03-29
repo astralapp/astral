@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class StarTagsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function store(Request $request)
     {
         $starIds = $request->input('starIds');

@@ -50,6 +50,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException){
+             return response()->json([$exception->getMessage()], $exception->getStatusCode());
+        }
         return parent::render($request, $exception);
     }
 }

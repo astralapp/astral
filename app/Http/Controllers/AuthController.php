@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['redirectToProvider', 'handleProviderCallback']]);
+        $this->middleware('jwt', ['except' => ['redirectToProvider', 'handleProviderCallback']]);
     }
 
     public function redirectToProvider()
@@ -37,10 +37,9 @@ class AuthController extends Controller
             $user = new User();
         } // If no user was found, create a new one
         $user->mapGitHubUser($githubUser);
-        $jwt = JWTAuth::fromUser($user);
-        $jwtExpiry = auth()->factory()->getTTL() * 60;
+        $jwt = 'Bearer '.JWTAuth::fromUser($user);
 
-        return redirect('/auth?token='.$jwt.'&token_expiry='.$jwtExpiry);
+        return redirect('/auth?token='.$jwt);
     }
 
     public function me(Request $request)
@@ -56,9 +55,8 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
+            'access_token' => 'Bearer '.$token,
             'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60,
         ]);
     }
 
