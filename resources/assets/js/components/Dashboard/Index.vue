@@ -5,7 +5,7 @@
     <Galileo />
     <StarList :stars="starsWithCurrentTag" />
     <StarInfo />
-    <div><Notifier timeout="3000" /></div>
+    <div><Notifier :timeout="3000" /></div>
     <SettingsModal :user="user" />
   </div>
 </template>
