@@ -7,8 +7,8 @@
     "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "lint": "eslint resources/assets/js --ext='.js,.vue'",
-    "lint:fix": "eslint resources/assets/js --ext='.js,.vue' --fix",
+    "lint": "eslint \"resources/assets/js/**\" --ext=.js --ext=.vue",
+    "lint:fix": "eslint \"resources/assets/js/**\" --ext=.js --ext=.vue --fix",
     "start": "npm run watch"
   },
   "jest": {
@@ -70,6 +70,7 @@
     "babel-jest": "^24.0.0",
     "cross-env": "^5.1",
     "eslint": "^5.9.0",
+    "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-vue": "^5.0.0-beta.5",
     "flush-promises": "^1.0.0",

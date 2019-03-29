@@ -1,64 +1,31 @@
 <template>
   <div class="relative ml-auto">
-    <div
-      v-click-outside="hideDropdown"
-      class="flex items-center cursor-pointer"
-      @click="toggleDropdown"
-    >
-      <img
-        :src="user.avatar_url"
-        :alt="user.username"
-        class="rounded-full w-10 h-10"
-      >
+    <div v-click-outside="hideDropdown" class="flex items-center cursor-pointer" @click="toggleDropdown">
+      <img :src="user.avatar_url" :alt="user.username" class="rounded-full w-10 h-10" />
       <span class="text-white ml-1">
         {{ user.username }}
       </span>
-      <Icon
-        type="ChevronDownIcon"
-        height="16"
-        width="16"
-        class="stroke-current text-white ml-1"
-      />
+      <Icon type="ChevronDownIcon" height="16" width="16" class="stroke-current text-white ml-1" />
     </div>
-    <div
-      v-show="visible"
-      class="dropdown user-dropdown-container"
-    >
+    <div v-show="visible" class="dropdown user-dropdown-container">
       <ul>
         <li>
-          <a
-            class="dropdown-item"
-            href="#"
-            @click.prevent="showSettingsModal"
-          >
+          <a class="dropdown-item" href="#" @click.prevent="showSettingsModal">
             Settings
           </a>
         </li>
         <li>
-          <a
-            class="dropdown-item"
-            href="https://github.com/astralapp/astral"
-            target="_blank"
-            rel="noopener"
-          >
+          <a class="dropdown-item" href="https://github.com/astralapp/astral" target="_blank" rel="noopener">
             GitHub
           </a>
         </li>
         <li>
-          <a
-            class="dropdown-item"
-            href="https://patreon.com/syropian"
-            target="_blank"
-            rel="noopener"
-          >
+          <a class="dropdown-item" href="https://patreon.com/syropian" target="_blank" rel="noopener">
             Patreon
           </a>
         </li>
         <li>
-          <RouterLink
-            class="dropdown-item"
-            to="/auth/logout"
-          >
+          <RouterLink class="dropdown-item" to="/auth/logout">
             Logout
           </RouterLink>
         </li>
@@ -78,7 +45,7 @@ export default {
   components: {
     Icon
   },
-  data () {
+  data() {
     return {
       visible: false
     }
@@ -87,14 +54,14 @@ export default {
     ...mapGetters(['user'])
   },
   methods: {
-    toggleDropdown () {
+    toggleDropdown() {
       this.$bus.$emit('dropdownOpened', -1)
       this.visible = !this.visible
     },
-    hideDropdown () {
+    hideDropdown() {
       this.visible = false
     },
-    showSettingsModal () {
+    showSettingsModal() {
       this.$modal.show('settings-modal')
     }
   }

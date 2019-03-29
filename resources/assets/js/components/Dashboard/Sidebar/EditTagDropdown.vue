@@ -4,22 +4,12 @@
     class="edit-tag-dropdown absolute pin-r right-0 bg-white rounded w-48 box-shadow overflow-hidden p-3"
     @click.stop
   >
-    <form
-      class="flex flex-col"
-      @submit.prevent="renameTag"
-    >
-      <input
-        v-model="tagName"
-        type="text"
-        class="text-input text-sm py-1 px-2 mb-4 w-full"
-      >
+    <form class="flex flex-col" @submit.prevent="renameTag">
+      <input v-model="tagName" type="text" class="text-input text-sm py-1 px-2 mb-4 w-full" />
       <button class="btn btn-brand text-sm py-1 px-3 mb-2">
         Save
       </button>
-      <button
-        class="btn btn-danger text-sm py-1 px-3"
-        @click.stop.prevent="deleteTag"
-      >
+      <button class="btn btn-danger text-sm py-1 px-3" @click.stop.prevent="deleteTag">
         Delete
       </button>
     </form>
@@ -28,7 +18,10 @@
 <script>
 export default {
   name: 'EditTagDropdown',
-  props: ['visible', 'tag'],
+  props: {
+    visible: Boolean,
+    tag: Object
+  },
   data() {
     return {
       tagName: this.tag.name

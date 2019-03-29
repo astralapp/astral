@@ -27,7 +27,7 @@
           type="text"
           placeholder="Enter a tag name..."
           @blur="formBlurred"
-        >
+        />
       </form>
     </Transition>
   </div>
@@ -40,25 +40,25 @@ export default {
   components: {
     Icon
   },
-  data () {
+  data() {
     return {
       formShowing: false,
       tagName: ''
     }
   },
   methods: {
-    showForm () {
+    showForm() {
       this.formShowing = true
       setTimeout(() => {
         this.$refs.form.focus()
       }, 0)
     },
-    formBlurred () {
+    formBlurred() {
       if (this.tagName.trim() === '') {
         this.formShowing = false
       }
     },
-    formSubmitted () {
+    formSubmitted() {
       this.$emit('submit', this.tagName)
       this.tagName = ''
     }

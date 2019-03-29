@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="search-container bg-white border-b border-r border-grey-light h-16 px-4 flex items-center justify-center"
-  >
+  <div class="search-container bg-white border-b border-r border-grey-light h-16 px-4 flex items-center justify-center">
     <GlobalEvents
       :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event)"
       @keyup.prevent.191.exact="focusInput"
@@ -15,12 +13,8 @@
         placeholder="Gaze through your telescope"
         @focus="inputFocused = true"
         @blur="inputFocused = false"
-      >
-      <Icon
-        type="SearchIcon"
-        class="search-input-icon absolute fill-none stroke-grey transition-stroke"
-        height="18"
       />
+      <Icon type="SearchIcon" class="search-input-icon absolute fill-none stroke-grey transition-stroke" height="18" />
       <button
         v-if="query"
         class="clear-search-icon absolute text-1xl text-grey-darker focus-none rounded-full w-6 h-6 bg-transparent hover:bg-grey-light transition-bg"

@@ -9,7 +9,10 @@
 import URI from 'urijs'
 export default {
   name: 'Readme',
-  props: ['star', 'readme'],
+  props: {
+    star: Object,
+    readme: String
+  },
   watch: {
     readme: {
       handler(newVal, oldVal) {

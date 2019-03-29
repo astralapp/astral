@@ -1,9 +1,6 @@
 <template>
   <div class="absolute pin-t pin-l pin-b mt-16 w-full bg-white flex flex-col">
-    <button
-      class="btn btn-brand absolute pin-r mt-2 mr-4 z-10 focus-none"
-      @click="saveNotes"
-    >
+    <button class="btn btn-brand absolute pin-r mt-2 mr-4 z-10 focus-none" @click="saveNotes">
       Save
     </button>
     <textarea ref="editor" />
@@ -15,7 +12,10 @@ import { debounce } from 'lodash'
 import 'highlight.js'
 export default {
   name: 'NotesEditor',
-  props: ['notes', 'autosave'],
+  props: {
+    notes: String,
+    autosave: Boolean
+  },
   data() {
     return {
       editor: null,
@@ -34,7 +34,7 @@ export default {
         this.editor.value(val)
       }
     },
-    currentNotes(newVal, oldVal) {
+    currentNotes() {
       if (this.autosave) {
         this.$nextTick(() => {
           this.debounceSaveNotes()
@@ -145,14 +145,14 @@ export default {
 }
 </script>
 <style lang="scss">
-@import "~easymde/dist/easymde.min.css";
+@import '~easymde/dist/easymde.min.css';
 .editor-toolbar {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border: none;
-  border-bottom: 1px solid config("colors.grey-light");
+  border-bottom: 1px solid config('colors.grey-light');
   button {
-    color: config("colors.grey-dark");
+    color: config('colors.grey-dark');
   }
 }
 .CodeMirror {

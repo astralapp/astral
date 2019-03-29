@@ -41,8 +41,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .dashboard-list-item {
-  transition: transform 250ms ease, opacity 250ms ease, color 250ms ease,
-    background-color 250ms ease;
+  transition: transform 250ms ease, opacity 250ms ease, color 250ms ease, background-color 250ms ease;
   &-badge {
     transition: background-color 250ms ease, opacity 250ms ease;
     padding: 0.3rem 0.7rem;

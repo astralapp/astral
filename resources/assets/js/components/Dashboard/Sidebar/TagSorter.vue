@@ -2,19 +2,14 @@
   <div class="sidebar-sortDropdown">
     <button
       v-click-outside="hideDropdown"
-      :class="{'text-grey': dropdownVisible}"
+      :class="{ 'text-grey': dropdownVisible }"
       class="bg-transparent text-sm uppercase flex items-center cursor-pointer text-grey-darker hover:text-grey transition-color focus-none"
       @click.stop="toggleDropdown"
     >
       <span>Sort</span>
-      <Icon
-        type="ChevronDownIcon"
-        class="transition-stroke stroke-current fill-none ml-1"
-        height="16"
-        width="16"
-      />
+      <Icon type="ChevronDownIcon" class="transition-stroke stroke-current fill-none ml-1" height="16" width="16" />
     </button>
-    <TagSortDropdown :visible="dropdownVisible"/>
+    <TagSortDropdown :visible="dropdownVisible" />
   </div>
 </template>
 <script>
@@ -36,7 +31,7 @@ export default {
     }
   },
   mounted() {
-    this.$bus.$on('TAGS_SORTED', method => (this.dropdownVisible = false))
+    this.$bus.$on('TAGS_SORTED', () => (this.dropdownVisible = false))
   },
   methods: {
     toggleDropdown() {

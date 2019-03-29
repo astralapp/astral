@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar-group" :class="{'is-collapsible': collapsible}">
-    <div :class="{'cursor-pointer': collapsible}" class="flex items-center text-grey-darker">
+  <div class="sidebar-group" :class="{ 'is-collapsible': collapsible }">
+    <div :class="{ 'cursor-pointer': collapsible }" class="flex items-center text-grey-darker">
       <Icon
+        v-if="collapsible"
         :type="isCollapsed ? 'ChevronRightIcon' : 'ChevronDownIcon'"
         class="transition-stroke stroke-current fill-none mr-1"
         height="16"
         width="16"
-        v-if="collapsible"
         @click="toggleCollapsed"
       />
       <slot name="header" :toggleCollapsed="toggleCollapsed"></slot>
@@ -21,7 +21,9 @@ export default {
   components: {
     Icon
   },
-  props: ['collapsible'],
+  props: {
+    collapsible: Boolean
+  },
   data() {
     return {
       isCollapsed: false
@@ -37,5 +39,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

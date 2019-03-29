@@ -1,10 +1,6 @@
 <template>
   <div class="auth-container w-screen h-screen bg-cover bg-center flex items-center justify-center flex-col">
-    <img
-      src="/images/logo.svg"
-      alt="Astral"
-      class="h-16 mb-8"
-    >
+    <img src="/images/logo.svg" alt="Astral" class="h-16 mb-8" />
     <a
       href="/auth/github"
       class="auth-button inline-block rounded border border-white text-white text-center no-underline"

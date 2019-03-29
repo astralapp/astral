@@ -16,18 +16,11 @@
   >
     <div
       v-click-outside="hideEditTagDropdown"
-      :class="{'opacity-100': editTagDropdownShowing}"
+      :class="{ 'opacity-100': editTagDropdownShowing }"
       class="opacity-0 transition-opacity edit-tag absolute pin-r"
     >
-      <button
-        class="text-grey hover:text-white px-2"
-        @click="toggleEditTagDropdown"
-      >
-        <Icon
-          type="MoreHorizontalIcon"
-          height="14"
-          class="edit-tag-icon stroke-none fill-current relative"
-        />
+      <button class="text-grey hover:text-white px-2" @click="toggleEditTagDropdown">
+        <Icon type="MoreHorizontalIcon" height="14" class="edit-tag-icon stroke-none fill-current relative" />
       </button>
       <EditTagDropdown
         ref="editTagDropdown"
@@ -54,7 +47,10 @@ export default {
     EditTagDropdown,
     Icon
   },
-  props: ['tag', 'isSelected'],
+  props: {
+    tag: Object,
+    isSelected: Boolean
+  },
   data() {
     return {
       editTagDropdownShowing: false,

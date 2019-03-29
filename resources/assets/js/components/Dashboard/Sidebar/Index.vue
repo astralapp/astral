@@ -1,11 +1,11 @@
 <template>
   <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
     <SidebarHeader title="Stars">
-      <RefreshButton :active="refreshingStars" @click.native="refreshStars"/>
+      <RefreshButton :active="refreshingStars" @click.native="refreshStars" />
     </SidebarHeader>
     <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
       <SidebarItem
-        :class="{ 'selected': noFiltersApplied }"
+        :class="{ selected: noFiltersApplied }"
         :badge="totalStars"
         class="all-stars"
         title="All Stars"
@@ -14,7 +14,7 @@
         @click.native="resetFilters"
       />
       <SidebarItem
-        :class="{ 'selected': viewingUntagged }"
+        :class="{ selected: viewingUntagged }"
         :badge="totalUntaggedStars"
         class="untagged-stars"
         title="Untagged Stars"
@@ -26,12 +26,12 @@
     <SidebarGroup :collapsible="true">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Tags" @click.native.stop="toggleCollapsed">
-          <TagSorter/>
+          <TagSorter />
         </SidebarHeader>
       </template>
       <template v-slot:content="{ isCollapsed }">
         <div v-show="!isCollapsed">
-          <NewTagForm @submit="doAddTag"/>
+          <NewTagForm @submit="doAddTag" />
           <ul ref="sidebarTags" class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
             <SidebarTag
               v-for="tag in tags"
@@ -50,16 +50,16 @@
     </SidebarGroup>
     <SidebarGroup :collapsible="true">
       <template v-slot:header="{ toggleCollapsed }">
-        <SidebarHeader title="Languages" @click.native="toggleCollapsed"/>
+        <SidebarHeader title="Languages" @click.native="toggleCollapsed" />
       </template>
       <template v-slot:content="{ isCollapsed }">
-        <ul class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3" v-show="!isCollapsed">
+        <ul v-show="!isCollapsed" class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
           <SidebarItem
             v-for="lang in languages"
             :key="lang.name"
             :badge="lang.count"
             :title="lang.name"
-            :class="{ 'selected': currentLanguage == lang.name }"
+            :class="{ selected: currentLanguage == lang.name }"
             class="language rounded"
             @click.native="setCurrentLanguage(lang.name)"
           />
@@ -115,7 +115,7 @@ export default {
       this.sortTags(method)
     })
 
-    this.drake = dragula([this.$refs.sidebarTags]).on('drop', (el, target, source, sibling) => {
+    this.drake = dragula([this.$refs.sidebarTags]).on('drop', (el, target, source) => {
       let sortMap = Array.from(source.children).map((el, i) => {
         return {
           id: el.dataset.id,

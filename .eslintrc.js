@@ -1,15 +1,19 @@
 module.exports = {
   root: true,
-  parserOptions: {
-    parser: 'babel-eslint',
-    ecmaVersion: 2018
+  env: {
+    node: true
   },
-  extends: ['plugin:vue/recommended', 'plugin:prettier/recommended', '@vue/prettier'],
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  extends: ['plugin:vue/recommended', 'eslint:recommended', 'prettier/vue', 'plugin:prettier/recommended'],
   rules: {
+    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
     'vue/require-default-prop': 'off',
-    'vue/require-prop-types': 'off',
     'vue/no-v-html': 'off',
-    'space-before-function-paren': 'off'
+    'space-before-function-paren': 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
   overrides: [
     {

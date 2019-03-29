@@ -23,7 +23,9 @@
 <script>
 export default {
   name: 'Notifier',
-  props: ['timeout'],
+  props: {
+    timeout: Number
+  },
   data() {
     return {
       timer: null,
@@ -63,8 +65,7 @@ export default {
   z-index: 99999;
   &-enter-active,
   &-leave-active {
-    transition: transform 250ms cubic-bezier(0.215, 0.61, 0.355, 1),
-      opacity 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 250ms cubic-bezier(0.215, 0.61, 0.355, 1), opacity 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
   }
   &-enter,
   &-leave-to {

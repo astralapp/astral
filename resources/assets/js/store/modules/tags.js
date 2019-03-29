@@ -23,22 +23,22 @@ const getters = {
 }
 
 const mutations = {
-  [SET_TAGS] (state, tags) {
+  [SET_TAGS](state, tags) {
     state.tags = tags
   },
-  [SET_CURRENT_TAG] (state, tag) {
+  [SET_CURRENT_TAG](state, tag) {
     state.currentTag = { ...tag }
   },
-  [ADD_TAG] (state, tag) {
+  [ADD_TAG](state, tag) {
     state.tags = [...state.tags, ...[tag]]
   },
-  [DELETE_TAG] (state, id) {
+  [DELETE_TAG](state, id) {
     const index = state.tags.findIndex(tag => {
       return tag.id === id
     })
     state.tags.splice(index, 1)
   },
-  [UPDATE_TAG] (state, { id, newTag }) {
+  [UPDATE_TAG](state, { id, newTag }) {
     state.tags = state.tags.map(tag => {
       if (tag.id === id) {
         tag = newTag
@@ -50,7 +50,7 @@ const mutations = {
 }
 
 const actions = {
-  fetchTags ({ commit }) {
+  fetchTags({ commit }) {
     return client
       .withAuth()
       .get('/api/tags')
@@ -58,7 +58,7 @@ const actions = {
         commit(SET_TAGS, res)
       })
   },
-  addTag ({ commit }, name) {
+  addTag({ commit }, name) {
     return client
       .withAuth()
       .post('/api/tags', { name })
@@ -66,14 +66,14 @@ const actions = {
         commit(ADD_TAG, res)
       })
   },
-  setCurrentTag ({ commit }, tag) {
+  setCurrentTag({ commit }, tag) {
     if (Object.keys(tag).length) {
       commit(SET_VIEWING_UNTAGGED, false)
     }
     commit(SET_CURRENT_TAG, tag)
     router.replace({ query: { ...router.currentRoute.query, tag: tag.name } })
   },
-  reorderTags ({ commit }, sortMap) {
+  reorderTags({ commit }, sortMap) {
     return client
       .withAuth()
       .put('/api/tags/reorder', { tags: sortMap })
@@ -81,7 +81,7 @@ const actions = {
         commit(SET_TAGS, res)
       })
   },
-  sortTags ({ commit, state, dispatch }, method) {
+  sortTags({ commit, state, dispatch }, method) {
     let sortedTags = []
     let sortMap = []
 
@@ -114,7 +114,7 @@ const actions = {
 
     dispatch('reorderTags', sortMap)
   },
-  deleteTag ({ rootState, state, commit }, id) {
+  deleteTag({ rootState, state, commit }, id) {
     client.withAuth().delete(`/api/tags/${id}`)
 
     if (state.currentTag.id === id) {
@@ -136,7 +136,7 @@ const actions = {
       commit(SET_STAR_TAGS, star)
     })
   },
-  renameTag ({ rootState, state, commit }, { id, name }) {
+  renameTag({ rootState, state, commit }, { id, name }) {
     client
       .withAuth()
       .patch(`/api/tags/${id}`, { name })

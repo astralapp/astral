@@ -345,7 +345,7 @@ describe('Tags Module', () => {
   })
 })
 
-function generateSortMap (tags) {
+function generateSortMap(tags) {
   return tags.map((tag, i) => {
     return {
       id: tag.id,

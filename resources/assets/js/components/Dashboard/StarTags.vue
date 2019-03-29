@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="{ 'px-2 pt-2 bg-white border border-grey-light': isEditing }"
-    class="star-tags-editor rounded mt-4"
-  >
+  <div :class="{ 'px-2 pt-2 bg-white border border-grey-light': isEditing }" class="star-tags-editor rounded mt-4">
     <GlobalEvents
       :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event) && isOnlySelectedStar"
       @keyup.t="startEditing"
@@ -13,7 +10,9 @@
         v-show="!isEditing"
         class="text-xs text-white bg-brand hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
         @click.stop="setCurrentLanguage(star.node.primaryLanguage.name)"
-      >{{ star.node.primaryLanguage.name }}</li>
+      >
+        {{ star.node.primaryLanguage.name }}
+      </li>
       <li
         v-for="tag in mutableTags"
         :key="tag.id"
@@ -22,11 +21,9 @@
       >
         <span>{{ tag.name }}</span>
         <span>
-          <button
-            v-show="isEditing"
-            class="remove-tag ml-2 text-white text-sm"
-            @click.stop="removeTag(tag)"
-          >&times;</button>
+          <button v-show="isEditing" class="remove-tag ml-2 text-white text-sm" @click.stop="removeTag(tag)">
+            &times;
+          </button>
         </span>
       </li>
       <li class="mb-2">
@@ -43,14 +40,16 @@
           @keydown.delete.stop="deletePressed"
           @keyup.esc="escapePressed"
           @blur="onBlur"
-        >
+        />
       </li>
       <li class="mb-2">
         <button
           v-show="!isEditing"
           class="transition-opacity text-xs text-grey-darker bg-grey-lighter rounded-full py-1 px-2 mr-2 opacity-0 group-hover:opacity-100"
           @click.stop="startEditing"
-        >Edit Tags</button>
+        >
+          Edit Tags
+        </button>
       </li>
     </ul>
   </div>
@@ -69,7 +68,9 @@ export default {
     GlobalEvents
   },
   mixins: [shouldDisableKeyboardShortcutsMixin],
-  props: ['star'],
+  props: {
+    star: Object
+  },
   data() {
     return {
       awesomplete: null,

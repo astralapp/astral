@@ -1,8 +1,5 @@
 <template>
-  <VueModal
-    name="settings-modal"
-    height="auto"
-  >
+  <VueModal name="settings-modal" height="auto">
     <div class="flex items-center justify-between px-4 py-3 bg-grey-lightest leading-none">
       <h3>Settings</h3>
       <button
@@ -16,30 +13,19 @@
       <span class="leading-normal">
         Show Language Tags on Stars
       </span>
-      <ToggleSwitch
-        v-model="user.show_language_tags"
-        @change="setShowLanguageTags(user.show_language_tags)"
-      />
+      <ToggleSwitch v-model="user.show_language_tags" @change="setShowLanguageTags(user.show_language_tags)" />
     </div>
     <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between items-center">
       <span class="leading-normal">
         Auto-Save Notes
       </span>
-      <ToggleSwitch
-        v-model="user.autosave_notes"
-        @change="setAutosaveNotes(user.autosave_notes)"
-      />
+      <ToggleSwitch v-model="user.autosave_notes" @change="setAutosaveNotes(user.autosave_notes)" />
     </div>
     <div class="px-4 py-6 bg-white border-b border-grey-light flex justify-between">
       <span class="leading-normal">
         Export Stars As JSON
       </span>
-      <a
-        :href="exportUrl"
-        target="_blank"
-        rel="noopener"
-        class="btn btn-grey"
-      >
+      <a :href="exportUrl" target="_blank" rel="noopener" class="btn btn-grey">
         Export
       </a>
     </div>
@@ -49,17 +35,15 @@
           GitHub Access
         </span>
         <div>
-          <button
-            class="btn text-sm py-2 px-4 btn-danger ml-2"
-            @click="revokeAccessButtonClicked"
-          >
+          <button class="btn text-sm py-2 px-4 btn-danger ml-2" @click="revokeAccessButtonClicked">
             Revoke Access
           </button>
         </div>
       </div>
       <div class="flex justify-end mt-6">
         <p class="text-sm text-grey-darker">
-          This will log you out and revoke your authorization granted to Astral for accessing your GitHub account. You will not lose any data.
+          This will log you out and revoke your authorization granted to Astral for accessing your GitHub account. You
+          will not lose any data.
         </p>
       </div>
     </div>
@@ -75,7 +59,7 @@
             type="text"
             placeholder="Enter your username to confirm"
             class="text-input text-sm px-2 w-64"
-          >
+          />
           <button
             :disabled="deleteButtonDisabled"
             class="btn text-sm py-2 px-4 btn-danger ml-2"
@@ -85,10 +69,7 @@
           </button>
         </div>
       </div>
-      <div
-        v-show="deleteUserClicked"
-        class="flex justify-end mt-6"
-      >
+      <div v-show="deleteUserClicked" class="flex justify-end mt-6">
         <p class="text-sm text-red-light">
           This will permanently delete all of your data. Be careful!
         </p>
@@ -105,7 +86,9 @@ export default {
   components: {
     ToggleSwitch
   },
-  props: ['user'],
+  props: {
+    user: Object
+  },
   data() {
     return {
       deleteUserClicked: false,
@@ -141,7 +124,7 @@ export default {
   label {
     &::before {
       transition: transform 150ms ease-in-out;
-      content: "";
+      content: '';
       display: block;
       border-radius: 50%;
       position: absolute;
@@ -149,12 +132,12 @@ export default {
       left: 2px;
       width: 20px;
       height: 20px;
-      background: config("colors.grey-lightest");
+      background: config('colors.grey-lightest');
       transform: translate3d(0, 0, 0);
     }
   }
   input:checked + label {
-    background: config("colors.brand");
+    background: config('colors.brand');
     &::before {
       transform: translate3d(24px, 0, 0);
     }

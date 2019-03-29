@@ -12,5 +12,4 @@ yarn-error.log
 .env
 NOTES.md
 **/.DS_Store
-/.vscode
 **/*.orig

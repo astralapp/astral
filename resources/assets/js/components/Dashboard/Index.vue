@@ -31,20 +31,17 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'stars', 'pageInfo', 'currentTag', 'currentStar']),
-    starsWithCurrentTag () {
+    starsWithCurrentTag() {
       return this.stars.filter(star => {
         if (!Object.keys(this.currentTag).length) {
           return true
         } else {
-          return (
-            star.hasOwnProperty('tags') &&
-            star.tags.map(tag => tag.name).includes(this.currentTag.name)
-          )
+          return star.hasOwnProperty('tags') && star.tags.map(tag => tag.name).includes(this.currentTag.name)
         }
       })
     }
   },
-  async created () {
+  async created() {
     await this.fetchUser()
     this.$bus.$emit('STATUS', 'Fetching stars...')
     await this.fetchUserStars()
@@ -64,13 +61,7 @@ export default {
     this.$bus.$emit('STATUS', '')
   },
   methods: {
-    ...mapActions([
-      'fetchUser',
-      'fetchGitHubStars',
-      'fetchUserStars',
-      'cleanupStars',
-      'autotagStars'
-    ])
+    ...mapActions(['fetchUser', 'fetchGitHubStars', 'fetchUserStars', 'cleanupStars', 'autotagStars'])
   }
 }
 </script>

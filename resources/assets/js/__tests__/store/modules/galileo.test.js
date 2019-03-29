@@ -38,9 +38,7 @@ describe('Galileo Module', () => {
     })
 
     it('returns the tokenized search query', () => {
-      expect(getters.tokenizedSearchQuery(state)).toEqual(
-        state.tokenizedSearchQuery
-      )
+      expect(getters.tokenizedSearchQuery(state)).toEqual(state.tokenizedSearchQuery)
     })
   })
 
@@ -74,15 +72,9 @@ describe('Galileo Module', () => {
         strings: ['world']
       }
 
-      expect(ctx.commit).toHaveBeenCalledWith(
-        'SET_SEARCH_QUERY',
-        expectedTokenizedQuery.query
-      )
+      expect(ctx.commit).toHaveBeenCalledWith('SET_SEARCH_QUERY', expectedTokenizedQuery.query)
 
-      expect(ctx.commit).toHaveBeenCalledWith(
-        'SET_TOKENIZED_SEARCH',
-        expectedTokenizedQuery
-      )
+      expect(ctx.commit).toHaveBeenCalledWith('SET_TOKENIZED_SEARCH', expectedTokenizedQuery)
     })
   })
 })

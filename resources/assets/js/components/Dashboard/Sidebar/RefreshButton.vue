@@ -1,14 +1,6 @@
 <template>
-  <button
-    :class="{ 'active': active }"
-    class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none"
-  >
-    <Icon
-      type="RefreshCwIcon"
-      height="16"
-      width="16"
-      class="stroke-current fill-none"
-    />
+  <button :class="{ active: active }" class="refresh-stars bg-transparent p-0 w-4 h-4 text-grey-darker focus-none">
+    <Icon type="RefreshCwIcon" height="16" width="16" class="stroke-current fill-none" />
   </button>
 </template>
 <script>
@@ -18,7 +10,9 @@ export default {
   components: {
     Icon
   },
-  props: ['active']
+  props: {
+    active: Boolean
+  }
 }
 </script>
 <style lang="scss">

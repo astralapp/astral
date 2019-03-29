@@ -316,7 +316,7 @@ const actions = {
         id,
         notes
       })
-      .then(res => {
+      .then(() => {
         commit(SET_STAR_NOTES, {
           id,
           notes

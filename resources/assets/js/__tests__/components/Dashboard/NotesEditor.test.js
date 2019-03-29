@@ -6,7 +6,7 @@ import NotesEditor from '@/components/Dashboard/NotesEditor'
 jest.unmock('lodash')
 
 const lodash = require.requireActual('lodash')
-lodash.debounce = jest.fn((fn, __ms) => fn)
+lodash.debounce = jest.fn((fn, ms) => fn(ms))
 
 describe('Notes Editor', () => {
   describe('on component mounted', () => {

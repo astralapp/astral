@@ -9,11 +9,11 @@ const verbs = ['get', 'post', 'put', 'patch', 'delete']
 
 const client = {
   auth: false,
-  withAuth () {
+  withAuth() {
     client.auth = true
     return client
   },
-  withoutAuth () {
+  withoutAuth() {
     client.auth = false
     return client
   }
@@ -27,13 +27,7 @@ verbs.forEach(verb => {
         url,
         data,
         headers:
-          client.auth && ls('jwt')
-            ? Object.assign(
-              {},
-              { Authorization: `Bearer ${ls('jwt')}` },
-              headers
-            )
-            : headers
+          client.auth && ls('jwt') ? Object.assign({}, { Authorization: `Bearer ${ls('jwt')}` }, headers) : headers
       })
         .then(res => {
           client.auth = false

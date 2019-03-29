@@ -9,7 +9,7 @@ const state = {
 
 const getters = {
   user: state => state.user,
-  isAuthenticated: state => !!ls('jwt')
+  isAuthenticated: () => !!ls('jwt')
 }
 
 const mutations = {
@@ -34,16 +34,16 @@ const actions = {
     return client
       .withAuth()
       .delete('/api/auth/delete')
-      .then(res => {
+      .then(() => {
         commit(DELETE_USER)
         router.push('auth/logout')
       })
   },
-  revokeUserAccess({ commit }) {
+  revokeUserAccess() {
     return client
       .withAuth()
       .get('/api/auth/revoke')
-      .then(res => {
+      .then(() => {
         router.push('auth/logout')
       })
   },

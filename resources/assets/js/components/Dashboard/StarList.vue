@@ -1,9 +1,6 @@
 <template>
   <div class="stars border-r border-grey-light bg-grey-lighter relative overflow-hidden">
-    <p
-      v-if="!filteredStars.length"
-      class="text-grey font-bold flex flex-col justify-center items-center h-full"
-    >
+    <p v-if="!filteredStars.length" class="text-grey font-bold flex flex-col justify-center items-center h-full">
       No Results
     </p>
     <GlobalEvents
@@ -11,17 +8,8 @@
       @keyup.down="nextStar"
       @keyup.up="previousStar"
     />
-    <CollectionCluster
-      ref="collection"
-      :items="filteredStars"
-      v-bind="cluster"
-      class="overflow-y-scroll"
-    >
-      <div
-        slot="star"
-        :key="item.value.node.databaseId"
-        slot-scope="{cell, item}"
-      >
+    <CollectionCluster ref="collection" :items="filteredStars" v-bind="cluster" class="overflow-y-scroll">
+      <div slot="star" :key="item.value.node.databaseId" slot-scope="{ cell, item }">
         <Star
           :star="item.value"
           :data-id="item.value.node.databaseId"
@@ -49,7 +37,9 @@ export default {
     Star
   },
   mixins: [shouldDisableKeyboardShortcutsMixin],
-  props: ['stars'],
+  props: {
+    stars: Array
+  },
   data() {
     return {
       cluster: {
@@ -107,13 +97,13 @@ export default {
         this.currentStars.includes(star)
       )
     },
-    previousStar(e) {
+    previousStar() {
       if (this.currentStarIndexes[0] === 0 || !this.currentStarIndexes.length) return
       const lowestIndex = Math.min.apply(Math, this.currentStarIndexes)
       const previousStar = this.filteredStars[lowestIndex - 1].value
       this.setCurrentStar(previousStar)
     },
-    nextStar(e) {
+    nextStar() {
       if (this.currentStarIndex === this.filteredStars.length - 1) return
       const nextStar = this.currentStarIndexes.length
         ? this.filteredStars[Math.max.apply(Math, this.currentStarIndexes) + 1].value
