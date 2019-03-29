@@ -40,13 +40,12 @@ class AuthenticatesUsersTest extends TestCase
 
         $user = User::first();
         $token = JWTAuth::fromUser($user);
-        $expiry = auth()->factory()->getTTL() * 60;
 
         $githubUser = Socialite::driver('github')->user();
 
         $this->assertEquals($githubUser->getNickname(), $user->username);
 
-        $response->assertRedirect("/auth?token={$token}&token_expiry={$expiry}");
+        $response->assertRedirect("/auth?token=Bearer {$token}");
     }
 
     public function mockSocialiteFacade()
@@ -85,7 +84,7 @@ class AuthenticatesUsersTest extends TestCase
 
         $this->getJson('/api/auth/refresh')
             ->assertStatus(200)
-            ->assertJsonStructure(['access_token', 'token_type', 'expires_in']);
+            ->assertJsonStructure(['access_token', 'token_type']);
     }
 
     /** @test */
