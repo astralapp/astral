@@ -17,8 +17,9 @@ let purgeCss = require('laravel-mix-purgecss')
 
 mix.webpackConfig({
   resolve: {
+    extensions: ['.js', '.vue', '.json'],
     alias: {
-      '@': path.resolve(__dirname, 'resources/assets/js')
+      '@': path.resolve(__dirname, 'resources/assets/js/')
     }
   }
 })
