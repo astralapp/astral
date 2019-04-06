@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ls from 'local-storage'
-import Auth from '@/components/Auth'
-import Dashboard from '@/components/Dashboard'
+import Auth from '@/components/Auth/Index'
+import Dashboard from '@/components/Dashboard/Index'
 
 Vue.use(Router)
 
