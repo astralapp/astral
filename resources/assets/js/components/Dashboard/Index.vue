@@ -12,7 +12,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Navbar from '@/components/Dashboard/Navbar'
-import Sidebar from '@/components/Dashboard/Sidebar/'
+import Sidebar from '@/components/Dashboard/Sidebar/Index'
 import StarList from '@/components/Dashboard/StarList'
 import Galileo from '@/components/Dashboard/Galileo'
 import StarInfo from '@/components/Dashboard/StarInfo'
