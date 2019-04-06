@@ -12,7 +12,6 @@ class GitHubStarsController extends Controller
 
     public function __construct(GitHubClient $client)
     {
-        $this->middleware('auth:api');
         $this->client = $client;
     }
 

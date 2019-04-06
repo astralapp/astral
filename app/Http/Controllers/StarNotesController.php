@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class StarNotesController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function store(Request $request)
     {
         $id = $request->input('id');

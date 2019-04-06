@@ -19,10 +19,6 @@ const router = new Router({
       component: Auth,
       beforeEnter: (to, from, next) => {
         if (to.query.token) {
-          const expirySeconds = parseInt(to.query.token_expiry, 10)
-          const now = new Date()
-          now.setSeconds(now.getSeconds() + expirySeconds)
-          ls('jwt_expiry', now)
           ls('jwt', to.query.token)
           next('dashboard')
         } else {
@@ -56,14 +52,12 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = ls('jwt')
-  const expiry = ls('jwt_expiry')
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
   if (requiresAuth && !token) {
+    ls.clear()
     next('auth')
-  } else if (requiresAuth && token && new Date() > new Date(expiry)) {
-    next('auth')
-  } else if (!requiresAuth && token && new Date() < new Date(expiry)) {
+  } else if (!requiresAuth && token) {
     next('dashboard')
   } else {
     next()

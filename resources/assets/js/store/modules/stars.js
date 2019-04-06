@@ -214,7 +214,7 @@ const actions = {
     }
     return client
       .withAuth()
-      .get(`/api/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`)
+      .get(`/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`)
       .then(res => {
         commit(
           SET_STARS,
@@ -235,7 +235,7 @@ const actions = {
   fetchUserStars({ commit }) {
     client
       .withAuth()
-      .get('/api/stars')
+      .get('/stars')
       .then(res => {
         commit(SET_USER_STARS, res)
       })
@@ -256,7 +256,7 @@ const actions = {
     const starIds = stars.map(star => star.databaseId)
     client
       .withAuth()
-      .post('/api/star/tags', { starIds, tag })
+      .post('/star/tags', { starIds, tag })
       .then(res => {
         commit(SET_TAGS, res.tags)
       })
@@ -297,7 +297,7 @@ const actions = {
   syncStarTags({ commit }, { id, tags }) {
     client
       .withAuth()
-      .put('/api/star/tags', {
+      .put('/star/tags', {
         id,
         tags
       })
@@ -312,7 +312,7 @@ const actions = {
   editStarNotes({ commit }, { id, notes }) {
     client
       .withAuth()
-      .post('/api/star/notes', {
+      .post('/star/notes', {
         id,
         notes
       })
@@ -326,7 +326,7 @@ const actions = {
   cleanupStars({ commit }) {
     client
       .withAuth()
-      .delete('/api/stars/cleanup')
+      .delete('/stars/cleanup')
       .then(res => {
         commit(SET_USER_STARS, res)
         commit(MAP_USER_STARS_TO_GITHUB_STARS)
@@ -335,7 +335,7 @@ const actions = {
   autotagStars({ commit }) {
     client
       .withAuth()
-      .put('/api/stars/autotag')
+      .put('/stars/autotag')
       .then(res => {
         commit(SET_TAGS, res.tags)
         commit(SET_USER_STARS, res.stars)

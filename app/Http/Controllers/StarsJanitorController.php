@@ -10,7 +10,6 @@ class StarsJanitorController extends Controller
 
     public function __construct(StarsJanitor $janitor)
     {
-        $this->middleware('auth:api');
         $this->janitor = $janitor;
     }
 

@@ -12,7 +12,6 @@ class AutotagController extends Controller
 
     public function __construct(Autotagger $autotagger)
     {
-        $this->middleware('auth:api');
         $this->autotagger = $autotagger;
     }
 
