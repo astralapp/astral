@@ -53,7 +53,7 @@ const actions = {
   fetchTags({ commit }) {
     return client
       .withAuth()
-      .get('/api/tags')
+      .get('/tags')
       .then(res => {
         commit(SET_TAGS, res)
       })
@@ -61,7 +61,7 @@ const actions = {
   addTag({ commit }, name) {
     return client
       .withAuth()
-      .post('/api/tags', { name })
+      .post('/tags', { name })
       .then(res => {
         commit(ADD_TAG, res)
       })
@@ -76,7 +76,7 @@ const actions = {
   reorderTags({ commit }, sortMap) {
     return client
       .withAuth()
-      .put('/api/tags/reorder', { tags: sortMap })
+      .put('/tags/reorder', { tags: sortMap })
       .then(res => {
         commit(SET_TAGS, res)
       })
@@ -115,7 +115,7 @@ const actions = {
     dispatch('reorderTags', sortMap)
   },
   deleteTag({ rootState, state, commit }, id) {
-    client.withAuth().delete(`/api/tags/${id}`)
+    client.withAuth().delete(`/tags/${id}`)
 
     if (state.currentTag.id === id) {
       commit(SET_CURRENT_TAG, {})
@@ -139,7 +139,7 @@ const actions = {
   renameTag({ rootState, state, commit }, { id, name }) {
     client
       .withAuth()
-      .patch(`/api/tags/${id}`, { name })
+      .patch(`/tags/${id}`, { name })
       .then(res => {
         if (state.currentTag.id === id) {
           commit(SET_CURRENT_TAG, res)

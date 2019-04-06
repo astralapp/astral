@@ -5,7 +5,7 @@ import ls from 'local-storage'
 import router from '@/router'
 
 const http = axios.create({
-  baseURL: '/',
+  baseURL: '/api',
   headers: {
     'X-Requested-With': 'XMLHttpRequest'
   }

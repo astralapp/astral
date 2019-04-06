@@ -25,7 +25,7 @@ const actions = {
   fetchUser({ commit }) {
     return client
       .withAuth()
-      .get('/api/auth/me')
+      .get('/auth/me')
       .then(res => {
         commit(SET_USER, res)
       })
@@ -33,7 +33,7 @@ const actions = {
   deleteUser({ commit }) {
     return client
       .withAuth()
-      .delete('/api/auth/delete')
+      .delete('/auth/delete')
       .then(() => {
         commit(DELETE_USER)
         router.push('auth/logout')
@@ -42,7 +42,7 @@ const actions = {
   revokeUserAccess() {
     return client
       .withAuth()
-      .get('/api/auth/revoke')
+      .get('/auth/revoke')
       .then(() => {
         router.push('auth/logout')
       })
@@ -50,7 +50,7 @@ const actions = {
   setShowLanguageTags({ commit }, flag) {
     return client
       .withAuth()
-      .put('/api/user/show-language-tags', { flag })
+      .put('/user/show-language-tags', { flag })
       .then(res => {
         commit(SET_USER, res)
       })
@@ -58,7 +58,7 @@ const actions = {
   setAutosaveNotes({ commit }, flag) {
     return client
       .withAuth()
-      .put('/api/user/autosave-notes', { flag })
+      .put('/user/autosave-notes', { flag })
       .then(res => {
         commit(SET_USER, res)
       })
