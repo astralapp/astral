@@ -93,7 +93,7 @@ export default {
     return {
       deleteUserClicked: false,
       deleteConfirmation: '',
-      exportUrl: `/api/stars/export?token=${ls('jwt')}`
+      exportUrl: `/api/stars/export?token=${ls('jwt').replace('Bearer ', '')}`
     }
   },
   computed: {
