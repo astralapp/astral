@@ -74,6 +74,10 @@ GQL;
             throw new InvalidAccessTokenException();
         }
 
+        if (!array_key_exists('data', $response->json())) {
+            info('Stars fetch failed.', ['response' => $response->json()]);
+        }
+
         return $response->json()['data']['viewer']['starredRepositories'];
     }
 
