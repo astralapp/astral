@@ -47,9 +47,12 @@ class StarTest extends TestCase
     /** @test */
     public function it_can_sync_a_list_of_tags()
     {
+        // Clear all tags to try and fix this weirdly flaky test...
+        $this->star->syncTags([]);
+
         $tags = $this->attachSampleTagsToStars();
 
-        $this->assertCount(5, $this->star->tags);
+        $this->assertCount(5, $this->star->fresh()->tags);
     }
 
     /** @test */
@@ -59,7 +62,7 @@ class StarTest extends TestCase
 
         $this->star->syncTags([]);
 
-        $this->assertCount(0, $this->star->tags);
+        $this->assertCount(0, $this->star->fresh()->tags);
     }
 
     private function attachSampleTagsToStars($count = 5)

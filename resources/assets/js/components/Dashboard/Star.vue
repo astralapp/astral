@@ -4,7 +4,13 @@
     class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg group"
     @dragstart="starDragged"
   >
-    <h3 v-once class="repo-name text-base text-brand mb-2 font-bold">
+    <div
+      v-if="star.node.isArchived"
+      class="border border-yellow-dark bg-yellow-lighter rounded-sm text-yellow-darker p-2 text-sm mb-4"
+    >
+      This repository has been archived by its owner.
+    </div>
+    <h3 v-once class="repo-name text-base text-brand mb-2 font-bold break-words">
       {{ star.node.nameWithOwner }}
     </h3>
     <p v-once class="text-dark-grey text-sm">
@@ -16,9 +22,13 @@
         <Icon type="StarIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ star.node.stargazers.totalCount }}</span>
       </div>
-      <div class="fork-count flex items-center text-grey-dark mr-4">
+      <div class="fork-count flex items-center text-grey-dark mr-2">
         <Icon type="Share2Icon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ star.node.forkCount }}</span>
+      </div>
+      <div v-if="star.node.releases.edges.length" class="latest-version flex items-center text-grey-dark mr-4">
+        <Icon type="SaveIcon" class="stroke-current h-4" />
+        <span v-once class="text-xs">{{ normalizedReleaseVersion }}</span>
       </div>
       <div class="github-link flex items-center text-grey-dark">
         <a
@@ -52,6 +62,10 @@ export default {
     ...mapGetters(['currentStars', 'user']),
     starInSelectedStars() {
       return this.currentStars.some(star => star.node.databaseId === this.star.node.databaseId)
+    },
+    normalizedReleaseVersion() {
+      const tagName = this.star.node.releases.edges[0].node.tagName
+      return tagName.startsWith('v') ? tagName : `v${tagName}`
     }
   },
   methods: {
