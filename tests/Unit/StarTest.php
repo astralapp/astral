@@ -49,7 +49,7 @@ class StarTest extends TestCase
     {
         $tags = $this->attachSampleTagsToStars();
 
-        $this->assertCount(5, $this->star->tags);
+        $this->assertCount(5, $this->star->fresh()->tags);
     }
 
     /** @test */
@@ -59,7 +59,7 @@ class StarTest extends TestCase
 
         $this->star->syncTags([]);
 
-        $this->assertCount(0, $this->star->tags);
+        $this->assertCount(0, $this->star->fresh()->tags);
     }
 
     private function attachSampleTagsToStars($count = 5)
