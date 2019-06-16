@@ -31,6 +31,7 @@ class GitHubClient
                 description
                 url
                 databaseId
+                isArchived
                 defaultBranchRef {
                 name
           	    }
@@ -41,6 +42,13 @@ class GitHubClient
                 totalCount
                 }
                 forkCount,
+                releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {
+                    edges{
+                        node {
+                            tagName
+                        }
+                    }
+                }
                 repositoryTopics(first: 5) {
                 edges {
                     node {
