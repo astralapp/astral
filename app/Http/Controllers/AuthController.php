@@ -91,6 +91,12 @@ class AuthController extends Controller
     public function revokeApplicationGrant()
     {
         $this->revokeUserAccess();
+
+        auth()->user()->update([
+            'access_token' => null,
+            'scope' => null,
+        ]);
+
         auth()->logout();
 
         return response()->json([], 204);
