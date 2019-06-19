@@ -18,7 +18,8 @@ import {
   SET_VIEWING_UNTAGGED,
   MAP_USER_STARS_TO_GITHUB_STARS,
   SET_STAR_NOTES,
-  RESET_STARS
+  RESET_STARS,
+  UNSTAR_STAR
 } from '../mutation-types'
 
 import client from '@/store/api/client'
@@ -91,7 +92,7 @@ const getters = {
       .sort((a, b) => b.count - a.count)
   },
   currentLanguage: state => state.currentLanguage,
-  currentStar: state => (state.currentStars.length > 0 ? state.currentStars[0] : {}),
+  currentStar: (__, getters) => (getters.currentStars.length > 0 ? getters.currentStars[0] : {}),
   currentStars: state => [...uniqBy(state.currentStars, 'node.databaseId')],
   currentStarIndexes: (state, getters) => {
     if (state.currentStars.length) {
@@ -202,6 +203,11 @@ const mutations = {
     state.totalStars = 0
     state.stars = []
     state.currentStars = []
+  },
+  [UNSTAR_STAR](state, databaseId) {
+    state.stars = state.stars.filter(star => {
+      return star.node.databaseId !== databaseId
+    })
   }
 }
 
@@ -336,6 +342,22 @@ const actions = {
     client
       .withAuth()
       .put('/stars/autotag')
+      .then(res => {
+        commit(SET_TAGS, res.tags)
+        commit(SET_USER_STARS, res.stars)
+        commit(MAP_USER_STARS_TO_GITHUB_STARS)
+      })
+  },
+  unstarStar({ commit, state, dispatch, getters }, { databaseId, nodeId }) {
+    commit(UNSTAR_STAR, databaseId)
+    commit(SELECT_STARS, state.currentStars.filter(star => star.node.databaseId !== databaseId))
+    if (Object.keys(getters.currentStar).length) {
+      dispatch('fetchReadme', getters.currentStar.node.nameWithOwner)
+    }
+
+    client
+      .withAuth()
+      .delete('/stars/github/unstar', { databaseId, nodeId })
       .then(res => {
         commit(SET_TAGS, res.tags)
         commit(SET_USER_STARS, res.stars)

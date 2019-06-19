@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,10 +28,11 @@ Route::group(['middleware' => 'jwt'], function () {
 
     Route::post('star/notes', 'StarNotesController@store');
 
-    Route::get('/stars', 'StarsController@index');
-    Route::get('/stars/export', 'StarsController@export');
+    Route::get('stars', 'StarsController@index');
+    Route::get('stars/export', 'StarsController@export');
 
     Route::get('stars/github', 'GitHubStarsController@index');
+    Route::delete('stars/github/unstar', 'GitHubStarsController@unstar');
 
     Route::put('stars/autotag', 'AutotagController@update');
 

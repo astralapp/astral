@@ -24,7 +24,7 @@ class GitHubStarsController extends Controller
             Cache::forget($key);
         }
 
-        $cursor = $request->has('cursor') ? $request->input('cursor') : null;
+        $cursor = $request->input('cursor', null);
         $expiry = env('APP_ENV') == 'local' ? 3600 * 8 : 3600 * 2;
         if (Cache::has($key)) {
             $cached = Cache::get($key);
@@ -65,5 +65,28 @@ class GitHubStarsController extends Controller
         }
 
         return $starsToReturn;
+    }
+
+    public function unstar(Request $request) {
+        $databaseId = (int)$request->input('databaseId');
+        $nodeId = $request->input('nodeId');
+
+        // Unstar through the GitHub API
+        // $this->client->unstarStar($nodeId);
+
+        // Remove it from DB if it exists
+        $userStar = auth()->user()->stars()->where('repo_id', $databaseId)->first();
+        if ($userStar) {
+            $userStar->delete();
+        }
+
+        // Clear the cache
+        // Cache::forget(auth()->user()->starsCacheKey());
+
+        $tags = auth()->user()->tags()->withStarCount()->get();
+        $stars = auth()->user()->stars()->with('tags')->get();
+
+        return response()->json(compact('stars', 'tags'));
+
     }
 }

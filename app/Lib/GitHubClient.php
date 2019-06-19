@@ -89,6 +89,32 @@ GQL;
         return $response->json()['data']['viewer']['starredRepositories'];
     }
 
+    public function unstarStar($nodeId)
+    {
+        $query = <<<GQL
+    mutation UnstarStar {
+        removeStar(input:{starrableId:"{$nodeId}"}) {
+            starrable {
+                id
+            }
+        }
+    }
+GQL;
+        $response = Zttp::withHeaders([
+            'Authorization' => 'Bearer '.$this->token,
+            'Content-Type'  => 'application/json',
+        ])->post($this->endpoint, [
+            'query'     => $query,
+            'variables' => '',
+        ]);
+
+        if ($response->getStatusCode() == 401) {
+            throw new InvalidAccessTokenException();
+        }
+
+        return $response->json()['data'];
+    }
+
     public function revokeApplicationGrant()
     {
         $clientId = config('services.github.client_id');

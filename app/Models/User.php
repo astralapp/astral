@@ -46,7 +46,9 @@ class User extends Authenticatable implements JWTSubject
             $this->name = $githubUser->getName();
         }
         $this->avatar_url = $githubUser->getAvatar();
-        $this->access_token = $githubUser->token;
+        if (!$this->access_token) {
+            $this->access_token = $githubUser->token;
+        }
         $this->save();
     }
 

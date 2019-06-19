@@ -15,10 +15,14 @@ class AuthController extends Controller
         $this->middleware('jwt', ['except' => ['redirectToProvider', 'handleProviderCallback']]);
     }
 
-    public function redirectToProvider()
+    public function redirectToProvider(Request $request)
     {
+        $scope = $request->input('scope', 'read:user');
+        $request->session()->put(['auth_scope' => $scope]);
+
         return Socialite::driver('github')
-            ->setScopes(['read:user'])
+            ->stateless()
+            ->setScopes([$scope])
             ->redirect();
     }
 
@@ -28,8 +32,7 @@ class AuthController extends Controller
             return redirect('/auth?error=true');
         }
 
-        $githubUser = Socialite::driver('github')->user();
-
+        $githubUser = Socialite::driver('github')->stateless()->user();
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
         // If the user exists, just update fields that they may have changed in their Github settings
@@ -37,6 +40,12 @@ class AuthController extends Controller
             $user = new User();
         } // If no user was found, create a new one
         $user->mapGitHubUser($githubUser);
+
+        $scope = $request->session()->pull('auth_scope', 'read:user');
+
+        $user->scope = $scope;
+        $user->save();
+
         $jwt = 'Bearer '.JWTAuth::fromUser($user);
 
         return redirect('/auth?token='.$jwt);

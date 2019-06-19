@@ -13,6 +13,18 @@
         />
         <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
       </button>
+      <button
+        class="bg-grey-light hover:bg-grey transition-bg rounded text-grey-darkest text-xs px-2 py-2 font-bold tracking-wide uppercase focus-none no-underline ml-4"
+        @click="unstar"
+      >
+        <Icon
+          type="StarIcon"
+          height="16"
+          width="16"
+          class="mr-1 pointer-events-none stroke-current fill-none inline-block align-bottom"
+        />
+        <span>Unstar</span>
+      </button>
       <div class="ml-auto">
         <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
         <input
@@ -88,7 +100,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['editStarNotes']),
+    ...mapActions(['editStarNotes', 'unstarStar']),
     async doEditStarNotes(notes) {
       this.editStarNotes({
         id: this.currentStar.node.databaseId,
@@ -98,6 +110,20 @@ export default {
     },
     highlightText(e) {
       e.currentTarget.select()
+    },
+    unstar() {
+      if (this.user.scope !== 'public_repo') {
+        if (
+          window.confirm('Unstarring repositories requires elevated auth privileges. Would you like to grant them?')
+        ) {
+          window.location.assign('/auth/github?scope=public_repo')
+        }
+      } else {
+        this.unstarStar({
+          databaseId: this.currentStar.node.databaseId,
+          nodeId: this.currentStar.node.id
+        })
+      }
     }
   }
 }
