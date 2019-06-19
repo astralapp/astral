@@ -67,8 +67,9 @@ class GitHubStarsController extends Controller
         return $starsToReturn;
     }
 
-    public function unstar(Request $request) {
-        $databaseId = (int)$request->input('databaseId');
+    public function unstar(Request $request)
+    {
+        $databaseId = (int) $request->input('databaseId');
         $nodeId = $request->input('nodeId');
 
         // Unstar through the GitHub API
@@ -87,6 +88,5 @@ class GitHubStarsController extends Controller
         $stars = auth()->user()->stars()->with('tags')->get();
 
         return response()->json(compact('stars', 'tags'));
-
     }
 }
