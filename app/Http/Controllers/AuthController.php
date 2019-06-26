@@ -93,7 +93,7 @@ class AuthController extends Controller
 
         auth()->user()->update([
             'access_token' => null,
-            'scope' => null,
+            'scope'        => null,
         ]);
 
         auth()->logout();
