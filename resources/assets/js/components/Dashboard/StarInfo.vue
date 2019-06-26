@@ -49,6 +49,12 @@
       <img src="/images/no-readme.svg" class="w-64 mb-8" />
       <span class="font-bold bg-grey px-4 py-2 text-white rounded">No README Found</span>
     </div>
+    <div
+      class="readme-loader absolute pin-t pib-b pin-l w-full flex items-center justify-center h-full transition-opacity opacity-0 pointer-events-none"
+      :class="{ 'opacity-100 pointer-events-auto': readmeLoading }"
+    >
+      <img src="/images/status-spinner-dark.svg" alt="..." class="spin" width="32" height="32" />
+    </div>
     <NotesEditor
       v-if="notesEditorShowing"
       :notes="currentStarNotes"
@@ -75,12 +81,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['readme', 'currentStar', 'user']),
+    ...mapGetters(['readme', 'readmeLoading', 'currentStar', 'user']),
     noRepoSelected() {
       return !Object.keys(this.currentStar).length
     },
     repoHasNoReadme() {
-      return Object.keys(this.currentStar).length && !this.readme
+      return Object.keys(this.currentStar).length && !this.readme && !this.readmeLoading
     },
     currentStarCloneUrl() {
       return `git@github.com:${this.currentStar.node.nameWithOwner}.git`
@@ -129,6 +135,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.readme-loader {
+  background-color: rgba(#fff, 0.85);
+}
+
 .github-clone-url {
   width: 300px;
   &:focus {

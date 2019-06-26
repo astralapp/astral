@@ -16,7 +16,7 @@ class UserTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = create('Astral\Models\User');
+        $this->user = create('Astral\Models\User', ['access_token' => null]);
     }
 
     /** @test */

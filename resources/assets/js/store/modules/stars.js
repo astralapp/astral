@@ -9,6 +9,7 @@ import {
   PUSH_TO_CURRENT_STARS,
   SET_CURRENT_TAG,
   SET_README,
+  SET_README_LOADING,
   SET_STARS_PAGE_INFO,
   SET_STARS,
   SET_STAR_TAGS,
@@ -34,6 +35,7 @@ const state = {
   currentLanguage: '',
   currentStars: [],
   readme: '',
+  readmeLoading: false,
   viewingUntagged: false
 }
 
@@ -106,6 +108,7 @@ const getters = {
     }
   },
   readme: state => state.readme,
+  readmeLoading: state => state.readmeLoading,
   viewingUntagged: state => state.viewingUntagged
 }
 
@@ -183,6 +186,9 @@ const mutations = {
   },
   [SET_README](state, readme) {
     state.readme = readme
+  },
+  [SET_README_LOADING](state, isLoading) {
+    state.readmeLoading = isLoading
   },
   [SET_VIEWING_UNTAGGED](state, viewing) {
     state.viewingUntagged = viewing
@@ -277,6 +283,7 @@ const actions = {
     commit(SELECT_STARS, stars)
   },
   fetchReadme({ rootState, commit }, repoName) {
+    commit(SET_README_LOADING, true)
     const accessToken = rootState.user.user.access_token
     return client
       .withoutAuth()
@@ -293,6 +300,7 @@ const actions = {
       .catch(() => {
         commit(SET_README, '')
       })
+      .finally(() => commit(SET_README_LOADING, false))
   },
   setViewingUntagged({ commit }, viewing) {
     if (viewing) {

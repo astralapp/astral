@@ -20,7 +20,7 @@
     "tymon/jwt-auth": "1.0.0-rc.4"
   },
   "require-dev": {
-    "codedungeon/phpunit-result-printer": "^0.6.0",
+    "codedungeon/phpunit-result-printer": "^0.26.0",
     "filp/whoops": "~2.0",
     "fzaninotto/faker": "~1.4",
     "laravel/telescope": "^2.0",

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="overflow-hidden">
     <Transition name="screen-fade" mode="out-in" appear>
       <RouterView />
     </Transition>
@@ -13,7 +13,6 @@ export default {
 <style lang="scss">
 #app {
   background-color: config('colors.brand');
-  // background-image: url('/images/bg.jpg');
   min-height: 100vh;
 }
 

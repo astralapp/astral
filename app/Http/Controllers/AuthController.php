@@ -21,7 +21,6 @@ class AuthController extends Controller
         $request->session()->put(['auth_scope' => $scope]);
 
         return Socialite::driver('github')
-            ->stateless()
             ->setScopes([$scope])
             ->redirect();
     }
@@ -32,7 +31,7 @@ class AuthController extends Controller
             return redirect('/auth?error=true');
         }
 
-        $githubUser = Socialite::driver('github')->stateless()->user();
+        $githubUser = Socialite::driver('github')->user();
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
         // If the user exists, just update fields that they may have changed in their Github settings

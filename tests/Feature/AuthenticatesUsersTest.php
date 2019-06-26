@@ -37,7 +37,6 @@ class AuthenticatesUsersTest extends TestCase
         JWTAuth::shouldReceive('fromUser')->withAnyArgs()->andReturn('12345');
 
         $response = $this->get('/auth/github/callback');
-
         $user = User::first();
         $token = JWTAuth::fromUser($user);
 
