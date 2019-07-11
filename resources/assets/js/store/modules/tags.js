@@ -137,7 +137,7 @@ const actions = {
     })
   },
   renameTag({ rootState, state, commit }, { id, name }) {
-    client
+    return client
       .withAuth()
       .patch(`/tags/${id}`, { name })
       .then(res => {
