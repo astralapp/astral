@@ -58,9 +58,10 @@ verbs.forEach(verb => {
           client.auth = false
           resolve(res.data)
         })
-        .catch(error => {
+        .catch(({ response }) => {
           client.auth = false
-          reject(error.response.data)
+
+          reject(response.data)
         })
     })
   }

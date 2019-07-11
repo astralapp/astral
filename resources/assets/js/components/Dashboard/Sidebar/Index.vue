@@ -180,8 +180,12 @@ export default {
     async doRenameTag(data) {
       const { id, name } = data
       const oldName = this.tags.find(s => s.id === id).name
-      await this.renameTag(data)
-      this.$bus.$emit('NOTIFICATION', `${oldName} tag renamed to ${name}!`)
+      try {
+        await this.renameTag(data)
+        this.$bus.$emit('NOTIFICATION', `${oldName} tag renamed to ${name}!!`)
+      } catch (e) {
+        this.$bus.$emit('NOTIFICATION', e.errors.name[0], 'error')
+      }
     },
     doSetCurrentTag(tag, e) {
       if (e.target.classList.contains('dashboard-list-item')) {

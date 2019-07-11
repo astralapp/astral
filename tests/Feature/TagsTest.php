@@ -53,6 +53,14 @@ class TagsTest extends TestCase
     }
 
     /** @test */
+    public function tag_name_unique_rule_ignores_the_tag_being_updated()
+    {
+        $this->patchJson("/api/tags/{$this->tags[0]->id}", [
+            'name' => strtolower($this->tags[0]->name),
+        ])->assertStatus(200);
+    }
+
+    /** @test */
     public function tags_can_be_reordered()
     {
         // Shuffle the tags
