@@ -23,7 +23,7 @@
         @click.native="setViewingUntagged(true)"
       />
     </ul>
-    <SidebarGroup :collapsible="true">
+    <SidebarGroup :collapsible="true" :is-collapsed="tagsCollapsed" @toggle="toggleCollapsedState('tags')">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Tags" @click.native.stop="toggleCollapsed">
           <TagSorter />
@@ -48,7 +48,7 @@
         </div>
       </template>
     </SidebarGroup>
-    <SidebarGroup :collapsible="true">
+    <SidebarGroup :collapsible="true" :is-collapsed="languagesCollapsed" @toggle="toggleCollapsedState('languages')">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Languages" @click.native="toggleCollapsed" />
       </template>
@@ -104,7 +104,9 @@ export default {
       'viewingUntagged',
       'pageInfo',
       'totalStars',
-      'totalUntaggedStars'
+      'totalUntaggedStars',
+      'tagsCollapsed',
+      'languagesCollapsed'
     ]),
     noFiltersApplied() {
       return !Object.keys(this.currentTag).length && this.currentLanguage === '' && !this.viewingUntagged
@@ -153,7 +155,8 @@ export default {
       'deleteTag',
       'renameTag',
       'fetchGitHubStars',
-      'cleanupStars'
+      'cleanupStars',
+      'toggleCollapsedState'
     ]),
     async refreshStars() {
       this.refreshingStars = true
@@ -170,12 +173,20 @@ export default {
       this.$bus.$emit('STATUS', '')
     },
     async doAddTag(name) {
-      await this.addTag(name)
-      this.$bus.$emit('NOTIFICATION', `${name} tag added!`)
+      try {
+        await this.addTag(name)
+        this.$bus.$emit('NOTIFICATION', `${name} tag added!`)
+      } catch (e) {
+        this.$bus.$emit('NOTIFICATION', e.errors.name[0], 'error')
+      }
     },
     async doDeleteTag({ id, name }) {
-      await this.deleteTag(id)
-      this.$bus.$emit('NOTIFICATION', `${name} tag deleted!`)
+      try {
+        await this.deleteTag(id)
+        this.$bus.$emit('NOTIFICATION', `${name} tag deleted!`)
+      } catch {
+        this.$bus.$emit('NOTIFICATION', 'Whoops, that tag could not be deleted. Please try again.', 'error')
+      }
     },
     async doRenameTag(data) {
       const { id, name } = data
@@ -200,11 +211,19 @@ export default {
     async tagStarWithData({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
       if (Array.isArray(data)) {
-        await this.addTagToStars({ stars: data, tag })
-        this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.length} stars!`)
+        try {
+          await this.addTagToStars({ stars: data, tag })
+          this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.length} stars!`)
+        } catch {
+          this.$bus.$emit('NOTIFICATION', 'Whoops, we could not tag that star. Please try again.', 'error')
+        }
       } else {
-        await this.addTagToStars({ stars: [data], tag })
-        this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.nameWithOwner}!`)
+        try {
+          await this.addTagToStars({ stars: [data], tag })
+          this.$bus.$emit('NOTIFICATION', `${tag.name} tag was added to ${data.nameWithOwner}!`)
+        } catch {
+          this.$bus.$emit('NOTIFICATION', 'Whoops, we could not tag those stars. Please try again.', 'error')
+        }
       }
     }
   }

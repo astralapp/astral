@@ -22,18 +22,12 @@ export default {
     Icon
   },
   props: {
-    collapsible: Boolean
-  },
-  data() {
-    return {
-      isCollapsed: false
-    }
+    collapsible: Boolean,
+    isCollapsed: Boolean
   },
   methods: {
     toggleCollapsed() {
-      if (this.collapsible) {
-        this.isCollapsed = !this.isCollapsed
-      }
+      this.$emit('toggle')
     }
   }
 }

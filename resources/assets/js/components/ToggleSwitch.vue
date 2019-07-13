@@ -30,7 +30,7 @@ export default {
   },
   props: {
     checked: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: false
     },
     onLabel: {
