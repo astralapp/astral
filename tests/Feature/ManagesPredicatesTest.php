@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Astral\Models\Predicate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ManagesPredicatesTest extends TestCase
 {
@@ -25,9 +25,7 @@ class ManagesPredicatesTest extends TestCase
         $response->assertStatus(201)
         ->assertJson($predicate->toArray());
 
-
         $this->assertDatabaseHas('predicates', ['name' => $predicate->name]);
-
     }
 
     /** @test */
@@ -48,6 +46,5 @@ class ManagesPredicatesTest extends TestCase
 
         // Try and create predicate with empty body
         $this->postJson('/api/predicates', $predicateC->toArray())->assertStatus(422);
-
     }
 }

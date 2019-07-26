@@ -5,7 +5,6 @@ namespace Astral\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
 
 class User extends Authenticatable implements JWTSubject
 {
