@@ -36,4 +36,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('stars/autotag', 'AutotagController@update');
 
     Route::delete('stars/cleanup', 'StarsJanitorController@destroy');
+
+    Route::get('predicates', 'PredicatesController@index');
+    Route::post('predicates', 'PredicatesController@store');
 });

@@ -5,6 +5,7 @@ namespace Astral\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -36,6 +37,11 @@ class User extends Authenticatable implements JWTSubject
     public function tags()
     {
         return $this->hasMany(Tag::class);
+    }
+
+    public function predicates()
+    {
+        return $this->hasMany(Predicate::class);
     }
 
     public function mapGitHubUser($githubUser)

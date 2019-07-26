@@ -3,13 +3,15 @@ import { TOGGLE_COLLAPSED_STATE } from '../mutation-types'
 const state = {
   collapsed: {
     tags: JSON.parse(localStorage.getItem('astral_ui_collapsed_tags')) || false,
-    languages: JSON.parse(localStorage.getItem('astral_ui_collapsed_languages')) || false
+    languages: JSON.parse(localStorage.getItem('astral_ui_collapsed_languages')) || false,
+    filters: JSON.parse(localStorage.getItem('astral_ui_collapsed_filters')) || false
   }
 }
 
 const getters = {
   tagsCollapsed: state => state.collapsed.tags,
-  languagesCollapsed: state => state.collapsed.languages
+  languagesCollapsed: state => state.collapsed.languages,
+  filtersCollapsed: state => state.collapsed.filters
 }
 
 const mutations = {

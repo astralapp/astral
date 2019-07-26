@@ -51,3 +51,13 @@
     }
   }
 }
+
+.select {
+  @apply block appearance-none w-full bg-white border border-grey-light px-4 py-2 pr-8 rounded shadow leading-tight;
+  &:hover {
+    @apply border-grey;
+  }
+  &:focus {
+    @apply outline-none;
+  }
+}

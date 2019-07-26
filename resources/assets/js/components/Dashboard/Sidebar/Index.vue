@@ -48,6 +48,31 @@
         </div>
       </template>
     </SidebarGroup>
+    <SidebarGroup :collapsible="true" :is-collapsed="filtersCollapsed" @toggle="toggleCollapsedState('filters')">
+      <template v-slot:header="{ toggleCollapsed }">
+        <SidebarHeader title="Filters" @click.native="toggleCollapsed">
+          <button
+            class="transition-color bg-transparent p-0 w-4 h-4 text-grey-darker hover:text-grey focus-none"
+            @click.stop="$modal.show('predicate-modal')"
+          >
+            <Icon type="PlusCircleIcon" height="16" width="16" class="stroke-current fill-none" />
+          </button>
+        </SidebarHeader>
+      </template>
+      <template v-slot:content="{ isCollapsed }">
+        <ul v-show="!isCollapsed" class="dashboard-list sidebar-predicates list-none m-0 p-0 pb-3">
+          <SidebarItem
+            v-for="predicate in predicates"
+            :key="predicate.id"
+            :title="predicate.name"
+            icon="SearchIcon"
+            :class="{ selected: currentPredicate.id === predicate.id }"
+            class="predicate rounded"
+            @click.native="setCurrentPredicate(predicate)"
+          />
+        </ul>
+      </template>
+    </SidebarGroup>
     <SidebarGroup :collapsible="true" :is-collapsed="languagesCollapsed" @toggle="toggleCollapsedState('languages')">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Languages" @click.native="toggleCollapsed" />
@@ -76,6 +101,7 @@ import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
 import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
 import SidebarTag from '@/components/Dashboard/Sidebar/SidebarTag'
 import TagSorter from '@/components/Dashboard/Sidebar/TagSorter'
+import Icon from '@/components/Icon'
 import { mapActions, mapGetters } from 'vuex'
 import dragula from 'dragula'
 export default {
@@ -87,7 +113,8 @@ export default {
     SidebarHeader,
     SidebarItem,
     SidebarTag,
-    TagSorter
+    TagSorter,
+    Icon
   },
   data() {
     return {
@@ -101,15 +128,23 @@ export default {
       'currentTag',
       'languages',
       'currentLanguage',
+      'predicates',
+      'currentPredicate',
       'viewingUntagged',
       'pageInfo',
       'totalStars',
       'totalUntaggedStars',
       'tagsCollapsed',
-      'languagesCollapsed'
+      'languagesCollapsed',
+      'filtersCollapsed'
     ]),
     noFiltersApplied() {
-      return !Object.keys(this.currentTag).length && this.currentLanguage === '' && !this.viewingUntagged
+      return (
+        !Object.keys(this.currentTag).length &&
+        !Object.keys(this.currentPredicate).length &&
+        this.currentLanguage === '' &&
+        !this.viewingUntagged
+      )
     }
   },
   async mounted() {
@@ -156,7 +191,8 @@ export default {
       'renameTag',
       'fetchGitHubStars',
       'cleanupStars',
-      'toggleCollapsedState'
+      'toggleCollapsedState',
+      'setCurrentPredicate'
     ]),
     async refreshStars() {
       this.refreshingStars = true
@@ -206,6 +242,7 @@ export default {
     resetFilters() {
       this.setViewingUntagged(false)
       this.setCurrentTag({})
+      this.setCurrentPredicate({})
       this.setCurrentLanguage('')
     },
     async tagStarWithData({ data, id }) {

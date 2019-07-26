@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash'
+import { orderBy, omit } from 'lodash'
 import {
   ADD_TAG,
   SET_TAGS,
@@ -6,7 +6,8 @@ import {
   SET_VIEWING_UNTAGGED,
   DELETE_TAG,
   UPDATE_TAG,
-  SET_STAR_TAGS
+  SET_STAR_TAGS,
+  SET_CURRENT_PREDICATE
 } from '../mutation-types'
 
 import client from '@/store/api/client'
@@ -69,9 +70,10 @@ const actions = {
   setCurrentTag({ commit }, tag) {
     if (Object.keys(tag).length) {
       commit(SET_VIEWING_UNTAGGED, false)
+      commit(SET_CURRENT_PREDICATE, {})
     }
     commit(SET_CURRENT_TAG, tag)
-    router.replace({ query: { ...router.currentRoute.query, tag: tag.name } })
+    router.replace({ query: { ...omit(router.currentRoute.query, 'predicate'), tag: tag.name } })
   },
   reorderTags({ commit }, sortMap) {
     return client

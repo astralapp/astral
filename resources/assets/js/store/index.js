@@ -5,6 +5,7 @@ import stars from './modules/stars'
 import tags from './modules/tags'
 import galileo from './modules/galileo'
 import ui from './modules/ui'
+import predicates from './modules/predicates'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     stars,
     tags,
     galileo,
-    ui
+    ui,
+    predicates
   }
 })

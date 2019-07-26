@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { uniqBy } from 'lodash'
+import { uniqBy, omit } from 'lodash'
 import {
   CLEAR_STARS,
   ADD_TAG_TO_STARS,
@@ -20,12 +20,14 @@ import {
   MAP_USER_STARS_TO_GITHUB_STARS,
   SET_STAR_NOTES,
   RESET_STARS,
-  UNSTAR_STAR
+  UNSTAR_STAR,
+  SET_CURRENT_PREDICATE
 } from '../mutation-types'
 
 import client from '@/store/api/client'
 import router from '@/router'
 import galileo from '@/filters/galileo'
+import predicate from '@/filters/predicate'
 
 const state = {
   userStars: [],
@@ -42,31 +44,38 @@ const state = {
 const getters = {
   stars: state => state.stars,
   filteredStars: (state, __getters, rootState) => {
-    const stars = state.stars
-      .filter(star => {
-        if (!Object.keys(rootState.tags.currentTag).length) {
-          return true
-        } else {
-          return star.tags.map(tag => tag.name).includes(rootState.tags.currentTag.name)
-        }
-      })
-      .filter(star => {
-        if (state.currentLanguage === '') {
-          return true
-        } else {
-          return star.node.primaryLanguage && star.node.primaryLanguage.name === state.currentLanguage
-        }
-      })
-      .filter(star => {
-        if (!state.viewingUntagged) {
-          return true
-        }
-
-        return !star.tags.length
-      })
-      .map(star => {
+    let stars
+    if (Object.keys(rootState.predicates.currentPredicate).length) {
+      stars = predicate(state.stars, JSON.parse(rootState.predicates.currentPredicate.body)).map(star => {
         return { type: 'star', value: star }
       })
+    } else {
+      stars = state.stars
+        .filter(star => {
+          if (!Object.keys(rootState.tags.currentTag).length) {
+            return true
+          } else {
+            return star.tags.map(tag => tag.name).includes(rootState.tags.currentTag.name)
+          }
+        })
+        .filter(star => {
+          if (state.currentLanguage === '') {
+            return true
+          } else {
+            return star.node.primaryLanguage && star.node.primaryLanguage.name === state.currentLanguage
+          }
+        })
+        .filter(star => {
+          if (!state.viewingUntagged) {
+            return true
+          }
+
+          return !star.tags.length
+        })
+        .map(star => {
+          return { type: 'star', value: star }
+        })
+    }
 
     return galileo(stars, rootState.galileo.tokenizedSearchQuery)
   },
@@ -255,10 +264,11 @@ const actions = {
   setCurrentLanguage({ commit }, language) {
     router.replace({
       query: {
-        ...router.currentRoute.query,
+        ...omit(router.currentRoute.query, 'predicate'),
         language: language || undefined
       }
     })
+    commit(SET_CURRENT_PREDICATE, {})
     commit(SET_CURRENT_LANGUAGE, language)
   },
   addTagToStars({ commit }, data) {

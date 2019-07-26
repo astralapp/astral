@@ -7,6 +7,7 @@
     <StarInfo />
     <div><Notifier :timeout="3000" /></div>
     <SettingsModal :user="user" />
+    <PredicateModal />
   </div>
 </template>
 <script>
@@ -17,6 +18,7 @@ import StarList from '@/components/Dashboard/StarList'
 import Galileo from '@/components/Dashboard/Galileo'
 import StarInfo from '@/components/Dashboard/StarInfo'
 import SettingsModal from '@/components/Dashboard/SettingsModal'
+import PredicateModal from '@/components/Dashboard/PredicateModal'
 import Notifier from '@/components/Notifier'
 export default {
   name: 'Dashboard',
@@ -27,6 +29,7 @@ export default {
     Sidebar,
     StarList,
     SettingsModal,
+    PredicateModal,
     Notifier
   },
   computed: {
@@ -43,6 +46,7 @@ export default {
   },
   async created() {
     await this.fetchUser()
+    await this.fetchPredicates()
     this.$bus.$emit('STATUS', 'Fetching stars...')
     await this.fetchUserStars()
     await this.fetchGitHubStars({ cursor: null, refresh: false })
@@ -61,7 +65,14 @@ export default {
     this.$bus.$emit('STATUS', '')
   },
   methods: {
-    ...mapActions(['fetchUser', 'fetchGitHubStars', 'fetchUserStars', 'cleanupStars', 'autotagStars'])
+    ...mapActions([
+      'fetchUser',
+      'fetchPredicates',
+      'fetchGitHubStars',
+      'fetchUserStars',
+      'cleanupStars',
+      'autotagStars'
+    ])
   }
 }
 </script>
