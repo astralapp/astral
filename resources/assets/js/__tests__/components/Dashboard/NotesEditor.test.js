@@ -25,20 +25,20 @@ describe('Notes Editor', () => {
           autosave: true
         }
       })
-      const valueSpy = jest.spyOn(wrapper.vm.editor, 'value').mockImplementation(() => {
+      const valueSpy = jest.spyOn(wrapper.vm.editor, 'value').mockImplementationOnce(() => {
         return 'New value'
       })
       const debouncedSaveSpy = jest.spyOn(wrapper.vm, 'debounceSaveNotes')
-      const debounceSpy = jest.spyOn(lodash, 'debounce')
 
       wrapper.vm.editor.codemirror.setValue('New value')
       wrapper.vm.editor.codemirror.refresh()
 
       expect(valueSpy).toHaveBeenCalled()
       expect(wrapper.vm.currentNotes).toBe('New value')
+
       await flushPromises()
+
       expect(debouncedSaveSpy).toHaveBeenCalled()
-      expect(debounceSpy).toHaveBeenCalledWith(wrapper.vm.saveNotes, 1000)
     })
   })
 

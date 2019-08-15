@@ -10,11 +10,9 @@ jest.mock('@/router', () => ({
   push: jest.fn()
 }))
 
-const state = { ...user.state }
 const getters = user.getters
 const { SET_USER, DELETE_USER } = user.mutations
 const { fetchUser, deleteUser, setShowLanguageTags, setAutosaveNotes } = user.actions
-const ctx = { commit: jest.fn() }
 
 describe('User Module', () => {
   beforeEach(() => {
@@ -22,14 +20,11 @@ describe('User Module', () => {
     jest.clearAllMocks()
   })
 
-  describe('User state', () => {
-    it('returns the user-related state', () => {
-      expect(state).toEqual({ user: {} })
-    })
-  })
-
   describe('User getters', () => {
     it('returns the user', () => {
+      const state = {
+        user: { username: 'syropian' }
+      }
       expect(getters.user(state)).toEqual(state.user)
 
       ls.mockReturnValueOnce('abcde12345')
@@ -41,6 +36,9 @@ describe('User Module', () => {
 
   describe('User mutations', () => {
     it('sets the user object', () => {
+      const state = {
+        user: {}
+      }
       const newUser = {
         username: 'syropian'
       }
@@ -51,12 +49,9 @@ describe('User Module', () => {
     })
 
     it('deletes the user object', () => {
-      const user = {
-        username: 'syropian'
+      const state = {
+        user: { username: 'syropian' }
       }
-
-      SET_USER(state, user)
-      expect(state.user).toEqual(user)
 
       DELETE_USER(state)
       expect(state.user).toEqual({})
@@ -64,29 +59,28 @@ describe('User Module', () => {
   })
 
   describe('User actions', () => {
+    const commit = jest.fn()
     it('fetches the authenticated user', async () => {
       const res = { username: 'syropian' }
       client.get.mockResolvedValue(res)
 
-      await fetchUser(ctx)
+      await fetchUser({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.get).toHaveBeenCalledWith('/api/auth/me')
-      expect(ctx.commit).toHaveBeenCalledWith('SET_USER', res)
+      expect(client.get).toHaveBeenCalledWith('/auth/me')
+      expect(commit).toHaveBeenCalledWith('SET_USER', res)
     })
 
     it('deletes the authenticated user', async () => {
-      const user = {
-        id: 1,
-        username: 'syropian'
+      const state = {
+        user: { username: 'syropian' }
       }
-      SET_USER(state, user)
 
-      await deleteUser(ctx)
+      await deleteUser({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.delete).toHaveBeenCalledWith('/api/auth/delete')
-      expect(ctx.commit).toHaveBeenCalledWith('DELETE_USER')
+      expect(client.delete).toHaveBeenCalledWith('/auth/delete')
+      expect(commit).toHaveBeenCalledWith('DELETE_USER')
       expect(router.push).toHaveBeenCalledWith('auth/logout')
     })
 
@@ -94,22 +88,22 @@ describe('User Module', () => {
       const res = { username: 'syropian' }
       client.put.mockResolvedValue(res)
 
-      await setShowLanguageTags(ctx, true)
+      await setShowLanguageTags({ commit }, true)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.put).toHaveBeenCalledWith('/api/user/show-language-tags', { flag: true })
-      expect(ctx.commit).toHaveBeenCalledWith('SET_USER', res)
+      expect(client.put).toHaveBeenCalledWith('/user/show-language-tags', { flag: true })
+      expect(commit).toHaveBeenCalledWith('SET_USER', res)
     })
 
     it('sets the users auto-save notes option', async () => {
       const res = { username: 'syropian' }
       client.put.mockResolvedValue(res)
 
-      await setAutosaveNotes(ctx, true)
+      await setAutosaveNotes({ commit }, true)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.put).toHaveBeenCalledWith('/api/user/autosave-notes', { flag: true })
-      expect(ctx.commit).toHaveBeenCalledWith('SET_USER', res)
+      expect(client.put).toHaveBeenCalledWith('/user/autosave-notes', { flag: true })
+      expect(commit).toHaveBeenCalledWith('SET_USER', res)
     })
   })
 })

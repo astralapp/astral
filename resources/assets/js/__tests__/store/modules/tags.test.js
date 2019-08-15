@@ -15,39 +15,25 @@ const { SET_TAGS, SET_CURRENT_TAG, ADD_TAG, DELETE_TAG, UPDATE_TAG } = tags.muta
 const { fetchTags, addTag, setCurrentTag, reorderTags, sortTags, deleteTag, renameTag } = tags.actions
 
 describe('Tags Module', () => {
-  let state
-  let ctx
   beforeEach(() => {
     jest.resetModules()
     jest.clearAllMocks()
-    state = { ...tags.state }
-    ctx = {
-      commit: jest.fn(),
-      state,
-      dispatch: jest.fn(),
-      rootState: {
-        stars: {
-          stars: []
-        }
-      }
-    }
-  })
-
-  describe('Tags state', () => {
-    it('returns the tag-related state', () => {
-      expect(state).toEqual({
-        tags: [],
-        currentTag: {}
-      })
-    })
   })
 
   describe('Tags getters', () => {
     it('returns the tags', () => {
+      const state = {
+        tags: []
+      }
+
       expect(getters.tags(state)).toEqual(state.tags)
     })
 
     it('returns the current tag', () => {
+      const state = {
+        currentTag: { name: 'Vue' }
+      }
+
       expect(getters.currentTag(state)).toEqual(state.currentTag)
     })
   })
@@ -55,6 +41,9 @@ describe('Tags Module', () => {
   describe('Tags mutations', () => {
     it('sets the tags array', () => {
       const tags = ['Vue', 'React', 'Angular']
+      const state = {
+        tags
+      }
 
       SET_TAGS(state, tags)
 
@@ -64,12 +53,20 @@ describe('Tags Module', () => {
     it('sets the current tag', () => {
       const currentTag = { name: 'Vue' }
 
+      const state = {
+        currentTag
+      }
+
       SET_CURRENT_TAG(state, currentTag)
 
       expect(state.currentTag).toEqual(currentTag)
     })
 
     it('adds a new tag', () => {
+      const state = {
+        tags: []
+      }
+
       ADD_TAG(state, 'Vue')
 
       expect(state.tags).toEqual(['Vue'])
@@ -80,16 +77,18 @@ describe('Tags Module', () => {
     })
 
     it('deletes a tag', () => {
-      state.tags = state.tags.concat([
-        {
-          id: 1,
-          name: 'Vue'
-        },
-        {
-          id: 2,
-          name: 'React'
-        }
-      ])
+      const state = {
+        tags: [
+          {
+            id: 1,
+            name: 'Vue'
+          },
+          {
+            id: 2,
+            name: 'React'
+          }
+        ]
+      }
 
       expect(state.tags.length).toBe(2)
 
@@ -100,81 +99,92 @@ describe('Tags Module', () => {
     })
 
     it('updates a tag', () => {
-      state.tags = state.tags.concat([
-        {
-          id: 1,
-          name: 'Vue'
-        },
-        {
-          id: 2,
-          name: 'React'
-        }
-      ])
+      const state = {
+        tags: [
+          {
+            id: 1,
+            name: 'Vue'
+          },
+          {
+            id: 2,
+            name: 'React'
+          }
+        ]
+      }
+
       const newTag = {
         id: 1,
         name: 'VueJS'
       }
+
       UPDATE_TAG(state, { id: 1, newTag })
+
       expect(state.tags[0].name).toBe('VueJS')
     })
   })
 
   describe('Tags actions', () => {
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+
     it("fetches the user's tags", async () => {
       const res = ['Vue', 'React', 'Angular']
       client.get.mockResolvedValue(res)
 
-      await fetchTags(ctx)
+      await fetchTags({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.get).toHaveBeenCalledWith('/api/tags')
-      expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', res)
+      expect(client.get).toHaveBeenCalledWith('/tags')
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', res)
     })
 
     it('adds a tag', async () => {
       const newTag = { name: 'Jest' }
       client.post.mockResolvedValue(newTag)
 
-      await addTag(ctx, newTag.name)
+      await addTag({ commit }, newTag.name)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.post).toHaveBeenCalledWith('/api/tags', { name: newTag.name })
-      expect(ctx.commit).toHaveBeenCalledWith('ADD_TAG', newTag)
+      expect(client.post).toHaveBeenCalledWith('/tags', { name: newTag.name })
+      expect(commit).toHaveBeenCalledWith('ADD_TAG', newTag)
     })
 
     describe('Setting the current tag', () => {
       it('sets the current tag', async () => {
         const currentTag = { name: 'Jest' }
 
-        await setCurrentTag(ctx, currentTag)
+        await setCurrentTag({ commit }, currentTag)
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_TAG', currentTag)
-        expect(ctx.commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', false)
+        expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', currentTag)
+        expect(commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', false)
         expect(router.replace).toHaveBeenCalledWith({ query: { tag: currentTag.name } })
       })
 
       it('sets the viewing status to untagged if no tag is set', async () => {
-        await setCurrentTag(ctx, {})
-        expect(ctx.commit).not.toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', false)
+        await setCurrentTag({ commit }, {})
+        expect(commit).not.toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', false)
       })
     })
 
     it('reorders tags', async () => {
       const dummyMap = []
       client.put.mockResolvedValue([])
-      await reorderTags(ctx, dummyMap)
+
+      await reorderTags({ commit }, dummyMap)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.put).toHaveBeenCalledWith('/api/tags/reorder', { tags: dummyMap })
-      expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', [])
+      expect(client.put).toHaveBeenCalledWith('/tags/reorder', { tags: dummyMap })
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', [])
     })
     describe('sorting tags', () => {
       it('sorts by ascending alpha', async () => {
-        ctx.state.tags = ctx.state.tags.concat([
-          { name: 'Vue', stars_count: 50 },
-          { name: 'React', stars_count: 35 },
-          { name: 'Angular', stars_count: 10 }
-        ])
+        const state = {
+          tags: [
+            { name: 'Vue', stars_count: 50 },
+            { name: 'React', stars_count: 35 },
+            { name: 'Angular', stars_count: 10 }
+          ]
+        }
 
         const sortedTags = [
           { name: 'Angular', stars_count: 10 },
@@ -182,18 +192,20 @@ describe('Tags Module', () => {
           { name: 'Vue', stars_count: 50 }
         ]
 
-        await sortTags(ctx, 'ALPHA_ASC')
+        await sortTags({ commit, dispatch, state }, 'ALPHA_ASC')
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
-        expect(ctx.dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
+        expect(commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
+        expect(dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
       })
 
       it('sorts by descending alpha', async () => {
-        ctx.state.tags = ctx.state.tags.concat([
-          { name: 'Vue', stars_count: 50 },
-          { name: 'React', stars_count: 35 },
-          { name: 'Angular', stars_count: 10 }
-        ])
+        const state = {
+          tags: [
+            { name: 'Vue', stars_count: 50 },
+            { name: 'React', stars_count: 35 },
+            { name: 'Angular', stars_count: 10 }
+          ]
+        }
 
         const sortedTags = [
           { name: 'Vue', stars_count: 50 },
@@ -201,18 +213,20 @@ describe('Tags Module', () => {
           { name: 'Angular', stars_count: 10 }
         ]
 
-        await sortTags(ctx, 'ALPHA_DESC')
+        await sortTags({ commit, dispatch, state }, 'ALPHA_DESC')
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
-        expect(ctx.dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
+        expect(commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
+        expect(dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
       })
 
       it('sorts by ascending star count', async () => {
-        ctx.state.tags = ctx.state.tags.concat([
-          { name: 'Vue', stars_count: 50 },
-          { name: 'React', stars_count: 35 },
-          { name: 'Angular', stars_count: 40 }
-        ])
+        const state = {
+          tags: [
+            { name: 'Vue', stars_count: 50 },
+            { name: 'React', stars_count: 35 },
+            { name: 'Angular', stars_count: 40 }
+          ]
+        }
 
         const sortedTags = [
           { name: 'React', stars_count: 35 },
@@ -220,17 +234,19 @@ describe('Tags Module', () => {
           { name: 'Vue', stars_count: 50 }
         ]
 
-        await sortTags(ctx, 'STARS_ASC')
+        await sortTags({ commit, dispatch, state }, 'STARS_ASC')
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
-        expect(ctx.dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
+        expect(commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
+        expect(dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
       })
       it('sorts by descending star count', async () => {
-        ctx.state.tags = ctx.state.tags.concat([
-          { name: 'Vue', stars_count: 50 },
-          { name: 'React', stars_count: 35 },
-          { name: 'Angular', stars_count: 40 }
-        ])
+        const state = {
+          tags: [
+            { name: 'Vue', stars_count: 50 },
+            { name: 'React', stars_count: 35 },
+            { name: 'Angular', stars_count: 40 }
+          ]
+        }
 
         const sortedTags = [
           { name: 'Vue', stars_count: 50 },
@@ -238,63 +254,84 @@ describe('Tags Module', () => {
           { name: 'React', stars_count: 35 }
         ]
 
-        await sortTags(ctx, 'STARS_DESC')
+        await sortTags({ commit, dispatch, state }, 'STARS_DESC')
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
-        expect(ctx.dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
+        expect(commit).toHaveBeenCalledWith('SET_TAGS', sortedTags)
+        expect(dispatch).toHaveBeenCalledWith('reorderTags', generateSortMap(sortedTags))
       })
     })
 
     describe('deleting tags', () => {
       it('deletes tags', async () => {
-        await deleteTag(ctx, 2)
+        const rootState = {
+          stars: {
+            stars: []
+          }
+        }
+        const state = {
+          currentTag: { id: 1 }
+        }
+        await deleteTag({ commit, rootState, state }, 2)
 
         expect(client.withAuth).toHaveBeenCalled()
-        expect(client.delete).toHaveBeenCalledWith('/api/tags/2')
-        expect(ctx.commit).toHaveBeenCalledWith('DELETE_TAG', 2)
-        expect(ctx.commit).not.toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+        expect(client.delete).toHaveBeenCalledWith('/tags/2')
+        expect(commit).toHaveBeenCalledWith('DELETE_TAG', 2)
+        expect(commit).not.toHaveBeenCalledWith('SET_CURRENT_TAG', {})
       })
 
       it("resets the current tag if it's the deleted tag", async () => {
-        state.currentTag = { id: 2, name: 'React' }
+        const rootState = {
+          stars: {
+            stars: []
+          }
+        }
+        const state = {
+          currentTag: { id: 2 }
+        }
+        await deleteTag({ commit, rootState, state }, 2)
 
-        await deleteTag(ctx, 2)
-
-        expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+        expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
       })
 
       it('removes any tags from stars matching the deleted tag', async () => {
-        ctx.rootState.stars.stars = [].concat([
-          {
-            node: {
-              name: 'vuejs/vue',
-              databaseId: 1234
-            },
-            tags: [{ id: 1, name: 'VueJS' }]
-          },
-          {
-            node: {
-              name: 'facebook/react',
-              databaseId: 5678
-            },
-            tags: [{ id: 2, name: 'React' }]
-          },
-          {
-            node: {
-              name: 'facebook/prop-types',
-              databaseId: 9101112
-            },
-            tags: [{ id: 2, name: 'React' }]
+        const rootState = {
+          stars: {
+            stars: [
+              {
+                node: {
+                  name: 'vuejs/vue',
+                  databaseId: 1234
+                },
+                tags: [{ id: 1, name: 'VueJS' }]
+              },
+              {
+                node: {
+                  name: 'facebook/react',
+                  databaseId: 5678
+                },
+                tags: [{ id: 2, name: 'React' }]
+              },
+              {
+                node: {
+                  name: 'facebook/prop-types',
+                  databaseId: 9101112
+                },
+                tags: [{ id: 2, name: 'React' }]
+              }
+            ]
           }
-        ])
+        }
+        const state = {
+          currentTag: { id: 2 }
+        }
 
-        await deleteTag(ctx, 2)
+        await deleteTag({ commit, rootState, state }, 2)
 
-        expect(ctx.commit).toHaveBeenNthCalledWith(2, 'SET_STAR_TAGS', {
+        expect(commit).toHaveBeenNthCalledWith(3, 'SET_STAR_TAGS', {
           starId: 5678,
           tags: []
         })
-        expect(ctx.commit).toHaveBeenNthCalledWith(3, 'SET_STAR_TAGS', {
+        expect(commit).toHaveBeenNthCalledWith(4, 'SET_STAR_TAGS', {
           starId: 9101112,
           tags: []
         })
@@ -303,40 +340,62 @@ describe('Tags Module', () => {
 
     describe('renaming tags', () => {
       it('renames tags', async () => {
+        const rootState = {
+          stars: {
+            stars: []
+          }
+        }
+        const state = {
+          currentTag: { id: 2 }
+        }
         const renamedTag = { id: 1, name: 'VueJS' }
         client.patch.mockResolvedValue(renamedTag)
-        await renameTag(ctx, renamedTag)
+        await renameTag({ commit, rootState, state }, renamedTag)
 
         expect(client.withAuth).toHaveBeenCalled()
-        expect(client.patch).toHaveBeenCalledWith(`/api/tags/${renamedTag.id}`, { name: renamedTag.name })
-        expect(ctx.commit).toHaveBeenCalledWith('UPDATE_TAG', { id: renamedTag.id, newTag: renamedTag })
-        expect(ctx.commit).not.toHaveBeenCalledWith('SET_CURRENT_TAG', renamedTag)
+        expect(client.patch).toHaveBeenCalledWith(`/tags/${renamedTag.id}`, { name: renamedTag.name })
+        expect(commit).toHaveBeenCalledWith('UPDATE_TAG', { id: renamedTag.id, newTag: renamedTag })
+        expect(commit).not.toHaveBeenCalledWith('SET_CURRENT_TAG', renamedTag)
       })
 
       it('updates the current tag if it matches the renamed tag', async () => {
+        const rootState = {
+          stars: {
+            stars: []
+          }
+        }
+        const state = {
+          currentTag: { id: 1, name: 'Vue' }
+        }
         const renamedTag = { id: 1, name: 'VueJS' }
-        state.currentTag = { id: 1, name: 'Vue' }
 
-        await renameTag(ctx, renamedTag)
+        await renameTag({ commit, rootState, state }, renamedTag)
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_TAG', renamedTag)
+        expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', renamedTag)
       })
 
       it('updates any tags from stars matching the renamed tag', async () => {
-        const renamedTag = { id: 1, name: 'VueJS' }
-        ctx.rootState.stars.stars = [].concat([
-          {
-            node: {
-              name: 'vuejs/vue',
-              databaseId: 1234
-            },
-            tags: [{ id: 1, name: 'Vue' }, { id: 2, name: 'SPA' }]
+        const rootState = {
+          stars: {
+            stars: [
+              {
+                node: {
+                  name: 'vuejs/vue',
+                  databaseId: 1234
+                },
+                tags: [{ id: 1, name: 'Vue' }, { id: 2, name: 'SPA' }]
+              }
+            ]
           }
-        ])
+        }
+        const state = {
+          currentTag: { id: 4, name: 'Svelte' }
+        }
+        const renamedTag = { id: 1, name: 'VueJS' }
 
-        await renameTag(ctx, renamedTag)
+        await renameTag({ commit, rootState, state }, renamedTag)
 
-        expect(ctx.commit).toHaveBeenNthCalledWith(2, 'SET_STAR_TAGS', {
+        expect(commit).toHaveBeenNthCalledWith(2, 'SET_STAR_TAGS', {
           starId: 1234,
           tags: [{ id: 1, name: 'VueJS' }, { id: 2, name: 'SPA' }]
         })

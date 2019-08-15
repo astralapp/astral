@@ -4,46 +4,38 @@ const getters = galileo.getters
 const { SET_SEARCH_QUERY, SET_TOKENIZED_SEARCH } = galileo.mutations
 const { setSearchQuery } = galileo.actions
 
-let ctx, state
-const defaultState = galileo.state
-
 describe('Galileo Module', () => {
   beforeEach(() => {
     jest.resetModules()
     jest.clearAllMocks()
-    state = JSON.parse(JSON.stringify(defaultState))
-    ctx = {
-      commit: jest.fn(),
-      state,
-      dispatch: jest.fn()
-    }
-  })
-
-  describe('Galileo state', () => {
-    it('returns the search-related state', () => {
-      expect(state).toEqual({
-        searchQuery: '',
-        tokenizedSearchQuery: {
-          query: '',
-          tags: [],
-          strings: []
-        }
-      })
-    })
   })
 
   describe('Galileo getters', () => {
     it('returns the search query', () => {
+      const state = {
+        searchQuery: '#vue:validation'
+      }
       expect(getters.searchQuery(state)).toEqual(state.searchQuery)
     })
 
     it('returns the tokenized search query', () => {
+      const state = {
+        tokenizedSearchQuery: {
+          query: '#vue:validation',
+          tags: ['vue'],
+          strings: ['validation']
+        }
+      }
       expect(getters.tokenizedSearchQuery(state)).toEqual(state.tokenizedSearchQuery)
     })
   })
 
   describe('Galileo mutations', () => {
     it('sets the search query', () => {
+      const state = {
+        searchQuery: ''
+      }
+
       SET_SEARCH_QUERY(state, 'Hello World')
 
       expect(state.searchQuery).toBe('Hello World')
@@ -51,9 +43,13 @@ describe('Galileo Module', () => {
 
     it('sets the tokenized search query', () => {
       const query = {
-        query: '#hello:world',
+        query: '#vue:validation',
         tags: ['hello'],
         strings: ['world']
+      }
+
+      const state = {
+        tokenizedSearchQuery: query
       }
 
       SET_TOKENIZED_SEARCH(state, query)
@@ -63,18 +59,19 @@ describe('Galileo Module', () => {
   })
 
   describe('Galileo actions', () => {
-    it('sets and tokenizes the search query', () => {
-      setSearchQuery(ctx, '#Hello:World:#Test')
+    const commit = jest.fn()
+    it('sets and tokenizes the search query', async () => {
+      await setSearchQuery({ commit }, '#vue:validation')
 
       const expectedTokenizedQuery = {
-        query: '#Hello:World:#Test',
-        tags: ['hello', 'test'],
-        strings: ['world']
+        query: '#vue:validation',
+        tags: ['vue'],
+        strings: ['validation']
       }
 
-      expect(ctx.commit).toHaveBeenCalledWith('SET_SEARCH_QUERY', expectedTokenizedQuery.query)
+      expect(commit).toHaveBeenCalledWith('SET_SEARCH_QUERY', expectedTokenizedQuery.query)
 
-      expect(ctx.commit).toHaveBeenCalledWith('SET_TOKENIZED_SEARCH', expectedTokenizedQuery)
+      expect(commit).toHaveBeenCalledWith('SET_TOKENIZED_SEARCH', expectedTokenizedQuery)
     })
   })
 })
