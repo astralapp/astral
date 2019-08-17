@@ -1,18 +1,6 @@
 import client from '@/store/api/client'
-import axios from 'axios'
+import mockAxios from 'axios'
 import '@/router'
-
-jest.mock('axios', () => {
-  const moxios = jest.fn(() => Promise.resolve({ data: { username: 'syropian' } }))
-  moxios.defaults = {
-    headers: {
-      common: {
-        'X-Request-With': 'XMLHttpRequest'
-      }
-    }
-  }
-  return moxios
-})
 
 jest.mock('@/router', () => {
   return jest.fn()
@@ -35,8 +23,21 @@ describe('Astral HTTP Client', () => {
   })
 
   it('sends a request', async () => {
+    mockAxios.mockImplementationOnce(() =>
+      Promise.resolve({
+        data: {
+          username: 'syropian'
+        }
+      })
+    )
     const res = await client.get('/user')
-    expect(axios).toHaveBeenCalled()
+
+    expect(mockAxios).toHaveBeenCalledWith({
+      method: 'get',
+      url: '/user',
+      data: {},
+      headers: {}
+    })
     expect(res).toEqual({ username: 'syropian' })
   })
 })

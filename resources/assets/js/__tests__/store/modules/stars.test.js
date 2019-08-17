@@ -2,6 +2,7 @@ import stars from '@/store/modules/stars'
 import sampleStars from '../../utils/sample-stars'
 import router from '@/router'
 import client from '@/store/api/client'
+import { cloneDeep } from 'lodash'
 
 jest.mock('@/store/api/client')
 jest.mock('@/router', () => ({
@@ -21,7 +22,6 @@ const {
   SELECT_STARS,
   SET_README,
   SET_STARS_PAGE_INFO,
-  SET_STARS,
   SET_STAR_TAGS,
   SET_TOTAL_STARS,
   SET_USER_STARS,
@@ -46,137 +46,123 @@ const {
   autotagStars
 } = stars.actions
 
-let ctx, state
-const defaultState = stars.state
-
 describe('Stars Module', () => {
   beforeEach(() => {
     jest.resetModules()
     jest.clearAllMocks()
-    state = JSON.parse(JSON.stringify(defaultState))
-    ctx = {
-      commit: jest.fn(),
-      state,
-      getters,
-      dispatch: jest.fn(),
-      rootState: {
-        user: {
-          user: {
-            access_token: 'abcde12345'
-          }
-        },
-        stars: {
-          stars: []
-        },
-        tags: {
-          currentTag: {}
-        },
-        galileo: {
-          tokenizedSearchQuery: {
-            query: '',
-            tags: [],
-            strings: []
-          }
-        }
-      }
-    }
-  })
-
-  describe('Stars state', () => {
-    it('returns the stars-related state', () => {
-      expect(state).toEqual({
-        userStars: [],
-        stars: [],
-        pageInfo: {},
-        totalStars: 0,
-        currentLanguage: '',
-        currentStars: [],
-        readme: '',
-        viewingUntagged: false
-      })
-    })
   })
 
   describe('Stars getters', () => {
     it('returns the stars', () => {
+      const state = {
+        stars: [{ id: 1 }]
+      }
+
       expect(getters.stars(state)).toEqual(state.stars)
     })
 
     it('returns the page info', () => {
+      const state = {
+        pageInfo: { currentPage: 1 }
+      }
+
       expect(getters.pageInfo(state)).toEqual(state.pageInfo)
     })
 
     it('returns total stars', () => {
+      const state = {
+        totalStars: 420
+      }
       expect(getters.totalStars(state)).toEqual(state.totalStars)
     })
 
     it('returns total untagged stars', () => {
-      expect(getters.totalUntaggedStars(state)).toEqual(state.stars.filter(star => !star.tags.length).length)
+      const state = {
+        stars: [{ id: 1, tags: ['a', 'b', 'c'] }, { id: 2, tags: [] }, { id: 3, tags: [] }]
+      }
+      expect(getters.totalUntaggedStars(state)).toEqual(2)
     })
 
     it('returns a list of all star languages with counts', () => {
-      state.stars = [...sampleStars.edges]
+      const state = {
+        stars: cloneDeep(sampleStars.edges)
+      }
       expect(getters.languages(state)).toEqual([{ name: 'JavaScript', count: 3 }, { name: 'PHP', count: 2 }])
     })
 
     it('returns the current language', () => {
+      const state = {
+        currentLanguage: 'JavaScript'
+      }
+
       expect(getters.currentLanguage(state)).toEqual(state.currentLanguage)
     })
 
     it('returns the first current star or an empty object if there is none', () => {
-      state.currentStars = [{ name: 'First' }, { name: 'Second' }, { name: 'Third' }]
-      expect(getters.currentStar(state)).toEqual({ name: 'First' })
+      const state = {
+        currentStars: [{ name: 'First' }, { name: 'Second' }, { name: 'Third' }]
+      }
+      const gettersStub = {
+        currentStars: [{ name: 'First' }, { name: 'Second' }, { name: 'Third' }]
+      }
+      expect(getters.currentStar(state, gettersStub)).toEqual({ name: 'First' })
 
       state.currentStars = []
-      expect(getters.currentStar(state)).toEqual({})
+      gettersStub.currentStars = []
+
+      expect(getters.currentStar(state, gettersStub)).toEqual({})
     })
 
     it('returns the current stars, and omits duplicates', () => {
-      const stars = [sampleStars.edges[0], sampleStars.edges[1]]
-      state.currentStars = stars
-      expect(getters.currentStars(state)).toEqual(stars)
-
-      // Concat a duplicate entry and assert the duplicate is not included in the getter
-      state.currentStars = stars.concat(sampleStars.edges[0])
-      expect(getters.currentStars(state)).toEqual(stars)
+      const state = {
+        currentStars: [{ node: { databaseId: 1234 } }, { node: { databaseId: 1234 } }, { node: { databaseId: 5678 } }]
+      }
+      expect(getters.currentStars(state).length).toBe(2)
     })
 
     it('returns the current star indexes if they exist or defaults to an empty array if no stars are selected', () => {
-      state.stars = sampleStars.edges
-      state.currentStars = [sampleStars.edges[0]]
-      getters.filteredStars = state.stars.map(star => {
+      const stars = cloneDeep(sampleStars.edges)
+      const state = {
+        stars,
+        currentStars: [stars[0], stars[1]]
+      }
+      const filteredStars = state.stars.map(star => {
         return { value: star }
       })
 
-      expect(getters.currentStarIndexes(state, getters)).toEqual([0])
+      expect(getters.currentStarIndexes(state, { filteredStars })).toEqual([0, 1])
 
       state.currentStars = []
+
       expect(getters.currentStarIndexes(state, getters)).toEqual([])
     })
 
     it('returns the readme', () => {
+      const state = { readme: '# Hello World' }
       expect(getters.readme(state)).toEqual(state.readme)
     })
 
     it('returns the viewing untagged bool', () => {
+      const state = { viewingUntagged: false }
       expect(getters.viewingUntagged(state)).toEqual(state.viewingUntagged)
     })
   })
 
   describe('Stars mutations', () => {
     it('sets the stars', () => {
-      const stars = [...sampleStars.edges]
-
-      SET_STARS(state, stars)
+      const stars = cloneDeep(sampleStars.edges)
+      const state = {
+        stars
+      }
 
       expect(state.stars).toEqual(stars)
     })
 
     it('clears the stars', () => {
-      const stars = [...sampleStars.edges]
-      SET_STARS(state, stars)
-
-      expect(state.stars).toEqual(stars)
+      const stars = cloneDeep(sampleStars.edges)
+      const state = {
+        stars
+      }
 
       CLEAR_STARS(state, stars)
 
@@ -184,18 +170,30 @@ describe('Stars Module', () => {
     })
 
     it('sets the total stars count', () => {
+      const state = {
+        totalStars: 0
+      }
+
       SET_TOTAL_STARS(state, 500)
 
       expect(state.totalStars).toBe(500)
     })
 
     it('sets the stars pagination info', () => {
+      const state = {
+        pageInfo: {}
+      }
+
       SET_STARS_PAGE_INFO(state, sampleStars.pageInfo)
 
       expect(state.pageInfo).toEqual(sampleStars.pageInfo)
     })
 
     it('sets the current language', () => {
+      const state = {
+        currentLanguage: ''
+      }
+
       SET_CURRENT_LANGUAGE(state, 'JavaScript')
 
       expect(state.currentLanguage).toBe('JavaScript')
@@ -203,11 +201,13 @@ describe('Stars Module', () => {
 
     it('adds tags to stars', () => {
       const sampleTags = [{ name: 'VueJS' }, { name: 'React' }, { name: 'Angular' }]
-      state.tags = sampleTags
-      state.stars = [...sampleStars.edges].map(s => ({
-        ...s,
-        tags: [{ name: 'Testing' }]
-      }))
+      const state = {
+        tags: sampleTags,
+        stars: cloneDeep(sampleStars.edges).map(star => ({
+          ...star,
+          tags: [{ name: 'Testing' }]
+        }))
+      }
 
       ADD_TAG_TO_STARS(state, {
         stars: [sampleStars.edges[0].node],
@@ -219,7 +219,10 @@ describe('Stars Module', () => {
 
     it('sets multiple tags  on a single star', () => {
       const sampleTags = [{ name: 'VueJS' }, { name: 'React' }, { name: 'Angular' }]
-      state.stars = [...sampleStars.edges.map(s => ({ ...s, tags: [] }))]
+      const stars = cloneDeep(sampleStars).edges.map(s => ({ ...s, tags: [] }))
+      const state = {
+        stars
+      }
 
       SET_STAR_TAGS(state, {
         starId: sampleStars.edges[0].node.databaseId,
@@ -234,6 +237,10 @@ describe('Stars Module', () => {
         { name: sampleStars.edges[0].node.nameWithOwner },
         { name: sampleStars.edges[1].node.nameWithOwner }
       ]
+
+      const state = {
+        userStars: sampleUserStars
+      }
 
       SET_USER_STARS(state, sampleUserStars)
 
@@ -256,8 +263,11 @@ describe('Stars Module', () => {
         }
       ]
 
-      SET_STARS(state, sampleStars.edges)
-      SET_USER_STARS(state, sampleUserStars)
+      const state = {
+        stars: cloneDeep(sampleStars).edges,
+        userStars: sampleUserStars
+      }
+
       MAP_USER_STARS_TO_GITHUB_STARS(state)
 
       expect(state.stars[0].tags).toEqual(sampleUserStars[0].tags)
@@ -267,13 +277,21 @@ describe('Stars Module', () => {
 
     it('sets the current star', () => {
       const star = sampleStars.edges[0]
+
+      const state = {
+        currentStars: [star]
+      }
+
       SET_CURRENT_STAR(state, star)
 
       expect(state.currentStars).toEqual([star])
     })
 
     it('can push or remove a star to or from the selected stars list', () => {
-      SET_STARS(state, sampleStars.edges)
+      const state = {
+        stars: cloneDeep(sampleStars).edges,
+        currentStars: []
+      }
 
       PUSH_TO_CURRENT_STARS(state, sampleStars.edges[0])
 
@@ -289,7 +307,10 @@ describe('Stars Module', () => {
     })
 
     it('can append multiple stars to the selected stars list', () => {
-      SET_STARS(state, sampleStars.edges)
+      const state = {
+        stars: cloneDeep(sampleStars).edges,
+        currentStars: []
+      }
 
       SELECT_STARS(state, [sampleStars.edges[0], sampleStars.edges[1]])
 
@@ -301,12 +322,20 @@ describe('Stars Module', () => {
     })
 
     it('can set the readme', () => {
+      const state = {
+        readme: ''
+      }
+
       SET_README(state, 'Hello World')
 
       expect(state.readme).toBe('Hello World')
     })
 
     it('can set the "viewing untagged" bool state', () => {
+      const state = {
+        viewingUntagged: false
+      }
+
       SET_VIEWING_UNTAGGED(state, true)
 
       expect(state.viewingUntagged).toBe(true)
@@ -317,8 +346,10 @@ describe('Stars Module', () => {
     })
 
     it('can set the notes for a star', () => {
-      SET_STARS(state, sampleStars.edges)
-      SET_CURRENT_STAR(state, sampleStars.edges[0])
+      const state = {
+        stars: cloneDeep(sampleStars).edges,
+        currentStars: [sampleStars.edges[0]]
+      }
 
       SET_STAR_NOTES(state, {
         id: sampleStars.edges[0].node.databaseId,
@@ -330,11 +361,13 @@ describe('Stars Module', () => {
     })
 
     it('can reset all the stars state', () => {
-      SET_README(state, 'Foo')
-      SET_STARS_PAGE_INFO(state, sampleStars.pageInfo)
-      SET_TOTAL_STARS(state, 500)
-      SET_STARS(state, sampleStars.edges)
-      SET_CURRENT_STAR(state, sampleStars.edges[0])
+      const state = {
+        stars: cloneDeep(sampleStars).edges,
+        currentStars: [sampleStars.edges[0]],
+        readme: '',
+        pageInfo: { currentPage: 1 },
+        totalStars: sampleStars.edges.length
+      }
 
       RESET_STARS(state)
 
@@ -347,6 +380,7 @@ describe('Stars Module', () => {
   })
 
   describe('Stars actions', () => {
+    const commit = jest.fn()
     describe("Fetching the user's GitHub stars", () => {
       it('fetches their stars', async () => {
         let sampleRes = sampleStars.edges.map(edge => {
@@ -356,51 +390,52 @@ describe('Stars Module', () => {
         })
         client.get.mockResolvedValue(sampleStars)
 
-        await fetchGitHubStars(ctx, { cursor: null, refresh: false })
+        await fetchGitHubStars({ commit }, { cursor: null, refresh: false })
 
         expect(client.withAuth).toHaveBeenCalled()
-        expect(client.get).toHaveBeenCalledWith('/api/stars/github?')
-        expect(ctx.commit).not.toHaveBeenCalledWith('RESET_STARS')
-        expect(ctx.commit).toHaveBeenCalledWith('SET_STARS', sampleRes)
-        expect(ctx.commit).toHaveBeenCalledWith('SET_STARS_PAGE_INFO', sampleStars.pageInfo)
-        expect(ctx.commit).toHaveBeenCalledWith('SET_TOTAL_STARS', sampleStars.totalCount)
-        expect(ctx.commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
+        expect(client.get).toHaveBeenCalledWith('/stars/github?')
+        expect(commit).not.toHaveBeenCalledWith('RESET_STARS')
+        expect(commit).toHaveBeenCalledWith('SET_STARS', sampleRes)
+        expect(commit).toHaveBeenCalledWith('SET_STARS_PAGE_INFO', sampleStars.pageInfo)
+        expect(commit).toHaveBeenCalledWith('SET_TOTAL_STARS', sampleStars.totalCount)
+        expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
       })
 
       it('resets the star-related state if refresh is true', async () => {
-        await fetchGitHubStars(ctx, { cursor: null, refresh: true })
+        await fetchGitHubStars({ commit }, { cursor: null, refresh: true })
 
-        expect(ctx.commit).toHaveBeenCalledWith('RESET_STARS')
-        expect(client.get).toHaveBeenCalledWith('/api/stars/github?refresh=true')
+        expect(commit).toHaveBeenCalledWith('RESET_STARS')
+        expect(client.get).toHaveBeenCalledWith('/stars/github?refresh=true')
       })
 
       it('does not set the total count state if a cursor is passed', async () => {
-        await fetchGitHubStars(ctx, { cursor: null, refresh: false })
+        await fetchGitHubStars({ commit }, { cursor: null, refresh: false })
 
-        expect(ctx.commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
+        expect(commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
       })
 
       it('can pass a cursor to the request query string', async () => {
-        await fetchGitHubStars(ctx, { cursor: 'abc123', refresh: false })
+        await fetchGitHubStars({ commit }, { cursor: 'abc123', refresh: false })
 
-        expect(ctx.commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
-        expect(client.get).toHaveBeenCalledWith('/api/stars/github?cursor=abc123')
+        expect(commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
+        expect(client.get).toHaveBeenCalledWith('/stars/github?cursor=abc123')
       })
     })
 
     it('fetches user stars', async () => {
       client.get.mockResolvedValue(sampleStars.edges)
 
-      await fetchUserStars(ctx)
+      await fetchUserStars({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.get).toHaveBeenCalledWith('/api/stars')
-      expect(ctx.commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
+      expect(client.get).toHaveBeenCalledWith('/stars')
+      expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
     })
 
     it('sets the current language', async () => {
-      await setCurrentLanguage(ctx, 'JavaScript')
-      expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_LANGUAGE', 'JavaScript')
+      await setCurrentLanguage({ commit }, 'JavaScript')
+
+      expect(commit).toHaveBeenCalledWith('SET_CURRENT_LANGUAGE', 'JavaScript')
       expect(router.replace).toHaveBeenCalledWith({
         query: { language: 'JavaScript' }
       })
@@ -414,75 +449,82 @@ describe('Stars Module', () => {
       }
       client.post.mockResolvedValue(sampleRes)
 
-      await addTagToStars(ctx, reqArgs)
+      await addTagToStars({ commit }, reqArgs)
 
-      expect(ctx.commit).toHaveBeenCalledWith('ADD_TAG_TO_STARS', reqArgs)
+      expect(commit).toHaveBeenCalledWith('ADD_TAG_TO_STARS', reqArgs)
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.post).toHaveBeenCalledWith('/api/star/tags', {
+      expect(client.post).toHaveBeenCalledWith('/star/tags', {
         starIds: [sampleStars.edges[0].node.databaseId],
         tag: sampleRes.tags[0]
       })
-      expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
     })
 
     it('sets the current star', async () => {
       const currentStar = sampleStars.edges[0]
 
-      await setCurrentStar(ctx, currentStar)
+      await setCurrentStar({ commit }, currentStar)
 
-      expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_STAR', currentStar)
+      expect(commit).toHaveBeenCalledWith('SET_CURRENT_STAR', currentStar)
     })
 
     it('can set the currently selected stars', async () => {
       const stars = [sampleStars.edges[0], sampleStars.edges[1]]
 
-      await selectStars(ctx, stars)
+      await selectStars({ commit }, stars)
 
-      expect(ctx.commit).toHaveBeenCalledWith('SELECT_STARS', stars)
+      expect(commit).toHaveBeenCalledWith('SELECT_STARS', stars)
     })
 
     it('can push to the selected stars list', async () => {
       const star = sampleStars.edges[0]
 
-      await pushToCurrentStars(ctx, star)
+      await pushToCurrentStars({ commit }, star)
 
-      expect(ctx.commit).toHaveBeenCalledWith('PUSH_TO_CURRENT_STARS', star)
+      expect(commit).toHaveBeenCalledWith('PUSH_TO_CURRENT_STARS', star)
     })
 
     describe('fetching repo readmes', () => {
+      const rootState = {
+        user: {
+          user: {
+            access_token: 'abc123'
+          }
+        }
+      }
       it('fetches a repo readme', async () => {
         client.get.mockResolvedValue('Hello World')
 
-        await fetchReadme(ctx, 'astralapp/astral')
+        await fetchReadme({ commit, rootState }, 'astralapp/astral')
 
         expect(client.withoutAuth).toHaveBeenCalled()
         expect(client.get).toHaveBeenCalledWith(
-          `https://api.github.com/repos/astralapp/astral/readme?access_token=${ctx.rootState.user.user.access_token}`,
+          `https://api.github.com/repos/astralapp/astral/readme?access_token=${rootState.user.user.access_token}`,
           {},
           { Accept: 'application/vnd.github.v3.html' }
         )
-        expect(ctx.commit).toHaveBeenCalledWith('SET_README', 'Hello World')
+        expect(commit).toHaveBeenCalledWith('SET_README', 'Hello World')
       })
 
       it('sets the readme to an empty string if the request fails', async () => {
         client.get.mockRejectedValue(null)
 
-        await fetchReadme(ctx, 'astralapp/astral')
+        await fetchReadme({ commit, rootState }, 'astralapp/astral')
 
-        expect(ctx.commit).toHaveBeenCalledWith('SET_README', '')
+        expect(commit).toHaveBeenCalledWith('SET_README', '')
       })
     })
 
     it('sets the viewing state', async () => {
-      await setViewingUntagged(ctx, true)
+      await setViewingUntagged({ commit }, true)
 
-      expect(ctx.commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
-      expect(ctx.commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', true)
+      expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+      expect(commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', true)
 
-      await setViewingUntagged(ctx, false)
+      await setViewingUntagged({ commit }, false)
 
-      expect(ctx.commit).not.toHaveBeenLastCalledWith('SET_CURRENT_TAG', {})
-      expect(ctx.commit).toHaveBeenLastCalledWith('SET_VIEWING_UNTAGGED', false)
+      expect(commit).not.toHaveBeenLastCalledWith('SET_CURRENT_TAG', {})
+      expect(commit).toHaveBeenLastCalledWith('SET_VIEWING_UNTAGGED', false)
     })
 
     it('syncs tags to a star', async () => {
@@ -497,17 +539,18 @@ describe('Stars Module', () => {
         id: sampleStars.edges[0].node.databaseId,
         tags: [sampleRes.tags[0]]
       }
+
       client.put.mockResolvedValue(sampleRes)
 
-      await syncStarTags(ctx, { id: sampleReq.id, tags: sampleReq.tags })
+      await syncStarTags({ commit }, { id: sampleReq.id, tags: sampleReq.tags })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.put).toHaveBeenCalledWith('/api/star/tags', {
+      expect(client.put).toHaveBeenCalledWith('/star/tags', {
         id: sampleReq.id,
         tags: sampleReq.tags
       })
-      expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
-      expect(ctx.commit).toHaveBeenCalledWith('SET_STAR_TAGS', {
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
+      expect(commit).toHaveBeenCalledWith('SET_STAR_TAGS', {
         starId: sampleReq.id,
         tags: sampleRes.star.tags
       })
@@ -517,22 +560,22 @@ describe('Stars Module', () => {
       const id = sampleStars.edges[0].node.databaseId
       const sampleReq = { id, notes: 'Hello World' }
 
-      await editStarNotes(ctx, sampleReq)
+      await editStarNotes({ commit }, sampleReq)
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.post).toHaveBeenCalledWith('/api/star/notes', sampleReq)
-      expect(ctx.commit).toHaveBeenCalledWith('SET_STAR_NOTES', sampleReq)
+      expect(client.post).toHaveBeenCalledWith('/star/notes', sampleReq)
+      expect(commit).toHaveBeenCalledWith('SET_STAR_NOTES', sampleReq)
     })
 
     it('cleans up stars', async () => {
       client.delete.mockResolvedValue(sampleStars.edges)
 
-      await cleanupStars(ctx)
+      await cleanupStars({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.delete).toHaveBeenCalledWith('/api/stars/cleanup')
-      expect(ctx.commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
-      expect(ctx.commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
+      expect(client.delete).toHaveBeenCalledWith('/stars/cleanup')
+      expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
+      expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
     })
 
     it('autotags stars', async () => {
@@ -540,15 +583,16 @@ describe('Stars Module', () => {
         stars: sampleStars.edges,
         tags: [{ name: 'VueJS' }, { name: 'React' }]
       }
+
       client.put.mockResolvedValue(sampleRes)
 
-      await autotagStars(ctx)
+      await autotagStars({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()
-      expect(client.put).toHaveBeenCalledWith('/api/stars/autotag')
-      expect(ctx.commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
-      expect(ctx.commit).toHaveBeenCalledWith('SET_USER_STARS', sampleRes.stars)
-      expect(ctx.commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
+      expect(client.put).toHaveBeenCalledWith('/stars/autotag')
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
+      expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleRes.stars)
+      expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
     })
   })
 })

@@ -42,9 +42,6 @@ export default {
       }
     }
   },
-  created() {
-    this.debounceSaveNotes = debounce(this.saveNotes, 1000)
-  },
   mounted() {
     this.editor = new EasyMDE({
       element: this.$refs.editor,
@@ -140,7 +137,10 @@ export default {
   methods: {
     saveNotes() {
       this.$emit('save', this.currentNotes)
-    }
+    },
+    debounceSaveNotes: debounce(() => {
+      this.saveNotes()
+    }, 1000)
   }
 }
 </script>
