@@ -1,4 +1,4 @@
-import { every, some, reject } from 'lodash'
+import { every, some, reject, get } from 'lodash'
 
 const logicalTypeMap = {
   any: some,
@@ -8,13 +8,40 @@ const logicalTypeMap = {
 
 const operators = {
   contains(source, substring) {
-    return ~source.toLowerCase().indexOf(substring.toLowerCase())
+    return source
+      .trim()
+      .toLowerCase()
+      .includes(substring.trim().toLowerCase())
   },
   is(source, target) {
-    return source.toLowerCase() === target.toLowerCase()
+    return source.trim().toLowerCase() === target.trim().toLowerCase()
   },
   isnt(source, target) {
-    return source.toLowerCase() !== target.toLowerCase()
+    return source.trim().toLowerCase() !== target.trim().toLowerCase()
+  },
+  greaterThan(source, target) {
+    return parseInt(source, 10) > parseInt(target, 10)
+  },
+  greaterThanOrEqualTo(source, target) {
+    return parseInt(source, 10) >= parseInt(target, 10)
+  },
+  equals(source, target) {
+    return parseInt(source, 10) === parseInt(target, 10)
+  },
+  lessThan(source, target) {
+    return parseInt(source, 10) < parseInt(target, 10)
+  },
+  lessThanOrEqualTo(source, target) {
+    return parseInt(source, 10) <= parseInt(target, 10)
+  },
+  hasAllTags(source, target) {
+    return source.map(t => t.name).every(val => target.map(t => t.name).includes(val))
+  },
+  hasAnyTags(source, target) {
+    return source.map(t => t.name).some(val => target.map(t => t.name).includes(val))
+  },
+  hasNoneTags(source, target) {
+    return !source.map(t => t.name).some(val => target.map(t => t.name).includes(val))
   }
 }
 
@@ -22,8 +49,8 @@ export default function(stars, predicate) {
   return stars.filter(star => {
     return predicate.groups.every(group => {
       return logicalTypeMap[group.logicalType](group.predicates, p => {
-        if (star.node[p.selectedTarget]) {
-          return operators[p.operator](star.node[p.selectedTarget], p.argument)
+        if (get(star, p.selectedTarget)) {
+          return operators[p.operator](get(star, p.selectedTarget), p.argument)
         } else {
           return false
         }

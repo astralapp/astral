@@ -33,7 +33,7 @@ class TagsController extends Controller
         $tag->name = $request->input('name');
         $tag->save();
 
-        return auth()->user()->tags()->withStarCount()->find($tag->id);
+        return auth()->user()->tags()->withStarCount()->findOrFail($tag->id);
     }
 
     public function destroy(Request $request, Tag $tag)

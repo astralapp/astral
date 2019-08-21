@@ -20,4 +20,21 @@ class PredicatesController extends Controller
 
         return auth()->user()->predicates()->create($request->only('name', 'body'));
     }
+
+    public function update(Request $request)
+    {
+        $predicate = auth()->user()->predicates()->findOrFail($request->input('id'));
+
+        $this->validate($request, [
+            'name' => 'bail|required|unique:predicates,name,'.$predicate->id.',id,user_id,'.auth()->id(),
+            'body' => 'required',
+        ]);
+
+        $predicate->update([
+            'name' => $request->input('name'),
+            'body' => $request->input('body')
+        ]);
+
+        return $predicate;
+    }
 }

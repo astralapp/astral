@@ -1,5 +1,5 @@
 <template>
-  <VueModal name="predicate-modal" height="auto" :width="680">
+  <VueModal name="predicate-modal" height="auto" :width="768">
     <div class="flex items-center justify-between px-4 py-3 bg-grey-lightest leading-none">
       <h3>Add a new filter</h3>
       <button
@@ -14,15 +14,17 @@
         <input v-model="predicate.name" type="text" class="text-input" placeholder="Custom filter name" />
       </div>
       <PredicateEditor v-model="predicate.body"></PredicateEditor>
-      <div class="mt-8">
-        <button class="btn btn-brand" @click="saveCurrentPredicate(predicate)">Save</button>
+      <div class="mt-8 flex justify-end">
+        <button class="btn btn-brand" @click="doSavePredicate()">Save</button>
       </div>
     </div>
   </VueModal>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import PredicateEditor from '@/components/dashboard/predicate-editor/Index'
+import { cloneDeep } from 'lodash'
+import { defaultPredicate } from '@/utils/predicates'
 export default {
   components: {
     PredicateEditor
@@ -35,27 +37,35 @@ export default {
           groups: [
             {
               logicalType: 'any',
-              predicates: [
-                {
-                  targets: [
-                    { label: 'Repository Name', key: 'nameWithOwner' },
-                    { label: 'Repository Description', key: 'description' }
-                  ],
-                  selectedTarget: 'nameWithOwner',
-                  operator: 'is',
-                  argument: ''
-                }
-              ]
+              predicates: [cloneDeep(defaultPredicate)]
             }
           ]
         })
       }
     }
   },
+  computed: {
+    ...mapGetters(['editingPredicate']),
+    isEditingPredicate() {
+      return !!Object.keys(this.editingPredicate).length
+    }
+  },
+  watch: {
+    editingPredicate() {
+      if (this.isEditingPredicate) {
+        this.predicate = cloneDeep(this.editingPredicate)
+      }
+    }
+  },
   methods: {
-    ...mapActions(['saveCurrentPredicate']),
+    ...mapActions(['savePredicate', 'setEditingPredicate']),
+    async doSavePredicate() {
+      await this.savePredicate(this.predicate)
+      this.closeModal()
+    },
     closeModal() {
       this.$modal.hide('predicate-modal')
+      this.setEditingPredicate({})
     }
   }
 }

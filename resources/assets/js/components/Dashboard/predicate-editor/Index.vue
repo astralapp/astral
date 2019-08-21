@@ -6,26 +6,49 @@
         <option value="all">All</option>
         <option value="none">None</option>
       </SelectDropdown>
-      <div v-for="(predicate, j) in group.predicates" :key="`group-${i}-predicate-${j}`" class="flex items-center mt-4">
-        <SelectDropdown v-model="predicate.selectedTarget" style="width:250px;">
+      <div v-for="(predicate, j) in group.predicates" :key="`group-${i}-predicate-${j}`" class="flex items-start mt-4">
+        <SelectDropdown
+          v-model="predicate.selectedTarget"
+          style="width:150px;"
+          @change="setDefaultArgumentValue(predicate)"
+        >
           <option
-            v-for="(target, k) in predicate.targets"
+            v-for="(target, k) in predicateTargets"
             :key="`group-${i}-predicate-${j}-target-${k}`"
             :value="target.key"
             >{{ target.label }}</option
           >
         </SelectDropdown>
-        <SelectDropdown v-model="predicate.operator" class="ml-4" style="width:145px;">
-          <option value="is">is</option>
-          <option value="contains">contains</option>
-          <option value="isnt">isn't</option>
+        <SelectDropdown
+          :value="currentOperator(predicate)"
+          class="ml-4"
+          style="width:125px;"
+          @change="predicate.operator = $event"
+        >
+          <option
+            v-for="operator in selectedPredicateTarget(predicate).operators"
+            :key="operator.key"
+            :value="operator.key"
+            >{{ operator.label }}</option
+          >
         </SelectDropdown>
-        <input v-model="predicate.argument" type="text" placeholder="" class="text-input text-sm px-2 w-64 ml-4" />
+        <component
+          :is="`${selectedPredicateTarget(predicate).type}Filter`"
+          v-model="predicate.argument"
+          :data-foo="predicate.argument"
+        />
         <button
-          class="ml-4 inline-flex justify-center items-center flex-no-shrink rounded-full w-8 h-8 border-2 border-grey hover:border-grey-dark shadow text-grey-darker"
+          class="relative nudge-t ml-4 inline-flex justify-center items-center flex-no-shrink rounded-full w-8 h-8 border-2 border-grey hover:border-grey-dark shadow text-grey-darker"
           @click="appendRow(i)"
         >
           <Icon type="PlusIcon" height="16" width="16" class="stroke-current fill-none" />
+        </button>
+        <button
+          class="relative nudge-t ml-2 inline-flex justify-center items-center flex-no-shrink rounded-full w-8 h-8 border-2 border-grey hover:border-grey-dark shadow text-grey-darker"
+          :disabled="group.predicates.length === 1"
+          @click="removeRow(i, j)"
+        >
+          <Icon type="MinusIcon" height="16" width="16" class="stroke-current fill-none" />
         </button>
       </div>
     </div>
@@ -34,9 +57,17 @@
 <script>
 import Icon from '@/components/Icon'
 import SelectDropdown from '@/components/SelectDropdown'
+import NumberFilter from '@/components/dashboard/predicate-editor/NumberFilter'
+import StringFilter from '@/components/dashboard/predicate-editor/StringFilter'
+import TagsFilter from '@/components/dashboard/predicate-editor/TagsFilter'
+import { cloneDeep } from 'lodash'
+import { defaultPredicate, predicateTargets } from '@/utils/predicates'
 export default {
   components: {
     Icon,
+    NumberFilter,
+    StringFilter,
+    TagsFilter,
     SelectDropdown
   },
   props: {
@@ -44,7 +75,8 @@ export default {
   },
   data() {
     return {
-      filter: {}
+      filter: {},
+      predicateTargets
     }
   },
   watch: {
@@ -56,20 +88,36 @@ export default {
       immediate: true
     }
   },
-  mounted() {
+  created() {
     this.filter = JSON.parse(this.value)
+    console.log(this.filter)
   },
   methods: {
     appendRow(groupIndex) {
-      this.filter.groups[groupIndex].predicates.push({
-        targets: [
-          { label: 'Repository Name', key: 'nameWithOwner' },
-          { label: 'Repository Description', key: 'description' }
-        ],
-        selectedTarget: 'nameWithOwner',
-        operator: 'is',
-        argument: ''
-      })
+      this.filter.groups[groupIndex].predicates.push(cloneDeep(defaultPredicate))
+    },
+    removeRow(groupIndex, predicateIndex) {
+      this.filter.groups[groupIndex].predicates.splice(predicateIndex, 1)
+    },
+    selectedPredicateTarget(predicate) {
+      return this.predicateTargets.find(target => target.key === predicate.selectedTarget)
+    },
+    currentOperator(predicate) {
+      if (
+        this.selectedPredicateTarget(predicate)
+          .operators.map(o => o.key)
+          .includes(predicate.operator)
+      ) {
+        return predicate.operator
+      } else {
+        const operator = this.selectedPredicateTarget(predicate).operators[0].key
+        predicate.operator = operator
+        return operator
+      }
+    },
+    setDefaultArgumentValue(predicate) {
+      console.log('Buttts')
+      predicate.argument = this.selectedPredicateTarget(predicate).defaultValue
     }
   }
 }

@@ -39,4 +39,5 @@ Route::group(['middleware' => 'jwt'], function () {
 
     Route::get('predicates', 'PredicatesController@index');
     Route::post('predicates', 'PredicatesController@store');
+    Route::patch('predicates', 'PredicatesController@update');
 });

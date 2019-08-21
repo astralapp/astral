@@ -69,7 +69,9 @@
             :class="{ selected: currentPredicate.id === predicate.id }"
             class="predicate rounded"
             @click.native="setCurrentPredicate(predicate)"
-          />
+          >
+            <button class="ml-auto" @click.stop="editPredicate(predicate)">...</button>
+          </SidebarItem>
         </ul>
       </template>
     </SidebarGroup>
@@ -192,7 +194,8 @@ export default {
       'fetchGitHubStars',
       'cleanupStars',
       'toggleCollapsedState',
-      'setCurrentPredicate'
+      'setCurrentPredicate',
+      'setEditingPredicate'
     ]),
     async refreshStars() {
       this.refreshingStars = true
@@ -262,6 +265,11 @@ export default {
           this.$bus.$emit('NOTIFICATION', 'Whoops, we could not tag those stars. Please try again.', 'error')
         }
       }
+    },
+    async editPredicate(predicate) {
+      this.setEditingPredicate(predicate)
+      await this.$nextTick()
+      this.$modal.show('predicate-modal')
     }
   }
 }
