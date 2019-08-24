@@ -10,8 +10,9 @@
       </button>
     </div>
     <div class="px-4 py-6 bg-white border-b border-t border-grey-light flex flex-col">
-      <div>
+      <div class="flex items-center">
         <input v-model="predicate.name" type="text" class="text-input" placeholder="Custom filter name" />
+        <p v-show="!!error" class="text-red ml-4">{{ error }}</p>
       </div>
       <PredicateEditor v-model="predicate.body"></PredicateEditor>
       <div class="mt-8 flex justify-end">
@@ -41,7 +42,8 @@ export default {
             }
           ]
         })
-      }
+      },
+      error: ''
     }
   },
   computed: {
@@ -67,11 +69,20 @@ export default {
   methods: {
     ...mapActions(['savePredicate', 'setEditingPredicate']),
     async doSavePredicate() {
-      await this.savePredicate(this.predicate)
-      this.closeModal()
+      try {
+        await this.savePredicate(this.predicate)
+        this.error = ''
+        if (!this.isEditingPredicate) {
+          this.$bus.$emit('NOTIFICATION', `${this.predicate.name} filter added!`)
+        }
+        this.closeModal()
+      } catch (e) {
+        this.error = e.errors[Object.keys(e.errors)[0]][0]
+      }
     },
     resetPredicateState() {
       this.setEditingPredicate({})
+      this.error = ''
       this.predicate = {
         name: '',
         body: JSON.stringify({
