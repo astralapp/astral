@@ -8610,6 +8610,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
   integrity sha512-KmvZVtmM26BQOMK1rwUZsrqxEGeKiYSZGA7SNWE6uExx8UX/cj9hq2MRV/wWC3Cq6AoeDGk57rL9YMFRel/q+g==
 
+vue-input-autowidth@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vue-input-autowidth/-/vue-input-autowidth-1.0.5.tgz#896bedc43828ee333d9152ed2ee8322ce75d99f7"
+  integrity sha512-jedOOR9dK3WBY/ApZ72JzY3xckP8ggx9dDlSoyogRtoKU2wfAbabTA/82RNsuwuu2vheZ6LEvTD5shh0+qduVg==
+
 vue-jest@4.0.0-beta.2:
   version "4.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/vue-jest/-/vue-jest-4.0.0-beta.2.tgz#f2120ea9d24224aad3a100c2010b0760d47ee6fe"

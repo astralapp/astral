@@ -42,6 +42,12 @@ const operators = {
   },
   hasNoneTags(source, target) {
     return !source.map(t => t.name).some(val => target.map(t => t.name).includes(val))
+  },
+  hasAnyLanguage(source, target) {
+    return target.map(l => l.name).includes(source)
+  },
+  hasNoneLanguage(source, target) {
+    return !target.map(l => l.name).includes(source)
   }
 }
 

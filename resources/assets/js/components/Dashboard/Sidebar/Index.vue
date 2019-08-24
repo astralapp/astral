@@ -67,10 +67,15 @@
             :title="predicate.name"
             icon="SearchIcon"
             :class="{ selected: currentPredicate.id === predicate.id }"
-            class="predicate rounded"
+            class="predicate rounded group"
             @click.native="setCurrentPredicate(predicate)"
           >
-            <button class="ml-auto" @click.stop="editPredicate(predicate)">...</button>
+            <button
+              class="transition-color-opacity ml-auto text-grey focus:outline-none opacity-0 hover:text-white group-hover:opacity-100 hover:text-white"
+              @click.stop="editPredicate(predicate)"
+            >
+              <Icon type="SettingsIcon" height="14" class="stroke-current fill-none relative" />
+            </button>
           </SidebarItem>
         </ul>
       </template>

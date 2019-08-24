@@ -63,6 +63,10 @@
   transition: opacity 150ms ease;
 }
 
+.transition-color-opacity {
+  transition: color 150ms ease, opacity 150ms ease;
+}
+
 [disabled] {
   opacity: 0.5;
   pointer-events: none;

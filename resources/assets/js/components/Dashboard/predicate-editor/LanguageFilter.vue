@@ -2,13 +2,13 @@
   <div class="text-input text-sm px-2 w-64 ml-4 pb-0 flex-grow">
     <ul class="list-reset flex flex-wrap items-start">
       <li
-        v-for="tag in tags"
-        :key="tag.name"
+        v-for="language in languages"
+        :key="language.name"
         class="text-xs text-white bg-indigo hover:bg-indigo-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
       >
-        <span>{{ tag.name }}</span>
+        <span>{{ language.name }}</span>
         <span>
-          <button class="remove-tag ml-2 text-white text-sm" @click.stop="removeTag(tag)">
+          <button class="ml-2 text-white text-sm" @click.stop="removeLanguage(language)">
             &times;
           </button>
         </span>
@@ -49,55 +49,55 @@ export default {
   data() {
     return {
       awesomplete: null,
-      tags: this.value,
+      languages: this.value,
       search: '',
-      placeholder: 'Find a tag',
+      placeholder: 'Find a language',
       isEditing: false
     }
   },
   computed: {
     ...mapGetters({
-      allTags: 'tags'
+      allLanguages: 'languages'
     }),
     suggestions() {
-      return differenceBy(this.allTags, this.tags, 'name').map(tag => tag.name)
+      return differenceBy(this.allLanguages, this.languages, 'name').map(language => language.name)
     },
-    tagNames() {
-      return this.tags.map(tag => tag.name)
+    languageNames() {
+      return this.languages.map(language => language.name)
     }
   },
   watch: {
-    tags() {
+    languages() {
       if (this.awesomplete) {
         this.awesomplete.list = this.suggestions
       }
-      this.$emit('change', this.tags)
+      this.$emit('change', this.languages)
     }
   },
   mounted() {
     this.initAwesomplete()
   },
   methods: {
-    addTag(name) {
+    addLanguage(name) {
       if (name.trim() !== '') {
-        this.tags.push({
+        this.languages.push({
           name: name.trim().replace(',', '')
         })
         this.search = ''
       }
       this.$refs.search.focus()
     },
-    removeTagAtIndex(index) {
-      this.$delete(this.tags, index)
+    removeLanguageAtIndex(index) {
+      this.$delete(this.languages, index)
     },
-    removeTag(tag) {
+    removeLanguage(language) {
       this.$refs.search.focus()
-      const index = this.tags.findIndex(t => t.name === tag.name)
-      this.removeTagAtIndex(index)
+      const index = this.languages.findIndex(l => l.name === language.name)
+      this.removeLanguageAtIndex(index)
     },
     deletePressed() {
-      if (this.search === '' && this.tags.length) {
-        this.removeTagAtIndex(this.tags.length - 1)
+      if (this.search === '' && this.languages.length) {
+        this.removeLanguageAtIndex(this.languages.length - 1)
       }
     },
     initAwesomplete() {
@@ -115,14 +115,14 @@ export default {
       e.stopPropagation()
       if (e.target === this.$refs.search) {
         await this.$nextTick()
-        this.addTag(e.text.value.trim())
+        this.addLanguage(e.text.value.trim())
       }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .awesomplete [hidden] {
   display: none;
 }

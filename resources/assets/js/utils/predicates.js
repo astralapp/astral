@@ -4,6 +4,11 @@ export const defaultPredicate = {
   argument: ''
 }
 
+export const defaultGroup = {
+  logicalType: 'any',
+  predicates: [{ ...defaultPredicate }]
+}
+
 export const predicateTargets = [
   {
     label: 'Name',
@@ -45,9 +50,9 @@ export const predicateTargets = [
   },
   {
     label: 'Language',
-    key: 'language',
+    key: 'node.primaryLanguage.name',
     type: 'Language',
-    operators: [{ key: 'is', label: 'is' }, { key: 'isnt', label: "isn't" }],
-    defaultValue: ''
+    operators: [{ key: 'hasAnyLanguage', label: 'has any' }, { key: 'hasNoneLanguage', label: 'has none' }],
+    defaultValue: []
   }
 ]

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(group, i) in filter.groups" :key="`group-${i}`">
+    <div v-for="(group, i) in filter.groups" :key="`group-${i}`" class="py-8 border-b border-grey-light">
       <SelectDropdown v-model="group.logicalType" class="w-auto">
         <option value="any">Any</option>
         <option value="all">All</option>
@@ -51,7 +51,9 @@
           <Icon type="MinusIcon" height="16" width="16" class="stroke-current fill-none" />
         </button>
       </div>
+      <button v-if="filter.groups.length > 1" class="btn btn-grey mt-8" @click="removeGroup(i)">Remove Group</button>
     </div>
+    <button class="btn btn-grey mt-8" @click="appendGroup">Add Group</button>
   </div>
 </template>
 <script>
@@ -60,14 +62,16 @@ import SelectDropdown from '@/components/SelectDropdown'
 import NumberFilter from '@/components/dashboard/predicate-editor/NumberFilter'
 import StringFilter from '@/components/dashboard/predicate-editor/StringFilter'
 import TagsFilter from '@/components/dashboard/predicate-editor/TagsFilter'
+import LanguageFilter from '@/components/dashboard/predicate-editor/LanguageFilter'
 import { cloneDeep } from 'lodash'
-import { defaultPredicate, predicateTargets } from '@/utils/predicates'
+import { defaultPredicate, defaultGroup, predicateTargets } from '@/utils/predicates'
 export default {
   components: {
     Icon,
     NumberFilter,
     StringFilter,
     TagsFilter,
+    LanguageFilter,
     SelectDropdown
   },
   props: {
@@ -90,7 +94,6 @@ export default {
   },
   created() {
     this.filter = JSON.parse(this.value)
-    console.log(this.filter)
   },
   methods: {
     appendRow(groupIndex) {
@@ -98,6 +101,12 @@ export default {
     },
     removeRow(groupIndex, predicateIndex) {
       this.filter.groups[groupIndex].predicates.splice(predicateIndex, 1)
+    },
+    appendGroup() {
+      this.filter.groups.push(defaultGroup)
+    },
+    removeGroup(index) {
+      this.filter.groups.splice(index, 1)
     },
     selectedPredicateTarget(predicate) {
       return this.predicateTargets.find(target => target.key === predicate.selectedTarget)
@@ -116,7 +125,6 @@ export default {
       }
     },
     setDefaultArgumentValue(predicate) {
-      console.log('Buttts')
       predicate.argument = this.selectedPredicateTarget(predicate).defaultValue
     }
   }
