@@ -32,7 +32,7 @@ class PredicatesController extends Controller
 
         $predicate->update([
             'name' => $request->input('name'),
-            'body' => $request->input('body')
+            'body' => $request->input('body'),
         ]);
 
         return $predicate;
