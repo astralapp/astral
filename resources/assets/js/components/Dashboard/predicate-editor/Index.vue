@@ -6,7 +6,7 @@
         <option value="all">All</option>
         <option value="none">None</option>
       </SelectDropdown>
-      <div v-for="(predicate, j) in group.predicates" :key="`group-${i}-predicate-${j}`" class="flex items-start mt-4">
+      <div v-for="(predicate, j) in group.predicates" :key="`group-${i}-predicate-${j}`" class="flex items-center mt-4">
         <SelectDropdown
           v-model="predicate.selectedTarget"
           style="width:150px;"
@@ -22,7 +22,7 @@
         <SelectDropdown
           :value="currentOperator(predicate)"
           class="ml-4"
-          style="width:125px;"
+          style="width:165px;"
           @change="predicate.operator = $event"
         >
           <option

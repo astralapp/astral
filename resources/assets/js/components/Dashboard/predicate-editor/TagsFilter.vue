@@ -1,6 +1,6 @@
 <template>
-  <div class="text-input text-sm px-2 w-64 ml-4 pb-0 flex-grow">
-    <ul class="list-reset flex flex-wrap items-start">
+  <div class="text-input text-sm px-2 w-64 ml-4 pb-0 flex-grow cursor-text">
+    <ul class="list-reset flex flex-wrap items-start" @click.stop="focusInput">
       <li
         v-for="tag in tags"
         :key="tag.name"
@@ -13,13 +13,13 @@
           </button>
         </span>
       </li>
-      <li class="mb-2">
+      <li :class="{ 'mb-2': tags.length === 0 }">
         <input
           ref="search"
           v-model="search"
           v-autowidth="{ maxWidth: '960px', minWidth: '20px', comfortZone: 0 }"
           type="text"
-          class="text-grey-darkest text-sm h-6 focus-none"
+          class="awesomplete-input text-grey-darkest text-sm focus-none"
           @click.stop
           @keydown.delete.stop="deletePressed"
         />
@@ -85,13 +85,13 @@ export default {
         })
         this.search = ''
       }
-      this.$refs.search.focus()
+      this.focusInput()
     },
     removeTagAtIndex(index) {
       this.$delete(this.tags, index)
     },
     removeTag(tag) {
-      this.$refs.search.focus()
+      this.focusInput()
       const index = this.tags.findIndex(t => t.name === tag.name)
       this.removeTagAtIndex(index)
     },
@@ -117,12 +117,19 @@ export default {
         await this.$nextTick()
         this.addTag(e.text.value.trim())
       }
+    },
+    focusInput() {
+      this.$refs.search.focus()
     }
   }
 }
 </script>
 
 <style lang="scss">
+.awesomplete-input {
+  height: 22px;
+}
+
 .awesomplete [hidden] {
   display: none;
 }

@@ -13,6 +13,9 @@ const operators = {
       .toLowerCase()
       .includes(substring.trim().toLowerCase())
   },
+  notContains(source, substring) {
+    return !operators.contains(source, substring)
+  },
   is(source, target) {
     return source.trim().toLowerCase() === target.trim().toLowerCase()
   },

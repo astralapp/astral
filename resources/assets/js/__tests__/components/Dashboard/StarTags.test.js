@@ -1,24 +1,34 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import StarTags from '@/components/Dashboard/StarTags'
-import Vuex from 'vuex'
 import sampleStars from '../../utils/sample-stars'
+import { Store } from 'vuex-mock-store'
 
 jest.unmock('lodash')
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
+const store = new Store({
+  state: {},
+  getters: {
+    user: {
+      show_language_tags: true
+    },
+    tags: [],
+    currentStars: [sampleStars[0]]
+  }
+})
+
+const mocks = {
+  $store: store
+}
 
 const sampleTags = [{ id: 1, name: 'Vue.js' }, { id: 2, name: 'Laravel' }, { id: 3, name: 'Tailwind' }]
 
-const actions = {
-  syncStarTags: jest.fn(),
-  setCurrentTag: jest.fn(),
-  setCurrentLanguage: jest.fn()
-}
+afterEach(() => store.reset())
 
 const mountWithTags = (tags = []) => {
+  store.getters.tags = tags
+
   return shallowMount(StarTags, {
-    localVue,
+    mocks,
     propsData: {
       star: {
         node: {
@@ -28,22 +38,7 @@ const mountWithTags = (tags = []) => {
         tags
       }
     },
-    stubs: ['GlobalEvents'],
-    store: new Vuex.Store({
-      state: {},
-      getters: {
-        tags: () => tags,
-        user: () => {
-          return {
-            show_language_tags: true
-          }
-        },
-        currentStars: () => {
-          return [sampleStars[0]]
-        }
-      },
-      actions
-    })
+    stubs: ['GlobalEvents']
   })
 }
 describe('Star Tags Editor', () => {
@@ -140,7 +135,7 @@ describe('Star Tags Editor', () => {
 
       expect(wrapper.vm.awesomplete.destroy).toHaveBeenCalled()
       expect(wrapper.vm.isEditing).toBe(false)
-      expect(actions.syncStarTags).toHaveBeenDispatchedWith({
+      expect(store.dispatch).toHaveBeenCalledWith('syncStarTags', {
         id: 12345,
         tags: [
           ...sampleTags.map(t => {

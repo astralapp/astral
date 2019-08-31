@@ -5365,6 +5365,11 @@ lodash-webpack-plugin@^0.11.5:
   dependencies:
     lodash "^4.17.4"
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
@@ -8610,10 +8615,10 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
   integrity sha512-KmvZVtmM26BQOMK1rwUZsrqxEGeKiYSZGA7SNWE6uExx8UX/cj9hq2MRV/wWC3Cq6AoeDGk57rL9YMFRel/q+g==
 
-vue-input-autowidth@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/vue-input-autowidth/-/vue-input-autowidth-1.0.5.tgz#896bedc43828ee333d9152ed2ee8322ce75d99f7"
-  integrity sha512-jedOOR9dK3WBY/ApZ72JzY3xckP8ggx9dDlSoyogRtoKU2wfAbabTA/82RNsuwuu2vheZ6LEvTD5shh0+qduVg==
+vue-input-autowidth@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/vue-input-autowidth/-/vue-input-autowidth-1.0.6.tgz#529348055b1f8fd316323fb1cfb48264e12727c3"
+  integrity sha512-cjqXa8AXxmLBdXwIfX7wrlDSMyLWoXvs2Ju5/fSRIZsthBYju9VOA+q0uzieREvS4o6Flvyrx1SUfZD91jsPsg==
 
 vue-jest@4.0.0-beta.2:
   version "4.0.0-beta.2"
@@ -8673,6 +8678,13 @@ vue@^2.5.13:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
+
+vuex-mock-store@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/vuex-mock-store/-/vuex-mock-store-0.0.7.tgz#b18c529bc48b23dc596fdf9e0739676ae16dd7d1"
+  integrity sha512-Hd8q/lab+U/b0o0YvGvUWbxtrFbRTxwTMp+VL8qPQ1l2wmhJOMBwb086yil5dn1i2qLiF8Y5UtgKqCMcLzShKQ==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
 
 vuex@^3.1.0:
   version "3.1.1"

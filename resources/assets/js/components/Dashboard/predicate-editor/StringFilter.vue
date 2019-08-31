@@ -1,7 +1,7 @@
 <template>
   <input
     type="text"
-    class="text-input text-sm px-2 w-64 ml-4 flex-grow"
+    class="text-input text-sm px-2 py-3 w-64 ml-4 flex-grow"
     :value="value"
     @input="$emit('input', $event.target.value)"
   />

@@ -9,50 +9,70 @@ export const defaultGroup = {
   predicates: [{ ...defaultPredicate }]
 }
 
+const stringOperators = [
+  { key: 'is', label: 'is' },
+  { key: 'contains', label: 'contains' },
+  { key: 'notContains', label: "doesn't contain" },
+  { key: 'isnt', label: "isn't" }
+]
+
+const numberOperators = [
+  { key: 'greaterThan', label: '>' },
+  { key: 'greaterThanOrEqualTo', label: '>=' },
+  { key: 'equals', label: '=' },
+  { key: 'lessThan', label: '<' },
+  { key: 'lessThanOrEqualTo', label: '<=' }
+]
+
+const tagOperators = [
+  { key: 'hasAnyTags', label: 'has any' },
+  { key: 'hasAllTags', label: 'has all' },
+  { key: 'hasNoneTags', label: 'has none' }
+]
+
+const languageOperators = [{ key: 'hasAnyLanguage', label: 'has any' }, { key: 'hasNoneLanguage', label: 'has none' }]
+
 export const predicateTargets = [
   {
     label: 'Name',
     key: 'node.nameWithOwner',
     type: 'String',
-    operators: [{ key: 'is', label: 'is' }, { key: 'contains', label: 'contains' }, { key: 'isnt', label: "isn't" }],
+    operators: stringOperators,
     defaultValue: ''
   },
   {
     label: 'Description',
     key: 'node.description',
     type: 'String',
-    operators: [{ key: 'is', label: 'is' }, { key: 'contains', label: 'contains' }, { key: 'isnt', label: "isn't" }],
+    operators: stringOperators,
+    defaultValue: ''
+  },
+  {
+    label: 'Notes',
+    key: 'notes',
+    type: 'String',
+    operators: stringOperators,
     defaultValue: ''
   },
   {
     label: 'Star Count',
     key: 'node.stargazers.totalCount',
     type: 'Number',
-    operators: [
-      { key: 'greaterThan', label: '>' },
-      { key: 'greaterThanOrEqualTo', label: '>=' },
-      { key: 'equals', label: '=' },
-      { key: 'lessThan', label: '<' },
-      { key: 'lessThanOrEqualTo', label: '<=' }
-    ],
+    operators: numberOperators,
     defaultValue: 0
   },
   {
     label: 'Tags',
     key: 'tags',
     type: 'Tags',
-    operators: [
-      { key: 'hasAnyTags', label: 'has any' },
-      { key: 'hasAllTags', label: 'has all' },
-      { key: 'hasNoneTags', label: 'has none' }
-    ],
+    operators: tagOperators,
     defaultValue: []
   },
   {
     label: 'Language',
     key: 'node.primaryLanguage.name',
     type: 'Language',
-    operators: [{ key: 'hasAnyLanguage', label: 'has any' }, { key: 'hasNoneLanguage', label: 'has none' }],
+    operators: languageOperators,
     defaultValue: []
   }
 ]

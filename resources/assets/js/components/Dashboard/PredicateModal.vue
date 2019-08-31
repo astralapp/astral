@@ -9,7 +9,7 @@
         &times;
       </button>
     </div>
-    <div class="px-4 py-6 bg-white border-b border-t border-grey-light flex flex-col">
+    <div class="modal-container px-4 py-6 bg-white border-b border-t border-grey-light flex flex-col">
       <div class="flex items-center">
         <input v-model="predicate.name" type="text" class="text-input" placeholder="Custom filter name" />
         <p v-show="!!error" class="text-red ml-4">{{ error }}</p>
@@ -101,3 +101,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.modal-container {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+</style>
