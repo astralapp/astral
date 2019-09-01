@@ -4,7 +4,7 @@ namespace Astral\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TagSortOrderController extends Controller
+class TagsSortOrderController extends Controller
 {
     public function update(Request $request)
     {
