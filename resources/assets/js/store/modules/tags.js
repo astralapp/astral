@@ -1,14 +1,5 @@
 import { orderBy, omit } from 'lodash'
-import {
-  ADD_TAG,
-  SET_TAGS,
-  SET_CURRENT_TAG,
-  SET_VIEWING_UNTAGGED,
-  DELETE_TAG,
-  UPDATE_TAG,
-  SET_STAR_TAGS,
-  SET_CURRENT_PREDICATE
-} from '../mutation-types'
+import { ADD_TAG, SET_TAGS, SET_CURRENT_TAG, DELETE_TAG, UPDATE_TAG, SET_STAR_TAGS } from '../mutation-types'
 
 import client from '@/store/api/client'
 import router from '@/router'
@@ -37,7 +28,10 @@ const mutations = {
     const index = state.tags.findIndex(tag => {
       return tag.id === id
     })
-    state.tags.splice(index, 1)
+
+    if (index > -1) {
+      state.tags.splice(index, 1)
+    }
   },
   [UPDATE_TAG](state, { id, newTag }) {
     state.tags = state.tags.map(tag => {
@@ -67,13 +61,15 @@ const actions = {
         commit(ADD_TAG, res)
       })
   },
-  setCurrentTag({ commit }, tag) {
-    if (Object.keys(tag).length) {
-      commit(SET_VIEWING_UNTAGGED, false)
-      commit(SET_CURRENT_PREDICATE, {})
-    }
+  setCurrentTag({ commit, dispatch }, tag) {
     commit(SET_CURRENT_TAG, tag)
-    router.replace({ query: { ...omit(router.currentRoute.query, 'predicate'), tag: tag.name } })
+    if (Object.keys(tag).length) {
+      dispatch('setViewingUntagged', false)
+      dispatch('setCurrentPredicate', {})
+      router.replace({ query: { ...omit(router.currentRoute.query, 'predicate'), tag: tag.name } })
+    } else {
+      router.replace({ query: { ...omit(router.currentRoute.query, 'tag') } })
+    }
   },
   reorderTags({ commit }, sortMap) {
     return client
@@ -116,11 +112,11 @@ const actions = {
 
     dispatch('reorderTags', sortMap)
   },
-  deleteTag({ rootState, state, commit }, id) {
+  deleteTag({ rootState, state, commit, dispatch }, id) {
     client.withAuth().delete(`/tags/${id}`)
 
     if (state.currentTag.id === id) {
-      commit(SET_CURRENT_TAG, {})
+      dispatch('setCurrentTag', {})
     }
     commit(DELETE_TAG, id)
     const starsWithTag = rootState.stars.stars
@@ -145,6 +141,7 @@ const actions = {
       .then(res => {
         if (state.currentTag.id === id) {
           commit(SET_CURRENT_TAG, res)
+          router.replace({ query: { ...router.currentRoute.query, tag: name } })
         }
 
         commit(UPDATE_TAG, { id, newTag: res })

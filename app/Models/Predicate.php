@@ -12,4 +12,14 @@ class Predicate extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($predicate) {
+            $predicate->user_id = auth()->id();
+            $predicate->sort_order = self::where('user_id', auth()->id())->count();
+        });
+    }
 }

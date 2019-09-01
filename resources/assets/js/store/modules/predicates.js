@@ -1,11 +1,5 @@
-import {
-  SET_CURRENT_PREDICATE,
-  SET_EDITING_PREDICATE,
-  SET_PREDICATES,
-  SET_VIEWING_UNTAGGED,
-  SET_CURRENT_LANGUAGE,
-  SET_CURRENT_TAG
-} from '../mutation-types'
+import { omit } from 'lodash'
+import { SET_CURRENT_PREDICATE, SET_EDITING_PREDICATE, SET_PREDICATES, DELETE_PREDICATE } from '../mutation-types'
 import client from '@/store/api/client'
 import router from '@/router'
 
@@ -30,6 +24,14 @@ const mutations = {
   },
   [SET_PREDICATES](state, predicates) {
     state.predicates = predicates
+  },
+  [DELETE_PREDICATE](state, id) {
+    const index = state.predicates.findIndex(predicate => {
+      return predicate.id === id
+    })
+    if (index > -1) {
+      state.predicates.splice(index, 1)
+    }
   }
 }
 
@@ -42,12 +44,16 @@ const actions = {
         commit(SET_PREDICATES, res)
       })
   },
-  setCurrentPredicate({ commit }, predicate) {
-    commit(SET_VIEWING_UNTAGGED, false)
-    commit(SET_CURRENT_TAG, {})
-    commit(SET_CURRENT_LANGUAGE, '')
+  setCurrentPredicate({ commit, dispatch }, predicate) {
     commit(SET_CURRENT_PREDICATE, predicate)
-    router.replace({ query: { predicate: predicate.name } })
+    if (Object.keys(predicate).length) {
+      dispatch('setViewingUntagged', false)
+      dispatch('setCurrentTag', {})
+      dispatch('setCurrentLanguage', '')
+      router.replace({ query: { predicate: predicate.name } })
+    } else {
+      router.replace({ query: { ...omit(router.currentRoute.query, 'predicate') } })
+    }
   },
   setEditingPredicate({ commit }, predicate) {
     commit(SET_EDITING_PREDICATE, predicate)
@@ -65,6 +71,21 @@ const actions = {
           }
         })
       })
+  },
+  reorderPredicates({ commit }, sortMap) {
+    return client
+      .withAuth()
+      .put('/predicates/reorder', { predicates: sortMap })
+      .then(res => {
+        commit(SET_PREDICATES, res)
+      })
+  },
+  deletePredicate({ commit, dispatch, getters }, id) {
+    client.withAuth().delete(`/predicates/${id}`)
+    if (Object.keys(getters.currentPredicate).length && getters.currentPredicate.id === id) {
+      dispatch('setCurrentPredicate', {})
+    }
+    commit(DELETE_PREDICATE, id)
   }
 }
 

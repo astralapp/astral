@@ -16,7 +16,16 @@
       </div>
       <PredicateEditor v-model="predicate.body"></PredicateEditor>
       <div class="mt-8 flex justify-end">
-        <button class="btn btn-brand" :disabled="predicate.name.trim() === ''" @click="doSavePredicate()">Save</button>
+        <button
+          v-if="isEditingPredicate"
+          class="btn border-2 border-grey-light text-red"
+          @click="doDeletePredicate(predicate.id)"
+        >
+          Delete
+        </button>
+        <button class="btn btn-brand ml-2" :disabled="predicate.name.trim() === ''" @click="doSavePredicate()">
+          Save
+        </button>
       </div>
     </div>
   </VueModal>
@@ -47,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['editingPredicate']),
+    ...mapGetters(['editingPredicate', 'currentPredicate']),
     isEditingPredicate() {
       return !!Object.keys(this.editingPredicate).length
     },
@@ -67,7 +76,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['savePredicate', 'setEditingPredicate']),
+    ...mapActions(['savePredicate', 'setEditingPredicate', 'setCurrentPredicate', 'deletePredicate']),
     async doSavePredicate() {
       try {
         await this.savePredicate(this.predicate)
@@ -78,6 +87,19 @@ export default {
         this.closeModal()
       } catch (e) {
         this.error = e.errors[Object.keys(e.errors)[0]][0]
+      }
+    },
+    async doDeletePredicate(id) {
+      if (window.confirm('Are you sure you want to delete this filter?')) {
+        try {
+          await this.deletePredicate(id)
+          this.error = ''
+          this.$bus.$emit('NOTIFICATION', `${this.predicate.name} filter was deleted.`)
+          this.resetPredicateState()
+          this.closeModal()
+        } catch (e) {
+          this.error = e.errors[Object.keys(e.errors)[0]][0]
+        }
       }
     },
     resetPredicateState() {

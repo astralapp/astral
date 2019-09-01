@@ -3033,6 +3033,11 @@ es-to-primitive@^1.2.0:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
+es6-object-assign@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
+  integrity sha1-wsNYJlYkfDnqEHyx5mUrb58kUjw=
+
 es6-promise@^4.1.1:
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
@@ -8615,10 +8620,12 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
   integrity sha512-KmvZVtmM26BQOMK1rwUZsrqxEGeKiYSZGA7SNWE6uExx8UX/cj9hq2MRV/wWC3Cq6AoeDGk57rL9YMFRel/q+g==
 
-vue-input-autowidth@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/vue-input-autowidth/-/vue-input-autowidth-1.0.6.tgz#529348055b1f8fd316323fb1cfb48264e12727c3"
-  integrity sha512-cjqXa8AXxmLBdXwIfX7wrlDSMyLWoXvs2Ju5/fSRIZsthBYju9VOA+q0uzieREvS4o6Flvyrx1SUfZD91jsPsg==
+vue-input-autowidth@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/vue-input-autowidth/-/vue-input-autowidth-1.0.7.tgz#26474547a488f45494980433f02887e41d458c12"
+  integrity sha512-F/vB2mswTeLve474zAz38P9RjymK9ZrUx+6vN3TpidjfsKa/Z52SqGh9wcNZVK0Yz8IjbRFpI47WwxzbUVyAvw==
+  dependencies:
+    es6-object-assign "^1.1.0"
 
 vue-jest@4.0.0-beta.2:
   version "4.0.0-beta.2"

@@ -17,7 +17,6 @@ class CreateTagsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->string('name');
-            $table->string('slug');
             $table->integer('sort_order')->unsigned()->index()->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

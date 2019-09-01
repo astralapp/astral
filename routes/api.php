@@ -20,7 +20,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('tags', 'TagsController@store');
     Route::delete('tags/{tag}', 'TagsController@destroy');
     Route::patch('tags/{tag}', 'TagsController@update');
-    Route::put('tags/reorder', 'TagSortOrderController@update');
+    Route::put('tags/reorder', 'TagsSortOrderController@update');
 
     Route::put('star/tags', 'StarTagsController@update');
     Route::post('star/tags', 'StarTagsController@store');
@@ -40,4 +40,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('predicates', 'PredicatesController@index');
     Route::post('predicates', 'PredicatesController@store');
     Route::patch('predicates', 'PredicatesController@update');
+    Route::delete('predicates/{predicate}', 'PredicatesController@destroy');
+    Route::put('predicates/reorder', 'PredicatesSortOrderController@update');
 });

@@ -60,10 +60,11 @@
         </SidebarHeader>
       </template>
       <template v-slot:content="{ isCollapsed }">
-        <ul v-show="!isCollapsed" class="dashboard-list sidebar-predicates list-none m-0 p-0 pb-3">
+        <ul v-show="!isCollapsed" ref="sidebarFilters" class="dashboard-list sidebar-predicates list-none m-0 p-0 pb-3">
           <SidebarItem
             v-for="predicate in predicates"
             :key="predicate.id"
+            :data-id="predicate.id"
             :title="predicate.name"
             icon="SearchIcon"
             :class="{ selected: currentPredicate.id === predicate.id }"
@@ -159,14 +160,22 @@ export default {
       this.sortTags(method)
     })
 
-    this.drake = dragula([this.$refs.sidebarTags]).on('drop', (el, target, source) => {
+    this.drake = dragula([this.$refs.sidebarTags, this.$refs.sidebarFilters], {
+      accepts(el, target, source) {
+        return target === source
+      }
+    }).on('drop', (el, __, source) => {
       let sortMap = Array.from(source.children).map((el, i) => {
         return {
           id: el.dataset.id,
           sort_order: i
         }
       })
-      this.reorderTags(sortMap)
+      if (source.classList.contains('sidebar-tags')) {
+        this.reorderTags(sortMap)
+      } else {
+        this.reorderPredicates(sortMap)
+      }
     })
 
     await this.fetchTags()
@@ -200,7 +209,8 @@ export default {
       'cleanupStars',
       'toggleCollapsedState',
       'setCurrentPredicate',
-      'setEditingPredicate'
+      'setEditingPredicate',
+      'reorderPredicates'
     ]),
     async refreshStars() {
       this.refreshingStars = true

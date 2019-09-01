@@ -19,7 +19,8 @@ describe('Dashboard Index', () => {
       fetchUser: jest.fn(),
       fetchGitHubStars: jest.fn(),
       fetchUserStars: jest.fn(),
-      cleanupStars: jest.fn()
+      cleanupStars: jest.fn(),
+      fetchPredicates: jest.fn()
     }
 
     store = new Vuex.Store({

@@ -153,11 +153,21 @@ describe('Tags Module', () => {
       it('sets the current tag', async () => {
         const currentTag = { name: 'Jest' }
 
-        await setCurrentTag({ commit }, currentTag)
+        await setCurrentTag({ commit, dispatch }, currentTag)
 
         expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', currentTag)
-        expect(commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', false)
+        expect(dispatch).toHaveBeenCalledWith('setViewingUntagged', false)
+        expect(dispatch).toHaveBeenCalledWith('setCurrentPredicate', {})
         expect(router.replace).toHaveBeenCalledWith({ query: { tag: currentTag.name } })
+
+        jest.clearAllMocks()
+
+        await setCurrentTag({ commit, dispatch }, {})
+
+        expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+        expect(dispatch).not.toHaveBeenCalledWith('setViewingUntagged', false)
+        expect(dispatch).not.toHaveBeenCalledWith('setCurrentPredicate', {})
+        expect(router.replace).toHaveBeenCalledWith({ query: {} })
       })
 
       it('sets the viewing status to untagged if no tag is set', async () => {
@@ -174,7 +184,7 @@ describe('Tags Module', () => {
 
       expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/tags/reorder', { tags: dummyMap })
-      expect(commit).toHaveBeenCalledWith('SET_TAGS', [])
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', dummyMap)
     })
     describe('sorting tags', () => {
       it('sorts by ascending alpha', async () => {
@@ -271,12 +281,20 @@ describe('Tags Module', () => {
         const state = {
           currentTag: { id: 1 }
         }
-        await deleteTag({ commit, rootState, state }, 2)
+        await deleteTag({ commit, rootState, state, dispatch }, 2)
 
         expect(client.withAuth).toHaveBeenCalled()
         expect(client.delete).toHaveBeenCalledWith('/tags/2')
         expect(commit).toHaveBeenCalledWith('DELETE_TAG', 2)
-        expect(commit).not.toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+        expect(dispatch).not.toHaveBeenCalledWith('setCurrentTag', {})
+
+        jest.clearAllMocks()
+
+        await deleteTag({ commit, rootState, state, dispatch }, 1)
+
+        expect(client.delete).toHaveBeenCalledWith('/tags/1')
+        expect(commit).toHaveBeenCalledWith('DELETE_TAG', 1)
+        expect(dispatch).toHaveBeenCalledWith('setCurrentTag', {})
       })
 
       it("resets the current tag if it's the deleted tag", async () => {
@@ -288,9 +306,9 @@ describe('Tags Module', () => {
         const state = {
           currentTag: { id: 2 }
         }
-        await deleteTag({ commit, rootState, state }, 2)
+        await deleteTag({ commit, rootState, state, dispatch }, 2)
 
-        expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+        expect(dispatch).toHaveBeenCalledWith('setCurrentTag', {})
       })
 
       it('removes any tags from stars matching the deleted tag', async () => {
@@ -325,13 +343,13 @@ describe('Tags Module', () => {
           currentTag: { id: 2 }
         }
 
-        await deleteTag({ commit, rootState, state }, 2)
+        await deleteTag({ commit, rootState, state, dispatch }, 2)
 
-        expect(commit).toHaveBeenNthCalledWith(3, 'SET_STAR_TAGS', {
+        expect(commit).toHaveBeenNthCalledWith(2, 'SET_STAR_TAGS', {
           starId: 5678,
           tags: []
         })
-        expect(commit).toHaveBeenNthCalledWith(4, 'SET_STAR_TAGS', {
+        expect(commit).toHaveBeenNthCalledWith(3, 'SET_STAR_TAGS', {
           starId: 9101112,
           tags: []
         })

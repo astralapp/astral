@@ -2,13 +2,14 @@
 
 namespace Astral\Http\Controllers;
 
+use Astral\Models\Predicate;
 use Illuminate\Http\Request;
 
 class PredicatesController extends Controller
 {
     public function index()
     {
-        return auth()->user()->predicates;
+        return auth()->user()->predicates()->orderBy('sort_order', 'asc')->get();
     }
 
     public function store(Request $request)
@@ -36,5 +37,12 @@ class PredicatesController extends Controller
         ]);
 
         return $predicate;
+    }
+
+    public function destroy(Request $request, Predicate $predicate)
+    {
+        auth()->user()->predicates()->findOrFail($predicate->id)->delete();
+
+        return response()->json([], 204);
     }
 }

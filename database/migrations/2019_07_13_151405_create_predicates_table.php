@@ -18,6 +18,7 @@ class CreatePredicatesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('name');
             $table->text('body');
+            $table->integer('sort_order')->unsigned()->index()->default(0);
             $table->timestamps();
         });
     }

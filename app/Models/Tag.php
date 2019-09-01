@@ -40,11 +40,6 @@ class Tag extends Model
         static::creating(function ($tag) {
             $tag->user_id = auth()->id();
             $tag->sort_order = self::where('user_id', auth()->id())->count();
-            $tag->slug = (new TagSlugger($tag->name))->fix();
-        });
-
-        static::saving(function ($tag) {
-            $tag->slug = (new TagSlugger($tag->name))->fix();
         });
     }
 }

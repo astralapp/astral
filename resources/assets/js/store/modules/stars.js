@@ -7,7 +7,6 @@ import {
   SET_CURRENT_STAR,
   SELECT_STARS,
   PUSH_TO_CURRENT_STARS,
-  SET_CURRENT_TAG,
   SET_README,
   SET_README_LOADING,
   SET_STARS_PAGE_INFO,
@@ -20,8 +19,7 @@ import {
   MAP_USER_STARS_TO_GITHUB_STARS,
   SET_STAR_NOTES,
   RESET_STARS,
-  UNSTAR_STAR,
-  SET_CURRENT_PREDICATE
+  UNSTAR_STAR
 } from '../mutation-types'
 
 import client from '@/store/api/client'
@@ -261,15 +259,17 @@ const actions = {
         commit(SET_USER_STARS, res)
       })
   },
-  setCurrentLanguage({ commit }, language) {
+  setCurrentLanguage({ commit, dispatch }, language) {
+    commit(SET_CURRENT_LANGUAGE, language)
     router.replace({
       query: {
         ...omit(router.currentRoute.query, 'predicate'),
         language: language || undefined
       }
     })
-    commit(SET_CURRENT_PREDICATE, {})
-    commit(SET_CURRENT_LANGUAGE, language)
+    if (language) {
+      dispatch('setCurrentPredicate', {})
+    }
   },
   addTagToStars({ commit }, data) {
     commit(ADD_TAG_TO_STARS, data)
@@ -312,9 +312,10 @@ const actions = {
       })
       .finally(() => commit(SET_README_LOADING, false))
   },
-  setViewingUntagged({ commit }, viewing) {
+  setViewingUntagged({ commit, dispatch }, viewing) {
     if (viewing) {
-      commit(SET_CURRENT_TAG, {})
+      dispatch('setCurrentTag', {})
+      dispatch('setCurrentPredicate', {})
     }
     commit(SET_VIEWING_UNTAGGED, viewing)
   },

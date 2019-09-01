@@ -381,6 +381,7 @@ describe('Stars Module', () => {
 
   describe('Stars actions', () => {
     const commit = jest.fn()
+    const dispatch = jest.fn()
     describe("Fetching the user's GitHub stars", () => {
       it('fetches their stars', async () => {
         let sampleRes = sampleStars.edges.map(edge => {
@@ -433,9 +434,10 @@ describe('Stars Module', () => {
     })
 
     it('sets the current language', async () => {
-      await setCurrentLanguage({ commit }, 'JavaScript')
+      await setCurrentLanguage({ commit, dispatch }, 'JavaScript')
 
       expect(commit).toHaveBeenCalledWith('SET_CURRENT_LANGUAGE', 'JavaScript')
+      expect(dispatch).toHaveBeenCalledWith('setCurrentPredicate', {})
       expect(router.replace).toHaveBeenCalledWith({
         query: { language: 'JavaScript' }
       })
@@ -516,15 +518,19 @@ describe('Stars Module', () => {
     })
 
     it('sets the viewing state', async () => {
-      await setViewingUntagged({ commit }, true)
+      await setViewingUntagged({ commit, dispatch }, true)
 
-      expect(commit).toHaveBeenCalledWith('SET_CURRENT_TAG', {})
+      expect(dispatch).toHaveBeenCalledWith('setCurrentTag', {})
+      expect(dispatch).toHaveBeenCalledWith('setCurrentPredicate', {})
       expect(commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', true)
 
-      await setViewingUntagged({ commit }, false)
+      jest.clearAllMocks()
 
-      expect(commit).not.toHaveBeenLastCalledWith('SET_CURRENT_TAG', {})
-      expect(commit).toHaveBeenLastCalledWith('SET_VIEWING_UNTAGGED', false)
+      await setViewingUntagged({ commit, dispatch }, false)
+
+      expect(dispatch).not.toHaveBeenCalledWith('setCurrentTag', {})
+      expect(dispatch).not.toHaveBeenCalledWith('setCurrentPredicate', {})
+      expect(commit).toHaveBeenCalledWith('SET_VIEWING_UNTAGGED', false)
     })
 
     it('syncs tags to a star', async () => {
