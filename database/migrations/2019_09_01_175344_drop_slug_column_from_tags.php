@@ -13,9 +13,11 @@ class DropSlugColumnFromTags extends Migration
      */
     public function up()
     {
-        Schema::table('tags', function (Blueprint $table) {
-            $table->dropColumn('slug');
-        });
+        if (Schema::hasColumn('tags', 'slug')) {
+            Schema::table('tags', function (Blueprint $table) {
+                $table->dropColumn('slug');
+            });
+        }
     }
 
     /**

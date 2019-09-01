@@ -11,6 +11,7 @@
   "type": "project",
   "require": {
     "php": ">=7.0.0",
+    "doctrine/dbal": "^2.9",
     "fideloper/proxy": "^4.0",
     "kitetail/zttp": "^0.3.0",
     "laravel/framework": "5.8.*",
