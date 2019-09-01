@@ -2,7 +2,6 @@
 
 namespace Astral\Models;
 
-use Astral\Lib\TagSlugger;
 use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
