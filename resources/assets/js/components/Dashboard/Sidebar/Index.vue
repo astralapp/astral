@@ -156,28 +156,6 @@ export default {
     }
   },
   async mounted() {
-    this.$bus.$on('TAGS_SORTED', method => {
-      this.sortTags(method)
-    })
-
-    this.drake = dragula([this.$refs.sidebarTags, this.$refs.sidebarFilters], {
-      accepts(el, target, source) {
-        return target === source
-      }
-    }).on('drop', (el, __, source) => {
-      let sortMap = Array.from(source.children).map((el, i) => {
-        return {
-          id: el.dataset.id,
-          sort_order: i
-        }
-      })
-      if (source.classList.contains('sidebar-tags')) {
-        this.reorderTags(sortMap)
-      } else {
-        this.reorderPredicates(sortMap)
-      }
-    })
-
     await this.fetchTags()
     await this.fetchPredicates()
 
@@ -203,6 +181,28 @@ export default {
         this.setCurrentPredicate(queryPredicate)
       }
     }
+
+    this.$bus.$on('TAGS_SORTED', method => {
+      this.sortTags(method)
+    })
+
+    this.drake = dragula([this.$refs.sidebarTags, this.$refs.sidebarFilters], {
+      accepts(el, target, source) {
+        return target === source
+      }
+    }).on('drop', (el, __, source) => {
+      let sortMap = Array.from(source.children).map((el, i) => {
+        return {
+          id: el.dataset.id,
+          sort_order: i
+        }
+      })
+      if (source.classList.contains('sidebar-tags')) {
+        this.reorderTags(sortMap)
+      } else {
+        this.reorderPredicates(sortMap)
+      }
+    })
   },
   methods: {
     ...mapActions([
@@ -259,7 +259,7 @@ export default {
       const oldName = this.tags.find(s => s.id === id).name
       try {
         await this.renameTag(data)
-        this.$bus.$emit('NOTIFICATION', `${oldName} tag renamed to ${name}!!`)
+        this.$bus.$emit('NOTIFICATION', `${oldName} tag renamed to ${name}`)
       } catch (e) {
         this.$bus.$emit('NOTIFICATION', e.errors.name[0], 'error')
       }

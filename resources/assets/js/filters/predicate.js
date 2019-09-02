@@ -51,6 +51,12 @@ const operators = {
   },
   hasNoneLanguage(source, target) {
     return !target.map(l => l.name).includes(source)
+  },
+  isState(target) {
+    return target === true
+  },
+  isntState(target) {
+    return target === false
   }
 }
 
@@ -60,6 +66,8 @@ export default function(stars, predicate) {
       return logicalTypeMap[group.logicalType](group.predicates, p => {
         if (get(star, p.selectedTarget)) {
           return operators[p.operator](get(star, p.selectedTarget), p.argument)
+        } else if (p.selectedTarget === 'state') {
+          return operators[p.operator](get(star, p.argument.key))
         } else {
           return false
         }

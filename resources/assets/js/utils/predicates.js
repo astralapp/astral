@@ -32,6 +32,8 @@ const tagOperators = [
 
 const languageOperators = [{ key: 'hasAnyLanguage', label: 'has any' }, { key: 'hasNoneLanguage', label: 'has none' }]
 
+const stateOperators = [{ key: 'isState', label: 'is' }, { key: 'isntState', label: "isn't" }]
+
 export const predicateTargets = [
   {
     label: 'Name',
@@ -74,5 +76,12 @@ export const predicateTargets = [
     type: 'Language',
     operators: languageOperators,
     defaultValue: []
+  },
+  {
+    label: 'State',
+    type: 'State',
+    key: 'state',
+    operators: stateOperators,
+    defaultValue: { key: 'node.isArchived', label: 'archived' }
   }
 ]

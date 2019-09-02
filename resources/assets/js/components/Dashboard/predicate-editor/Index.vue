@@ -32,11 +32,7 @@
             >{{ operator.label }}</option
           >
         </SelectDropdown>
-        <component
-          :is="`${selectedPredicateTarget(predicate).type}Filter`"
-          v-model="predicate.argument"
-          :data-foo="predicate.argument"
-        />
+        <component :is="`${selectedPredicateTarget(predicate).type}Filter`" v-model="predicate.argument" />
         <button
           class="relative nudge-t ml-4 inline-flex justify-center items-center flex-no-shrink rounded-full w-8 h-8 border-2 border-grey hover:border-grey-dark shadow text-grey-darker"
           @click="appendRow(i)"
@@ -63,6 +59,7 @@ import NumberFilter from '@/components/dashboard/predicate-editor/NumberFilter'
 import StringFilter from '@/components/dashboard/predicate-editor/StringFilter'
 import TagsFilter from '@/components/dashboard/predicate-editor/TagsFilter'
 import LanguageFilter from '@/components/dashboard/predicate-editor/LanguageFilter'
+import StateFilter from '@/components/dashboard/predicate-editor/StateFilter'
 import { cloneDeep } from 'lodash'
 import { defaultPredicate, defaultGroup, predicateTargets } from '@/utils/predicates'
 export default {
@@ -72,6 +69,7 @@ export default {
     StringFilter,
     TagsFilter,
     LanguageFilter,
+    StateFilter,
     SelectDropdown
   },
   props: {
@@ -125,7 +123,9 @@ export default {
       }
     },
     setDefaultArgumentValue(predicate) {
-      predicate.argument = this.selectedPredicateTarget(predicate).defaultValue
+      if (this.selectedPredicateTarget(predicate).hasOwnProperty('defaultValue')) {
+        predicate.argument = this.selectedPredicateTarget(predicate).defaultValue
+      }
     }
   }
 }

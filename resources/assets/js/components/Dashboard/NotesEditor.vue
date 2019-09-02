@@ -138,7 +138,7 @@ export default {
     saveNotes() {
       this.$emit('save', this.currentNotes)
     },
-    debounceSaveNotes: debounce(() => {
+    debounceSaveNotes: debounce(function() {
       this.saveNotes()
     }, 1000)
   }
