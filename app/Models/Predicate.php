@@ -18,7 +18,7 @@ class Predicate extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new SortOrderScope);
+        static::addGlobalScope(new SortOrderScope());
 
         static::creating(function ($predicate) {
             $predicate->user_id = auth()->id();
