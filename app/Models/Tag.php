@@ -37,7 +37,7 @@ class Tag extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new SortOrderScope);
+        static::addGlobalScope(new SortOrderScope());
 
         static::creating(function ($tag) {
             $tag->user_id = auth()->id();
