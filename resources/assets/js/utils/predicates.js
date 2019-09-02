@@ -80,7 +80,7 @@ export const predicateTargets = [
   {
     label: 'State',
     type: 'State',
-    key: 'state',
+    key: 'astralRepoState',
     operators: stateOperators,
     defaultValue: { key: 'node.isArchived', label: 'archived' }
   }

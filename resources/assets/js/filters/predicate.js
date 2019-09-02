@@ -66,7 +66,7 @@ export default function(stars, predicate) {
       return logicalTypeMap[group.logicalType](group.predicates, p => {
         if (get(star, p.selectedTarget)) {
           return operators[p.operator](get(star, p.selectedTarget), p.argument)
-        } else if (p.selectedTarget === 'state') {
+        } else if (p.selectedTarget === 'astralRepoState') {
           return operators[p.operator](get(star, p.argument.key))
         } else {
           return false
