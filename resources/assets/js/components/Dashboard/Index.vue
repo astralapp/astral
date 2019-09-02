@@ -46,7 +46,6 @@ export default {
   },
   async created() {
     await this.fetchUser()
-    await this.fetchPredicates()
     this.$bus.$emit('STATUS', 'Fetching stars...')
     await this.fetchUserStars()
     await this.fetchGitHubStars({ cursor: null, refresh: false })
@@ -65,14 +64,7 @@ export default {
     this.$bus.$emit('STATUS', '')
   },
   methods: {
-    ...mapActions([
-      'fetchUser',
-      'fetchPredicates',
-      'fetchGitHubStars',
-      'fetchUserStars',
-      'cleanupStars',
-      'autotagStars'
-    ])
+    ...mapActions(['fetchUser', 'fetchGitHubStars', 'fetchUserStars', 'cleanupStars', 'autotagStars'])
   }
 }
 </script>

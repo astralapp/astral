@@ -2,6 +2,7 @@
 
 namespace Astral\Models;
 
+use Astral\Scopes\SortOrderScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Predicate extends Model
@@ -16,6 +17,8 @@ class Predicate extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(new SortOrderScope);
 
         static::creating(function ($predicate) {
             $predicate->user_id = auth()->id();

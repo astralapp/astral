@@ -2,6 +2,7 @@
 
 namespace Astral\Models;
 
+use Astral\Scopes\SortOrderScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
@@ -29,12 +30,14 @@ class Tag extends Model
 
     public function scopeWithStarCount($query)
     {
-        return $query->withCount('stars')->orderBy('sort_order', 'asc');
+        return $query->withCount('stars');
     }
 
     protected static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(new SortOrderScope);
 
         static::creating(function ($tag) {
             $tag->user_id = auth()->id();

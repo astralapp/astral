@@ -9,7 +9,7 @@ class PredicatesController extends Controller
 {
     public function index()
     {
-        return auth()->user()->predicates()->orderBy('sort_order', 'asc')->get();
+        return auth()->user()->predicates()->get();
     }
 
     public function store(Request $request)

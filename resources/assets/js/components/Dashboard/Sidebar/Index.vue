@@ -179,6 +179,7 @@ export default {
     })
 
     await this.fetchTags()
+    await this.fetchPredicates()
 
     if (this.$route.query.tag) {
       const queryTag = this.tags.find(tag => {
@@ -191,6 +192,16 @@ export default {
 
     if (this.$route.query.language) {
       this.setCurrentLanguage(this.$route.query.language)
+    }
+
+    if (this.$route.query.predicate) {
+      const queryPredicate = this.predicates.find(predicate => {
+        return predicate.name === this.$route.query.predicate
+      })
+
+      if (queryPredicate) {
+        this.setCurrentPredicate(queryPredicate)
+      }
     }
   },
   methods: {
@@ -208,6 +219,7 @@ export default {
       'fetchGitHubStars',
       'cleanupStars',
       'toggleCollapsedState',
+      'fetchPredicates',
       'setCurrentPredicate',
       'setEditingPredicate',
       'reorderPredicates'
