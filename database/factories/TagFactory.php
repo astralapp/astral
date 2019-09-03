@@ -7,6 +7,6 @@ $factory->define(Astral\Models\Tag::class, function (Faker $faker) {
         'user_id' => function () {
             return factory('Astral\Models\User')->create()->id;
         },
-        'name' => $faker->word,
+        'name' => $faker->unique()->word,
     ];
 });
