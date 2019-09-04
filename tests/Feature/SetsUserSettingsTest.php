@@ -19,20 +19,20 @@ class SetsUserSettingsTest extends TestCase
     /** @test */
     public function it_can_set_the_show_language_tags_setting()
     {
-        $this->putJson('/api/user/show-language-tags', ['flag' => false])->assertStatus(200);
+        $this->putJson('/api/user/show-language-tags', ['flag' => false])->assertStatus(201);
         $this->assertEquals(false, auth()->user()->show_language_tags);
 
-        $this->putJson('/api/user/show-language-tags', ['flag' => true])->assertStatus(200);
+        $this->putJson('/api/user/show-language-tags', ['flag' => true])->assertStatus(201);
         $this->assertEquals(true, auth()->user()->show_language_tags);
     }
 
     /** @test */
     public function it_can_set_the_autosave_notes_setting()
     {
-        $this->putJson('/api/user/autosave-notes', ['flag' => false])->assertStatus(200);
+        $this->putJson('/api/user/autosave-notes', ['flag' => false])->assertStatus(201);
         $this->assertEquals(false, auth()->user()->autosave_notes);
 
-        $this->putJson('/api/user/autosave-notes', ['flag' => true])->assertStatus(200);
+        $this->putJson('/api/user/autosave-notes', ['flag' => true])->assertStatus(201);
         $this->assertEquals(true, auth()->user()->autosave_notes);
     }
 }

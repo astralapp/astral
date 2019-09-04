@@ -28,6 +28,6 @@ describe('Astral HTTP Client', () => {
       data: {},
       headers: {}
     })
-    expect(res).toEqual({ username: 'syropian' })
+    expect(res).toEqual({ data: { username: 'syropian' } })
   })
 })

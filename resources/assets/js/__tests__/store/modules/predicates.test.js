@@ -107,11 +107,10 @@ describe('Predicates Module', () => {
     const dispatch = jest.fn()
     it('fetches the predicates', async () => {
       const res = []
-      client.get.mockResolvedValue(res)
+      client.get.mockResolvedValue({ data: res })
 
       await fetchPredicates({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.get).toHaveBeenCalledWith('/predicates')
       expect(commit).toHaveBeenCalledWith('SET_PREDICATES', res)
     })
@@ -143,7 +142,7 @@ describe('Predicates Module', () => {
     it('saves a new predicate', async () => {
       const predicate = cloneDeep(defaultPredicate)
       const stringifiedPredicate = JSON.stringify(predicate)
-      client.post.mockResolvedValue(predicate)
+      client.post.mockResolvedValue({ data: predicate })
 
       dispatch.mockImplementationOnce(() => Promise.resolve(42))
 
@@ -153,7 +152,6 @@ describe('Predicates Module', () => {
       }
       await savePredicate({ commit, dispatch, getters }, stringifiedPredicate)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.post).toHaveBeenCalledWith('/predicates', stringifiedPredicate)
       expect(dispatch).toHaveBeenCalledWith('setCurrentPredicate', getters.predicates[0])
     })
@@ -168,17 +166,16 @@ describe('Predicates Module', () => {
 
     it('reorders predicates', async () => {
       const dummyMap = []
-      client.put.mockResolvedValue([])
+      client.put.mockResolvedValue({ data: [] })
 
       await reorderPredicates({ commit }, dummyMap)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/predicates/reorder', { predicates: dummyMap })
       expect(commit).toHaveBeenCalledWith('SET_PREDICATES', dummyMap)
     })
 
     it('deletes predicates', async () => {
-      client.delete.mockResolvedValue([])
+      client.delete.mockResolvedValue({ data: [] })
 
       const getters = {
         currentPredicate: { id: 1 }
@@ -186,7 +183,6 @@ describe('Predicates Module', () => {
 
       await deletePredicate({ commit, dispatch, getters }, 1)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.delete).toHaveBeenCalledWith('/predicates/1')
       expect(commit).toHaveBeenCalledWith('DELETE_PREDICATE', 1)
       expect(dispatch).toHaveBeenCalledWith('setCurrentPredicate', {})

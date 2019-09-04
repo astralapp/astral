@@ -2,20 +2,27 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Astral\Exceptions\InvalidAccessTokenException;
 use Astral\Lib\GitHubClient;
 use Tests\TestCase;
 
 class GitHubClientTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected $client;
     protected $sampleStars;
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->login();
+        $user = auth()->user();
+        $user->access_token = encrypt(env('GITHUB_TEST_ACCESS_TOKEN'));
+        $user->save();
 
-        $this->client = new GitHubClient(env('GITHUB_TEST_ACCESS_TOKEN'));
+        $this->client = new GitHubClient();
         $this->sampleStars = json_decode(file_get_contents(__DIR__.'/../Blobs/stars_with_cursor.json'), true);
     }
 
@@ -51,7 +58,11 @@ class GitHubClientTest extends TestCase
         $stars = [];
 
         try {
-            $client = new GitHubClient('invalid-token');
+            $user = auth()->user();
+            $user->access_token = encrypt('foobar');
+            $user->save();
+
+            $client = new GitHubClient();
             $stars = $client->fetchStars(null, 100);
         } catch (InvalidAccessTokenException $e) {
             $this->assertCount(0, $stars);

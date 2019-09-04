@@ -129,22 +129,20 @@ describe('Tags Module', () => {
 
     it("fetches the user's tags", async () => {
       const res = ['Vue', 'React', 'Angular']
-      client.get.mockResolvedValue(res)
+      client.get.mockResolvedValue({ data: res })
 
       await fetchTags({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.get).toHaveBeenCalledWith('/tags')
       expect(commit).toHaveBeenCalledWith('SET_TAGS', res)
     })
 
     it('adds a tag', async () => {
       const newTag = { name: 'Jest' }
-      client.post.mockResolvedValue(newTag)
+      client.post.mockResolvedValue({ data: newTag })
 
       await addTag({ commit }, newTag.name)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.post).toHaveBeenCalledWith('/tags', { name: newTag.name })
       expect(commit).toHaveBeenCalledWith('ADD_TAG', newTag)
     })
@@ -178,11 +176,10 @@ describe('Tags Module', () => {
 
     it('reorders tags', async () => {
       const dummyMap = []
-      client.put.mockResolvedValue([])
+      client.put.mockResolvedValue({ data: [] })
 
       await reorderTags({ commit }, dummyMap)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/tags/reorder', { tags: dummyMap })
       expect(commit).toHaveBeenCalledWith('SET_TAGS', dummyMap)
     })
@@ -283,7 +280,6 @@ describe('Tags Module', () => {
         }
         await deleteTag({ commit, rootState, state, dispatch }, 2)
 
-        expect(client.withAuth).toHaveBeenCalled()
         expect(client.delete).toHaveBeenCalledWith('/tags/2')
         expect(commit).toHaveBeenCalledWith('DELETE_TAG', 2)
         expect(dispatch).not.toHaveBeenCalledWith('setCurrentTag', {})
@@ -367,10 +363,9 @@ describe('Tags Module', () => {
           currentTag: { id: 2 }
         }
         const renamedTag = { id: 1, name: 'VueJS' }
-        client.patch.mockResolvedValue(renamedTag)
+        client.patch.mockResolvedValue({ data: renamedTag })
         await renameTag({ commit, rootState, state }, renamedTag)
 
-        expect(client.withAuth).toHaveBeenCalled()
         expect(client.patch).toHaveBeenCalledWith(`/tags/${renamedTag.id}`, { name: renamedTag.name })
         expect(commit).toHaveBeenCalledWith('UPDATE_TAG', { id: renamedTag.id, newTag: renamedTag })
         expect(commit).not.toHaveBeenCalledWith('SET_CURRENT_TAG', renamedTag)

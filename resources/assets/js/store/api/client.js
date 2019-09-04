@@ -1,4 +1,3 @@
-import { Promise } from 'es6-promise'
 import axios from 'axios'
 import router from '@/router'
 
@@ -13,7 +12,7 @@ http.interceptors.response.use(
   function(response) {
     return response
   },
-  function(error) {
+  function() {
     router.push('auth/logout')
   }
 )

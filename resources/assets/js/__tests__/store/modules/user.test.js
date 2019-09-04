@@ -55,11 +55,10 @@ describe('User Module', () => {
     const commit = jest.fn()
     it('fetches the authenticated user', async () => {
       const res = { username: 'syropian' }
-      client.get.mockResolvedValue(res)
+      client.get.mockResolvedValue({ data: res })
 
       await fetchUser({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.get).toHaveBeenCalledWith('/auth/me')
       expect(commit).toHaveBeenCalledWith('SET_USER', res)
     })
@@ -67,7 +66,6 @@ describe('User Module', () => {
     it('deletes the authenticated user', async () => {
       await deleteUser({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.delete).toHaveBeenCalledWith('/auth/delete')
       expect(commit).toHaveBeenCalledWith('DELETE_USER')
       expect(router.push).toHaveBeenCalledWith('auth/logout')
@@ -75,22 +73,20 @@ describe('User Module', () => {
 
     it('sets the users language tag visibility option', async () => {
       const res = { username: 'syropian' }
-      client.put.mockResolvedValue(res)
+      client.put.mockResolvedValue({ data: res })
 
       await setShowLanguageTags({ commit }, true)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/user/show-language-tags', { flag: true })
       expect(commit).toHaveBeenCalledWith('SET_USER', res)
     })
 
     it('sets the users auto-save notes option', async () => {
       const res = { username: 'syropian' }
-      client.put.mockResolvedValue(res)
+      client.put.mockResolvedValue({ data: res })
 
       await setAutosaveNotes({ commit }, true)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/user/autosave-notes', { flag: true })
       expect(commit).toHaveBeenCalledWith('SET_USER', res)
     })

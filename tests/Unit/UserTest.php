@@ -57,11 +57,6 @@ class UserTest extends TestCase
             $githubUser->getAvatar(),
             $this->user->avatar_url
         );
-
-        $this->assertEquals(
-            $githubUser->token,
-            $this->user->access_token
-        );
     }
 
     /** @test */

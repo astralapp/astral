@@ -389,11 +389,10 @@ describe('Stars Module', () => {
           edge.notes = ''
           return edge
         })
-        client.get.mockResolvedValue(sampleStars)
+        client.get.mockResolvedValue({ data: sampleStars })
 
         await fetchGitHubStars({ commit }, { cursor: null, refresh: false })
 
-        expect(client.withAuth).toHaveBeenCalled()
         expect(client.get).toHaveBeenCalledWith('/stars/github?')
         expect(commit).not.toHaveBeenCalledWith('RESET_STARS')
         expect(commit).toHaveBeenCalledWith('SET_STARS', sampleRes)
@@ -424,11 +423,10 @@ describe('Stars Module', () => {
     })
 
     it('fetches user stars', async () => {
-      client.get.mockResolvedValue(sampleStars.edges)
+      client.get.mockResolvedValue({ data: sampleStars.edges })
 
       await fetchUserStars({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.get).toHaveBeenCalledWith('/stars')
       expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
     })
@@ -444,22 +442,23 @@ describe('Stars Module', () => {
     })
 
     it('adds a tag to one or more stars', async () => {
-      const sampleRes = { tags: [{ name: 'VueJS' }, { name: 'React' }] }
+      const sampleRes = { data: { tags: [{ name: 'VueJS' }, { name: 'React' }] } }
       const reqArgs = {
         stars: [sampleStars.edges[0].node],
-        tag: sampleRes.tags[0]
+        tag: sampleRes.data.tags[0]
       }
       client.post.mockResolvedValue(sampleRes)
 
       await addTagToStars({ commit }, reqArgs)
 
       expect(commit).toHaveBeenCalledWith('ADD_TAG_TO_STARS', reqArgs)
-      expect(client.withAuth).toHaveBeenCalled()
+
       expect(client.post).toHaveBeenCalledWith('/star/tags', {
         starIds: [sampleStars.edges[0].node.databaseId],
-        tag: sampleRes.tags[0]
+        tag: sampleRes.data.tags[0]
       })
-      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
+
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.data.tags)
     })
 
     it('sets the current star', async () => {
@@ -487,31 +486,19 @@ describe('Stars Module', () => {
     })
 
     describe('fetching repo readmes', () => {
-      const rootState = {
-        user: {
-          user: {
-            access_token: 'abc123'
-          }
-        }
-      }
       it('fetches a repo readme', async () => {
-        client.get.mockResolvedValue('Hello World')
+        client.get.mockResolvedValue({ data: 'Hello World' })
 
-        await fetchReadme({ commit, rootState }, 'astralapp/astral')
+        await fetchReadme({ commit }, 'astralapp/astral')
 
-        expect(client.withoutAuth).toHaveBeenCalled()
-        expect(client.get).toHaveBeenCalledWith(
-          `https://api.github.com/repos/astralapp/astral/readme?access_token=${rootState.user.user.access_token}`,
-          {},
-          { Accept: 'application/vnd.github.v3.html' }
-        )
+        expect(client.get).toHaveBeenCalledWith(`/stars/readme?repo=astralapp/astral`)
         expect(commit).toHaveBeenCalledWith('SET_README', 'Hello World')
       })
 
       it('sets the readme to an empty string if the request fails', async () => {
         client.get.mockRejectedValue(null)
 
-        await fetchReadme({ commit, rootState }, 'astralapp/astral')
+        await fetchReadme({ commit }, 'astralapp/astral')
 
         expect(commit).toHaveBeenCalledWith('SET_README', '')
       })
@@ -535,30 +522,31 @@ describe('Stars Module', () => {
 
     it('syncs tags to a star', async () => {
       const sampleRes = {
-        tags: [{ name: 'VueJS' }, { name: 'React' }],
-        star: {
-          name: sampleStars.edges[0].node.nameWithOwner,
-          tags: [{ name: 'VueJS' }]
+        data: {
+          tags: [{ name: 'VueJS' }, { name: 'React' }],
+          star: {
+            name: sampleStars.edges[0].node.nameWithOwner,
+            tags: [{ name: 'VueJS' }]
+          }
         }
       }
       const sampleReq = {
         id: sampleStars.edges[0].node.databaseId,
-        tags: [sampleRes.tags[0]]
+        tags: [sampleRes.data.tags[0]]
       }
 
       client.put.mockResolvedValue(sampleRes)
 
       await syncStarTags({ commit }, { id: sampleReq.id, tags: sampleReq.tags })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/star/tags', {
         id: sampleReq.id,
         tags: sampleReq.tags
       })
-      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
+      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.data.tags)
       expect(commit).toHaveBeenCalledWith('SET_STAR_TAGS', {
         starId: sampleReq.id,
-        tags: sampleRes.star.tags
+        tags: sampleRes.data.star.tags
       })
     })
 
@@ -568,17 +556,15 @@ describe('Stars Module', () => {
 
       await editStarNotes({ commit }, sampleReq)
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.post).toHaveBeenCalledWith('/star/notes', sampleReq)
       expect(commit).toHaveBeenCalledWith('SET_STAR_NOTES', sampleReq)
     })
 
     it('cleans up stars', async () => {
-      client.delete.mockResolvedValue(sampleStars.edges)
+      client.delete.mockResolvedValue({ data: sampleStars.edges })
 
       await cleanupStars({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.delete).toHaveBeenCalledWith('/stars/cleanup')
       expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
       expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
@@ -586,15 +572,16 @@ describe('Stars Module', () => {
 
     it('autotags stars', async () => {
       const sampleRes = {
-        stars: sampleStars.edges,
-        tags: [{ name: 'VueJS' }, { name: 'React' }]
+        data: {
+          stars: sampleStars.edges,
+          tags: [{ name: 'VueJS' }, { name: 'React' }]
+        }
       }
 
-      client.put.mockResolvedValue(sampleRes)
+      client.put.mockResolvedValue({ data: sampleRes })
 
       await autotagStars({ commit })
 
-      expect(client.withAuth).toHaveBeenCalled()
       expect(client.put).toHaveBeenCalledWith('/stars/autotag')
       expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
       expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleRes.stars)
