@@ -37,12 +37,9 @@ const mutations = {
 
 const actions = {
   fetchPredicates({ commit }) {
-    return client
-      .withAuth()
-      .get('/predicates')
-      .then(res => {
-        commit(SET_PREDICATES, res)
-      })
+    return client.get('/predicates').then(({ data }) => {
+      commit(SET_PREDICATES, data)
+    })
   },
   setCurrentPredicate({ commit, dispatch }, predicate) {
     commit(SET_CURRENT_PREDICATE, predicate)
@@ -61,27 +58,21 @@ const actions = {
   savePredicate({ dispatch, getters }, predicate) {
     const method = predicate.hasOwnProperty('id') ? 'patch' : 'post'
 
-    return client
-      .withAuth()
-      [method]('/predicates', predicate)
-      .then(() => {
-        return dispatch('fetchPredicates').then(() => {
-          if (Object.keys(getters.currentPredicate).length) {
-            return dispatch('setCurrentPredicate', getters.predicates.find(p => p.id === getters.currentPredicate.id))
-          }
-        })
+    return client[method]('/predicates', predicate).then(() => {
+      return dispatch('fetchPredicates').then(() => {
+        if (Object.keys(getters.currentPredicate).length) {
+          return dispatch('setCurrentPredicate', getters.predicates.find(p => p.id === getters.currentPredicate.id))
+        }
       })
+    })
   },
   reorderPredicates({ commit }, sortMap) {
-    return client
-      .withAuth()
-      .put('/predicates/reorder', { predicates: sortMap })
-      .then(res => {
-        commit(SET_PREDICATES, res)
-      })
+    return client.put('/predicates/reorder', { predicates: sortMap }).then(({ data }) => {
+      commit(SET_PREDICATES, data)
+    })
   },
   deletePredicate({ commit, dispatch, getters }, id) {
-    client.withAuth().delete(`/predicates/${id}`)
+    client.delete(`/predicates/${id}`)
     if (Object.keys(getters.currentPredicate).length && getters.currentPredicate.id === id) {
       dispatch('setCurrentPredicate', {})
     }

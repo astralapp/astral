@@ -36,7 +36,7 @@ class UserTest extends TestCase
     {
         $githubUser = new GitHubUser();
 
-        $this->user->mapGitHubUser($githubUser);
+        $this->user->mapGitHubUserData($githubUser);
 
         $this->assertEquals(
             $githubUser->getNickname(),

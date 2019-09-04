@@ -89,4 +89,9 @@ class GitHubStarsController extends Controller
 
         return response()->json(compact('stars', 'tags'));
     }
+
+    public function fetchReadme(Request $request)
+    {
+        return $this->client->fetchReadme($request->input('repo'));
+    }
 }

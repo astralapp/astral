@@ -231,33 +231,27 @@ const actions = {
     if (refresh) {
       commit(RESET_STARS)
     }
-    return client
-      .withAuth()
-      .get(`/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`)
-      .then(res => {
-        commit(
-          SET_STARS,
-          res.edges.map(edge => {
-            edge.tags = []
-            edge.notes = ''
-            return edge
-          })
-        )
-        commit(SET_STARS_PAGE_INFO, res.pageInfo)
-        if (!cursor) {
-          commit(SET_TOTAL_STARS, res.totalCount)
-        }
+    return client.get(`/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`).then(({ data }) => {
+      commit(
+        SET_STARS,
+        data.edges.map(edge => {
+          edge.tags = []
+          edge.notes = ''
+          return edge
+        })
+      )
+      commit(SET_STARS_PAGE_INFO, data.pageInfo)
+      if (!cursor) {
+        commit(SET_TOTAL_STARS, data.totalCount)
+      }
 
-        commit(MAP_USER_STARS_TO_GITHUB_STARS)
-      })
+      commit(MAP_USER_STARS_TO_GITHUB_STARS)
+    })
   },
   fetchUserStars({ commit }) {
-    client
-      .withAuth()
-      .get('/stars')
-      .then(res => {
-        commit(SET_USER_STARS, res)
-      })
+    client.get('/stars').then(({ data }) => {
+      commit(SET_USER_STARS, data)
+    })
   },
   setCurrentLanguage({ commit, dispatch }, language) {
     commit(SET_CURRENT_LANGUAGE, language)
@@ -276,12 +270,9 @@ const actions = {
 
     const { stars, tag } = data
     const starIds = stars.map(star => star.databaseId)
-    client
-      .withAuth()
-      .post('/star/tags', { starIds, tag })
-      .then(res => {
-        commit(SET_TAGS, res.tags)
-      })
+    client.post('/star/tags', { starIds, tag }).then(({ data }) => {
+      commit(SET_TAGS, data.tags)
+    })
   },
   setCurrentStar({ commit }, star) {
     commit(SET_CURRENT_STAR, star)
@@ -292,20 +283,12 @@ const actions = {
   selectStars({ commit }, stars) {
     commit(SELECT_STARS, stars)
   },
-  fetchReadme({ rootState, commit }, repoName) {
+  fetchReadme({ commit }, repoName) {
     commit(SET_README_LOADING, true)
-    const accessToken = rootState.user.user.access_token
     return client
-      .withoutAuth()
-      .get(
-        `https://api.github.com/repos/${repoName}/readme?access_token=${accessToken}`,
-        {},
-        {
-          Accept: 'application/vnd.github.v3.html'
-        }
-      )
-      .then(res => {
-        commit(SET_README, res)
+      .get(`/stars/readme?repo=${repoName}`)
+      .then(({ data }) => {
+        commit(SET_README, data)
       })
       .catch(() => {
         commit(SET_README, '')
@@ -321,22 +304,20 @@ const actions = {
   },
   syncStarTags({ commit }, { id, tags }) {
     client
-      .withAuth()
       .put('/star/tags', {
         id,
         tags
       })
-      .then(res => {
-        commit(SET_TAGS, res.tags)
+      .then(({ data }) => {
+        commit(SET_TAGS, data.tags)
         commit(SET_STAR_TAGS, {
           starId: id,
-          tags: res.star.tags
+          tags: data.star.tags
         })
       })
   },
   editStarNotes({ commit }, { id, notes }) {
     client
-      .withAuth()
       .post('/star/notes', {
         id,
         notes
@@ -349,23 +330,17 @@ const actions = {
       })
   },
   cleanupStars({ commit }) {
-    client
-      .withAuth()
-      .delete('/stars/cleanup')
-      .then(res => {
-        commit(SET_USER_STARS, res)
-        commit(MAP_USER_STARS_TO_GITHUB_STARS)
-      })
+    client.delete('/stars/cleanup').then(({ data }) => {
+      commit(SET_USER_STARS, data)
+      commit(MAP_USER_STARS_TO_GITHUB_STARS)
+    })
   },
   autotagStars({ commit }) {
-    client
-      .withAuth()
-      .put('/stars/autotag')
-      .then(res => {
-        commit(SET_TAGS, res.tags)
-        commit(SET_USER_STARS, res.stars)
-        commit(MAP_USER_STARS_TO_GITHUB_STARS)
-      })
+    client.put('/stars/autotag').then(({ data }) => {
+      commit(SET_TAGS, data.tags)
+      commit(SET_USER_STARS, data.stars)
+      commit(MAP_USER_STARS_TO_GITHUB_STARS)
+    })
   },
   unstarStar({ commit, state, dispatch, getters }, { databaseId, nodeId }) {
     commit(UNSTAR_STAR, databaseId)
@@ -374,14 +349,11 @@ const actions = {
       dispatch('fetchReadme', getters.currentStar.node.nameWithOwner)
     }
 
-    client
-      .withAuth()
-      .delete('/stars/github/unstar', { databaseId, nodeId })
-      .then(res => {
-        commit(SET_TAGS, res.tags)
-        commit(SET_USER_STARS, res.stars)
-        commit(MAP_USER_STARS_TO_GITHUB_STARS)
-      })
+    client.delete('/stars/github/unstar', { databaseId, nodeId }).then(({ data }) => {
+      commit(SET_TAGS, data.tags)
+      commit(SET_USER_STARS, data.stars)
+      commit(MAP_USER_STARS_TO_GITHUB_STARS)
+    })
   }
 }
 

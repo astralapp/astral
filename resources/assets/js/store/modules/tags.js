@@ -46,20 +46,14 @@ const mutations = {
 
 const actions = {
   fetchTags({ commit }) {
-    return client
-      .withAuth()
-      .get('/tags')
-      .then(res => {
-        commit(SET_TAGS, res)
-      })
+    return client.get('/tags').then(({ data }) => {
+      commit(SET_TAGS, data)
+    })
   },
   addTag({ commit }, name) {
-    return client
-      .withAuth()
-      .post('/tags', { name })
-      .then(res => {
-        commit(ADD_TAG, res)
-      })
+    return client.post('/tags', { name }).then(({ data }) => {
+      commit(ADD_TAG, data)
+    })
   },
   setCurrentTag({ commit, dispatch }, tag) {
     commit(SET_CURRENT_TAG, tag)
@@ -72,12 +66,9 @@ const actions = {
     }
   },
   reorderTags({ commit }, sortMap) {
-    return client
-      .withAuth()
-      .put('/tags/reorder', { tags: sortMap })
-      .then(res => {
-        commit(SET_TAGS, res)
-      })
+    return client.put('/tags/reorder', { tags: sortMap }).then(({ data }) => {
+      commit(SET_TAGS, data)
+    })
   },
   sortTags({ commit, state, dispatch }, method) {
     let sortedTags = []
@@ -113,7 +104,7 @@ const actions = {
     dispatch('reorderTags', sortMap)
   },
   deleteTag({ rootState, state, commit, dispatch }, id) {
-    client.withAuth().delete(`/tags/${id}`)
+    client.delete(`/tags/${id}`)
 
     if (state.currentTag.id === id) {
       dispatch('setCurrentTag', {})
@@ -135,36 +126,33 @@ const actions = {
     })
   },
   renameTag({ rootState, state, commit }, { id, name }) {
-    return client
-      .withAuth()
-      .patch(`/tags/${id}`, { name })
-      .then(res => {
-        if (state.currentTag.id === id) {
-          commit(SET_CURRENT_TAG, res)
-          router.replace({ query: { ...router.currentRoute.query, tag: name } })
-        }
+    return client.patch(`/tags/${id}`, { name }).then(({ data }) => {
+      if (state.currentTag.id === id) {
+        commit(SET_CURRENT_TAG, data)
+        router.replace({ query: { ...router.currentRoute.query, tag: name } })
+      }
 
-        commit(UPDATE_TAG, { id, newTag: res })
+      commit(UPDATE_TAG, { id, newTag: data })
 
-        const starsWithTag = rootState.stars.stars
-          .filter(star => {
-            return star.tags.map(tag => tag.id).includes(id)
-          })
-          .map(star => {
-            const tags = star.tags.map(tag => {
-              if (tag.id === id) {
-                tag.name = name
-              }
-
-              return tag
-            })
-            return { starId: star.node.databaseId, tags }
-          })
-
-        starsWithTag.forEach(star => {
-          commit(SET_STAR_TAGS, star)
+      const starsWithTag = rootState.stars.stars
+        .filter(star => {
+          return star.tags.map(tag => tag.id).includes(id)
         })
+        .map(star => {
+          const tags = star.tags.map(tag => {
+            if (tag.id === id) {
+              tag.name = name
+            }
+
+            return tag
+          })
+          return { starId: star.node.databaseId, tags }
+        })
+
+      starsWithTag.forEach(star => {
+        commit(SET_STAR_TAGS, star)
       })
+    })
   }
 }
 

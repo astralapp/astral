@@ -5,14 +5,13 @@ namespace Astral\Http\Controllers;
 use Astral\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use JWTAuth;
 use Socialite;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt', ['except' => ['redirectToProvider', 'handleProviderCallback']]);
+        $this->middleware('auth', ['except' => ['redirectToProvider', 'handleProviderCallback']]);
     }
 
     public function redirectToProvider(Request $request)
@@ -34,45 +33,36 @@ class AuthController extends Controller
         $githubUser = Socialite::driver('github')->user();
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
-        // If the user exists, just update fields that they may have changed in their Github settings
+        // If no user is found, create a new one
         if (is_null($user)) {
             $user = new User();
-        } // If no user was found, create a new one
-        $user->mapGitHubUser($githubUser);
+        }
 
         $scope = $request->session()->pull('auth_scope', 'read:user');
 
+        if (is_null($user->access_token) || $user->scope != $scope) {
+            $user->access_token = encrypt($githubUser->token);
+        }
+        // If the user exists, just update fields that they may have changed in their Github settings
+        $user->mapGitHubUserData($githubUser);
         $user->scope = $scope;
         $user->save();
 
-        $jwt = 'Bearer '.JWTAuth::fromUser($user);
+        auth()->login($user, true);
 
-        return redirect('/auth?token='.$jwt);
+        return redirect('/dashboard');
     }
 
-    public function me(Request $request)
+    public function me()
     {
         return response()->json(auth()->user());
-    }
-
-    public function refresh()
-    {
-        return $this->respondWithToken(auth()->refresh());
-    }
-
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => 'Bearer '.$token,
-            'token_type'   => 'bearer',
-        ]);
     }
 
     public function logout()
     {
         auth()->logout();
 
-        return response()->json([], 204);
+        return redirect('/');
     }
 
     public function destroy(Request $request)
@@ -84,7 +74,7 @@ class AuthController extends Controller
         $user->stars()->delete();
         $user->delete();
 
-        return response()->json([], 204);
+        return redirect('/');
     }
 
     public function revokeApplicationGrant()
@@ -98,7 +88,7 @@ class AuthController extends Controller
 
         auth()->logout();
 
-        return response()->json([], 204);
+        return redirect('/');
     }
 
     protected function revokeUserAccess()

@@ -3,17 +3,9 @@
 namespace Astral\Lib;
 
 use Astral\Models\Star;
-use Astral\Models\User;
 
 class Autotagger
 {
-    protected $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
     public function tagByTopic($stars)
     {
         collect($stars['edges'])->each(function ($star) {
@@ -23,12 +15,12 @@ class Autotagger
             });
 
             if (count($topics)) {
-                $userStar = $this->user->stars()->withRepoId($starId)->first();
+                $userStar = auth()->user()->stars()->withRepoId($starId)->first();
 
                 if (!$userStar) {
                     $userStar = new Star();
                     $userStar->repo_id = $starId;
-                    $userStar->user_id = $this->user->id;
+                    $userStar->user_id = auth()->user()->id;
                     $userStar->save();
                 }
 

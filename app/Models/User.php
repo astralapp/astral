@@ -4,9 +4,8 @@ namespace Astral\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
     use Notifiable;
 
@@ -15,22 +14,13 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'access_token'
     ];
 
     protected $casts = [
         'autosave_notes' => 'boolean',
+        'show_language_tags' => 'boolean',
     ];
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
 
     public function stars()
     {
@@ -47,7 +37,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Predicate::class);
     }
 
-    public function mapGitHubUser($githubUser)
+    public function mapGitHubUserData($githubUser)
     {
         $this->username = $githubUser->getNickname();
         $this->github_id = $githubUser->getId();
@@ -55,9 +45,7 @@ class User extends Authenticatable implements JWTSubject
             $this->name = $githubUser->getName();
         }
         $this->avatar_url = $githubUser->getAvatar();
-        if (!$this->access_token) {
-            $this->access_token = $githubUser->token;
-        }
+
         $this->save();
     }
 

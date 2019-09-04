@@ -1,10 +1,8 @@
 import user from '@/store/modules/user'
 import router from '@/router'
 import client from '@/store/api/client'
-import ls from 'local-storage'
 
 jest.mock('@/store/api/client')
-jest.mock('local-storage')
 
 jest.mock('@/router', () => ({
   push: jest.fn()
@@ -26,11 +24,6 @@ describe('User Module', () => {
         user: { username: 'syropian' }
       }
       expect(getters.user(state)).toEqual(state.user)
-
-      ls.mockReturnValueOnce('abcde12345')
-      expect(getters.isAuthenticated(state)).toBe(true)
-      ls.mockReturnValueOnce('')
-      expect(getters.isAuthenticated(state)).toBe(false)
     })
   })
 
@@ -72,10 +65,6 @@ describe('User Module', () => {
     })
 
     it('deletes the authenticated user', async () => {
-      const state = {
-        user: { username: 'syropian' }
-      }
-
       await deleteUser({ commit })
 
       expect(client.withAuth).toHaveBeenCalled()

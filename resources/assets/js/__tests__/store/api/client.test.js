@@ -12,16 +12,6 @@ describe('Astral HTTP Client', () => {
     jest.clearAllMocks()
   })
 
-  it('can enable an authorized request', () => {
-    client.withAuth()
-    expect(client.auth).toBe(true)
-  })
-
-  it('can enable an unauthorized request', () => {
-    client.withoutAuth()
-    expect(client.auth).toBe(false)
-  })
-
   it('sends a request', async () => {
     mockAxios.mockImplementationOnce(() =>
       Promise.resolve({

@@ -28,20 +28,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->isLocal()) {
-            $this->app->register(TelescopeServiceProvider::class);
-        }
-
         $this->app->bind(GitHubClient::class, function () {
-            return new GitHubClient(auth()->user()->access_token);
+            return new GitHubClient();
         });
 
         $this->app->bind(StarsJanitor::class, function () {
-            return new StarsJanitor(auth()->user());
+            return new StarsJanitor();
         });
 
         $this->app->bind(Autotagger::class, function () {
-            return new Autotagger(auth()->user());
+            return new Autotagger();
         });
     }
 }

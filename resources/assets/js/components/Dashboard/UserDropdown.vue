@@ -25,9 +25,9 @@
           </a>
         </li>
         <li>
-          <RouterLink class="dropdown-item" to="/auth/logout">
-            Logout
-          </RouterLink>
+          <a class="dropdown-item" href="/auth/logout">
+            Sign Out
+          </a>
         </li>
       </ul>
     </div>

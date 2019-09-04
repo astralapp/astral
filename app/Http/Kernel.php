@@ -56,7 +56,6 @@ class Kernel extends HttpKernel
         'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can'        => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'      => \Astral\Http\Middleware\RedirectIfAuthenticated::class,
-        'jwt'        => \Astral\Http\Middleware\RefreshToken::class,
         'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

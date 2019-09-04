@@ -15,7 +15,6 @@ abstract class TestCase extends BaseTestCase
     {
         $user = $user ?: create('Astral\Models\User');
         $token = auth()->login($user);
-        $this->headers['Authorization'] = 'Bearer '.$token;
 
         return $this;
     }

@@ -33,12 +33,6 @@ class InstallCommand extends Command
             $this->line('~ App key generated.');
         }
 
-        if (strlen(config('jwt.secret')) === 0) {
-            $this->call('jwt:secret');
-
-            $this->line('~ JWT secret key generated.');
-        }
-
         $credentials = $this->requestDatabaseCredentials();
         $this->updateEnvironmentFile($credentials);
 

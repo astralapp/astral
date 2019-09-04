@@ -55,10 +55,10 @@ export default {
         refresh: false
       })
     }
-    if (this.user.autotag_topics) {
-      this.$bus.$emit('STATUS', 'Applying repository tags...')
-      await this.autotagStars()
-    }
+    // if (this.user.autotag_topics) {
+    //   this.$bus.$emit('STATUS', 'Applying repository tags...')
+    //   await this.autotagStars()
+    // }
     this.$bus.$emit('STATUS', 'Cleaning up...')
     await this.cleanupStars()
     this.$bus.$emit('STATUS', '')

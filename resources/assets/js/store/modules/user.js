@@ -1,4 +1,3 @@
-import ls from 'local-storage'
 import { SET_USER, DELETE_USER } from '../mutation-types'
 import client from '../api/client'
 import router from '@/router'
@@ -8,8 +7,7 @@ const state = {
 }
 
 const getters = {
-  user: state => state.user,
-  isAuthenticated: () => !!ls('jwt')
+  user: state => state.user
 }
 
 const mutations = {
@@ -23,45 +21,30 @@ const mutations = {
 
 const actions = {
   fetchUser({ commit }) {
-    return client
-      .withAuth()
-      .get('/auth/me')
-      .then(res => {
-        commit(SET_USER, res)
-      })
+    return client.get('/auth/me').then(({ data }) => {
+      commit(SET_USER, data)
+    })
   },
   deleteUser({ commit }) {
-    return client
-      .withAuth()
-      .delete('/auth/delete')
-      .then(() => {
-        commit(DELETE_USER)
-        router.push('auth/logout')
-      })
+    return client.delete('/auth/delete').then(() => {
+      commit(DELETE_USER)
+      router.push('auth/logout')
+    })
   },
   revokeUserAccess() {
-    return client
-      .withAuth()
-      .get('/auth/revoke')
-      .then(() => {
-        router.push('auth/logout')
-      })
+    return client.get('/auth/revoke').then(() => {
+      router.push('auth/logout')
+    })
   },
   setShowLanguageTags({ commit }, flag) {
-    return client
-      .withAuth()
-      .put('/user/show-language-tags', { flag })
-      .then(res => {
-        commit(SET_USER, res)
-      })
+    return client.put('/user/show-language-tags', { flag }).then(({ data }) => {
+      commit(SET_USER, data)
+    })
   },
   setAutosaveNotes({ commit }, flag) {
-    return client
-      .withAuth()
-      .put('/user/autosave-notes', { flag })
-      .then(res => {
-        commit(SET_USER, res)
-      })
+    return client.put('/user/autosave-notes', { flag }).then(({ data }) => {
+      commit(SET_USER, data)
+    })
   }
 }
 

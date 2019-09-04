@@ -8,16 +8,15 @@ use Zttp\Zttp;
 class GitHubClient
 {
     protected $endpoint;
-    protected $token;
 
-    public function __construct($token)
+    public function __construct()
     {
         $this->endpoint = 'https://api.github.com/graphql';
-        $this->token = $token;
     }
 
     public function fetchStars($cursor = null, $perPage = 100)
     {
+        $token = decrypt(auth()->user()->access_token);
         $cursorString = $cursor ? 'after:"'.$cursor.'"' : 'after: null';
         $query = <<<GQL
     query {
@@ -71,7 +70,7 @@ class GitHubClient
 GQL;
 
         $response = Zttp::withHeaders([
-            'Authorization' => 'Bearer '.$this->token,
+            'Authorization' => "Bearer {$token}",
             'Content-Type'  => 'application/json',
         ])->post($this->endpoint, [
             'query'     => $query,
@@ -91,6 +90,7 @@ GQL;
 
     public function unstarStar($nodeId)
     {
+        $token = decrypt(auth()->user()->access_token);
         $query = <<<GQL
     mutation UnstarStar {
         removeStar(input:{starrableId:"{$nodeId}"}) {
@@ -101,7 +101,7 @@ GQL;
     }
 GQL;
         $response = Zttp::withHeaders([
-            'Authorization' => 'Bearer '.$this->token,
+            'Authorization' => "Bearer {$token}",
             'Content-Type'  => 'application/json',
         ])->post($this->endpoint, [
             'query'     => $query,
@@ -115,12 +115,25 @@ GQL;
         return $response->json()['data'];
     }
 
+    public function fetchReadme($repo) {
+        $token = decrypt(auth()->user()->access_token);
+        $url = "https://api.github.com/repos/{$repo}/readme?access_token={$token}";
+        $response = Zttp::accept('application/vnd.github.v3.html')->get($url);
+
+        if ($response->getStatusCode() == 401) {
+            throw new InvalidAccessTokenException();
+        }
+
+        return $response->body();
+    }
+
     public function revokeApplicationGrant()
     {
+        $token = decrypt(auth()->user()->access_token);
         $clientId = config('services.github.client_id');
         $clientSecret = config('services.github.client_secret');
 
-        $response = Zttp::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$this->token}");
+        $response = Zttp::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$token}");
 
         if ($response->getStatusCode() == 404) {
             throw new InvalidAccessTokenException();
