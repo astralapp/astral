@@ -15,7 +15,7 @@ Route::get('auth/github', 'AuthController@redirectToProvider');
 Route::get('auth/github/callback', 'AuthController@handleProviderCallback');
 Route::get('auth/logout', 'AuthController@logout');
 
-Route::get('login', function() {
+Route::get('login', function () {
     return redirect('/auth');
 })->name('login');
 
@@ -59,7 +59,7 @@ Route::prefix('api')->group(function () {
     });
 });
 
-Route::get('/', function() {
+Route::get('/', function () {
     if (auth()->check()) {
         return redirect('/dashboard');
     }
