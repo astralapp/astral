@@ -45,7 +45,7 @@ class ClearAccessTokensCommand extends Command
 
         $bar->start();
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $user->access_token = null;
             $user->save();
             $bar->advance();

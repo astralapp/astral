@@ -115,7 +115,8 @@ GQL;
         return $response->json()['data'];
     }
 
-    public function fetchReadme($repo) {
+    public function fetchReadme($repo)
+    {
         $token = decrypt(auth()->user()->access_token);
         $url = "https://api.github.com/repos/{$repo}/readme?access_token={$token}";
         $response = Zttp::accept('application/vnd.github.v3.html')->get($url);
