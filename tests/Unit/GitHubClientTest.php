@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Astral\Exceptions\InvalidAccessTokenException;
 use Astral\Lib\GitHubClient;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class GitHubClientTest extends TestCase
