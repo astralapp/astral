@@ -48,7 +48,7 @@
         </div>
       </template>
     </SidebarGroup>
-    <!-- <SidebarGroup :collapsible="true" :is-collapsed="filtersCollapsed" @toggle="toggleCollapsedState('filters')">
+    <SidebarGroup :collapsible="true" :is-collapsed="filtersCollapsed" @toggle="toggleCollapsedState('filters')">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Filters" @click.native="toggleCollapsed">
           <button
@@ -80,7 +80,7 @@
           </SidebarItem>
         </ul>
       </template>
-    </SidebarGroup> -->
+    </SidebarGroup>
     <SidebarGroup :collapsible="true" :is-collapsed="languagesCollapsed" @toggle="toggleCollapsedState('languages')">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Languages" @click.native="toggleCollapsed" />
