@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use Astral\Lib\GitHubClient;
 use Astral\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 use Mockery;
 use Tests\TestCase;
 
@@ -43,7 +43,7 @@ class AuthenticatesUsersTest extends TestCase
 
         $this->assertEquals($githubUser->getNickname(), $user->username);
 
-        $response->assertRedirect("/dashboard");
+        $response->assertRedirect('/dashboard');
     }
 
     public function mockSocialiteFacade()
