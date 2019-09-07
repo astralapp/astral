@@ -79,7 +79,6 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import ls from 'local-storage'
 import ToggleSwitch from '@/components/ToggleSwitch'
 export default {
   name: 'SettingsModal',
@@ -93,7 +92,7 @@ export default {
     return {
       deleteUserClicked: false,
       deleteConfirmation: '',
-      exportUrl: `/api/stars/export?token=${ls('jwt').replace('Bearer ', '')}`
+      exportUrl: `/api/stars/export`
     }
   },
   computed: {

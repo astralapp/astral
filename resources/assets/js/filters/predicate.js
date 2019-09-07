@@ -69,7 +69,7 @@ export default function(stars, predicate) {
         } else if (p.selectedTarget === 'astralRepoState') {
           return operators[p.operator](get(star, p.argument.key))
         } else {
-          return false
+          return operators[p.operator]('', p.argument)
         }
       })
     })
