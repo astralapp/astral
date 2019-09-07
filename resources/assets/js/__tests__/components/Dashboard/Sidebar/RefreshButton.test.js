@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
+import RefreshButton from '@/components/dashboard/sidebar/RefreshButton'
 
 describe('Sidebar refresh button', () => {
   it('applies the active class when the prop is true', () => {

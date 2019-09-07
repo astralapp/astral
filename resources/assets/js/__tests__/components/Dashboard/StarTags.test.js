@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import StarTags from '@/components/Dashboard/StarTags'
+import StarTags from '@/components/dashboard/StarTags'
 import sampleStars from '../../utils/sample-stars'
 import { Store } from 'vuex-mock-store'
 

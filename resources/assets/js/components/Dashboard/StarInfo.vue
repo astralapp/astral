@@ -65,8 +65,8 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import NotesEditor from '@/components/Dashboard/NotesEditor'
-import Readme from '@/components/Dashboard/Readme'
+import NotesEditor from '@/components/dashboard/NotesEditor'
+import Readme from '@/components/dashboard/Readme'
 import Icon from '@/components/Icon'
 export default {
   name: 'StarInfo',

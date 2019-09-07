@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import TagSorter from '@/components/Dashboard/Sidebar/TagSorter'
+import TagSorter from '@/components/dashboard/sidebar/TagSorter'
 
 const $bus = {
   $on: jest.fn((e, fn) => fn(e))

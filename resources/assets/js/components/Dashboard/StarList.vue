@@ -27,7 +27,7 @@
 import GlobalEvents from 'vue-global-events'
 import CollectionCluster from 'vue-collection-cluster'
 import { mapGetters, mapActions } from 'vuex'
-import Star from '@/components/Dashboard/Star'
+import Star from '@/components/dashboard/Star'
 import shouldDisableKeyboardShortcutsMixin from '@/mixins/disable-kb-shortcuts'
 export default {
   name: 'StarList',

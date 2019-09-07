@@ -9,7 +9,7 @@
   </header>
 </template>
 <script>
-import UserDropdown from '@/components/Dashboard/UserDropdown'
+import UserDropdown from '@/components/dashboard/UserDropdown'
 export default {
   name: 'Navbar',
   components: {

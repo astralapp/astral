@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import EasyMDE from 'easymde'
 import flushPromises from 'flush-promises'
-import NotesEditor from '@/components/Dashboard/NotesEditor'
+import NotesEditor from '@/components/dashboard/NotesEditor'
 
 jest.unmock('lodash')
 

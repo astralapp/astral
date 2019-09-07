@@ -1,5 +1,5 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
+import SidebarItem from '@/components/dashboard/sidebar/SidebarItem'
 
 describe('Sidebar Item', () => {
   it('renders a title', () => {

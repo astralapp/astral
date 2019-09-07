@@ -45,7 +45,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import StarTags from '@/components/Dashboard/StarTags'
+import StarTags from '@/components/dashboard/StarTags'
 import Icon from '@/components/Icon'
 
 export default {

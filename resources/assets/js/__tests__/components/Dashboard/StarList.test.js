@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import StarList from '@/components/Dashboard/StarList'
+import StarList from '@/components/dashboard/StarList'
 import '@/filters/galileo'
 import sampleStars from '../../utils/sample-stars'
 import { Store } from 'vuex-mock-store'

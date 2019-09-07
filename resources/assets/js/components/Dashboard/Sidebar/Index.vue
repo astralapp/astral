@@ -102,13 +102,13 @@
   </div>
 </template>
 <script>
-import NewTagForm from '@/components/Dashboard/Sidebar/NewTagForm'
-import RefreshButton from '@/components/Dashboard/Sidebar/RefreshButton'
-import SidebarGroup from '@/components/Dashboard/Sidebar/SidebarGroup'
-import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
-import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
-import SidebarTag from '@/components/Dashboard/Sidebar/SidebarTag'
-import TagSorter from '@/components/Dashboard/Sidebar/TagSorter'
+import NewTagForm from '@/components/dashboard/sidebar/NewTagForm'
+import RefreshButton from '@/components/dashboard/sidebar/RefreshButton'
+import SidebarGroup from '@/components/dashboard/sidebar/SidebarGroup'
+import SidebarHeader from '@/components/dashboard/sidebar/SidebarHeader'
+import SidebarItem from '@/components/dashboard/sidebar/SidebarItem'
+import SidebarTag from '@/components/dashboard/sidebar/SidebarTag'
+import TagSorter from '@/components/dashboard/sidebar/TagSorter'
 import Icon from '@/components/Icon'
 import { mapActions, mapGetters } from 'vuex'
 import dragula from 'dragula'
