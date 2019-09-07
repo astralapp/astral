@@ -1,5 +1,5 @@
 import { mount, TransitionStub } from '@vue/test-utils'
-import NewTagForm from '@/components/dashboard/sidebar/NewTagForm'
+import NewTagForm from '@/components/Dashboard/Sidebar/NewTagForm'
 
 describe('New Tag Form', () => {
   describe('methods', () => {

@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import SidebarHeader from '@/components/dashboard/sidebar/SidebarHeader'
+import SidebarHeader from '@/components/Dashboard/Sidebar/SidebarHeader'
 
 describe('Sidebar Header', () => {
   it('sets the title', () => {

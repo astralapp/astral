@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Auth from '@/components/auth/Index'
-import Dashboard from '@/components/dashboard/Index'
+import Auth from '@/components/Auth/Index'
+import Dashboard from '@/components/Dashboard/Index'
 import axios from 'axios'
 
 Vue.use(Router)

@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
-import DashboardIndex from '@/components/dashboard/Index'
+import DashboardIndex from '@/components/Dashboard/Index'
 import Vuex from 'vuex'
 
 const $bus = {

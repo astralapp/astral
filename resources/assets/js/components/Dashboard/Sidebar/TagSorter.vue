@@ -14,7 +14,7 @@
 </template>
 <script>
 import vClickOutside from 'v-click-outside'
-import TagSortDropdown from '@/components/dashboard/sidebar/TagSortDropdown'
+import TagSortDropdown from '@/components/Dashboard/Sidebar/TagSortDropdown'
 import Icon from '@/components/Icon'
 export default {
   name: 'TagSorter',

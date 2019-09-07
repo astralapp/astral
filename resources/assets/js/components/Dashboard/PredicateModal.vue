@@ -32,9 +32,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import PredicateEditor from '@/components/dashboard/predicate-editor/Index'
 import { cloneDeep } from 'lodash'
 import { defaultPredicate } from '@/utils/predicates'
+import PredicateEditor from '@/components/Dashboard/PredicateEditor/Index'
 export default {
   components: {
     PredicateEditor

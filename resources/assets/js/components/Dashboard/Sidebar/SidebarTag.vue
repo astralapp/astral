@@ -34,8 +34,8 @@
 </template>
 <script>
 import vClickOutside from 'v-click-outside'
-import SidebarItem from '@/components/dashboard/sidebar/SidebarItem'
-import EditTagDropdown from '@/components/dashboard/sidebar/EditTagDropdown'
+import SidebarItem from '@/components/Dashboard/Sidebar/SidebarItem'
+import EditTagDropdown from '@/components/Dashboard/Sidebar/EditTagDropdown'
 import Icon from '@/components/Icon'
 export default {
   name: 'SidebarTag',

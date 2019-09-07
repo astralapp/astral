@@ -12,13 +12,13 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Navbar from '@/components/dashboard/Navbar'
-import Sidebar from '@/components/dashboard/sidebar/Index'
-import StarList from '@/components/dashboard/StarList'
-import Galileo from '@/components/dashboard/Galileo'
-import StarInfo from '@/components/dashboard/StarInfo'
-import SettingsModal from '@/components/dashboard/SettingsModal'
-import PredicateModal from '@/components/dashboard/PredicateModal'
+import Navbar from '@/components/Dashboard/Navbar'
+import Sidebar from '@/components/Dashboard/Sidebar/Index'
+import StarList from '@/components/Dashboard/StarList'
+import Galileo from '@/components/Dashboard/Galileo'
+import StarInfo from '@/components/Dashboard/StarInfo'
+import SettingsModal from '@/components/Dashboard/SettingsModal'
+import PredicateModal from '@/components/Dashboard/PredicateModal'
 import Notifier from '@/components/Notifier'
 export default {
   name: 'Dashboard',

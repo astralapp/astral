@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import TagSortDropdown from '@/components/dashboard/sidebar/TagSortDropdown'
+import TagSortDropdown from '@/components/Dashboard/Sidebar/TagSortDropdown'
 
 const $bus = {
   $emit: jest.fn((e, data) => data)

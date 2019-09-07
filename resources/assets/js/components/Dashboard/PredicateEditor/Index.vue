@@ -55,11 +55,11 @@
 <script>
 import Icon from '@/components/Icon'
 import SelectDropdown from '@/components/SelectDropdown'
-import NumberFilter from '@/components/dashboard/predicate-editor/NumberFilter'
-import StringFilter from '@/components/dashboard/predicate-editor/StringFilter'
-import TagsFilter from '@/components/dashboard/predicate-editor/TagsFilter'
-import LanguageFilter from '@/components/dashboard/predicate-editor/LanguageFilter'
-import StateFilter from '@/components/dashboard/predicate-editor/StateFilter'
+import NumberFilter from '@/components/Dashboard/PredicateEditor/NumberFilter'
+import StringFilter from '@/components/Dashboard/PredicateEditor/StringFilter'
+import TagsFilter from '@/components/Dashboard/PredicateEditor/TagsFilter'
+import LanguageFilter from '@/components/Dashboard/PredicateEditor/LanguageFilter'
+import StateFilter from '@/components/Dashboard/PredicateEditor/StateFilter'
 import { cloneDeep } from 'lodash'
 import { defaultPredicate, defaultGroup, predicateTargets } from '@/utils/predicates'
 export default {
