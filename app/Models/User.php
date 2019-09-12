@@ -14,11 +14,11 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'access_token'
+        'password', 'remember_token', 'access_token',
     ];
 
     protected $casts = [
-        'autosave_notes' => 'boolean',
+        'autosave_notes'     => 'boolean',
         'show_language_tags' => 'boolean',
     ];
 
