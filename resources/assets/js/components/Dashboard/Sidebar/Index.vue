@@ -50,7 +50,7 @@
     </SidebarGroup>
     <SidebarGroup :collapsible="true" :is-collapsed="filtersCollapsed" @toggle="toggleCollapsedState('filters')">
       <template v-slot:header="{ toggleCollapsed }">
-        <SidebarHeader title="Filters" @click.native="toggleCollapsed">
+        <SidebarHeader title="Smart Filters" @click.native="toggleCollapsed">
           <button
             class="transition-color bg-transparent p-0 w-4 h-4 text-grey-darker hover:text-grey focus-none"
             @click.stop="$modal.show('predicate-modal')"
