@@ -16,3 +16,4 @@ NOTES.md
 **/.DS_Store
 **/*.orig
 *.crt
+.phpunit.result.cache

@@ -26,7 +26,7 @@ class AuthenticatesUsersTest extends TestCase
     {
         $response = $this->get('/auth/github');
 
-        $this->assertContains('github.com/login/oauth', $response->getTargetUrl());
+        $this->assertStringContainsStringIgnoringCase('github.com/login/oauth', $response->getTargetUrl());
     }
 
     /** @test */
