@@ -3,7 +3,7 @@
 namespace Astral\Lib;
 
 use Astral\Exceptions\InvalidAccessTokenException;
-use Zttp\Zttp;
+use Illuminate\Support\Facades\Http;
 
 class GitHubClient
 {
@@ -69,10 +69,7 @@ class GitHubClient
     }
 GQL;
 
-        $response = Zttp::withHeaders([
-            'Authorization' => "Bearer {$token}",
-            'Content-Type'  => 'application/json',
-        ])->post($this->endpoint, [
+        $response = Http::withToken($token)->post($this->endpoint, [
             'query'     => $query,
             'variables' => '',
         ]);
@@ -100,10 +97,7 @@ GQL;
         }
     }
 GQL;
-        $response = Zttp::withHeaders([
-            'Authorization' => "Bearer {$token}",
-            'Content-Type'  => 'application/json',
-        ])->post($this->endpoint, [
+        $response = Http::withToken($token)->post($this->endpoint, [
             'query'     => $query,
             'variables' => '',
         ]);
@@ -119,7 +113,7 @@ GQL;
     {
         $token = decrypt(auth()->user()->access_token);
         $url = "https://api.github.com/repos/{$repo}/readme";
-        $response = Zttp::accept('application/vnd.github.v3.html')->withHeaders(['Authorization' => "Bearer {$token}"])->get($url);
+        $response = Http::accept('application/vnd.github.v3.html')->withToken($token)->get($url);
 
         if ($response->getStatusCode() == 401) {
             throw new InvalidAccessTokenException();
@@ -134,7 +128,7 @@ GQL;
         $clientId = config('services.github.client_id');
         $clientSecret = config('services.github.client_secret');
 
-        $response = Zttp::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$token}");
+        $response = Http::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$token}");
 
         if ($response->getStatusCode() == 404) {
             throw new InvalidAccessTokenException();
