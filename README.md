@@ -16,9 +16,9 @@ Begin by cloning this repository to your machine, and installing all Composer & 
 
 ```bash
 git clone git@github.com:astralapp/astral.git
-cd astral && composer install && npm install
+cd astral && composer install && yarn
 php artisan astral:install
-npm run dev
+yarn dev
 ```
 
 ### Step 2
