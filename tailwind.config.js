@@ -23,7 +23,7 @@ View the full documentation at https://tailwindcss.com.
 |
 */
 
-var defaultConfig = require('tailwindcss/defaultConfig')()
+require('tailwindcss/defaultConfig')()
 
 /*
 |-------------------------------------------------------------------------------
@@ -664,7 +664,7 @@ module.exports = {
   | Margin                                  https://tailwindcss.com/docs/margin
   |-----------------------------------------------------------------------------
   |
-  | Here is where you define your margin utility sizes. These can be
+  | Here is where  you define your margin utility sizes. These can be
   | percentage based, pixels, rems, or any other units. By default we
   | provide a sensible rem based numeric scale plus a couple other
   | common use-cases like "1px". You can, of course, modify these
