@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Star extends Model
 {
-    protected $fillable = ['repo_id'];
+    protected $guarded = [];
 
     public function user()
     {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Predicate extends Model
 {
-    protected $fillable = ['name', 'body'];
+    protected $guarded = [];
 
     public function user()
     {
