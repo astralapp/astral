@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard w-screen h-screen overflow-hidden">
+  <div class="w-screen h-screen overflow-hidden dashboard">
     <Navbar />
     <Sidebar />
     <Galileo />
@@ -44,21 +44,53 @@ export default {
       })
     }
   },
-  async created() {
+  async mounted() {
+    let currentDirection = 'DESC'
+
     await this.fetchUser()
     this.$bus.$emit('STATUS', 'Fetching stars...')
     await this.fetchUserStars()
-    await this.fetchGitHubStars({ cursor: null, refresh: false })
+
+    if (this.stars.length) {
+      // If they havent finished fetching them in DESC order
+      if (this.pageInfo.hasNextPage) {
+        await this.fetchGitHubStars({ cursor: this.pageInfo.endCursor })
+      } else {
+        // Now fetch anything they've starred since the local stars
+        currentDirection = 'ASC'
+        await this.fetchGitHubStars({
+          cursor: this.pageInfo.initialStartCursor,
+          direction: currentDirection
+        })
+      }
+    } else {
+      // Fresh fetch!
+      await this.fetchGitHubStars({})
+    }
     while (this.pageInfo.hasNextPage) {
       await this.fetchGitHubStars({
         cursor: this.pageInfo.endCursor,
-        refresh: false
+        direction: currentDirection
       })
     }
-    // if (this.user.autotag_topics) {
-    //   this.$bus.$emit('STATUS', 'Applying repository tags...')
-    //   await this.autotagStars()
-    // }
+    /*
+     * Attempt one more fetch of newest stars, since the while loop
+     * above could end fetching the remainder of an abandoned state.
+     */
+    if (currentDirection === 'DESC') {
+      currentDirection = 'ASC'
+      await this.fetchGitHubStars({
+        cursor: this.pageInfo.initialStartCursor,
+        direction: currentDirection
+      })
+      while (this.pageInfo.hasNextPage) {
+        await this.fetchGitHubStars({
+          cursor: this.pageInfo.endCursor,
+          direction: currentDirection
+        })
+      }
+    }
+
     this.$bus.$emit('STATUS', 'Cleaning up...')
     await this.cleanupStars()
     this.$bus.$emit('STATUS', '')

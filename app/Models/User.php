@@ -12,7 +12,7 @@ class User extends Authenticatable
     protected $guarded = [];
 
     protected $hidden = [
-        'password', 'remember_token', 'access_token',
+        'password', 'remember_token',
     ];
 
     protected $casts = [
@@ -59,8 +59,12 @@ class User extends Authenticatable
         $this->save();
     }
 
-    public function starsCacheKey()
+    public function getAccessTokenAttribute($value)
     {
-        return "user_{$this->id}.github_stars";
+        if ($value) {
+            return decrypt($value);
+        } else {
+            return null;
+        }
     }
 }

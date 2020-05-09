@@ -1,4 +1,3 @@
-import qs from 'qs'
 import { uniqBy, omit } from 'lodash'
 import {
   CLEAR_STARS,
@@ -10,6 +9,7 @@ import {
   SET_README,
   SET_README_LOADING,
   SET_STARS_PAGE_INFO,
+  SET_INITIAL_START_CURSOR,
   SET_STARS,
   SET_STAR_TAGS,
   SET_TAGS,
@@ -21,6 +21,7 @@ import {
   RESET_STARS,
   UNSTAR_STAR
 } from '../mutation-types'
+import { fetchStarsQuery } from '../utils/queries'
 
 import client from '@/store/api/client'
 import router from '@/router'
@@ -120,8 +121,12 @@ const getters = {
 }
 
 const mutations = {
-  [SET_STARS](state, edges) {
-    state.stars = state.stars.concat(edges)
+  [SET_STARS](state, { stars, prepend }) {
+    if (prepend) {
+      state.stars = [...stars, ...state.stars]
+    } else {
+      state.stars = [...state.stars, ...stars]
+    }
   },
   [CLEAR_STARS](state) {
     state.stars = []
@@ -130,7 +135,10 @@ const mutations = {
     state.totalStars = total
   },
   [SET_STARS_PAGE_INFO](state, info) {
-    state.pageInfo = { ...info }
+    state.pageInfo = { ...state.pageInfo, ...info }
+  },
+  [SET_INITIAL_START_CURSOR](state, cursor) {
+    state.pageInfo = { ...state.pageInfo, initialStartCursor: cursor }
   },
   [SET_CURRENT_LANGUAGE](state, language) {
     state.currentLanguage = language
@@ -225,28 +233,47 @@ const mutations = {
 }
 
 const actions = {
-  fetchGitHubStars({ commit }, { cursor = null, refresh = false }) {
-    let cursorQs = cursor ? { cursor } : {}
-    let refreshQs = refresh ? { refresh: true } : {}
+  fetchGitHubStars({ commit, rootState }, { cursor = null, direction = 'DESC', refresh = false }) {
     if (refresh) {
       commit(RESET_STARS)
+      cursor = null
+      direction = 'DESC'
     }
-    return client.get(`/stars/github?${qs.stringify(cursorQs)}${qs.stringify(refreshQs)}`).then(({ data }) => {
-      commit(
-        SET_STARS,
-        data.edges.map(edge => {
-          edge.tags = []
-          edge.notes = ''
-          return edge
-        })
-      )
-      commit(SET_STARS_PAGE_INFO, data.pageInfo)
-      if (!cursor) {
-        commit(SET_TOTAL_STARS, data.totalCount)
-      }
 
-      commit(MAP_USER_STARS_TO_GITHUB_STARS)
-    })
+    return client
+      .post(
+        'https://api.github.com/graphql',
+        {
+          query: fetchStarsQuery(cursor, direction)
+        },
+        {
+          Authorization: `Bearer ${rootState.user.user.access_token}`
+        }
+      )
+      .then(res => {
+        const stars = res.data.data.viewer.starredRepositories
+        if (stars.edges.length) {
+          commit(SET_STARS, {
+            stars: stars.edges.map(edge => {
+              edge.tags = []
+              edge.notes = ''
+              return edge
+            }),
+            prepend: direction === 'ASC'
+          })
+          commit(SET_STARS_PAGE_INFO, stars.pageInfo)
+          if (!cursor) {
+            commit(SET_INITIAL_START_CURSOR, stars.pageInfo.startCursor)
+            commit(SET_TOTAL_STARS, stars.totalCount)
+          }
+
+          if (direction === 'ASC') {
+            commit(SET_INITIAL_START_CURSOR, stars.pageInfo.endCursor)
+          }
+
+          commit(MAP_USER_STARS_TO_GITHUB_STARS)
+        }
+      })
   },
   fetchUserStars({ commit }) {
     client.get('/stars').then(({ data }) => {
@@ -283,10 +310,17 @@ const actions = {
   selectStars({ commit }, stars) {
     commit(SELECT_STARS, stars)
   },
-  fetchReadme({ commit }, repoName) {
+  fetchReadme({ commit, rootState }, repoName) {
     commit(SET_README_LOADING, true)
     return client
-      .get(`/stars/readme?repo=${repoName}`)
+      .get(
+        `https://api.github.com/repos/${repoName}/readme`,
+        {},
+        {
+          Authorization: `Bearer ${rootState.user.user.access_token}`,
+          Accept: 'application/vnd.github.v3.html'
+        }
+      )
       .then(({ data }) => {
         commit(SET_README, data)
       })
@@ -332,13 +366,6 @@ const actions = {
   cleanupStars({ commit }) {
     client.delete('/stars/cleanup').then(({ data }) => {
       commit(SET_USER_STARS, data)
-      commit(MAP_USER_STARS_TO_GITHUB_STARS)
-    })
-  },
-  autotagStars({ commit }) {
-    client.put('/stars/autotag').then(({ data }) => {
-      commit(SET_TAGS, data.tags)
-      commit(SET_USER_STARS, data.stars)
       commit(MAP_USER_STARS_TO_GITHUB_STARS)
     })
   },

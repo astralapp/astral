@@ -3,6 +3,7 @@ import sampleStars from '../../utils/sample-stars'
 import router from '@/router'
 import client from '@/store/api/client'
 import { cloneDeep } from 'lodash'
+import { fetchStarsQuery } from '@/store/utils/queries'
 
 jest.mock('@/store/api/client')
 jest.mock('@/router', () => ({
@@ -22,6 +23,7 @@ const {
   SELECT_STARS,
   SET_README,
   SET_STARS_PAGE_INFO,
+  SET_INITIAL_START_CURSOR,
   SET_STAR_TAGS,
   SET_TOTAL_STARS,
   SET_USER_STARS,
@@ -382,6 +384,13 @@ describe('Stars Module', () => {
   describe('Stars actions', () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
+    const rootState = {
+      user: {
+        user: {
+          access_token: '1234acbd'
+        }
+      }
+    }
     describe("Fetching the user's GitHub stars", () => {
       it('fetches their stars', async () => {
         let sampleRes = sampleStars.edges.map(edge => {
@@ -389,36 +398,45 @@ describe('Stars Module', () => {
           edge.notes = ''
           return edge
         })
-        client.get.mockResolvedValue({ data: sampleStars })
 
-        await fetchGitHubStars({ commit }, { cursor: null, refresh: false })
+        client.post.mockResolvedValue({
+          data: {
+            data: {
+              viewer: {
+                starredRepositories: sampleStars
+              }
+            }
+          }
+        })
 
-        expect(client.get).toHaveBeenCalledWith('/stars/github?')
+        await fetchGitHubStars({ commit, rootState }, {})
+
+        expect(client.post).toHaveBeenCalledWith(
+          'https://api.github.com/graphql',
+          {
+            query: fetchStarsQuery()
+          },
+          {
+            Authorization: 'Bearer 1234acbd'
+          }
+        )
         expect(commit).not.toHaveBeenCalledWith('RESET_STARS')
-        expect(commit).toHaveBeenCalledWith('SET_STARS', sampleRes)
+        expect(commit).toHaveBeenCalledWith('SET_STARS', { stars: sampleRes, prepend: false })
         expect(commit).toHaveBeenCalledWith('SET_STARS_PAGE_INFO', sampleStars.pageInfo)
         expect(commit).toHaveBeenCalledWith('SET_TOTAL_STARS', sampleStars.totalCount)
         expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
       })
 
       it('resets the star-related state if refresh is true', async () => {
-        await fetchGitHubStars({ commit }, { cursor: null, refresh: true })
+        await fetchGitHubStars({ commit, rootState }, { refresh: true })
 
         expect(commit).toHaveBeenCalledWith('RESET_STARS')
-        expect(client.get).toHaveBeenCalledWith('/stars/github?refresh=true')
       })
 
       it('does not set the total count state if a cursor is passed', async () => {
-        await fetchGitHubStars({ commit }, { cursor: null, refresh: false })
+        await fetchGitHubStars({ commit, rootState }, { cursor: null, refresh: false })
 
         expect(commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
-      })
-
-      it('can pass a cursor to the request query string', async () => {
-        await fetchGitHubStars({ commit }, { cursor: 'abc123', refresh: false })
-
-        expect(commit).not.toHaveBeenCalledWith('SET_TOTAL_STARS')
-        expect(client.get).toHaveBeenCalledWith('/stars/github?cursor=abc123')
       })
     })
 
@@ -489,16 +507,23 @@ describe('Stars Module', () => {
       it('fetches a repo readme', async () => {
         client.get.mockResolvedValue({ data: 'Hello World' })
 
-        await fetchReadme({ commit }, 'astralapp/astral')
+        await fetchReadme({ commit, rootState }, 'astralapp/astral')
 
-        expect(client.get).toHaveBeenCalledWith(`/stars/readme?repo=astralapp/astral`)
+        expect(client.get).toHaveBeenCalledWith(
+          'https://api.github.com/repos/astralapp/astral/readme',
+          {},
+          {
+            Authorization: 'Bearer 1234acbd',
+            Accept: 'application/vnd.github.v3.html'
+          }
+        )
         expect(commit).toHaveBeenCalledWith('SET_README', 'Hello World')
       })
 
       it('sets the readme to an empty string if the request fails', async () => {
         client.get.mockRejectedValue(null)
 
-        await fetchReadme({ commit }, 'astralapp/astral')
+        await fetchReadme({ commit, rootState }, 'astralapp/astral')
 
         expect(commit).toHaveBeenCalledWith('SET_README', '')
       })
@@ -567,24 +592,6 @@ describe('Stars Module', () => {
 
       expect(client.delete).toHaveBeenCalledWith('/stars/cleanup')
       expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleStars.edges)
-      expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
-    })
-
-    it('autotags stars', async () => {
-      const sampleRes = {
-        data: {
-          stars: sampleStars.edges,
-          tags: [{ name: 'VueJS' }, { name: 'React' }]
-        }
-      }
-
-      client.put.mockResolvedValue({ data: sampleRes })
-
-      await autotagStars({ commit })
-
-      expect(client.put).toHaveBeenCalledWith('/stars/autotag')
-      expect(commit).toHaveBeenCalledWith('SET_TAGS', sampleRes.tags)
-      expect(commit).toHaveBeenCalledWith('SET_USER_STARS', sampleRes.stars)
       expect(commit).toHaveBeenCalledWith('MAP_USER_STARS_TO_GITHUB_STARS')
     })
   })

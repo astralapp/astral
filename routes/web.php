@@ -13,7 +13,6 @@
 
 Route::get('auth/github', 'AuthController@redirectToProvider');
 Route::get('auth/github/callback', 'AuthController@handleProviderCallback');
-Route::get('auth/logout', 'AuthController@logout');
 
 Route::get('login', function () {
     return redirect('/auth');
@@ -21,7 +20,7 @@ Route::get('login', function () {
 
 Route::prefix('api')->group(function () {
     Route::get('auth/me', 'AuthController@me');
-
+    Route::get('auth/logout', 'AuthController@logout');
     Route::get('auth/revoke', 'AuthController@revokeApplicationGrant');
     Route::delete('auth/delete', 'AuthController@destroy');
 
@@ -43,8 +42,6 @@ Route::prefix('api')->group(function () {
         Route::get('stars', 'StarsController@index');
         Route::get('stars/export', 'StarsController@export');
 
-        Route::get('stars/github', 'GitHubStarsController@index');
-        Route::get('stars/readme', 'GitHubStarsController@fetchReadme');
         Route::delete('stars/github/unstar', 'GitHubStarsController@unstar');
 
         Route::put('stars/autotag', 'AutotagController@update');

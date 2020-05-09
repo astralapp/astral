@@ -68,15 +68,4 @@ class UserTest extends TestCase
         $this->user->setShowLanguageTags(true);
         $this->assertEquals(true, $this->user->show_language_tags);
     }
-
-    /** @test */
-    public function it_can_fetch_the_user_specific_cache_key_for_stars()
-    {
-        $id = $this->user->id;
-
-        $this->assertEquals(
-            "user_{$id}.github_stars",
-            $this->user->starsCacheKey()
-        );
-    }
 }

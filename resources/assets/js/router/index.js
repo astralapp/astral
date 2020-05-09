@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Auth from '@/components/Auth/Index'
 import Dashboard from '@/components/Dashboard/Index'
 import axios from 'axios'
+import store from '../store'
 
 Vue.use(Router)
 
@@ -34,6 +35,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (requiresAuth) {
     try {
+      await store.restored
       await axios.get('/api/auth/me')
       next()
     } catch (e) {

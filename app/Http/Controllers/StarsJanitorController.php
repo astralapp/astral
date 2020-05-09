@@ -15,7 +15,7 @@ class StarsJanitorController extends Controller
 
     public function destroy()
     {
-        $this->janitor->deleteEmptyStars()->deleteUnstarredStars();
+        $this->janitor->deleteEmptyStars();
 
         return auth()->user()->stars()->with('tags')->get();
     }

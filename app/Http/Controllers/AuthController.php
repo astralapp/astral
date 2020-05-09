@@ -69,7 +69,6 @@ class AuthController extends Controller
     {
         $user = auth()->user();
         $this->revokeUserAccess();
-        Cache::forget($user->starsCacheKey());
         $user->tags()->delete();
         $user->stars()->delete();
         $user->delete();
