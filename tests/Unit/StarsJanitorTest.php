@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Astral\Lib\StarsJanitor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class StarsJanitorTest extends TestCase
