@@ -4,7 +4,6 @@ namespace Astral\Http\Controllers;
 
 use Astral\Lib\GitHubClient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class GitHubStarsController extends Controller
 {

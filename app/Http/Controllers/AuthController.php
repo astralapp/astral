@@ -4,7 +4,6 @@ namespace Astral\Http\Controllers;
 
 use Astral\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Socialite;
 
 class AuthController extends Controller
