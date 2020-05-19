@@ -14,30 +14,6 @@ class GitHubClient
         $this->endpoint = 'https://api.github.com/graphql';
     }
 
-    public function unstarStar($nodeId)
-    {
-        $token = decrypt(auth()->user()->access_token);
-        $query = <<<GQL
-    mutation UnstarStar {
-        removeStar(input:{starrableId:"{$nodeId}"}) {
-            starrable {
-                id
-            }
-        }
-    }
-GQL;
-        $response = Http::withToken($token)->post($this->endpoint, [
-            'query'     => $query,
-            'variables' => '',
-        ]);
-
-        if ($response->getStatusCode() == 401) {
-            throw new InvalidAccessTokenException();
-        }
-
-        return $response->json()['data'];
-    }
-
     public function revokeApplicationGrant()
     {
         $token = auth()->user()->access_token;

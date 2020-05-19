@@ -39,7 +39,7 @@ export default {
         if (!Object.keys(this.currentTag).length) {
           return true
         } else {
-          return star.hasOwnProperty('tags') && star.tags.map(tag => tag.name).includes(this.currentTag.name)
+          return star.hasOwnProperty('tags') && star.tags.find(tag => tag.name === this.currentTag.name)
         }
       })
     }

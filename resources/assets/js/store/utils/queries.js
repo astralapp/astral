@@ -41,3 +41,14 @@ export const fetchStarsQuery = (cursor = null, direction = 'DESC', perPage = 100
     }
   }`
 }
+
+export const unstarQuery = id => {
+  return `mutation UnstarStar {
+    removeStar(input: {starrableId: "${id}"}) {
+      starrable {
+        id
+      }
+    }
+  }
+  `
+}

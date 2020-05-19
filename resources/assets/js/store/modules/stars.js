@@ -21,7 +21,7 @@ import {
   RESET_STARS,
   UNSTAR_STAR
 } from '../mutation-types'
-import { fetchStarsQuery } from '../utils/queries'
+import { fetchStarsQuery, unstarQuery } from '../utils/queries'
 
 import client from '@/store/api/client'
 import router from '@/router'
@@ -268,6 +268,7 @@ const actions = {
           }
 
           if (direction === 'ASC') {
+            console.log('Setting initial cursor', stars.pageInfo.endCursor)
             commit(SET_INITIAL_START_CURSOR, stars.pageInfo.endCursor)
           }
 
@@ -369,17 +370,37 @@ const actions = {
       commit(MAP_USER_STARS_TO_GITHUB_STARS)
     })
   },
-  unstarStar({ commit, state, dispatch, getters }, { databaseId, nodeId }) {
-    commit(UNSTAR_STAR, databaseId)
-    commit(SELECT_STARS, state.currentStars.filter(star => star.node.databaseId !== databaseId))
-    if (Object.keys(getters.currentStar).length) {
-      dispatch('fetchReadme', getters.currentStar.node.nameWithOwner)
-    }
-
-    client.delete('/stars/github/unstar', { databaseId, nodeId }).then(({ data }) => {
-      commit(SET_TAGS, data.tags)
-      commit(SET_USER_STARS, data.stars)
-      commit(MAP_USER_STARS_TO_GITHUB_STARS)
+  unstarStar({ commit, state, dispatch, getters, rootState }, { databaseId, nodeId }) {
+    return new Promise((resolve, reject) => {
+      client
+        .post(
+          'https://api.github.com/graphql',
+          {
+            query: unstarQuery(nodeId)
+          },
+          {
+            Authorization: `Bearer ${rootState.user.user.access_token}`
+          }
+        )
+        .then(({ data }) => {
+          if (!data.hasOwnProperty('errors')) {
+            commit(SELECT_STARS, state.currentStars.filter(star => star.node.databaseId !== databaseId))
+            if (Object.keys(getters.currentStar).length) {
+              dispatch('fetchReadme', getters.currentStar.node.nameWithOwner)
+            }
+            commit(UNSTAR_STAR, databaseId)
+            client.delete('/stars/github/unstar', { databaseId }).then(res => {
+              if (res) {
+                commit(SET_TAGS, res.tags)
+                commit(SET_USER_STARS, res.stars)
+                commit(MAP_USER_STARS_TO_GITHUB_STARS)
+              }
+            })
+            resolve()
+          } else {
+            reject({ error: 'Astral does not have permission to unstar this repository.', status: 403 })
+          }
+        })
     })
   }
 }

@@ -14,7 +14,7 @@
         <span>{{ notesShowing ? 'Hide Notes' : 'Show Notes' }}</span>
       </button>
       <button
-        class="hidden px-2 py-2 ml-4 text-xs font-bold tracking-wide no-underline uppercase rounded bg-grey-light hover:bg-grey transition-bg text-grey-darkest focus-none"
+        class="px-2 py-2 ml-4 text-xs font-bold tracking-wide no-underline uppercase rounded bg-grey-light hover:bg-grey transition-bg text-grey-darkest focus-none"
         @click="unstar"
       >
         <Icon
@@ -50,7 +50,7 @@
       <span class="px-4 py-2 font-bold text-white rounded bg-grey">No README Found</span>
     </div>
     <div
-      class="absolute flex items-center justify-center w-full h-full opacity-0 pointer-events-none readme-loader pin-t pib-b pin-l transition-opacity"
+      class="absolute flex items-center justify-center w-full h-full transition-opacity opacity-0 pointer-events-none readme-loader pin-t pib-b pin-l"
       :class="{ 'opacity-100 pointer-events-auto': readmeLoading }"
     >
       <img src="/images/status-spinner-dark.svg" alt="..." class="spin" width="32" height="32" />
@@ -117,7 +117,7 @@ export default {
     highlightText(e) {
       e.currentTarget.select()
     },
-    unstar() {
+    async unstar() {
       if (this.user.scope !== 'public_repo') {
         if (
           window.confirm('Unstarring repositories requires elevated auth privileges. Would you like to grant them?')
@@ -125,10 +125,14 @@ export default {
           window.location.assign('/auth/github?scope=public_repo')
         }
       } else {
-        this.unstarStar({
-          databaseId: this.currentStar.node.databaseId,
-          nodeId: this.currentStar.node.id
-        })
+        try {
+          await this.unstarStar({
+            databaseId: this.currentStar.node.databaseId,
+            nodeId: this.currentStar.node.id
+          })
+        } catch (e) {
+          this.$bus.$emit('NOTIFICATION', e.error, 'error')
+        }
       }
     }
   }

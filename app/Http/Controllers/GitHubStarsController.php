@@ -18,20 +18,20 @@ class GitHubStarsController extends Controller
     public function unstar(Request $request)
     {
         $databaseId = (int) $request->input('databaseId');
-        $nodeId = $request->input('nodeId');
-
-        // Unstar through the GitHub API
-        // $this->client->unstarStar($nodeId);
 
         // Remove it from DB if it exists
         $userStar = auth()->user()->stars()->where('repo_id', $databaseId)->first();
+
         if ($userStar) {
             $userStar->delete();
+            $tags = auth()->user()->tags()->withStarCount()->get();
+            $stars = auth()->user()->stars()->with('tags')->get();
+
+            return response()->json(compact('stars', 'tags'));
+        } else {
+            return response()->json([], 204);
         }
 
-        $tags = auth()->user()->tags()->withStarCount()->get();
-        $stars = auth()->user()->stars()->with('tags')->get();
 
-        return response()->json(compact('stars', 'tags'));
     }
 }
