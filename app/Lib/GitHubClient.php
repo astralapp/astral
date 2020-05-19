@@ -76,6 +76,7 @@ GQL;
 
         if ($response->getStatusCode() == 401) {
             auth()->user()->update(['access_token' => null]);
+
             throw new InvalidAccessTokenException();
         }
 
@@ -105,6 +106,7 @@ GQL;
 
         if ($response->getStatusCode() == 401) {
             auth()->user()->update(['access_token' => null]);
+
             throw new InvalidAccessTokenException();
         }
 
@@ -119,6 +121,7 @@ GQL;
 
         if ($response->getStatusCode() == 401) {
             auth()->user()->update(['access_token' => null]);
+
             throw new InvalidAccessTokenException();
         }
 
@@ -135,6 +138,7 @@ GQL;
 
         if ($response->getStatusCode() == 404) {
             auth()->user()->update(['access_token' => null]);
+
             throw new InvalidAccessTokenException();
         }
 
