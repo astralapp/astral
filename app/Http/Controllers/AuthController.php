@@ -59,6 +59,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        auth()->user()->update(['access_token' => null]);
         auth()->logout();
 
         return redirect('/');

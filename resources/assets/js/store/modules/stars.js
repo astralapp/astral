@@ -268,7 +268,6 @@ const actions = {
           }
 
           if (direction === 'ASC') {
-            console.log('Setting initial cursor', stars.pageInfo.endCursor)
             commit(SET_INITIAL_START_CURSOR, stars.pageInfo.endCursor)
           }
 
@@ -388,9 +387,9 @@ const actions = {
             if (Object.keys(getters.currentStar).length) {
               dispatch('fetchReadme', getters.currentStar.node.nameWithOwner)
             }
-            commit(UNSTAR_STAR, databaseId)
             client.delete('/stars/github/unstar', { databaseId }).then(res => {
               if (res) {
+                commit(UNSTAR_STAR, databaseId)
                 commit(SET_TAGS, res.tags)
                 commit(SET_USER_STARS, res.stars)
                 commit(MAP_USER_STARS_TO_GITHUB_STARS)

@@ -23,6 +23,7 @@ class GitHubClient
         $response = Http::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$token}");
 
         if ($response->getStatusCode() == 404) {
+            auth()->user()->update(['access_token' => null]);
             throw new InvalidAccessTokenException();
         }
 
