@@ -63,4 +63,13 @@ class User extends Authenticatable
     {
         return "user_{$this->id}.github_stars";
     }
+
+    public function getAccessTokenAttribute($value)
+    {
+        if ($value) {
+            return decrypt($value);
+        } else {
+            return null;
+        }
+    }
 }

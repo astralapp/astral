@@ -40,7 +40,7 @@ class AuthController extends Controller
 
         $scope = $request->session()->pull('auth_scope', 'read:user');
 
-        if (is_null($user->access_token) || $user->scope != $scope) {
+        if (is_null($user->access_token) || $user->scope != $scope || isset($request['clearAccessToken'])) {
             $user->access_token = encrypt($githubUser->token);
         }
         // If the user exists, just update fields that they may have changed in their Github settings
@@ -60,6 +60,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        auth()->user()->update(['access_token' => null]);
         auth()->logout();
 
         return redirect('/');

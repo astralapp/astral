@@ -16,7 +16,7 @@ class GitHubClient
 
     public function fetchStars($cursor = null, $perPage = 100)
     {
-        $token = decrypt(auth()->user()->access_token);
+        $token = auth()->user()->access_token;
         $cursorString = $cursor ? 'after:"'.$cursor.'"' : 'after: null';
         $query = <<<GQL
     query {
@@ -75,6 +75,7 @@ GQL;
         ]);
 
         if ($response->getStatusCode() == 401) {
+            auth()->user()->update(['access_token' => null]);
             throw new InvalidAccessTokenException();
         }
 
@@ -87,7 +88,7 @@ GQL;
 
     public function unstarStar($nodeId)
     {
-        $token = decrypt(auth()->user()->access_token);
+        $token = auth()->user()->access_token;
         $query = <<<GQL
     mutation UnstarStar {
         removeStar(input:{starrableId:"{$nodeId}"}) {
@@ -103,6 +104,7 @@ GQL;
         ]);
 
         if ($response->getStatusCode() == 401) {
+            auth()->user()->update(['access_token' => null]);
             throw new InvalidAccessTokenException();
         }
 
@@ -111,11 +113,12 @@ GQL;
 
     public function fetchReadme($repo)
     {
-        $token = decrypt(auth()->user()->access_token);
+        $token = auth()->user()->access_token;
         $url = "https://api.github.com/repos/{$repo}/readme";
         $response = Http::accept('application/vnd.github.v3.html')->withToken($token)->get($url);
 
         if ($response->getStatusCode() == 401) {
+            auth()->user()->update(['access_token' => null]);
             throw new InvalidAccessTokenException();
         }
 
@@ -124,13 +127,14 @@ GQL;
 
     public function revokeApplicationGrant()
     {
-        $token = decrypt(auth()->user()->access_token);
+        $token = auth()->user()->access_token;
         $clientId = config('services.github.client_id');
         $clientSecret = config('services.github.client_secret');
 
         $response = Http::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$token}");
 
         if ($response->getStatusCode() == 404) {
+            auth()->user()->update(['access_token' => null]);
             throw new InvalidAccessTokenException();
         }
 
