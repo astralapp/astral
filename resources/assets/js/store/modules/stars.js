@@ -121,7 +121,7 @@ const getters = {
 }
 
 const mutations = {
-  [SET_STARS](state, { stars, prepend }) {
+  [SET_STARS](state, { stars, prepend = false }) {
     if (prepend) {
       state.stars = [...stars, ...state.stars]
     } else {
