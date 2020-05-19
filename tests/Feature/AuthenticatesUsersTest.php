@@ -39,7 +39,7 @@ class AuthenticatesUsersTest extends TestCase
         $response = $this->get('/auth/github/callback');
         $user = User::first();
 
-        $githubUser = Socialite::driver('github')->user();
+        $githubUser = Socialite::driver('github')->stateless()->user();
 
         $this->assertEquals($githubUser->getNickname(), $user->username);
 
@@ -60,6 +60,7 @@ class AuthenticatesUsersTest extends TestCase
         $abstractUser->token = 'abcde12345';
 
         $provider = Mockery::mock('Laravel\Socialite\Contracts\Provider');
+        $provider->shouldReceive('stateless')->andReturn(Mockery::self());
         $provider->shouldReceive('user')->andReturn($abstractUser);
 
         Socialite::shouldReceive('driver')->with('github')->andReturn($provider);
