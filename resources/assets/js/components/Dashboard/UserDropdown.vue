@@ -1,11 +1,11 @@
 <template>
   <div class="relative ml-auto">
     <div v-click-outside="hideDropdown" class="flex items-center cursor-pointer" @click="toggleDropdown">
-      <img :src="user.avatar_url" :alt="user.username" class="rounded-full w-10 h-10" />
-      <span class="text-white ml-1">
+      <img :src="user.avatar_url" :alt="user.username" class="w-10 h-10 rounded-full" />
+      <span class="ml-1 text-white">
         {{ user.username }}
       </span>
-      <Icon type="ChevronDownIcon" height="16" width="16" class="stroke-current text-white ml-1" />
+      <Icon type="ChevronDownIcon" height="16" width="16" class="ml-1 text-white stroke-current" />
     </div>
     <div v-show="visible" class="dropdown user-dropdown-container">
       <ul>
@@ -20,8 +20,8 @@
           </a>
         </li>
         <li>
-          <a class="dropdown-item" href="https://patreon.com/syropian" target="_blank" rel="noopener">
-            Patreon
+          <a class="dropdown-item" href="https://github.com/sponsors/syropian" target="_blank" rel="noopener">
+            Sponsor on GitHub
           </a>
         </li>
         <li>
