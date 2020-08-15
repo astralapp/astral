@@ -13,3 +13,4 @@ These generous folks are supporting Astral monthly through [GitHub Sponsors](htt
 - Cole Howard - **$1**
 - Sancar Adali - **$1**
 - Duncan Holm - **$1**
+- Elias Jackson - **$1**
