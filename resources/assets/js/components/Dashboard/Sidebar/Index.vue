@@ -26,7 +26,7 @@
     <SidebarGroup :collapsible="true" :is-collapsed="tagsCollapsed" @toggle="toggleCollapsedState('tags')">
       <template v-slot:header="{ toggleCollapsed }">
         <SidebarHeader title="Tags" @click.native.stop="toggleCollapsed">
-          <TagSorter v-if="tags" />
+          <TagSorter v-if="tags.length" />
         </SidebarHeader>
       </template>
       <template v-slot:content="{ isCollapsed }">
