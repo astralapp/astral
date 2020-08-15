@@ -1,5 +1,5 @@
 <template>
-  <div class="search-container bg-white border-b border-r border-grey-light h-16 px-4 flex items-center justify-center">
+  <div class="flex items-center justify-center h-16 px-4 bg-white border-b border-r search-container border-grey-light">
     <GlobalEvents
       :filter="(event, handler, eventName) => shouldDisableKeyboardShortcuts(event)"
       @keyup.prevent.191.exact="focusInput"
@@ -9,22 +9,26 @@
         ref="searchInput"
         v-model="currentSearchQuery"
         type="text"
-        class="search-input text-input w-full pl-8 pr-8"
+        class="w-full pl-8 pr-8 search-input text-input"
         placeholder="Gaze through your telescope"
         @focus="inputFocused = true"
         @blur="inputFocused = false"
       />
-      <Icon type="SearchIcon" class="search-input-icon absolute fill-none stroke-grey transition-stroke" height="18" />
+      <Icon
+        type="SearchIcon"
+        class="absolute pointer-events-none search-input-icon fill-none stroke-grey transition-stroke"
+        height="18"
+      />
       <button
         v-if="query"
-        class="clear-search-icon absolute text-1xl text-grey-darker focus-none rounded-full w-6 h-6 bg-transparent hover:bg-grey-light transition-bg"
+        class="absolute w-6 h-6 bg-transparent rounded-full clear-search-icon text-1xl text-grey-darker focus-none hover:bg-grey-light transition-bg"
         @click="resetSearch"
       >
         &times;
       </button>
       <div
         v-show="!inputFocused && !query"
-        class="w-6 h-6 bg-transparent text-grey-light border-grey-light border rounded-sm flex justify-center items-center absolute pin-t pin-r mt-2 nudge-up-t mr-2 pointer-events-none"
+        class="absolute flex items-center justify-center w-6 h-6 mt-2 mr-2 bg-transparent border rounded-sm pointer-events-none text-grey-light border-grey-light pin-t pin-r nudge-up-t"
       >
         /
       </div>
