@@ -5,5 +5,7 @@
     "javascriptreact"
   ],
   "editor.formatOnSave": false,
-  "vetur.validation.template": false
+  "vetur.validation.template": false,
+  "deepscan.enable": true,
+  "i18n-ally.localesPaths": "resources/lang"
 }

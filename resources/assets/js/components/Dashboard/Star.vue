@@ -4,16 +4,19 @@
     class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg group"
     @dragstart="starDragged"
   >
-    <div
-      v-if="star.node.isArchived"
-      class="border border-yellow-dark bg-yellow-lighter rounded-sm text-yellow-darker p-2 text-sm mb-4"
-    >
-      This repository has been archived by its owner.
+    <div class="flex items-center">
+      <h3 v-once :class="`repo-name text-base ${archived('brand')} mb-2 font-bold break-words`">
+        {{ star.node.nameWithOwner }}
+      </h3>
+      <div
+        v-if="star.node.isArchived"
+        class="is-archived flex flex-grow items-center justify-end font-semibold text-grey-dark mb-4"
+      >
+        <Icon type="ArchiveIcon" class="stroke-current h-4" />
+        <span v-once class="text-xs">Archived</span>
+      </div>
     </div>
-    <h3 v-once class="repo-name text-base text-brand mb-2 font-bold break-words">
-      {{ star.node.nameWithOwner }}
-    </h3>
-    <p v-once class="text-dark-grey text-sm">
+    <p v-once :class="`${archived('dark-grey')} text-sm`">
       {{ star.node.description }}
     </p>
     <StarTags :star="star" />
@@ -23,22 +26,23 @@
         <span v-once class="text-xs">{{ star.node.stargazers.totalCount }}</span>
       </div>
       <div class="fork-count flex items-center text-grey-dark mr-2">
-        <Icon type="Share2Icon" class="stroke-current h-4" />
+        <Icon type="GitPullRequestIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ star.node.forkCount }}</span>
       </div>
       <div v-if="star.node.releases.edges.length" class="latest-version flex items-center text-grey-dark mr-4">
         <Icon type="SaveIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ normalizedReleaseVersion }}</span>
       </div>
-      <div class="github-link flex items-center text-grey-dark">
+      <div class="github-link flex flex-grow items-center justify-end text-grey-dark">
         <a
           :href="star.node.url"
           class="text-xs text-grey-dark font-bold hover:no-underline"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           @click.stop
-          >View on GitHub</a
         >
+          <Icon type="GithubIcon" class="stroke-current h-4" />
+        </a>
       </div>
     </div>
   </div>
@@ -78,6 +82,9 @@ export default {
       }
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.setData('text/plain', data)
+    },
+    archived(className) {
+      return this.star.node.isArchived ? 'text-grey-dark' : `text-${className}`
     }
   }
 }
@@ -98,6 +105,9 @@ export default {
   }
   &.selected::before {
     transform: translate3d(0, 0, 0);
+  }
+  .is-archived {
+    margin-block-start: 0.4em;
   }
 }
 </style>

@@ -8,7 +8,7 @@
       <li
         v-if="star.node.primaryLanguage && user.show_language_tags"
         v-show="!isEditing"
-        class="text-xs text-white bg-brand hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2"
+        :class="`text-xs text-white ${archived('brand')} hover:bg-brand-dark transition-bg rounded-full py-1 px-2 mr-2 mb-2`"
         @click.stop="setCurrentLanguage(star.node.primaryLanguage.name)"
       >
         {{ star.node.primaryLanguage.name }}
@@ -202,6 +202,9 @@ export default {
           }, 0)
         }, 0)
       }
+    },
+    archived(className) {
+      return this.star.node.isArchived ? 'bg-grey-dark' : `bg-${className}`
     }
   }
 }
