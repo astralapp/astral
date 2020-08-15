@@ -30,7 +30,5 @@ class GitHubStarsController extends Controller
         } else {
             return response()->json([], 204);
         }
-
-
     }
 }
