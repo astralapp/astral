@@ -45,7 +45,7 @@
     "lodash": "^4.17.19",
     "nanoid": "^1.0.1",
     "qs": "^6.5.1",
-    "urijs": "^1.19.1",
+    "urijs": "^1.19.4",
     "v-click-outside": "^1.0.4",
     "vue": "^2.5.13",
     "vue-collection-cluster": "^1.0.11",
