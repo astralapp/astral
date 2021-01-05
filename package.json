@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "awesomplete": "^1.1.2",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "codemirror": "^5.39.2",
     "cuid": "^2.1.1",
     "dragula": "^3.7.2",
