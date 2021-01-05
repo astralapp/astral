@@ -5,6 +5,7 @@ These generous folks are supporting Astral monthly through [GitHub Sponsors](htt
 - [Ralph Cacho](https://github.com/ralphiz) - **$20**
 - Noritaka Horio - **$5**
 - Aaron Terry - **$5**
+- Michael Taggart - **$2**
 - Damon Oehlman - **$2**
 - CJ Winslow - **$1**
 - David Nicholson - **$1**
