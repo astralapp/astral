@@ -29,9 +29,13 @@
         <Icon type="GitPullRequestIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ star.node.forkCount }}</span>
       </div>
-      <div v-if="star.node.releases.edges.length" class="latest-version flex items-center text-grey-dark mr-4">
+      <div v-if="star.node.releases.edges.length" class="latest-version flex items-center text-grey-dark mr-2">
         <Icon type="SaveIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ normalizedReleaseVersion }}</span>
+      </div>
+      <div v-if="star.node.updatedAt" class="upddated-at flex items-center text-grey-dark mr-4">
+        <Icon type="CalendarIcon" class="stroke-current h-4" />
+        <span v-once class="text-xs">{{ getRelativeDate }}</span>
       </div>
       <div class="github-link flex flex-grow items-center justify-end text-grey-dark">
         <a
@@ -51,6 +55,7 @@
 import { mapGetters } from 'vuex'
 import StarTags from '@/components/Dashboard/StarTags'
 import Icon from '@/components/Icon'
+import { relativeDate } from '@/utils/dates'
 
 export default {
   name: 'Star',
@@ -70,6 +75,9 @@ export default {
     normalizedReleaseVersion() {
       const tagName = this.star.node.releases.edges[0].node.tagName
       return tagName.startsWith('v') ? tagName : `v${tagName}`
+    },
+    getRelativeDate() {
+      return relativeDate(this.star.node.updatedAt)
     }
   },
   methods: {
