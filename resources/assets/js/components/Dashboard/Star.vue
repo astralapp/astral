@@ -33,7 +33,7 @@
         <Icon type="SaveIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ normalizedReleaseVersion }}</span>
       </div>
-      <div v-if="star.node.updatedAt" class="upddated-at flex items-center text-grey-dark mr-4">
+      <div v-if="star.node.updatedAt" class="updated-at flex items-center text-grey-dark mr-4">
         <Icon type="CalendarIcon" class="stroke-current h-4" />
         <span v-once class="text-xs">{{ getRelativeDate }}</span>
       </div>
