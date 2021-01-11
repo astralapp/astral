@@ -55,7 +55,9 @@
 import { mapGetters } from 'vuex'
 import StarTags from '@/components/Dashboard/StarTags'
 import Icon from '@/components/Icon'
-import { relativeDate } from '@/utils/dates'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 export default {
   name: 'Star',
@@ -77,7 +79,7 @@ export default {
       return tagName.startsWith('v') ? tagName : `v${tagName}`
     },
     getRelativeDate() {
-      return relativeDate(this.star.node.updatedAt)
+      return dayjs().to(dayjs(this.star.node.updatedAt))
     }
   },
   methods: {

@@ -36,6 +36,7 @@
     "axios": "^0.21.1",
     "codemirror": "^5.39.2",
     "cuid": "^2.1.1",
+    "dayjs": "^1.10.3",
     "dragula": "^3.7.2",
     "easymde": "^2.6.0",
     "es6-promise": "^4.1.1",
