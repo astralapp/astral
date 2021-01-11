@@ -57,7 +57,7 @@ class GitHubClient
                     }
                 }
                 }
-                updatedAt
+                pushedAt
             }
             cursor
             }

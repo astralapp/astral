@@ -107,7 +107,7 @@ export default {
       return this.currentStarNotes ? 'FileTextIcon' : 'FileIcon'
     },
     dateFormat() {
-      return dayjs(this.currentStar.node.updatedAt).format('MMM D, YYYY')
+      return dayjs(this.currentStar.node.pushedAt).format('MMM D, YYYY')
     }
   },
   methods: {
