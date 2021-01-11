@@ -56,8 +56,29 @@ import { mapGetters } from 'vuex'
 import StarTags from '@/components/Dashboard/StarTags'
 import Icon from '@/components/Icon'
 import dayjs from 'dayjs'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(updateLocale)
 dayjs.extend(relativeTime)
+
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: '%s',
+    past: '%s',
+    s: 's',
+    m: "1m",
+    mm: "%dm",
+    h: "1h",
+    hh: "%dh",
+    d: "1d",
+    dd: "%dd",
+    M: "1m",
+    MM: "%dm",
+    y: "1y",
+    yy: "%dy"
+  }
+})
 
 export default {
   name: 'Star',

@@ -26,6 +26,7 @@
         <span>Unstar</span>
       </button>
       <div class="ml-auto">
+        <span class="last-updated-date mr-2">Last Updated: {{ dateFormat }}</span>
         <label for="starCloneUrl" class="mr-2 font-bold cursor-pointer">Clone:</label>
         <input
           id="starCloneUrl"
@@ -65,6 +66,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import dayjs from 'dayjs'
 import NotesEditor from '@/components/Dashboard/NotesEditor'
 import Readme from '@/components/Dashboard/Readme'
 import Icon from '@/components/Icon'
@@ -103,6 +105,9 @@ export default {
     },
     toggleNotesIcon() {
       return this.currentStarNotes ? 'FileTextIcon' : 'FileIcon'
+    },
+    dateFormat() {
+      return dayjs(this.currentStar.node.updatedAt).format('MMM D, YYYY')
     }
   },
   methods: {
