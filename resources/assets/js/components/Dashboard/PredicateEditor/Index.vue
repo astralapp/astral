@@ -60,6 +60,7 @@ import StringFilter from '@/components/Dashboard/PredicateEditor/StringFilter'
 import TagsFilter from '@/components/Dashboard/PredicateEditor/TagsFilter'
 import LanguageFilter from '@/components/Dashboard/PredicateEditor/LanguageFilter'
 import StateFilter from '@/components/Dashboard/PredicateEditor/StateFilter'
+import DateFilter from '@/components/Dashboard/PredicateEditor/DateFilter'
 import { cloneDeep } from 'lodash'
 import { defaultPredicate, defaultGroup, predicateTargets } from '@/utils/predicates'
 export default {
@@ -70,6 +71,7 @@ export default {
     TagsFilter,
     LanguageFilter,
     StateFilter,
+    DateFilter,
     SelectDropdown
   },
   props: {
