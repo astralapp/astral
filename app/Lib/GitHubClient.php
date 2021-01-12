@@ -57,6 +57,7 @@ class GitHubClient
                     }
                 }
                 }
+                pushedAt
             }
             cursor
             }
