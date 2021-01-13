@@ -92,7 +92,7 @@ export const predicateTargets = [
   {
     label: 'Updated At',
     type: 'Date',
-    key: 'node.updatedAt',
+    key: 'node.pushedAt',
     operators: dateOperators,
     defaultValue: new Date()
   }

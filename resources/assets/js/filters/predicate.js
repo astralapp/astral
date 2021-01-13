@@ -59,12 +59,11 @@ const operators = {
     return target === false
   },
   before(source, target) {
-    // debugger
-    return new Date(source) < new Date(target)
+    return new Date(source).getTime() < new Date(target).getTime()
   },
   after(source, target) {
-    // debugger
-    return new Date(source) > new Date(target)
+    console.log(`evaluating ${source} against ${target}`)
+    return new Date(source).getTime() > new Date(target).getTime()
   }
 }
 

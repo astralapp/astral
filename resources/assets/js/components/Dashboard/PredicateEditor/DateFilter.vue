@@ -1,5 +1,5 @@
 <template>
-  <date-picker v-model="datetime" type="datetime"></date-picker>
+  <date-picker v-model="datetime" type="datetime" @change="handleChange"></date-picker>
 </template>
 
 <script>
@@ -11,14 +11,18 @@ export default {
   },
   props: {
     value: {
-      type: Date,
-      default: new Date()
+      type: [Date, String]
     }
   },
   data() {
     return {
-      datetime: new Date(this.value)
+      datetime: this.value
     };
+  },
+  methods: {
+    handleChange(value) {
+      this.$emit('input', value)
+    }
   }
 }
 </script>

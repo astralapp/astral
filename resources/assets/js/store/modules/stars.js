@@ -44,9 +44,11 @@ const getters = {
   filteredStars: (state, __getters, rootState) => {
     let stars
     if (Object.keys(rootState.predicates.currentPredicate).length) {
+    console.log("asdf")
       stars = predicate(state.stars, JSON.parse(rootState.predicates.currentPredicate.body)).map(star => {
         return { type: 'star', value: star }
       })
+      console.log(stars)
     } else {
       stars = state.stars
         .filter(star => {
@@ -74,7 +76,8 @@ const getters = {
           return { type: 'star', value: star }
         })
     }
-
+    console.log("stars.js filter")
+    console.log(stars)
     return galileo(stars, rootState.galileo.tokenizedSearchQuery)
   },
   pageInfo: state => state.pageInfo,
