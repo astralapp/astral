@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ 'selected shadow-inner bg-grey-lightest': selected, 'bg-white': !selected }"
-    class="star relative p-4 border-b border-grey-light cursor-pointer hover:bg-grey-lightest transition-bg group"
+    class="relative p-4 border-b cursor-pointer star border-grey-light hover:bg-grey-lightest transition-bg group"
     @dragstart="starDragged"
   >
     <div class="flex items-center">
@@ -10,9 +10,9 @@
       </h3>
       <div
         v-if="star.node.isArchived"
-        class="is-archived flex flex-grow items-center justify-end font-semibold text-grey-dark mb-4"
+        class="flex items-center justify-end flex-grow mb-4 font-semibold is-archived text-grey-dark"
       >
-        <Icon type="ArchiveIcon" class="stroke-current h-4" />
+        <Icon type="ArchiveIcon" class="h-4 stroke-current" />
         <span v-once class="text-xs">Archived</span>
       </div>
     </div>
@@ -20,32 +20,32 @@
       {{ star.node.description }}
     </p>
     <StarTags :star="star" />
-    <div class="star-meta flex items-center mt-4">
-      <div class="stargazers-count flex items-center text-grey-dark mr-2">
-        <Icon type="StarIcon" class="stroke-current h-4" />
+    <div class="flex items-center mt-4 star-meta">
+      <div class="flex items-center mr-2 stargazers-count text-grey-dark">
+        <Icon type="StarIcon" class="h-4 stroke-current" />
         <span v-once class="text-xs">{{ star.node.stargazers.totalCount }}</span>
       </div>
-      <div class="fork-count flex items-center text-grey-dark mr-2">
-        <Icon type="GitPullRequestIcon" class="stroke-current h-4" />
+      <div class="flex items-center mr-2 fork-count text-grey-dark">
+        <Icon type="GitPullRequestIcon" class="h-4 stroke-current" />
         <span v-once class="text-xs">{{ star.node.forkCount }}</span>
       </div>
-      <div v-if="star.node.releases.edges.length" class="latest-version flex items-center text-grey-dark mr-2">
-        <Icon type="SaveIcon" class="stroke-current h-4" />
+      <div v-if="star.node.releases.edges.length" class="flex items-center mr-2 latest-version text-grey-dark">
+        <Icon type="SaveIcon" class="h-4 stroke-current" />
         <span v-once class="text-xs">{{ normalizedReleaseVersion }}</span>
       </div>
-      <div v-if="star.node.updatedAt" class="updated-at flex items-center text-grey-dark mr-4">
-        <Icon type="CalendarIcon" class="stroke-current h-4" />
+      <div v-if="star.node.pushedAt" class="flex items-center mr-4 updated-at text-grey-dark">
+        <Icon type="CalendarIcon" class="h-4 stroke-current" />
         <span v-once class="text-xs">{{ getRelativeDate }}</span>
       </div>
-      <div class="github-link flex flex-grow items-center justify-end text-grey-dark">
+      <div class="flex items-center justify-end flex-grow github-link text-grey-dark">
         <a
           :href="star.node.url"
-          class="text-xs text-grey-dark font-bold hover:no-underline"
+          class="text-xs font-bold text-grey-dark hover:no-underline"
           target="_blank"
           rel="noopener noreferrer"
           @click.stop
         >
-          <Icon type="GithubIcon" class="stroke-current h-4" />
+          <Icon type="GithubIcon" class="h-4 stroke-current" />
         </a>
       </div>
     </div>
@@ -55,7 +55,30 @@
 import { mapGetters } from 'vuex'
 import StarTags from '@/components/Dashboard/StarTags'
 import Icon from '@/components/Icon'
-import { relativeDate } from '@/utils/dates'
+import dayjs from 'dayjs'
+import updateLocale from 'dayjs/plugin/updateLocale'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(updateLocale)
+dayjs.extend(relativeTime)
+
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: '%s',
+    past: '%s',
+    s: 's',
+    m: '1m',
+    mm: '%dm',
+    h: '1h',
+    hh: '%dh',
+    d: '1d',
+    dd: '%dd',
+    M: '1mo',
+    MM: '%dmo',
+    y: '1y',
+    yy: '%dy'
+  }
+})
 
 export default {
   name: 'Star',
@@ -77,7 +100,7 @@ export default {
       return tagName.startsWith('v') ? tagName : `v${tagName}`
     },
     getRelativeDate() {
-      return relativeDate(this.star.node.updatedAt)
+      return dayjs().to(dayjs(this.star.node.pushedAt))
     }
   },
   methods: {

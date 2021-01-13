@@ -2626,10 +2626,20 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
+date-format-parse@^0.2.6:
+  version "0.2.6"
+  resolved "https://eis.jfrog.io/eis/api/npm/npm/date-format-parse/-/date-format-parse-0.2.6.tgz#7ed42817efb6ec39532169eada9670ae3c627aa7"
+  integrity sha1-ftQoF++27DlTIWnq2pZwrjxieqc=
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
+
+dayjs@^1.10.3:
+  version "1.10.3"
+  resolved "https://eis.jfrog.io/eis/api/npm/npm/dayjs/-/dayjs-1.10.3.tgz#cf3357c8e7f508432826371672ebf376cb7d619b"
+  integrity sha1-zzNXyOf1CEMoJjcWcuvzdst9YZs=
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -8665,6 +8675,13 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue2-datepicker@^3.8.2:
+  version "3.8.2"
+  resolved "https://eis.jfrog.io/eis/api/npm/npm/vue2-datepicker/-/vue2-datepicker-3.8.2.tgz#5bba391d39eda949ae1f68cd9adab0037a32b417"
+  integrity sha1-W7o5HTntqUmuH2jNmtqwA3oytBc=
+  dependencies:
+    date-format-parse "^0.2.6"
 
 vue@^2.5.13:
   version "2.6.10"
