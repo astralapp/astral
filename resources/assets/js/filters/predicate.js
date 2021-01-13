@@ -62,7 +62,6 @@ const operators = {
     return new Date(source).getTime() < new Date(target).getTime()
   },
   after(source, target) {
-    console.log(`evaluating ${source} against ${target}`)
     return new Date(source).getTime() > new Date(target).getTime()
   }
 }

@@ -1,5 +1,10 @@
 <template>
-  <date-picker v-model="datetime" type="datetime" @change="handleChange"></date-picker>
+  <date-picker
+    class="ml-4 flex-grow"
+    v-model="date"
+    input-class="text-sm px-2 py-3 text-input w-full"
+    type="date"
+    @change="handleChange"></date-picker>
 </template>
 
 <script>
@@ -16,7 +21,7 @@ export default {
   },
   data() {
     return {
-      datetime: this.value
+      date: new Date(this.value)
     };
   },
   methods: {

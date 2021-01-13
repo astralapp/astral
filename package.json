@@ -28,7 +28,8 @@
       "^.+\\.vue$": "vue-jest"
     },
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/resources/assets/js/$1"
+      "^@/(.*)$": "<rootDir>/resources/assets/js/$1",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     }
   },
   "dependencies": {
