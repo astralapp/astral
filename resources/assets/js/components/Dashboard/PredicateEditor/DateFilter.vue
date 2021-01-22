@@ -1,15 +1,15 @@
 <template>
-  <date-picker
-    class="ml-4 flex-grow"
+  <DatePicker
     v-model="date"
-    input-class="text-sm px-2 py-3 text-input w-full"
+    class="flex-grow ml-4"
+    input-class="w-full px-2 py-3 text-sm text-input"
     type="date"
-    @change="handleChange"></date-picker>
+    @change="handleChange"
+  ></DatePicker>
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import DatePicker from 'vue2-datepicker'
 export default {
   components: {
     DatePicker
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       date: new Date(this.value)
-    };
+    }
   },
   methods: {
     handleChange(value) {
@@ -32,4 +32,6 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+@import '~vue2-datepicker/index.css';
+</style>

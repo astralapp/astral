@@ -1,8 +1,8 @@
 let mix = require('laravel-mix')
 let tailwindcss = require('tailwindcss')
-let fs = require('fs')
-let webpack = require('webpack')
-let purgeCss = require('laravel-mix-purgecss')
+let path = require('path')
+require('webpack')
+require('laravel-mix-purgecss')
 
 /*
  |--------------------------------------------------------------------------
@@ -26,19 +26,18 @@ mix.webpackConfig({
 
 mix
   .js('resources/assets/js/app.js', 'public/js')
+  .vue()
   .sass('resources/assets/sass/app.scss', 'public/css/app.css')
   .options({
-    extractVueStyles: true,
     processCssUrls: false,
     postCss: [tailwindcss('tailwind.config.js')]
   })
   .purgeCss({
-    extensions: ['html', 'js', 'php', 'vue', 'scss', 'css'],
-    globs: [
-      path.join(__dirname, 'node_modules/easymde/dist/easymde.min.css'),
-      path.join(__dirname, 'node_modules/easymde/dist/easymde.min.js'),
-      path.join(__dirname, 'node_modules/vue2-datepicker/index.css')
-    ]
+    extend: {
+      safelist: {
+        deep: [/^mx-/, /^CodeMirror(-\w*)?/, /^cm-\w*/, /^EasyMDEContainer/, /^editor-toolbar/, /^easymde-\w*/]
+      }
+    }
   })
 
 if (mix.inProduction()) {

@@ -1,15 +1,15 @@
 {
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --watch --watch-poll --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "mix",
+    "watch": "mix watch",
+    "hot": "mix watch --hot",
+    "prod": "mix --production",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "lint": "eslint \"resources/assets/js/**\" --ext=.js --ext=.vue",
     "lint:fix": "eslint \"resources/assets/js/**\" --ext=.js --ext=.vue --fix",
-    "start": "npm run watch"
+    "start": "yarn watch"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -77,14 +77,16 @@
     "eslint-plugin-vue": "^5.0.0-beta.5",
     "flush-promises": "^1.0.0",
     "jest": "^24.0.0",
-    "laravel-mix": "^4.0.0",
-    "laravel-mix-purgecss": "^4.1.0",
+    "laravel-mix": "^6.0.0",
+    "laravel-mix-purgecss": "^6.0.0",
     "lodash-webpack-plugin": "^0.11.5",
+    "postcss": "^8.1",
     "prettier": "^1.15.3",
     "sass": "^1.16.1",
     "sass-loader": "^7.1.0",
     "tailwindcss": "^0.6.3",
     "vue-jest": "4.0.0-beta.2",
+    "vue-loader": "^15.9.5",
     "vue-template-compiler": "^2.6.0",
     "vuex-mock-store": "^0.0.7"
   }
