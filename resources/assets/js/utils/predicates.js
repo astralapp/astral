@@ -30,6 +30,11 @@ const tagOperators = [
   { key: 'hasNoneTags', label: 'has none' }
 ]
 
+const dateOperators = [
+  { key: 'before', label: 'before' },
+  { key: 'after', label: 'after' }
+]
+
 const languageOperators = [{ key: 'hasAnyLanguage', label: 'has any' }, { key: 'hasNoneLanguage', label: 'has none' }]
 
 const stateOperators = [{ key: 'isState', label: 'is' }, { key: 'isntState', label: "isn't" }]
@@ -83,5 +88,12 @@ export const predicateTargets = [
     key: 'astralRepoState',
     operators: stateOperators,
     defaultValue: { key: 'node.isArchived', label: 'archived' }
+  },
+  {
+    label: 'Updated At',
+    type: 'Date',
+    key: 'node.pushedAt',
+    operators: dateOperators,
+    defaultValue: new Date()
   }
 ]

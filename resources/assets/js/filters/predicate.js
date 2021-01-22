@@ -57,6 +57,12 @@ const operators = {
   },
   isntState(target) {
     return target === false
+  },
+  before(source, target) {
+    return new Date(source).getTime() < new Date(target).getTime()
+  },
+  after(source, target) {
+    return new Date(source).getTime() > new Date(target).getTime()
   }
 }
 
