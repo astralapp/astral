@@ -42,7 +42,8 @@ mix
           /^EasyMDEContainer/,
           /^editor-toolbar/,
           /^easymde-\w*/,
-          /^collection-(cluster|space)$/
+          /^collection-(cluster|space)$/,
+          /^repo-readme/
         ]
       }
     }
