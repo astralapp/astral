@@ -1,6 +1,6 @@
 <template>
-  <div class="stars border-r border-grey-light bg-grey-lighter relative overflow-hidden">
-    <p v-if="!filteredStars.length" class="text-grey font-bold flex flex-col justify-center items-center h-full">
+  <div class="relative overflow-hidden border-r stars border-grey-light bg-grey-lighter">
+    <p v-if="!filteredStars.length" class="flex flex-col items-center justify-center h-full font-bold text-grey">
       No Results
     </p>
     <GlobalEvents
@@ -83,6 +83,7 @@ export default {
         clone.children[0].innerText += ` + ${this.currentStars.length - 1} more`
       }
       clone.id = 'repo-clone'
+      clone.classList.add('repo-clone')
       document.body.appendChild(clone)
       width = clone.offsetWidth
       height = clone.offsetHeight
@@ -158,7 +159,7 @@ export default {
 .collection-cluster {
   height: calc(100vh - 136px);
 }
-#repo-clone {
+.repo-clone {
   transform: translate3d(-50%, -50%, 0);
   border-radius: 0.375rem;
   position: absolute;

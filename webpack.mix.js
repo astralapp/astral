@@ -43,7 +43,9 @@ mix
           /^editor-toolbar/,
           /^easymde-\w*/,
           /^collection-(cluster|space)$/,
-          /^repo-readme/
+          /^repo-readme/,
+          /^awesomplete/,
+          /^repo-clone/
         ]
       }
     }
