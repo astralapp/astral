@@ -35,7 +35,15 @@ mix
   .purgeCss({
     extend: {
       safelist: {
-        deep: [/^mx-/, /^CodeMirror(-\w*)?/, /^cm-\w*/, /^EasyMDEContainer/, /^editor-toolbar/, /^easymde-\w*/]
+        deep: [
+          /^mx-/,
+          /^CodeMirror(-\w*)?/,
+          /^cm-\w*/,
+          /^EasyMDEContainer/,
+          /^editor-toolbar/,
+          /^easymde-\w*/,
+          /^collection-(cluster|space)$/
+        ]
       }
     }
   })
