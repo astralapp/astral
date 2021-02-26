@@ -24,3 +24,7 @@ yarn dev
 ### Step 2
 
 Next, boot up a server to visit the app. If you're using a tool like Laravel Valet, the URL will likely default to `http://astral.test`. That's pretty much it!
+
+## Deploying
+
+- 1-Click Install with [Cloudron](https://www.cloudron.io/store/com.astralapp.cloudronapp.html)
