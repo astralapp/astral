@@ -2,6 +2,7 @@
 
 These generous folks are supporting Astral monthly through [GitHub Sponsors](https://github.com/sponsors/syropian) and on [Patreon](https://patreon.com/syropian)!
 
+- Damoon - **$27**
 - [Ralph Cacho](https://github.com/ralphiz) - **$20**
 - Noritaka Horio - **$5**
 - Aaron Terry - **$5**
