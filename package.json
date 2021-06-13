@@ -44,7 +44,7 @@
     "fuzzysearch": "^1.0.3",
     "highlight.js": "^10.4.1",
     "local-storage": "^1.4.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "nanoid": "^1.0.1",
     "qs": "^6.5.1",
     "urijs": "^1.19.4",
