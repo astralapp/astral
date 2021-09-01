@@ -135,7 +135,7 @@ GQL;
         $clientId = config('services.github.client_id');
         $clientSecret = config('services.github.client_secret');
 
-        $response = Http::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grants/{$token}");
+        $response = Http::withBasicAuth($clientId, $clientSecret)->delete("https://api.github.com/applications/{$clientId}/grant", ['access_token' => $token]);
 
         if ($response->getStatusCode() == 404) {
             auth()->user()->update(['access_token' => null]);
