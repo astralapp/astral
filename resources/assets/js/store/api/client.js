@@ -12,7 +12,9 @@ http.interceptors.response.use(
   function(response) {
     return response
   },
-  function() {
+  function(error) {
+    const resp = error.response
+    if ('status' in resp && resp.status === 422) return Promise.reject(resp.data)
     router.push('auth/logout')
   }
 )
