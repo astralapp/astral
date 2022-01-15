@@ -1,104 +1,116 @@
 <template>
-  <div class="sidebar bg-blue-darkest py-8 overflow-y-scroll px-4">
-    <SidebarHeader title="Stars">
-      <RefreshButton :active="refreshingStars" @click.native="refreshStars" />
-    </SidebarHeader>
-    <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
-      <SidebarItem
-        :class="{ selected: noFiltersApplied }"
-        :badge="totalStars"
-        class="all-stars"
-        title="All Stars"
-        icon="InboxIcon"
-        icon-size="16"
-        @click.native="resetFilters"
-      />
-      <SidebarItem
-        :class="{ selected: viewingUntagged }"
-        :badge="totalUntaggedStars"
-        class="untagged-stars"
-        title="Untagged Stars"
-        icon="StarIcon"
-        icon-size="16"
-        @click.native="setViewingUntagged(true)"
-      />
-    </ul>
-    <SidebarGroup :collapsible="true" :is-collapsed="tagsCollapsed" @toggle="toggleCollapsedState('tags')">
-      <template v-slot:header="{ toggleCollapsed }">
-        <SidebarHeader title="Tags" @click.native.stop="toggleCollapsed">
-          <TagSorter v-if="tags.length" />
-        </SidebarHeader>
-      </template>
-      <template v-slot:content="{ isCollapsed }">
-        <div v-show="!isCollapsed">
-          <NewTagForm @submit="doAddTag" />
-          <ul ref="sidebarTags" class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
-            <SidebarTag
-              v-for="tag in tags"
-              :key="tag.id"
-              :tag="tag"
-              :is-selected="currentTag.id == tag.id"
-              :data-id="tag.id"
-              @click.native="doSetCurrentTag(tag, $event)"
-              @starsDropped="tagStarWithData"
-              @deleteTag="doDeleteTag"
-              @renameTag="doRenameTag"
+  <div :class="{ open: sidebarToggle }" class="sidebar bg-blue-darkest py-8 overflow-y-scroll ">
+    <button class="navbar-burger flex items-center text-blue-600 p-4" @click="toggleSidebar()">
+      <svg class="block h-4 w-4 fill-white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <title>Mobile menu</title>
+        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+      </svg>
+    </button>
+    <div class="sidebar-inner px-4">
+      <SidebarHeader title="Stars">
+        <RefreshButton :active="refreshingStars" @click.native="refreshStars" />
+      </SidebarHeader>
+      <ul class="dashboard-list sidebar-stars list-none m-0 p-0 pb-3">
+        <SidebarItem
+          :class="{ selected: noFiltersApplied }"
+          :badge="totalStars"
+          class="all-stars"
+          title="All Stars"
+          icon="InboxIcon"
+          icon-size="16"
+          @click.native="resetFiltersClick"
+        />
+        <SidebarItem
+          :class="{ selected: viewingUntagged }"
+          :badge="totalUntaggedStars"
+          class="untagged-stars"
+          title="Untagged Stars"
+          icon="StarIcon"
+          icon-size="16"
+          @click.native="untaggedStarsClick"
+        />
+      </ul>
+      <SidebarGroup :collapsible="true" :is-collapsed="tagsCollapsed" @toggle="toggleCollapsedState('tags')">
+        <template v-slot:header="{ toggleCollapsed }">
+          <SidebarHeader title="Tags" @click.native.stop="toggleCollapsed">
+            <TagSorter v-if="tags.length" />
+          </SidebarHeader>
+        </template>
+        <template v-slot:content="{ isCollapsed }">
+          <div v-show="!isCollapsed">
+            <NewTagForm @submit="doAddTag" />
+            <ul ref="sidebarTags" class="dashboard-list sidebar-tags list-none m-0 p-0 pb-3">
+              <SidebarTag
+                v-for="tag in tags"
+                :key="tag.id"
+                :tag="tag"
+                :is-selected="currentTag.id == tag.id"
+                :data-id="tag.id"
+                @click.native="doSetCurrentTag(tag, $event)"
+                @starsDropped="tagStarWithData"
+                @deleteTag="doDeleteTag"
+                @renameTag="doRenameTag"
+              />
+            </ul>
+          </div>
+        </template>
+      </SidebarGroup>
+      <SidebarGroup :collapsible="true" :is-collapsed="filtersCollapsed" @toggle="toggleCollapsedState('filters')">
+        <template v-slot:header="{ toggleCollapsed }">
+          <SidebarHeader title="Smart Filters" @click.native="toggleCollapsed">
+            <button
+              class="transition-color bg-transparent p-0 w-4 h-4 text-grey-darker hover:text-grey focus-none"
+              @click.stop="$modal.show('predicate-modal')"
+            >
+              <Icon type="PlusCircleIcon" height="16" width="16" class="stroke-current fill-none" />
+            </button>
+          </SidebarHeader>
+        </template>
+        <template v-slot:content="{ isCollapsed }">
+          <ul
+            v-show="!isCollapsed"
+            ref="sidebarFilters"
+            class="dashboard-list sidebar-predicates list-none m-0 p-0 pb-3"
+          >
+            <SidebarItem
+              v-for="predicate in predicates"
+              :key="predicate.id"
+              :data-id="predicate.id"
+              :title="predicate.name"
+              icon="SearchIcon"
+              :class="{ selected: currentPredicate.id === predicate.id }"
+              class="predicate rounded group"
+              @click.native="setCurrentPredicate(predicate)"
+            >
+              <button
+                class="transition-color-opacity ml-auto text-grey focus:outline-none opacity-0 hover:text-white group-hover:opacity-100 hover:text-white"
+                @click.stop="editPredicate(predicate)"
+              >
+                <Icon type="SettingsIcon" height="14" class="stroke-current fill-none relative" />
+              </button>
+            </SidebarItem>
+          </ul>
+        </template>
+      </SidebarGroup>
+      <SidebarGroup :collapsible="true" :is-collapsed="languagesCollapsed" @toggle="toggleCollapsedState('languages')">
+        <template v-slot:header="{ toggleCollapsed }">
+          <SidebarHeader title="Languages" @click.native="toggleCollapsed" />
+        </template>
+        <template v-slot:content="{ isCollapsed }">
+          <ul v-show="!isCollapsed" class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
+            <SidebarItem
+              v-for="lang in languages"
+              :key="lang.name"
+              :badge="lang.count"
+              :title="lang.name"
+              :class="{ selected: currentLanguage == lang.name }"
+              class="language rounded"
+              @click.native="languageItemClick(lang)"
             />
           </ul>
-        </div>
-      </template>
-    </SidebarGroup>
-    <SidebarGroup :collapsible="true" :is-collapsed="filtersCollapsed" @toggle="toggleCollapsedState('filters')">
-      <template v-slot:header="{ toggleCollapsed }">
-        <SidebarHeader title="Smart Filters" @click.native="toggleCollapsed">
-          <button
-            class="transition-color bg-transparent p-0 w-4 h-4 text-grey-darker hover:text-grey focus-none"
-            @click.stop="$modal.show('predicate-modal')"
-          >
-            <Icon type="PlusCircleIcon" height="16" width="16" class="stroke-current fill-none" />
-          </button>
-        </SidebarHeader>
-      </template>
-      <template v-slot:content="{ isCollapsed }">
-        <ul v-show="!isCollapsed" ref="sidebarFilters" class="dashboard-list sidebar-predicates list-none m-0 p-0 pb-3">
-          <SidebarItem
-            v-for="predicate in predicates"
-            :key="predicate.id"
-            :data-id="predicate.id"
-            :title="predicate.name"
-            icon="SearchIcon"
-            :class="{ selected: currentPredicate.id === predicate.id }"
-            class="predicate rounded group"
-            @click.native="setCurrentPredicate(predicate)"
-          >
-            <button
-              class="transition-color-opacity ml-auto text-grey focus:outline-none opacity-0 hover:text-white group-hover:opacity-100 hover:text-white"
-              @click.stop="editPredicate(predicate)"
-            >
-              <Icon type="SettingsIcon" height="14" class="stroke-current fill-none relative" />
-            </button>
-          </SidebarItem>
-        </ul>
-      </template>
-    </SidebarGroup>
-    <SidebarGroup :collapsible="true" :is-collapsed="languagesCollapsed" @toggle="toggleCollapsedState('languages')">
-      <template v-slot:header="{ toggleCollapsed }">
-        <SidebarHeader title="Languages" @click.native="toggleCollapsed" />
-      </template>
-      <template v-slot:content="{ isCollapsed }">
-        <ul v-show="!isCollapsed" class="dashboard-list sidebar-languages list-none m-0 p-0 pb-3">
-          <SidebarItem
-            v-for="lang in languages"
-            :key="lang.name"
-            :badge="lang.count"
-            :title="lang.name"
-            :class="{ selected: currentLanguage == lang.name }"
-            class="language rounded"
-            @click.native="setCurrentLanguage(lang.name)"
-          />
-        </ul>
-      </template>
-    </SidebarGroup>
+        </template>
+      </SidebarGroup>
+    </div>
   </div>
 </template>
 <script>
@@ -127,7 +139,8 @@ export default {
   data() {
     return {
       refreshingStars: false,
-      drake: null
+      drake: null,
+      sidebarToggle: false
     }
   },
   computed: {
@@ -154,6 +167,11 @@ export default {
         !this.viewingUntagged
       )
     }
+  },
+  created() {
+    this.$bus.$on('SIDEBAR_TOGGLE', () => {
+      this.sidebarToggle = !this.sidebarToggle
+    })
   },
   async mounted() {
     await this.fetchTags()
@@ -269,11 +287,26 @@ export default {
         this.setCurrentTag(tag)
       }
     },
+    languageItemClick(lang) {
+      this.setCurrentLanguage(lang.name)
+      this.toggleSidebar()
+    },
+    toggleSidebar() {
+      this.$bus.$emit('SIDEBAR_TOGGLE')
+    },
     resetFilters() {
       this.setViewingUntagged(false)
       this.setCurrentTag({})
       this.setCurrentPredicate({})
       this.setCurrentLanguage('')
+    },
+    resetFiltersClick() {
+      this.resetFilters()
+      this.toggleSidebar()
+    },
+    untaggedStarsClick() {
+      this.setViewingUntagged(true)
+      this.toggleSidebar()
     },
     async tagStarWithData({ data, id }) {
       const tag = this.tags.find(tag => tag.id === parseInt(id, 10))
@@ -320,5 +353,9 @@ export default {
   opacity: 0.2;
   -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
   filter: alpha(opacity=20);
+}
+
+.navbar-burger svg {
+  fill: #ffffff;
 }
 </style>

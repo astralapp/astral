@@ -73,13 +73,54 @@ export default {
   display: grid;
   grid-template-columns: 280px 400px 1fr;
   grid-template-rows: 72px 64px 1fr;
+
+  @media screen and (max-width: 767px) {
+    grid-template-columns: 50px 400px 1fr;
+  }
   header {
     grid-column: 1 / 4;
   }
   .sidebar {
     grid-column: 1 / 2;
     grid-row: 2 / 4;
+    @media screen and (max-width: 767px) {
+      position: fixed;
+      z-index: 1;
+      width: 50px;
+      margin: 0px;
+      padding: 0px;
+      top: 70px;
+      overflow: hidden;
+      bottom: 0;
+    }
   }
+
+  .sidebar .navbar-burger {
+    display: none;
+    @media screen and (max-width: 767px) {
+      display: block;
+    }
+  }
+
+  .sidebar.open {
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      overflow-y: auto;
+    }
+  }
+
+  .sidebar-inner {
+    @media screen and (max-width: 767px) {
+      visibility: hidden;
+    }
+  }
+
+  .sidebar.open .sidebar-inner {
+    @media screen and (max-width: 767px) {
+      visibility: visible;
+    }
+  }
+
   .search-container {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
