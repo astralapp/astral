@@ -38,10 +38,10 @@ const operators = {
     return parseInt(source, 10) <= parseInt(target, 10)
   },
   hasAllTags(source, target) {
-    return source.map(t => t.name).every(val => target.map(t => t.name).includes(val))
+    return target.map(t => t.name).every(val => source.map(t => t.name).includes(val))
   },
   hasAnyTags(source, target) {
-    return source.map(t => t.name).some(val => target.map(t => t.name).includes(val))
+    return target.map(t => t.name).some(val => source.map(t => t.name).includes(val))
   },
   hasNoneTags(source, target) {
     return !source.map(t => t.name).some(val => target.map(t => t.name).includes(val))
