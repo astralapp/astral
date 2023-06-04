@@ -21,7 +21,7 @@ class SmartFiltersController extends Controller
             'body' => 'required',
         ], [
             'required' => 'You must provide a name for your smart filter.',
-            'unique' => 'You already have a smart filter with that name.',
+            'unique'   => 'You already have a smart filter with that name.',
         ]);
 
         auth()->user()->smartFilters()->create($request->only(['name', 'body']));
@@ -36,7 +36,7 @@ class SmartFiltersController extends Controller
             'body' => 'required',
         ], [
             'required' => 'You must provide a name for your smart filter.',
-            'unique' => 'You already have a smart filter with that name.',
+            'unique'   => 'You already have a smart filter with that name.',
         ]);
 
         $smartFilter->update($request->only(['name', 'body']));

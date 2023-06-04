@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Star extends Model
 {
-    use HasFactory, Cachable;
+    use HasFactory;
+    use Cachable;
 
     protected $fillable = [
         'repo_id',
@@ -51,7 +52,7 @@ class Star extends Model
 
     public function isOrphan(): bool
     {
-        return ! (bool) $this->notes && $this->tags()->count() < 1;
+        return !(bool) $this->notes && $this->tags()->count() < 1;
     }
 
     public function removeAllTags()

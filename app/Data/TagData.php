@@ -8,5 +8,6 @@ class TagData extends Data
 {
     public function __construct(
       //
-    ) {}
+    ) {
+    }
 }

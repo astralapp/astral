@@ -8,5 +8,6 @@ class StarData extends Data
 {
     public function __construct(
       //
-    ) {}
+    ) {
+    }
 }

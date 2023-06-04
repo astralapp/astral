@@ -42,7 +42,7 @@ return [
 
         'main' => [
             'method' => 'token',
-            'token' => '',
+            'token'  => '',
             // 'backoff'    => false,
             // 'cache'      => false,
             // 'version'    => 'v3',
@@ -50,8 +50,8 @@ return [
         ],
 
         'app' => [
-            'method' => 'application',
-            'clientId' => env('GITHUB_CLIENT_ID'),
+            'method'       => 'application',
+            'clientId'     => env('GITHUB_CLIENT_ID'),
             'clientSecret' => env('GITHUB_CLIENT_SECRET'),
             // 'backoff'      => false,
             // 'cache'        => false,
@@ -61,7 +61,7 @@ return [
 
         'jwt' => [
             'method' => 'jwt',
-            'token' => 'your-jwt-token',
+            'token'  => 'your-jwt-token',
             // 'backoff'      => false,
             // 'cache'        => false,
             // 'version'      => 'v3',
@@ -69,8 +69,8 @@ return [
         ],
 
         'private' => [
-            'method' => 'private',
-            'appId' => 'your-github-app-id',
+            'method'  => 'private',
+            'appId'   => 'your-github-app-id',
             'keyPath' => 'your-private-key-path',
             // 'key'        => 'your-private-key-content',
             // 'passphrase' => 'your-private-key-passphrase'
@@ -104,14 +104,14 @@ return [
     'cache' => [
 
         'main' => [
-            'driver' => 'illuminate',
+            'driver'    => 'illuminate',
             'connector' => null, // null means use default driver
             // 'min'       => 43200,
             // 'max'       => 172800
         ],
 
         'bar' => [
-            'driver' => 'illuminate',
+            'driver'    => 'illuminate',
             'connector' => 'redis', // config/cache.php
             // 'min'       => 43200,
             // 'max'       => 172800

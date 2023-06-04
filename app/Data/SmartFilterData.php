@@ -8,5 +8,6 @@ class SmartFilterData extends Data
 {
     public function __construct(
       //
-    ) {}
+    ) {
+    }
 }

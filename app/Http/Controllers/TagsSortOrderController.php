@@ -9,8 +9,8 @@ class TagsSortOrderController extends Controller
     public function __invoke(Request $request)
     {
         $this->validate($request, [
-            'tags' => 'required|array',
-            'tags.*.id' => 'required|integer|exists:tags,id',
+            'tags'              => 'required|array',
+            'tags.*.id'         => 'required|integer|exists:tags,id',
             'tags.*.sort_order' => 'required|integer',
         ]);
 
