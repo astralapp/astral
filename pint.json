@@ -1,0 +1,16 @@
+{
+  "preset": "laravel",
+  "rules": {
+    "method_chaining_indentation": true,
+    "no_superfluous_phpdoc_tags": {
+      "allow_mixed": true
+    },
+    "concat_space": {
+      "spacing": "one"
+    },
+    "declare_strict_types": true,
+    "psr_autoloading": true,
+    "self_accessor": true,
+    "no_unused_imports": true
+  }
+}
