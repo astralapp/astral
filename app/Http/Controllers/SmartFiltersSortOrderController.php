@@ -9,8 +9,8 @@ class SmartFiltersSortOrderController extends Controller
     public function __invoke(Request $request)
     {
         $this->validate($request, [
-            'smartFilters' => 'required|array',
-            'smartFilters.*.id' => 'required|integer|exists:smart_filters,id',
+            'smartFilters'              => 'required|array',
+            'smartFilters.*.id'         => 'required|integer|exists:smart_filters,id',
             'smartFilters.*.sort_order' => 'required|integer',
         ]);
 

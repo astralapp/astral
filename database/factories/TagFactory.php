@@ -24,7 +24,7 @@ class TagFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->unique()->word(),
+            'name'    => $this->faker->unique()->word(),
         ];
     }
 }
