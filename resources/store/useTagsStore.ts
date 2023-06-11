@@ -1,34 +1,29 @@
-import { defineStore } from 'pinia'
-import { router } from '@inertiajs/vue3'
-import { Errors, Page, PageProps } from '@inertiajs/core'
+import { FetchDirection, TagSortMethod } from '@/types'
+import { moveSort } from '@/utils'
+import { router } from 'hybridly'
 import orderBy from 'lodash/orderBy'
-import { FetchDirection, Tag, TagSortMethod } from '@/scripts/types'
-import { moveSort } from '@/scripts/utils'
+import { defineStore } from 'pinia'
 
 export const useTagsStore = defineStore({
-  id: 'tags',
-  state() {
-    return {
-      tags: [] as Tag[],
-    }
-  },
   actions: {
-    addTag(tagName: string): Promise<Page<PageProps> | Errors> {
-      return new Promise((resolve, reject) => {
-        router.post(
-          '/tags',
-          { name: tagName },
-          {
-            only: ['tags', 'abilities', 'errors'],
-            onSuccess: page => {
-              resolve(page)
-            },
-            onError: errors => {
-              reject(errors)
-            },
-          }
-        )
+    _reorderTags(tags: Pick<App.Data.TagData, 'id' | 'sort_order'>[]) {
+      router.put(route('tags.reorder'), {
+        data: {
+          tags,
+        },
+        only: 'tags',
       })
+    },
+    addTag(tagName: string) {
+      return router.post(route('tags.store'), {
+        data: {
+          name: tagName,
+        },
+        only: ['tags', 'abilities', 'errors'],
+      })
+    },
+    deleteTag(tagId: number) {
+      router.delete(route('tags.destroy', { tag: tagId }), { only: 'tags' })
     },
     sortTags(method: TagSortMethod, direction: Lowercase<FetchDirection>) {
       this.tags = orderBy(this.tags, method, direction)
@@ -38,7 +33,7 @@ export const useTagsStore = defineStore({
         sort_order: index,
       }))
 
-      router.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
+      this._reorderTags(reorderedTags)
     },
     syncTagOrder(oldIndex: number, newIndex: number) {
       const reorderedTags = moveSort(this.tags, oldIndex, newIndex).map((tag, index) => ({
@@ -46,10 +41,13 @@ export const useTagsStore = defineStore({
         sort_order: index,
       }))
 
-      router.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
+      this._reorderTags(reorderedTags)
     },
-    deleteTag(id: number) {
-      router.delete(`/tags/${id}`, { only: ['tags'] })
-    },
+  },
+  id: 'tags',
+  state() {
+    return {
+      tags: [] as App.Data.TagData[],
+    }
   },
 })

@@ -1,29 +1,29 @@
 <script lang="ts" setup>
-import { computed, nextTick, reactive, ref, unref, watch } from 'vue'
-import { useTagsStore } from '@/scripts/store/useTagsStore'
-import AutocompleteMenu from '@/views/components/tags-editor/AutocompleteMenu.vue'
+import AutocompleteMenu from '@/components/tags-editor/AutocompleteMenu.vue'
+import { useTagsStore } from '@/store/useTagsStore'
+import { TagEditorTag } from '@/types'
 import { XIcon } from '@heroicons/vue/solid'
-import { TagEditorTag } from '@/scripts/types'
 import { whenever } from '@vueuse/core'
 import { nanoid } from 'nanoid'
+import { computed, nextTick, reactive, ref, unref, watch } from 'vue'
 
 interface Props {
-  tags?: TagEditorTag[]
+  autocompleteOptions?: string[]
   canCreate?: boolean
   placeholder?: string
-  autocompleteOptions?: string[]
+  tags?: TagEditorTag[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  tags: () => [] as TagEditorTag[],
+  autocompleteOptions: () => [] as string[],
   canCreate: true,
   placeholder: 'Add a tag',
-  autocompleteOptions: () => [] as string[],
+  tags: () => [] as TagEditorTag[],
 })
 
 const emit = defineEmits<{
-  (e: 'change', value: TagEditorTag[]): void
   (e: 'blur'): void
+  (e: 'change', value: TagEditorTag[]): void
 }>()
 
 const tagsStore = useTagsStore()
@@ -32,10 +32,10 @@ const tagText = ref('')
 const input = ref<HTMLInputElement | null>(null)
 const normalizedTags = Array.isArray(props.tags) ? props.tags : []
 const mutableTags = ref<TagEditorTag[]>(normalizedTags.map(tag => ({ id: tag.id, name: tag.name })))
-let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
-  top: 0,
-  left: 0,
+let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'height' | 'left' | 'top'>>({
   height: 20,
+  left: 0,
+  top: 0,
 })
 
 const autocompleteShowing = ref(false)
@@ -95,7 +95,7 @@ const addTagWithName = (name: string) => {
   if (name && !tagsHasTag(name)) {
     const existingTag = tagsStore.tags.find(tag => tag.name === name)
 
-    mutableTags.value.push({ name: name, id: existingTag ? existingTag.id : Date.now() })
+    mutableTags.value.push({ id: existingTag ? existingTag.id : Date.now(), name: name })
     tagText.value = ''
     input.value?.focus()
   }
@@ -161,7 +161,10 @@ nextTick(() => {
         </button>
       </li>
 
-      <li class="relative isolate mx-1 mb-2 flex-grow leading-none" style="flex-basis: 82px">
+      <li
+        class="relative isolate mx-1 mb-2 flex-grow leading-none"
+        style="flex-basis: 82px"
+      >
         <input
           ref="input"
           v-model="tagText"

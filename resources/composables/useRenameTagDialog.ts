@@ -1,25 +1,24 @@
-import { ref, computed, Ref } from 'vue'
-import { Tag } from '@/scripts/types'
-import { BaseDialogReturnType } from '@/scripts/types'
+import { BaseDialogReturnType } from '@/types'
+import { Ref, computed, ref } from 'vue'
 
 interface RenameTagDialogReturnType extends Omit<BaseDialogReturnType, 'show'> {
-  isOpen: Ref<boolean>
-  currentTag: Ref<Nullable<Tag>>
-  show(tag: Tag): void
+  currentTag: Ref<Nullable<App.Data.TagData>>
   hide(): void
+  isOpen: Ref<boolean>
+  show(tag: App.Data.TagData): void
 }
 
 const isOpen = ref(false)
-const currentTag = ref<Nullable<Tag>>(null)
+const currentTag = ref<Nullable<App.Data.TagData>>(null)
 
 export const useRenameTagDialog = (): RenameTagDialogReturnType => {
   return {
-    isOpen: computed(() => isOpen.value),
     currentTag: computed(() => currentTag.value),
-    show: (tag: Tag) => {
+    hide: () => (isOpen.value = false),
+    isOpen: computed(() => isOpen.value),
+    show: (tag: App.Data.TagData) => {
       currentTag.value = tag
       isOpen.value = true
     },
-    hide: () => (isOpen.value = false),
   }
 }

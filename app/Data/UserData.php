@@ -3,8 +3,10 @@
 namespace App\Data;
 
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Mappers\CamelCaseMapper;
 use Spatie\LaravelData\Attributes\MapOutputName;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 
 #[MapOutputName(CamelCaseMapper::class)]
 class UserData extends Data
@@ -18,6 +20,9 @@ class UserData extends Data
         public readonly ?string $scope,
         public readonly ?string $avatar,
         public readonly ?bool $is_sponsor,
+        public readonly UserSettingsData $settings,
+        #[DataCollectionOf(UserFlagData::class)]
+        public readonly DataCollection $flags,
     ) {
     }
 }

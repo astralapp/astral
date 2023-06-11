@@ -1,24 +1,24 @@
+import { Ability, Authorizations, Limit, Limits } from '@/types'
+import { router } from 'hybridly'
 import { defineStore } from 'pinia'
-import { router } from '@inertiajs/core'
-import { Ability, Limit, Limits, Authorizations } from '@/scripts/types'
 
 export const useAuthorizationsStore = defineStore({
+  actions: {
+    checkForSponsorship() {
+      router.get(route('sponsor.check'))
+    },
+  },
   id: 'authorizations',
   state() {
     return {
       abilities: {
-        [Ability.CREATE_TAG]: false,
-        [Ability.CREATE_SMART_FILTER]: false,
         [Ability.ADD_NOTES]: false,
+        [Ability.CREATE_SMART_FILTER]: false,
+        [Ability.CREATE_TAG]: false,
       } as Authorizations,
       limits: {
         [Limit.MAX_TAGS]: -1,
       } as Limits,
     }
-  },
-  actions: {
-    checkForSponsorship() {
-      router.get('/check-sponsorship')
-    },
   },
 })

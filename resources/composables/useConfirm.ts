@@ -1,23 +1,23 @@
 import { reactive } from 'vue'
 
 interface ConfirmConfig {
-  isOpen: boolean
-  message?: string
-  confirmLabel?: string
+  cancel: () => void
   cancelLabel?: string
   confirm: () => void
-  cancel: () => void
+  confirmLabel?: string
+  isOpen: boolean
+  message?: string
 }
 
-type ConfirmOptions = Pick<ConfirmConfig, 'confirmLabel' | 'cancelLabel'>
+type ConfirmOptions = Pick<ConfirmConfig, 'cancelLabel' | 'confirmLabel'>
 
 const confirmConfig = reactive<ConfirmConfig>({
-  isOpen: false,
-  message: '',
-  confirmLabel: 'Ok',
+  cancel: () => ({}),
   cancelLabel: 'Cancel',
   confirm: () => ({}),
-  cancel: () => ({}),
+  confirmLabel: 'Ok',
+  isOpen: false,
+  message: '',
 })
 
 export const useConfirm = () => {
@@ -25,10 +25,10 @@ export const useConfirm = () => {
     const confirmPromise = new Promise((resolve, reject) => {
       Object.assign(confirmConfig, {
         ...options,
+        cancel: reject,
+        confirm: resolve,
         isOpen: true,
         message,
-        confirm: resolve,
-        cancel: reject,
       })
     })
 
@@ -45,7 +45,7 @@ export const useConfirm = () => {
   }
 
   return {
-    isConfirmed,
     confirmConfig,
+    isConfirmed,
   }
 }

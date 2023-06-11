@@ -3,7 +3,7 @@ export function useAuth() {
   const isAuthenticated = computed(() => !!user.value)
 
   return {
-    user,
     isAuthenticated,
+    user,
   }
 }

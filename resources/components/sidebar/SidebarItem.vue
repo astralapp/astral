@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import { h, computed, useSlots } from 'vue'
+import { computed, h, useSlots } from 'vue'
 
 interface Props {
-  tag?: string
-  title: string
-  isActive?: boolean
-  isHighlighted?: boolean
   count?: number
   hasContextMenu?: boolean
+  isActive?: boolean
   isContextMenuActive?: boolean
+  isHighlighted?: boolean
+  tag?: string
+  title: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  tag: 'li',
-  isActive: false,
-  isHighlighted: false,
   count: 0,
   hasContextMenu: false,
+  isActive: false,
   isContextMenuActive: false,
+  isHighlighted: false,
+  tag: 'li',
 })
 
 const slots = useSlots()
@@ -49,29 +49,29 @@ const Render = () =>
   h(
     props.tag,
     {
+      ariaSelected: props.isActive,
       class: `group flex items-center p-1 font-semibold cursor-pointer text-sm transition-colors ${labelClasses.value}`,
       role: 'option',
-      ariaSelected: props.isActive,
     },
     [
       !!slots.icon &&
         h(
           'div',
           {
-            class: `flex-shrink-0 w-5 h-5 mr-2 ${iconClasses.value}`,
             ariaHidden: true,
+            class: `flex-shrink-0 w-5 h-5 mr-2 ${iconClasses.value}`,
           },
           slots.icon()
         ),
-      h('span', { class: 'truncate pr-2', role: 'region', ariaLive: 'polite', title: props.title }, props.title),
+      h('span', { ariaLive: 'polite', class: 'truncate pr-2', role: 'region', title: props.title }, props.title),
       h('div', { class: 'relative ml-auto' }, [
         !!props.count &&
           h(
             'div',
             {
+              ariaLive: 'polite',
               class: `transition-opacity rounded-full px-2 h-5 text-xs inline-flex items-center flex-shrink-0 ${badgeClasses.value}`,
               role: 'region',
-              ariaLive: 'polite',
             },
             props.count.toLocaleString()
           ),

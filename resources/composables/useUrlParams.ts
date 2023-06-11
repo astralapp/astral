@@ -1,14 +1,14 @@
-import { reactive, watch } from 'vue'
 import { useEventListener } from '@vueuse/core'
+import { reactive, watch } from 'vue'
 
 interface UseUrlParamsReturnValue {
-  params: Record<string, string | null>
   clearParams: () => void
+  params: Record<string, null | string>
 }
 
 export const useUrlParams = (): UseUrlParamsReturnValue => {
   const urlParams = new URLSearchParams(location.search || '')
-  const params: Record<string, string | null> = reactive(Object.assign({}))
+  const params: Record<string, null | string> = reactive(Object.assign({}))
 
   urlParams.forEach((value, key) => (params[key] = value))
 
@@ -41,7 +41,7 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
   })
 
   return {
-    params,
     clearParams,
+    params,
   }
 }

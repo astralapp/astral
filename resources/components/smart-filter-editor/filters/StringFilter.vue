@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseTextInput from '@/views/components/shared/core/BaseTextInput.vue'
+import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import { useVModel } from '@vueuse/core'
 
 interface Props {
@@ -17,4 +17,9 @@ const emit = defineEmits<{
 const value = useVModel(props, 'modelValue', emit)
 </script>
 
-<template><BaseTextInput v-model="value" class="flex-grow" /></template>
+<template>
+  <BaseTextInput
+    v-model="value"
+    class="flex-grow"
+  />
+</template>

@@ -1,21 +1,21 @@
 <script lang="ts" setup>
+import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
+import { useUserStore } from '@/store/useUserStore'
+import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
+import { GlobeIcon, ShareIcon, StarIcon } from '@heroicons/vue/outline'
+import pick from 'lodash/pick'
 import { computed, ref } from 'vue'
-import TagsEditor from '@/views/components/tags-editor/TagsEditor.vue'
-import { useUserStore } from '@/scripts/store/useUserStore'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
-import { useTagsStore } from '@/scripts/store/useTagsStore'
-import { StarIcon, ShareIcon, GlobeIcon } from '@heroicons/vue/outline'
-import { GitHubRepo, GitHubRepoNode, StarMetaInput, Tag, TagEditorTag } from '@/scripts/types'
-import { pick } from 'lodash'
 
 const props = defineProps<{
   repo: GitHubRepo
 }>()
 
 const emit = defineEmits<{
-  (e: 'selected', value: GitHubRepo): void
-  (e: 'tagSelected', value: Tag): void
   (e: 'languageSelected', value: string): void
+  (e: 'selected', value: GitHubRepo): void
+  (e: 'tagSelected', value: App.Data.TagData): void
 }>()
 
 const userStore = useUserStore()
@@ -103,10 +103,10 @@ const onDragEnd = () => {
 
 <template>
   <div
-    class="group relative cursor-pointer border-b border-gray-300 p-4 shadow-sm dark:bg-gray-800"
+    class="group relative cursor-pointer border-b border-gray-300 dark:border-gray-700/50 p-4 shadow-sm"
     :class="{
-      'bg-gray-100 shadow-inner dark:bg-gray-800': isSelected,
-      'bg-white': !isSelected,
+      'bg-gray-100 shadow-inner dark:bg-gray-900': isSelected,
+      'bg-white dark:bg-gray-800/80': !isSelected,
     }"
     draggable="true"
     role="option"
@@ -126,7 +126,10 @@ const onDragEnd = () => {
 
     <p class="font-semibold text-brand-600">{{ repo.node.nameWithOwner }}</p>
 
-    <p class="mt-2 line-clamp-5 text-sm text-gray-700 dark:text-gray-300" :title="repo.node.description">
+    <p
+      class="mt-2 line-clamp-5 text-sm text-gray-700 dark:text-gray-300"
+      :title="repo.node.description"
+    >
       {{ repo.node.description }}
     </p>
 
@@ -139,10 +142,13 @@ const onDragEnd = () => {
       @blur="isEditingTags = false"
     />
 
-    <ul v-if="!isEditingTags" class="mt-4 inline-flex flex-wrap items-start">
+    <ul
+      v-if="!isEditingTags"
+      class="mt-4 inline-flex flex-wrap items-start"
+    >
       <li
         v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
-        class="mb-1 mr-1 cursor-pointer rounded-sm bg-brand-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 dark:bg-brand-800 dark:text-brand-200"
+        class="mb-1 mr-1 cursor-pointer rounded-sm bg-brand-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
         role="button"
         @click.stop="emit('languageSelected', repo.node.primaryLanguage?.name as string)"
       >
@@ -152,7 +158,7 @@ const onDragEnd = () => {
       <li
         v-for="tag in tags"
         :key="tag.id"
-        class="mb-1 mr-1 cursor-pointer rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-800 dark:text-indigo-200"
+        class="mb-1 mr-1 cursor-pointer rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-400 ring-1 ring-inset ring-transparent dark:ring-indigo-400/30"
         role="button"
         @click.stop="emit('tagSelected', tag)"
       >

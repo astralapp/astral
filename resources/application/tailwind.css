@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@layer utilities {
+  .image-rendering-crisp {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}

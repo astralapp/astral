@@ -9,11 +9,6 @@ use Socialite;
 
 class AuthController extends Controller
 {
-    public function index()
-    {
-        return view('welcome');
-    }
-
     public function redirectToProvider(Request $request)
     {
         $scope = $request->input('scope', 'read:user');
@@ -43,20 +38,20 @@ class AuthController extends Controller
 
         auth()->login($user, true);
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 
     public function revokeGrant()
     {
         auth()->user()->revokeGrant();
 
-        return Inertia::location(route('logout'));
+        return hybridly()->external(route('auth.destroy'));
     }
 
     public function logout()
     {
         auth()->logout();
 
-        return redirect(route('auth'));
+        return redirect(route('auth.show'));
     }
 }

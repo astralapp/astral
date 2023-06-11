@@ -1,15 +1,8 @@
+import { useStarsStore } from '@/store/useStarsStore'
+import { router } from 'hybridly'
 import { defineStore } from 'pinia'
-import { User } from '@/scripts/types'
-import { router } from '@inertiajs/core'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
 
 export const useUserStore = defineStore({
-  id: 'user',
-  state() {
-    return {
-      user: null as Nullable<User>,
-    }
-  },
   actions: {
     deleteUser() {
       const starsStore = useStarsStore()
@@ -17,7 +10,13 @@ export const useUserStore = defineStore({
       starsStore.starredRepos = []
       starsStore.resetPageInfo()
 
-      router.delete('/user')
+      router.delete(route('user.destroy'))
     },
+  },
+  id: 'user',
+  state() {
+    return {
+      user: null as Nullable<App.Data.UserData>,
+    }
   },
 })

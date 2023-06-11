@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { reactive, watch, defineComponent } from 'vue'
-import BaseSelect from '@/views/components/shared/core/BaseSelect.vue'
-import BaseButton from '@/views/components/shared/core/BaseButton.vue'
-import StringFilter from '@/views/components/smart-filter-editor/filters/StringFilter.vue'
-import NumberFilter from '@/views/components/smart-filter-editor/filters/NumberFilter.vue'
-import StateFilter from '@/views/components/smart-filter-editor/filters/StateFilter.vue'
-import TagsFilter from '@/views/components/smart-filter-editor/filters/TagsFilter.vue'
-import LanguageFilter from '@/views/components/smart-filter-editor/filters/LanguageFilter.vue'
-import DateFilter from '@/views/components/smart-filter-editor/filters/DateFilter.vue'
-import cloneDeep from 'lodash/cloneDeep'
-import { PlusIcon, MinusIcon, MinusCircleIcon } from '@heroicons/vue/solid'
 import {
-  predicateTargets,
-  PredicateGroup,
   Predicate,
-  defaultPredicate,
-  defaultGroup,
+  PredicateGroup,
   PredicateTargetType,
-} from '@/scripts/utils/predicates'
+  defaultGroup,
+  defaultPredicate,
+  predicateTargets,
+} from '@/utils/predicates'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import BaseSelect from '@/components/shared/core/BaseSelect.vue'
+import DateFilter from '@/components/smart-filter-editor/filters/DateFilter.vue'
+import LanguageFilter from '@/components/smart-filter-editor/filters/LanguageFilter.vue'
+import NumberFilter from '@/components/smart-filter-editor/filters/NumberFilter.vue'
+import StateFilter from '@/components/smart-filter-editor/filters/StateFilter.vue'
+import StringFilter from '@/components/smart-filter-editor/filters/StringFilter.vue'
+import TagsFilter from '@/components/smart-filter-editor/filters/TagsFilter.vue'
+import { MinusCircleIcon, MinusIcon, PlusIcon } from '@heroicons/vue/solid'
+import cloneDeep from 'lodash/cloneDeep'
+import { defineComponent, reactive, watch } from 'vue'
 
 const props = defineProps<{ modelValue: string }>()
 
@@ -26,12 +26,12 @@ const emit = defineEmits<{
 }>()
 
 const predicateTargetFilters: Record<PredicateTargetType, ReturnType<typeof defineComponent>> = {
-  String: StringFilter,
+  Date: DateFilter,
+  Language: LanguageFilter,
   Number: NumberFilter,
   State: StateFilter,
+  String: StringFilter,
   Tags: TagsFilter,
-  Language: LanguageFilter,
-  Date: DateFilter,
 }
 
 const filterBody = reactive<Record<'groups', PredicateGroup[]>>({
@@ -59,7 +59,7 @@ const setPredicateOperator = (e: Event, predicate: Predicate) => {
 }
 
 const selectedPredicateTarget = (predicate: Predicate) => {
-  return predicateTargets.find(target => target.key === predicate.selectedTarget)
+  return predicateTargets.find(target => target.keyPath === predicate.selectedTarget)
 }
 
 const setDefaultArgumentValue = (predicate: Predicate) => {
@@ -112,9 +112,16 @@ const removeGroup = (index: number) => {
 
 <template>
   <div>
-    <div v-for="(group, i) in filterBody.groups" :key="`group-${i}`" class="group border-b border-gray-200 py-8">
+    <div
+      v-for="(group, i) in filterBody.groups"
+      :key="`group-${i}`"
+      class="group border-b border-gray-200 py-8"
+    >
       <div class="flex items-center">
-        <BaseSelect v-model="group.logicalType" class="w-auto">
+        <BaseSelect
+          v-model="group.logicalType"
+          class="w-auto"
+        >
           <option value="any">Any</option>
 
           <option value="all">All</option>
@@ -129,7 +136,10 @@ const removeGroup = (index: number) => {
           size="sm"
           @click="removeGroup(i)"
         >
-          <MinusCircleIcon class="h-4 w-4" aria-hidden="true" />
+          <MinusCircleIcon
+            class="h-4 w-4"
+            aria-hidden="true"
+          />
 
           <span>Remove group</span></BaseButton
         >
@@ -141,11 +151,14 @@ const removeGroup = (index: number) => {
         class="mt-4 flex w-full items-center"
       >
         <div class="flex w-full items-center space-x-2">
-          <BaseSelect v-model="predicate.selectedTarget" @change="setDefaultArgumentValue(predicate)">
+          <BaseSelect
+            v-model="predicate.selectedTarget"
+            @change="setDefaultArgumentValue(predicate)"
+          >
             <option
               v-for="(target, k) in predicateTargets"
               :key="`group-${i}-predicate-${j}-target-${k}`"
-              :value="target.key"
+              :value="target.keyPath"
             >
               {{ target.label }}
             </option>
@@ -196,8 +209,15 @@ const removeGroup = (index: number) => {
     </div>
 
     <div class="mt-4">
-      <BaseButton class="btn btn-grey space-x-1 hover:bg-brand-50" kind="primary-borderless" @click="appendGroup">
-        <PlusIcon class="h-5 w-5" aria-hidden="true" />
+      <BaseButton
+        class="btn btn-grey space-x-1 hover:bg-brand-50"
+        kind="primary-borderless"
+        @click="appendGroup"
+      >
+        <PlusIcon
+          class="h-5 w-5"
+          aria-hidden="true"
+        />
 
         <span>Add group</span>
       </BaseButton>

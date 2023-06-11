@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { ref, computed, nextTick, watch, onMounted } from 'vue'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
+import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
+import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
+import ReadmeNotSelectedSvg from '@/img/readme-not-selected.svg?component'
+import { useStarsStore } from '@/store/useStarsStore'
+import { randomIntFromRange } from '@/utils'
 import { debouncedWatch } from '@vueuse/core'
-import TransitionFade from '@/views/components/shared/transitions/TransitionFade.vue'
-import LoadingSpinner from '@/views/components/readme/LoadingSpinner.vue'
-import ReadmeNotSelectedSvg from '../../../img/readme-not-selected.svg?component'
-import { randomIntFromRange } from '@/scripts/utils'
+import { computed, nextTick, ref, watch } from 'vue'
 
 const starsStore = useStarsStore()
 
@@ -18,14 +18,18 @@ const readmeContainerEl = ref<HTMLElement>()
 const selectedRepoCount = computed(() => starsStore.selectedRepos.length)
 const noRepoSelected = computed(() => !selectedRepoCount.value)
 
-const extraStacks = ref<{ transform: string }[]>(Array(5).fill(0).map((_, index) => {
-  const direction = index % 2 === 0 ? 1 : -1
-  const tilt = randomIntFromRange(2, 7) * direction
-  const translateX = randomIntFromRange(15, 25) * direction
-  const translateY = randomIntFromRange(0.5, 2) * direction
+const extraStacks = ref<{ transform: string }[]>(
+  Array(5)
+    .fill(0)
+    .map((_, index) => {
+      const direction = index % 2 === 0 ? 1 : -1
+      const tilt = randomIntFromRange(2, 7) * direction
+      const translateX = randomIntFromRange(15, 25) * direction
+      const translateY = randomIntFromRange(0.5, 2) * direction
 
-  return { transform: `rotate(${tilt}deg) scale(0.9) translate3d(${translateX}%, ${translateY}%, 0)` }
-}))
+      return { transform: `rotate(${tilt}deg) scale(0.9) translate3d(${translateX}%, ${translateY}%, 0)` }
+    })
+)
 const visibleStacks = computed(() => extraStacks.value.slice(0, Math.min(5, selectedRepoCount.value - 1)))
 
 watch(
@@ -106,12 +110,18 @@ const patchReadmeImages = () => {
 </script>
 
 <template>
-  <div ref="readmeContainerEl" class="relative flex-grow overflow-y-auto">
+  <div
+    ref="readmeContainerEl"
+    class="relative flex-grow overflow-y-auto"
+  >
     <div
       v-show="noRepoSelected"
       class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-50 p-4 text-center text-gray-500 dark:bg-gray-900"
     >
-      <ReadmeNotSelectedSvg aria-label="No Readme Selected" class="w-full max-w-sm" />
+      <ReadmeNotSelectedSvg
+        aria-label="No Readme Selected"
+        class="w-full max-w-sm"
+      />
     </div>
 
     <div
@@ -120,15 +130,18 @@ const patchReadmeImages = () => {
       class="relative z-20 h-full w-full transition-colors overflow-hidden"
       :class="{ 'grid place-items-center bg-gray-100': selectedRepoCount > 1 }"
     >
-        <div
-          v-for="(stack, $index) in visibleStacks"
-          :key="$index"
-          :style="{ zIndex: visibleStacks.length - $index, transform: stack.transform }"
-          class="pointer-events-none absolute h-[85vh] w-full max-w-none overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
-          aria-hidden="true"
-        ></div>
+      <div
+        v-for="(stack, $index) in visibleStacks"
+        :key="$index"
+        :style="{ zIndex: visibleStacks.length - $index, transform: stack.transform }"
+        class="pointer-events-none absolute h-[85vh] w-full max-w-none overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
+        aria-hidden="true"
+      ></div>
 
-      <div class="relative h-full overflow-auto" :style="{ zIndex: visibleStacks.length + 1 }">
+      <div
+        class="relative h-full overflow-auto"
+        :style="{ zIndex: visibleStacks.length + 1 }"
+      >
         <div
           ref="readmeEl"
           class="prose max-w-none bg-white p-4 transition-transform dark:prose-invert dark:bg-gray-900 sm:mx-auto sm:max-w-2xl 2xl:max-w-4xl"
@@ -138,7 +151,12 @@ const patchReadmeImages = () => {
           v-html="contents"
         ></div>
 
-        <div v-show="selectedRepoCount > 1" class="sr-only">{{ selectedRepoCount }} Stars selected</div>
+        <div
+          v-show="selectedRepoCount > 1"
+          class="sr-only"
+        >
+          {{ selectedRepoCount }} Stars selected
+        </div>
       </div>
     </div>
 

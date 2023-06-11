@@ -1,5 +1,5 @@
+import { BaseDialogReturnType } from '@/types'
 import { ref } from 'vue'
-import { BaseDialogReturnType } from '@/scripts/types'
 
 const isOpen = ref(false)
 
@@ -9,9 +9,9 @@ interface NotesEditorReturnType extends BaseDialogReturnType {
 
 export const useNotesEditor = (): NotesEditorReturnType => {
   return {
+    hide: () => (isOpen.value = false),
     isOpen,
     show: () => (isOpen.value = true),
-    hide: () => (isOpen.value = false),
     toggle: () => (isOpen.value = !isOpen.value),
   }
 }

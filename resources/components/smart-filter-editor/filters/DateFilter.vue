@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
-import BaseTextInput from '@/views/components/shared/core/BaseTextInput.vue'
-import WatchValue from '@/views/components/shared/core/WatchValue.vue'
+import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
+import WatchValue from '@/components/shared/core/WatchValue.vue'
 import { Popover, PopoverButton, PopoverPanel, Portal } from '@headlessui/vue'
 import { ArrowSmLeftIcon, ArrowSmRightIcon } from '@heroicons/vue/solid'
 import * as dateFns from 'date-fns'
+import { computed, nextTick, onMounted, reactive, ref, unref } from 'vue'
 
 interface Props {
   modelValue?: string
@@ -13,8 +13,8 @@ interface Props {
 interface DateWithMeta {
   date: Date
   isCurrentMonth: boolean
-  isToday: boolean
   isSelected: boolean
+  isToday: boolean
 }
 
 const props = defineProps<Props>()
@@ -41,11 +41,11 @@ const MONTH_LABELS = [
 ]
 
 const isDatePickerShowing = ref(false)
-const inputRef = ref<typeof BaseTextInput | null>(null)
-const inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
-  top: 0,
-  left: 0,
+const inputRef = ref<null | typeof BaseTextInput>(null)
+const inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'height' | 'left' | 'top'>>({
   height: 38,
+  left: 0,
+  top: 0,
 })
 
 const selectedDate = ref(props.modelValue ? dateFns.parse(props.modelValue, 'yyyy-MM-dd', new Date()) : new Date())
@@ -66,13 +66,13 @@ const dates = computed(() => {
   startDate = dateFns.addDays(startDate, -leadPaddingDays)
   endDate = dateFns.addDays(endDate, trailingPaddingDays)
 
-  return dateFns.eachDayOfInterval({ start: startDate, end: endDate }).map(
+  return dateFns.eachDayOfInterval({ end: endDate, start: startDate }).map(
     date =>
       ({
         date,
         isCurrentMonth: dateFns.isSameMonth(cursor, date),
-        isToday: dateFns.isSameDay(date, today.value),
         isSelected: dateFns.isSameDay(date, selectedDate.value),
+        isToday: dateFns.isSameDay(date, today.value),
       } as DateWithMeta)
   )
 })
@@ -125,8 +125,14 @@ const setDatePickerVisibility = (isVisible: boolean) => {
 </script>
 
 <template>
-  <Popover v-slot="{ open }" class="relative">
-    <WatchValue :value="open" @change="setDatePickerVisibility($event)" />
+  <Popover
+    v-slot="{ open }"
+    class="relative"
+  >
+    <WatchValue
+      :value="open"
+      @change="setDatePickerVisibility($event)"
+    />
 
     <div class="relative">
       <BaseTextInput
@@ -158,18 +164,30 @@ const setDatePickerVisibility = (isVisible: boolean) => {
             <header
               class="col-span-7 flex items-center justify-between px-3 pt-2 pb-4 text-center font-semibold text-gray-700"
             >
-              <button aria-label="Previous Month" type="button" @click="previousMonth()">
+              <button
+                aria-label="Previous Month"
+                type="button"
+                @click="previousMonth()"
+              >
                 <ArrowSmLeftIcon class="h-4 w-4" />
               </button>
 
               <span>{{ currentMonthLabel }} {{ currentYear }}</span>
 
-              <button aria-label="Next Month" type="button" @click="nextMonth()">
+              <button
+                aria-label="Next Month"
+                type="button"
+                @click="nextMonth()"
+              >
                 <ArrowSmRightIcon class="h-4 w-4" />
               </button>
             </header>
 
-            <div v-for="dayLabel in DAY_LABELS" :key="dayLabel" class="headings text-center font-semibold">
+            <div
+              v-for="dayLabel in DAY_LABELS"
+              :key="dayLabel"
+              class="headings text-center font-semibold"
+            >
               {{ dayLabel }}
             </div>
 

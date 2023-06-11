@@ -1,5 +1,8 @@
 <template>
-  <svg fill="currentColor" viewBox="0 0 24 24">
+  <svg
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { computed, ref, nextTick } from 'vue'
-import { router } from '@inertiajs/vue3'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import BaseDialog from '@/components/shared/core/BaseDialog.vue'
+import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
+import BaseToggle from '@/components/shared/core/BaseToggle.vue'
+import { useSettingsDialog } from '@/composables/useSettingsDialog'
+import { useUserStore } from '@/store/useUserStore'
 import { DialogTitle } from '@headlessui/vue'
-import ConfettiExplosion from 'vue-confetti-explosion'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
-import BaseDialog from '@/views/components/shared/core/BaseDialog.vue'
-import BaseTextInput from '@/views/components/shared/core/BaseTextInput.vue'
-import BaseToggle from '@/views/components/shared/core/BaseToggle.vue'
-import BaseButton from '@/views/components/shared/core/BaseButton.vue'
-import { useSettingsDialog } from '@/scripts/composables/useSettingsDialog'
-import { useUserStore } from '@/scripts/store/useUserStore'
+import { router } from 'hybridly'
+import { computed, nextTick, ref } from 'vue'
+import ConfettiExplosion from 'vue-confetti-explosion'
 
 const { isOpen, hide } = useSettingsDialog()
 const userStore = useUserStore()
 const isRequestingDeleteConfirmation = ref(false)
 const usernameConfirmation = ref('')
-const confirmInput = ref<typeof BaseTextInput | null>()
+const confirmInput = ref<null | typeof BaseTextInput>()
 
 const deleteButtonLabel = computed(() =>
   isRequestingDeleteConfirmation.value ? 'Confirm deletion' : 'Delete my account'
@@ -26,13 +26,13 @@ const deleteButtonIsDisabled = computed(() => {
 })
 
 const updateUserSetting = (setting: string, enabled: boolean) => {
-  router.put(
-    '/settings',
-    { key: setting, enabled },
-    {
-      only: ['user'],
-    }
-  )
+  router.put(route('settings.update'), {
+    data: {
+      enabled,
+      key: setting,
+    },
+    only: 'user',
+  })
 }
 
 const deleteUser = async () => {
@@ -53,19 +53,27 @@ const checkSponsorshipStatus = () => {
 </script>
 
 <template>
-  <BaseDialog :is-open="isOpen" :hide="hide" dialog-classes="sm:max-w-xl px-0 pt-0 pb-0 sm:p-0">
-    <DialogTitle class="w-full rounded-t-lg border-b border-gray-200 bg-gray-100 p-4 text-xl font-bold text-gray-700"
+  <BaseDialog
+    :is-open="isOpen"
+    :hide="hide"
+    dialog-classes="sm:max-w-xl px-0 pt-0 pb-0 sm:p-0"
+  >
+    <DialogTitle
+      class="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 p-4 text-xl font-bold text-gray-700 dark:text-gray-200"
       >Settings</DialogTitle
     >
 
-    <div class="divide-y divide-gray-100">
+    <div class="divide-y divide-gray-100 dark:divide-gray-700">
       <div class="px-4 py-5">
         <div class="flex items-center">
           <div>
-            <p class="font-bold text-gray-600">Sponsorship status</p>
+            <p class="font-bold text-gray-600 dark:text-gray-300">Sponsorship status</p>
 
             <div class="mt-2">
-              <p v-show="isSponsor" class="flex items-center gap-x-1">
+              <p
+                v-show="isSponsor"
+                class="flex items-center gap-x-1"
+              >
                 <span class="flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-green-200">
                   <CheckCircleIcon class="h-5 w-5" />
                 </span>
@@ -73,7 +81,10 @@ const checkSponsorshipStatus = () => {
                 <span class="text-sm font-bold text-green-800">You're a sponsor and you're awesome!</span>
               </p>
 
-              <p v-show="!isSponsor" class="flex items-center gap-x-1">
+              <p
+                v-show="!isSponsor"
+                class="flex items-center gap-x-1"
+              >
                 <span class="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-600 text-yellow-200">
                   <XCircleIcon class="h-5 w-5" />
                 </span>
@@ -83,15 +94,21 @@ const checkSponsorshipStatus = () => {
             </div>
           </div>
 
-          <BaseButton class="ml-auto" kind="primary" size="sm" @click="checkSponsorshipStatus">Check now</BaseButton>
+          <BaseButton
+            class="ml-auto"
+            kind="primary"
+            size="sm"
+            @click="checkSponsorshipStatus"
+            >Check now</BaseButton
+          >
 
-          <component :is="ConfettiExplosion" v-if="isSponsor" />
+          <ConfettiExplosion v-if="isSponsor" />
         </div>
       </div>
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="font-bold text-gray-600">Show language tags</p>
+          <p class="font-bold text-gray-600 dark:text-gray-300">Show language tags</p>
 
           <BaseToggle
             class="ml-auto"
@@ -100,12 +117,14 @@ const checkSponsorshipStatus = () => {
           />
         </div>
 
-        <p class="mt-4 w-2/3 text-sm text-gray-500">Shows or hides the language tag on repos in your list.</p>
+        <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
+          Shows or hides the language tag on repos in your list.
+        </p>
       </div>
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="font-bold text-gray-600">Auto-save notes</p>
+          <p class="font-bold text-gray-600 dark:text-gray-300">Auto-save notes</p>
 
           <BaseToggle
             class="ml-auto"
@@ -114,21 +133,25 @@ const checkSponsorshipStatus = () => {
           />
         </div>
 
-        <p class="mt-4 w-2/3 text-sm text-gray-500">
+        <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
           While this is turned on, notes will auto-save every few seconds as you type.
         </p>
       </div>
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="font-bold text-gray-600">GitHub access</p>
+          <p class="font-bold text-gray-600 dark:text-gray-300">GitHub access</p>
 
-          <BaseButton class="ml-auto" kind="danger" size="sm" @click="router.post('/revoke-grant')"
+          <BaseButton
+            class="ml-auto"
+            kind="danger"
+            size="sm"
+            @click="router.post('/revoke-grant')"
             >Revoke access</BaseButton
           >
         </div>
 
-        <p class="mt-4 w-2/3 text-sm text-gray-500">
+        <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
           This will log you out and revoke your authorization granted to Astral for accessing your GitHub account. You
           will not lose any data.
         </p>
@@ -136,11 +159,15 @@ const checkSponsorshipStatus = () => {
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="font-bold text-gray-600">Delete account</p>
+          <p class="font-bold text-gray-600 dark:text-gray-300">Delete account</p>
 
           <div class="ml-auto flex items-center space-x-3">
             <div v-show="isRequestingDeleteConfirmation">
-              <label for="confirm-user-delete" class="sr-only">Enter your username to confirm</label>
+              <label
+                for="confirm-user-delete"
+                class="sr-only"
+                >Enter your username to confirm</label
+              >
 
               <BaseTextInput
                 id="confirm-user-delete"
@@ -151,13 +178,17 @@ const checkSponsorshipStatus = () => {
               />
             </div>
 
-            <BaseButton kind="danger" size="sm" :disabled="deleteButtonIsDisabled" @click="deleteUser">{{
-              deleteButtonLabel
-            }}</BaseButton>
+            <BaseButton
+              kind="danger"
+              size="sm"
+              :disabled="deleteButtonIsDisabled"
+              @click="deleteUser"
+              >{{ deleteButtonLabel }}</BaseButton
+            >
           </div>
         </div>
 
-        <p class="mt-4 w-2/3 text-sm text-gray-500">
+        <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
           This will permanently delete <strong>all</strong> of your data on this site, and revoke your authorization
           granted to Astral.
           <em>Be careful!</em>

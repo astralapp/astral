@@ -2,13 +2,13 @@
 import { useVModel } from '@vueuse/core'
 
 interface Props {
-  type?: 'text' | 'email' | 'password' | 'number'
-  modelValue?: string | number
+  modelValue?: number | string
+  type?: 'email' | 'number' | 'password' | 'text'
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'text',
   modelValue: '',
+  type: 'text',
 })
 
 const emit = defineEmits<{
@@ -21,7 +21,7 @@ const value = useVModel(props, 'modelValue', emit)
 <template>
   <input
     v-model="value"
-    class="rounded-md border border-transparent bg-white px-3 py-2 text-base text-gray-600 shadow ring-1 ring-gray-300 transition-colors focus:border-gray-400 focus:ring-gray-400 dark:bg-gray-700 dark:text-gray-300 dark:ring-gray-600 dark:focus:border-gray-600 sm:text-sm"
+    class="min-w-0 flex-auto appearance-none rounded-md border border-gray-900/20 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-gray-800/5 placeholder:text-gray-400 focus:border-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-500/10 dark:border-gray-700 dark:bg-gray-700/[0.15] dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus:border-gray-500 dark:focus:ring-gray-400/10 sm:text-sm"
     :type="props.type"
   />
 </template>

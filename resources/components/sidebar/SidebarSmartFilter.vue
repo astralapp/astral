@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import SidebarItem from '@/views/components/sidebar/SidebarItem.vue'
+import WatchValue from '@/components/shared/core/WatchValue.vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
+import { useConfirm } from '@/composables/useConfirm'
+import { useGlobalToast } from '@/composables/useGlobalToast'
+import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
+import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import WatchValue from '@/views/components/shared/core/WatchValue.vue'
-import { useSmartFilterDialog } from '@/scripts/composables/useSmartFilterDialog'
-import { useSmartFiltersStore } from '@/scripts/store/useSmartFiltersStore'
-import { useConfirm } from '@/scripts/composables/useConfirm'
-import { useGlobalToast } from '@/scripts/composables/useGlobalToast'
-import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
 import { FilterIcon } from '@heroicons/vue/outline'
-import { SmartFilter } from '@/scripts/types'
+import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
+import { ref } from 'vue'
 
 const props = defineProps<{
-  smartFilter: SmartFilter
+  smartFilter: App.Data.SmartFilterData
 }>()
 
 const smartFiltersStore = useSmartFiltersStore()
@@ -25,8 +24,8 @@ const isContextMenuActive = ref(false)
 const deleteSmartFilter = async () => {
   if (
     await isConfirmed(`Are you sure you want to delete the "${props.smartFilter.name}" smart filter?`, {
-      confirmLabel: "Yes, I'm sure",
       cancelLabel: 'Nevermind',
+      confirmLabel: "Yes, I'm sure",
     })
   ) {
     smartFiltersStore.deleteSmartFilter(props.smartFilter.id)
@@ -49,8 +48,15 @@ const deleteSmartFilter = async () => {
 
     <template #contextMenu>
       <div>
-        <Menu v-slot="{ open }" as="div" class="relative">
-          <WatchValue :value="open" @change="isContextMenuActive = !!$event" />
+        <Menu
+          v-slot="{ open }"
+          as="div"
+          class="relative"
+        >
+          <WatchValue
+            :value="open"
+            @change="isContextMenuActive = !!$event"
+          />
 
           <MenuButton
             class="right-0 top-0 h-5 w-5 text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover/sidebar-item:opacity-100"

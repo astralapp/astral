@@ -36,7 +36,7 @@ class StarTagsController extends Controller
             'repos.*.description' => ['nullable', 'string'],
             'tagId' => ['required', Rule::exists('tags', 'id')->where(function ($query) {
                 return $query->where('user_id', auth()->id());
-            }), ],
+            }),],
         ]);
 
         $repos = $request->input('repos');
@@ -98,6 +98,6 @@ class StarTagsController extends Controller
 
         DB::commit();
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }

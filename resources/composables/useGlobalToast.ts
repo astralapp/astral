@@ -1,21 +1,22 @@
+import { sleep } from '@/utils'
 import { Ref, ref } from 'vue'
-import { sleep } from '@/scripts/utils'
 
-export enum ToastType {
-  Success = 'success',
-  Error = 'error',
-}
+export const ToastType = {
+  Error: 'error',
+  Success: 'success',
+} as const
+export type ToastType = Values<typeof ToastType>
 
 interface GlobalToastReturnType {
-  show: (message: string, type?: ToastType) => void
-  isVisible: Ref<boolean>
   currentMessage: Ref<string>
   currentType: Ref<ToastType>
+  isVisible: Ref<boolean>
+  show: (message: string, type?: ToastType) => void
 }
 
 const isVisible = ref(false)
 const currentMessage = ref('')
-const currentType = ref(ToastType.Success)
+const currentType = ref<ToastType>(ToastType.Success)
 
 let timeout: ReturnType<typeof setTimeout>
 const DURATION = 3750
@@ -37,9 +38,9 @@ export const useGlobalToast = (): GlobalToastReturnType => {
   }
 
   return {
-    show,
-    isVisible,
     currentMessage,
     currentType,
+    isVisible,
+    show,
   }
 }

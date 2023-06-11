@@ -1,45 +1,56 @@
 <script lang="ts" setup>
-import { computed, Ref } from 'vue'
-import { useSponsorshipDialog } from '@/scripts/composables/useSponsorshipDialog'
-import { useAuthorizationsStore } from '@/scripts/store/useAuthorizationsStore'
+import ActionDialog from '@/components/shared/core/ActionDialog.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
+import { Ability } from '@/types'
 import { UserGroupIcon } from '@heroicons/vue/outline'
-import { Ability } from '@/scripts/types'
-import ActionDialog from '@/views/components/shared/core/ActionDialog.vue'
-import BaseButton from '@/views/components/shared/core/BaseButton.vue'
+import { Ref, computed } from 'vue'
 
 const { isOpen, hide, currentContext } = useSponsorshipDialog()
 const authorizationsStore = useAuthorizationsStore()
 
-const DIALOG_MESSAGES: Record<Ability, string> = {
-  [Ability.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
+const DIALOG_MESSAGES: Record<App.Data.Enums.Ability, string> = {
   [Ability.ADD_NOTES]: 'To add notes to your starred repos',
   [Ability.CREATE_SMART_FILTER]: 'To create smart filters',
+  [Ability.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
 }
 
-const currentMessage: Ref<string | null> = computed(() =>
+const currentMessage: Ref<null | string> = computed(() =>
   currentContext.value ? DIALOG_MESSAGES[currentContext.value] : null
 )
 </script>
 
 <template>
-  <ActionDialog :is-open="isOpen" :hide="hide">
+  <ActionDialog
+    :is-open="isOpen"
+    :hide="hide"
+  >
     <template #icon>
-      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-        <UserGroupIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
+      <div
+        class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/10 dark:text-green-400"
+      >
+        <UserGroupIcon
+          class="h-6 w-6 text-green-600"
+          aria-hidden="true"
+        />
       </div>
     </template>
 
     <template #title>Sponsorship required</template>
 
     <template #body>
-      <p v-if="currentMessage" class="text-gray-500">
+      <p
+        v-if="currentMessage"
+        class="text-gray-500 dark:text-gray-300"
+      >
         <span>{{ currentMessage }}</span>
         you must be an active
         <a
           href="https://github.com/sponsors"
           target="_blank"
           rel="noopener noreferrer"
-          class="font-semibold text-brand-700 focus:outline-none"
+          class="font-semibold text-brand-700 dark:text-brand-500 focus:outline-none"
           >GitHub Sponsor</a
         >
         of the project. You can sponsor for as little as $1/month to get full access to all of Astral's features.
@@ -47,7 +58,12 @@ const currentMessage: Ref<string | null> = computed(() =>
     </template>
 
     <template #actions>
-      <BaseButton class="w-full" @click="hide"> Nevermind </BaseButton>
+      <BaseButton
+        class="w-full"
+        @click="hide"
+      >
+        Nevermind
+      </BaseButton>
 
       <BaseButton
         as="link"

@@ -5,22 +5,30 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { computed, PropType, ref, watch } from 'vue'
-import TransitionFade from '@/views/components/shared/transitions/TransitionFade.vue'
-import fuzzysearch from 'fuzzysearch'
+import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
 import { onKeyStroke } from '@vueuse/core'
+import fuzzysearch from 'fuzzysearch'
+import { computed, ref, watch } from 'vue'
 
-const props = defineProps({
-  source: {
-    type: Array as PropType<string[]>,
-    default: () => [],
-  },
-  search: {
-    type: String,
-    default: '',
-  },
+interface Props {
+  search: string
+  source: string[]
+}
+
+defineOptions({
+  inheritAttrs: false,
 })
-const emit = defineEmits(['select', 'show', 'hide'])
+
+const props = withDefaults(defineProps<Props>(), {
+  search: '',
+  source: () => [],
+})
+
+const emit = defineEmits<{
+  hide: []
+  select: [item: string]
+  show: []
+}>()
 
 const currentIndex = ref(-1)
 const isVisible = ref(false)
@@ -43,7 +51,7 @@ watch(visibleItems, (oldItems, items) => {
 
 watch(hasResults, shouldShow => {
   isVisible.value = shouldShow
-  emit(shouldShow ? 'show' : 'hide')
+  shouldShow ? emit('show') : emit('hide')
 })
 
 watch(
@@ -81,7 +89,10 @@ onKeyStroke('Escape', () => (isVisible.value = false))
 
 <template>
   <teleport to="body">
-    <TransitionFade :show="shouldShow" as="div">
+    <TransitionFade
+      :show="shouldShow"
+      as="div"
+    >
       <ul
         v-show="shouldShow"
         class="absolute z-50 min-w-[150px] divide-y divide-gray-100 rounded-md border border-gray-200 bg-white py-1 shadow-lg"
@@ -112,7 +123,13 @@ onKeyStroke('Escape', () => (isVisible.value = false))
         </li>
       </ul>
 
-      <span class="sr-only" role="status" aria-live="assertive" aria-atomic="true" hidden>
+      <span
+        class="sr-only"
+        role="status"
+        aria-live="assertive"
+        aria-atomic="true"
+        hidden
+      >
         {{ visibleItems.length }}
         {{ visibleItems.length === 1 ? 'result' : 'results' }} found
       </span>

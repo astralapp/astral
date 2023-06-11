@@ -1,6 +1,6 @@
-import { watch } from 'vue'
 import localForage from 'localforage'
 import { Store } from 'pinia'
+import { watch } from 'vue'
 
 localForage.config({
   name: 'Astral',

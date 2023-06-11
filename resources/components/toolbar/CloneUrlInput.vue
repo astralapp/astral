@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, Ref, watch } from 'vue'
-import { router } from '@inertiajs/vue3'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
+import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
+import { useAuth } from '@/composables/use-auth'
+import { useStarsStore } from '@/store/useStarsStore'
+import { isFocusedElementEditable } from '@/utils'
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue'
-import BaseTextInput from '@/views/components/shared/core/BaseTextInput.vue'
 import { onKeyStroke } from '@vueuse/core'
-import { isFocusedElementEditable } from '@/scripts/utils'
-import { useMe } from '@/scripts/composables/useMe'
+import { router } from 'hybridly'
+import { Ref, computed, ref, watch } from 'vue'
 
-type CloneUrlType = 'ssh' | 'https'
+type CloneUrlType = 'https' | 'ssh'
 
-const { me } = useMe();
+const { user } = useAuth()
 const starsStore = useStarsStore()
 
-const currentUrlType: Ref<CloneUrlType> = ref(me.value.settings.clone_https_url ? 'https' : 'ssh')
-const input = ref<typeof BaseTextInput | null>(null)
+const currentUrlType: Ref<CloneUrlType> = ref(user.value?.settings.clone_https_url ? 'https' : 'ssh')
+const input = ref<null | typeof BaseTextInput>(null)
 
 const cloneUrl = computed(() => {
   return currentUrlType.value === 'ssh'
@@ -26,8 +26,13 @@ const selectUrlText = (e: FocusEvent) => {
   ;(e?.currentTarget as HTMLInputElement)?.select()
 }
 
-watch(currentUrlType, (newValue) => {
-  router.put('/settings', { key: 'clone_https_url', enabled: newValue === 'https' })
+watch(currentUrlType, newValue => {
+  router.put(route('settings.update'), {
+    data: {
+      enabled: newValue === 'https',
+      key: 'clone_https_url',
+    },
+  })
 })
 
 onKeyStroke('c', e => {
@@ -42,7 +47,11 @@ onKeyStroke('c', e => {
 <template>
   <div class="flex items-center">
     <div>
-      <label for="repo_clone_url" class="cursor-pointer text-sm font-semibold text-gray-600">Clone:</label>
+      <label
+        for="repo_clone_url"
+        class="cursor-pointer text-sm font-semibold text-gray-600"
+        >Clone:</label
+      >
 
       <BaseTextInput
         id="repo_clone_url"
@@ -56,10 +65,17 @@ onKeyStroke('c', e => {
       />
     </div>
 
-    <RadioGroup v-model="currentUrlType" class="isolate px-3">
+    <RadioGroup
+      v-model="currentUrlType"
+      class="isolate px-3"
+    >
       <RadioGroupLabel class="sr-only">Clone URL Type</RadioGroupLabel>
 
-      <RadioGroupOption v-slot="{ checked }" as="template" value="ssh">
+      <RadioGroupOption
+        v-slot="{ checked }"
+        as="template"
+        value="ssh"
+      >
         <div
           class="cursor-pointer rounded-full py-0.5 px-1.5 text-center text-xxs font-bold"
           :class="{
@@ -71,7 +87,11 @@ onKeyStroke('c', e => {
         </div>
       </RadioGroupOption>
 
-      <RadioGroupOption v-slot="{ checked }" as="template" value="https">
+      <RadioGroupOption
+        v-slot="{ checked }"
+        as="template"
+        value="https"
+      >
         <div
           class="cursor-pointer rounded-full py-0.5 px-1.5 text-center text-xxs font-bold"
           :class="{

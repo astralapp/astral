@@ -1,38 +1,38 @@
 <script lang="ts" setup>
-import { ref, watch, computed, nextTick } from 'vue'
-import { useUserStore } from '@/store/useUserStore'
-import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
-import { useTagsStore } from '@/store/useTagsStore'
-import { useStarsStore } from '@/store/useStarsStore'
-import { useStarsFilterStore } from '@/store/useStarsFilterStore'
-import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
-import { useSyncValuesToStores } from '@/composables/useSyncValuesToStores'
-import { useListSelectionState } from '@/composables/useListSelectionState'
-import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
-import { useSettingsDialog } from '@/composables/useSettingsDialog'
-import { useUrlParams } from '@/composables/useUrlParams'
-import Sidebar from '@/components/sidebar/Sidebar.vue'
-import StarredRepoList from '@/components/stars/StarredRepoList.vue'
-import StarredRepo from '@/components/stars/StarredRepo.vue'
-import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
+import Galileo from '@/components/Galileo.vue'
+import GlobalToast from '@/components/GlobalToast.vue'
+import UserMenu from '@/components/UserMenu.vue'
 import NotesEditor from '@/components/notes-editor/NotesEditor.vue'
 import Readme from '@/components/readme/Readme.vue'
-import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
-import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
-import UpgradeOAuthScopeDialog from '@/components/shared/dialogs/UpgradeAuthScopeDialog.vue'
-import SmartFiltersDialog from '@/components/shared/dialogs/SmartFilterDialog.vue'
 import ConfirmDialog from '@/components/shared/dialogs/ConfirmDialog.vue'
-import WelcomeDialog from '@/components/shared/dialogs/WelcomeDialog.vue'
-import UserMenu from '@/components/UserMenu.vue'
-import Galileo from '@/components/Galileo.vue'
+import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
 import SettingsDialog from '@/components/shared/dialogs/SettingsDialog.vue'
-import GlobalToast from '@/components/GlobalToast.vue'
-import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
+import SmartFiltersDialog from '@/components/shared/dialogs/SmartFilterDialog.vue'
+import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
+import UpgradeOAuthScopeDialog from '@/components/shared/dialogs/UpgradeAuthScopeDialog.vue'
+import WelcomeDialog from '@/components/shared/dialogs/WelcomeDialog.vue'
+import Sidebar from '@/components/sidebar/Sidebar.vue'
+import StarredRepo from '@/components/stars/StarredRepo.vue'
+import StarredRepoList from '@/components/stars/StarredRepoList.vue'
+import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
+import { useAuth } from '@/composables/use-auth'
+import { useListSelectionState } from '@/composables/useListSelectionState'
+import { useSettingsDialog } from '@/composables/useSettingsDialog'
+import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+import { useSyncValuesToStores } from '@/composables/useSyncValuesToStores'
+import { useUrlParams } from '@/composables/useUrlParams'
 import LogoSvg from '@/img/logo.svg?component'
+import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
+import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
+import { useUserStore } from '@/store/useUserStore'
+import { GitHubRepo } from '@/types'
+import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
 import { tryOnMounted } from '@vueuse/core'
 import localForage from 'localforage'
-import { useAuth } from '@/composables/use-auth'
-import { GitHubRepo } from '@/types'
+import { computed, nextTick, ref, watch } from 'vue'
 
 const props = defineProps<App.Data.DashboardData>()
 const { user } = useAuth()
@@ -68,11 +68,11 @@ const { selectItem, selectedItems } = useListSelectionState(
  * the user attempted to do something that requires an active
  * sponsorship. If true, show them the Sponsor dialog.
  */
-// router.on('finish', () => {
-//   if (props.errors.sponsorship_required) {
-//     showSponsorshipDialog(props.errors.sponsorship_required as Ability)
-//   }
-// })
+registerHook('error', errors => {
+  if (errors.sponsorship_required) {
+    showSponsorshipDialog(errors.sponsorship_required as App.Data.Enums.Ability)
+  }
+})
 
 const isSidebarOpen = ref(false)
 const isReadmeOpen = ref(false)
@@ -159,7 +159,7 @@ watch(
 // Show welcome dialog the first time a user logs in
 const shouldShowWelcomeMessage = ref(false)
 tryOnMounted(() => {
-  shouldShowWelcomeMessage.value = !props.user.flags.find(flag => flag.key === 'has-seen-welcome-message')?.value
+  shouldShowWelcomeMessage.value = !user.value?.flags.find(flag => flag.key === 'has-seen-welcome-message')?.value
 })
 </script>
 
@@ -237,7 +237,7 @@ tryOnMounted(() => {
 
       <!-- Starred Repo List -->
       <div
-        class="relative flex flex-col border-r border-gray-300 transition-transform duration-300 dark:border-gray-600"
+        class="relative flex flex-col border-r border-gray-300 transition-transform duration-300 dark:border-gray-950 dark:bg-black"
         :class="{
           'translate-x-8': isSidebarOpen,
         }"

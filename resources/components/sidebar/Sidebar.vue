@@ -1,44 +1,39 @@
 <script lang="ts" setup>
-import { ref, computed, reactive, nextTick } from 'vue'
-import { Errors } from '@inertiajs/core'
-import { router } from '@inertiajs/vue3'
-import { InboxIcon, StarIcon, PlusCircleIcon, RefreshIcon } from '@heroicons/vue/outline'
+import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
+import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
+import SidebarTag from '@/components/sidebar/SidebarTag.vue'
+import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
+import { useAuth } from '@/composables/use-auth'
+import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
+import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
+import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
+import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
+import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
+import { Ability, Errors, StarDragDataTransferData } from '@/types'
+// import { Errors } from '@inertiajs/core'
+import { InboxIcon, PlusCircleIcon, RefreshIcon, StarIcon } from '@heroicons/vue/outline'
+import { router } from 'hybridly'
 import { Sortable } from 'sortablejs-vue3'
+import { computed, nextTick, reactive, ref } from 'vue'
 
-import SidebarGroup from '@/views/components/sidebar/SidebarGroup.vue'
-import SidebarItem from '@/views/components/sidebar/SidebarItem.vue'
-import SidebarTag from '@/views/components/sidebar/SidebarTag.vue'
-import SidebarSmartFilter from '@/views/components/sidebar/SidebarSmartFilter.vue'
-import SortTagsMenu from '@/views/components/sidebar/SortTagsMenu.vue'
-
-import { useGlobalToast, ToastType } from '@/scripts/composables/useGlobalToast'
-import { useSmartFilterDialog } from '@/scripts/composables/useSmartFilterDialog'
-import { useSponsorshipDialog } from '@/scripts/composables/useSponsorshipDialog'
-
-import { SPONSORSHIP_REQUIRED_ERROR } from '@/scripts/constants'
-
-import { useTagsStore } from '@/scripts/store/useTagsStore'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
-import { useStarsFilterStore } from '@/scripts/store/useStarsFilterStore'
-import { useSmartFiltersStore } from '@/scripts/store/useSmartFiltersStore'
-import { useAuthorizationsStore } from '@/scripts/store/useAuthorizationsStore'
-
-import { Tag, StarDragDataTransferData, Ability, SmartFilter, User } from '@/scripts/types'
-import { useMe } from '@/scripts/composables/useMe'
-
-type CollapsibleSidebarSettingsKey = Extract<keyof User['settings'], `sidebar_${string}`>
+type CollapsibleSidebarSettingsKey = Extract<keyof App.Data.UserSettingsData, `sidebar_${string}`>
 type SidebarGroupCollapsedState = { [K in CollapsibleSidebarSettingsKey]: boolean }
 
 const emit = defineEmits<{
-  (e: 'tag-selected', tag: Tag): void
-  (e: 'smart-filter-selected', value: SmartFilter): void
-  (e: 'language-selected', value: string): void
   (e: 'all-stars-selected'): void
-  (e: 'untagged-selected'): void
+  (e: 'language-selected', value: string): void
   (e: 'reload-stars'): void
+  (e: 'smart-filter-selected', value: App.Data.SmartFilterData): void
+  (e: 'tag-selected', tag: App.Data.TagData): void
+  (e: 'untagged-selected'): void
 }>()
 
-const { me } = useMe()
+const { user } = useAuth()
 
 const starsFilterStore = useStarsFilterStore()
 const tagsStore = useTagsStore()
@@ -54,9 +49,9 @@ const newTag = ref('')
 const isNewTagFormShowing = ref(false)
 
 const sidebarGroupCollapsedState: SidebarGroupCollapsedState = reactive({
-  sidebar_tags_collapsed: me.value.settings.sidebar_tags_collapsed,
-  sidebar_smart_filters_collapsed: me.value.settings.sidebar_smart_filters_collapsed,
-  sidebar_languages_collapsed: me.value.settings.sidebar_languages_collapsed,
+  sidebar_languages_collapsed: user.value?.settings.sidebar_languages_collapsed ?? false,
+  sidebar_smart_filters_collapsed: user.value?.settings.sidebar_smart_filters_collapsed ?? false,
+  sidebar_tags_collapsed: user.value?.settings.sidebar_tags_collapsed ?? false,
 })
 
 const tags = computed({
@@ -95,8 +90,8 @@ const doAddTag = async (tagName: string) => {
   }
 }
 
-const tagIsSelected = (tag: Tag): boolean => tag.id === starsFilterStore.selectedTag?.id
-const smartFilterIsSelected = (smartFilter: SmartFilter): boolean =>
+const tagIsSelected = (tag: App.Data.TagData): boolean => tag.id === starsFilterStore.selectedTag?.id
+const smartFilterIsSelected = (smartFilter: App.Data.SmartFilterData): boolean =>
   smartFilter.id === starsFilterStore.selectedSmartFilter?.id
 const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
 
@@ -115,18 +110,18 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
 
   await nextTick()
 
-  router.put(
-    '/settings',
-    { key: key, enabled: sidebarGroupCollapsedState[key] },
-    {
-      only: ['user'],
-    }
-  )
+  router.put(route('settings.update'), {
+    data: {
+      enabled: sidebarGroupCollapsedState[key],
+      key,
+    },
+    only: 'user',
+  })
 }
 </script>
 
 <template>
-  <div class="h-full overflow-y-auto bg-gray-900 p-4 dark:border-r dark:border-gray-600">
+  <div class="h-full overflow-y-auto bg-gray-900 dark:bg-gray-800 p-4 dark:border-r dark:border-gray-950">
     <div class="mt-6 space-y-6">
       <SidebarGroup title="Stars">
         <template #right-action>
@@ -151,7 +146,11 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
           </div>
         </template>
 
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars">
+        <ul
+          class="mt-2 space-y-2"
+          role="listbox"
+          aria-label="Stars"
+        >
           <SidebarItem
             title="All Stars"
             :is-active="starsFilterStore.isFilteringByAll"
@@ -184,7 +183,11 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         :close="() => toggleSidebarGroupCollapsedState('sidebar_tags_collapsed')"
       >
         <template #right-action>
-          <SortTagsMenu v-if="tags.length > 1" class="-mt-1" @sort-tags="tagsStore.sortTags" />
+          <SortTagsMenu
+            v-if="tags.length > 1"
+            class="-mt-1"
+            @sort-tags="tagsStore.sortTags"
+          />
         </template>
 
         <template #default>
@@ -195,7 +198,10 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               type="button"
               @click="showNewTagForm"
             >
-              <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+              <PlusCircleIcon
+                class="h-5 w-5 flex-shrink-0"
+                aria-hidden="true"
+              />
 
               <span class="ml-2">Add a tag...</span>
             </button>
@@ -218,7 +224,11 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             </form>
           </div>
 
-          <ul class="mt-2" role="listbox" aria-label="Tags">
+          <ul
+            class="mt-2"
+            role="listbox"
+            aria-label="Tags"
+          >
             <Sortable
               :list="tags"
               item-key="id"
@@ -256,12 +266,19 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             aria-label="Add smart filter"
             @click="doShowSmartFilterDialog"
           >
-            <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+            <PlusCircleIcon
+              class="h-5 w-5 flex-shrink-0"
+              aria-hidden="true"
+            />
           </button>
         </template>
 
         <template #default>
-          <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters">
+          <ul
+            class="mt-2 space-y-2"
+            role="listbox"
+            aria-label="Smart Filters"
+          >
             <Sortable
               :list="smartFilters"
               item-key="id"
@@ -290,7 +307,11 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         :is-open="!sidebarGroupCollapsedState.sidebar_languages_collapsed"
         :close="() => toggleSidebarGroupCollapsedState('sidebar_languages_collapsed')"
       >
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages">
+        <ul
+          class="mt-2 space-y-2"
+          role="listbox"
+          aria-label="Languages"
+        >
           <SidebarItem
             v-for="language in starsStore.languages"
             :key="language.name"

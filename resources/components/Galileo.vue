@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
+import { isFocusedElementEditable } from '@/utils'
 import { SearchIcon } from '@heroicons/vue/outline'
-import { useStarsFilterStore } from '@/scripts/store/useStarsFilterStore'
 import { onKeyStroke } from '@vueuse/core'
-import { isFocusedElementEditable } from '@/scripts/utils'
+import { computed, ref } from 'vue'
 
 const starsFilterStore = useStarsFilterStore()
 
@@ -27,7 +27,7 @@ onKeyStroke('/', e => {
 
 <template>
   <div
-    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-white px-4 dark:border-gray-600 dark:bg-gray-900"
+    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-white px-4 dark:border-gray-950 dark:bg-gray-900"
   >
     <div
       class="relative flex w-full items-center rounded-md border border-transparent bg-white py-2 shadow ring-1 ring-gray-300 transition-colors focus-within:border-gray-400 focus-within:ring-gray-400 dark:bg-gray-700 dark:ring-gray-600 dark:focus-within:border-gray-600"

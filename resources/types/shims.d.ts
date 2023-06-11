@@ -6,7 +6,13 @@ declare module '@heroicons/*'
 
 declare module 'vue-flatpickr-component'
 
-declare module 'particles.vue3'
+declare module 'vue-confetti-explosion' {
+  import { DefineComponent } from 'vue'
+
+  const ConfettiExplosion: DefineComponent<{}, {}, any>
+
+  export default ConfettiExplosion
+}
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'

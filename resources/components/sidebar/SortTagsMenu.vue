@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import { FetchDirection, TagSortMethod } from '@/types'
+import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
+import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
+import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
+import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { SwitchVerticalIcon } from '@heroicons/vue/solid'
-import { FetchDirection, TagSortMethod } from '@/scripts/types'
-import NameAZIcon from '@/views/components/shared/icons/tag-sorting/NameAZIcon.vue'
-import NameZAIcon from '@/views/components/shared/icons/tag-sorting/NameZAIcon.vue'
-import StarsCountHighIcon from '@/views/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
-import StarsCountLowIcon from '@/views/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
 
 const emit = defineEmits<{
   (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
@@ -13,14 +13,21 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <Menu v-slot="{ open }" as="div" class="relative">
+  <Menu
+    v-slot="{ open }"
+    as="div"
+    class="relative"
+  >
     <MenuButton
       class="inline-flex items-center text-gray-400 transition-colors hover:text-gray-200"
       :class="{ 'text-gray-50': open }"
     >
       <span class="text-xs uppercase tracking-wider">Sort</span>
 
-      <SwitchVerticalIcon class="ml-1 h-4 w-4" aria-hidden="true" />
+      <SwitchVerticalIcon
+        class="ml-1 h-4 w-4"
+        aria-hidden="true"
+      />
     </MenuButton>
 
     <transition
@@ -42,7 +49,10 @@ const emit = defineEmits<{
               :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'name', 'asc')"
             >
-              <NameAZIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <NameAZIcon
+                class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500"
+                aria-hidden="true"
+              />
 
               <span>Alphabetical (A-Z)</span>
             </button>
@@ -55,7 +65,10 @@ const emit = defineEmits<{
               :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'name', 'desc')"
             >
-              <NameZAIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <NameZAIcon
+                class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500"
+                aria-hidden="true"
+              />
 
               <span>Alphabetical (Z-A)</span>
             </button>
@@ -68,7 +81,10 @@ const emit = defineEmits<{
               :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'stars_count', 'desc')"
             >
-              <StarsCountHighIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <StarsCountHighIcon
+                class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500"
+                aria-hidden="true"
+              />
 
               <span>Most Stars</span>
             </button>
@@ -81,7 +97,10 @@ const emit = defineEmits<{
               :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'stars_count', 'asc')"
             >
-              <StarsCountLowIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <StarsCountLowIcon
+                class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500"
+                aria-hidden="true"
+              />
 
               <span>Fewest Stars</span>
             </button>

@@ -1,24 +1,24 @@
-import { ref, computed, Ref } from 'vue'
-import { Ability, BaseDialogReturnType } from '@/scripts/types'
+import { BaseDialogReturnType } from '@/types'
+import { Ref, computed, ref } from 'vue'
 
 const isOpen = ref(false)
-const currentContext = ref<Ability | null>(null)
+const currentContext = ref<App.Data.Enums.Ability | null>(null)
 
 interface SponsorshipDialogReturnType extends Omit<BaseDialogReturnType, 'show'> {
-  isOpen: Ref<boolean>
-  currentContext: Ref<Ability | null>
-  show(context: Ability): void
+  currentContext: Ref<App.Data.Enums.Ability | null>
   hide(): void
+  isOpen: Ref<boolean>
+  show(context: App.Data.Enums.Ability): void
 }
 
 export const useSponsorshipDialog = (): SponsorshipDialogReturnType => {
   return {
-    isOpen: computed(() => isOpen.value),
     currentContext: computed(() => currentContext.value),
-    show: (context: Ability) => {
+    hide: () => (isOpen.value = false),
+    isOpen: computed(() => isOpen.value),
+    show: (context: App.Data.Enums.Ability) => {
       currentContext.value = context
       isOpen.value = true
     },
-    hide: () => (isOpen.value = false),
   }
 }

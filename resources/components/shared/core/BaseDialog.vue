@@ -2,16 +2,25 @@
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 defineProps<{
-  isOpen: boolean
+  dialogClasses?: Record<string, string> | string | string[]
   hide: () => void
-  dialogClasses?: string | string[] | Record<string, string>
-  wrapperClasses?: string | string[] | Record<string, string>
+  isOpen: boolean
+  wrapperClasses?: Record<string, string> | string | string[]
 }>()
 </script>
 
 <template>
-  <TransitionRoot as="template" :show="isOpen">
-    <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hide">
+  <TransitionRoot
+    as="template"
+    :show="isOpen"
+  >
+    <Dialog
+      as="div"
+      static
+      class="fixed inset-0 z-20 overflow-y-auto"
+      :open="isOpen"
+      @close="hide"
+    >
       <div
         class="flex min-h-screen justify-center p-4 text-center sm:block sm:items-center sm:p-0"
         :class="{
@@ -28,11 +37,15 @@ defineProps<{
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm transition-opacity" />
+          <DialogOverlay class="fixed inset-0 bg-gray-500/75 dark:bg-gray-700/75 backdrop-blur-sm transition-opacity" />
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
-        <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+        <span
+          class="hidden sm:inline-block sm:h-screen sm:align-middle"
+          aria-hidden="true"
+          >&#8203;</span
+        >
 
         <TransitionChild
           as="template"
@@ -44,7 +57,7 @@ defineProps<{
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle"
+            class="inline-block w-full transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle"
             :class="dialogClasses"
           >
             <slot />

@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { useTagsStore } from '@/store/useTagsStore'
+import { TagEditorTag } from '@/types'
+import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
 import { computed } from 'vue'
-import TagsEditor from '@/views/components/tags-editor/TagsEditor.vue'
-import { useTagsStore } from '@/scripts/store/useTagsStore'
-import { TagEditorTag } from '@/scripts/types'
 
 interface Props {
   modelValue?: TagEditorTag[]

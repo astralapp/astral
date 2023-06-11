@@ -1,5 +1,5 @@
-import { watch, ComputedRef } from 'vue'
 import { Store } from 'pinia'
+import { ComputedRef, watch } from 'vue'
 
 type StoreSyncTuple<TStore extends Store, TKey extends keyof TStore['$state']> = [
   TStore,

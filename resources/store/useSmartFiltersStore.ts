@@ -1,45 +1,24 @@
+import { moveSort } from '@/utils'
+import { router } from 'hybridly'
 import { defineStore } from 'pinia'
-import { router } from '@inertiajs/vue3'
-import { Errors, Page, PageProps } from '@inertiajs/core'
-import { SmartFilter } from '@/scripts/types'
-import { moveSort } from '@/scripts/utils'
 
 export const useSmartFiltersStore = defineStore({
-  id: 'smart-filters',
-  state() {
-    return {
-      smartFilters: [] as SmartFilter[],
-    }
-  },
   actions: {
-    addSmartFilter(smartFilter: Pick<SmartFilter, 'name' | 'body'>): Promise<Page<PageProps> | Errors> {
-      return new Promise((resolve, reject) => {
-        router.post('/smart-filters', smartFilter, {
-          only: ['smartFilters', 'abilities', 'errors'],
-          onSuccess: page => {
-            resolve(page)
-          },
-          onError: errors => {
-            reject(errors)
-          },
-        })
+    addSmartFilter(smartFilter: Pick<App.Data.SmartFilterData, 'body' | 'name'>) {
+      return router.post(route('smart-filters.store'), {
+        data: {
+          smartFilter,
+        },
+        only: ['smartFilters', 'abilities', 'errors'],
       })
     },
-    updateSmartFilter(id: number, smartFilter: Pick<SmartFilter, 'name' | 'body'>): Promise<Page<PageProps> | Errors> {
-      return new Promise((resolve, reject) => {
-        router.put(`/smart-filters/${id}`, smartFilter, {
-          only: ['smartFilters', 'errors'],
-          onSuccess: page => {
-            resolve(page)
-          },
-          onError: errors => {
-            reject(errors)
-          },
-        })
-      })
-    },
-    deleteSmartFilter(id: number) {
-      router.delete(`/smart-filters/${id}`, { only: ['smartFilters', 'abilities'] })
+    deleteSmartFilter(smartFilterId: number) {
+      router.delete(
+        route('smart-filters.destroy', {
+          smartFilter: smartFilterId,
+        }),
+        { only: ['smartFilters', 'abilities'] }
+      )
     },
     syncSmartFiltersOrder(oldIndex: number, newIndex: number) {
       const reorderedSmartFilters = moveSort(this.smartFilters, oldIndex, newIndex).map((smartFilter, index) => ({
@@ -47,7 +26,31 @@ export const useSmartFiltersStore = defineStore({
         sort_order: index,
       }))
 
-      router.put('/smart-filters/reorder', { smartFilters: reorderedSmartFilters } as any, { only: ['smartFilters'] })
+      router.put(route('smart-filters.reorder'), {
+        data: {
+          smartFilters: reorderedSmartFilters,
+        },
+        only: 'smartFilters',
+      })
     },
+    updateSmartFilter(smartFilterId: number, smartFilter: Pick<App.Data.SmartFilterData, 'body' | 'name'>) {
+      return router.post(
+        route('smart-filters.update', {
+          smartFilter: smartFilterId,
+        }),
+        {
+          data: {
+            smartFilter,
+          },
+          only: ['smartFilters', 'errors'],
+        }
+      )
+    },
+  },
+  id: 'smart-filters',
+  state() {
+    return {
+      smartFilters: [] as App.Data.SmartFilterData[],
+    }
   },
 })

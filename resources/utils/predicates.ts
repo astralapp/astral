@@ -1,43 +1,57 @@
-import { RepoLanguage, Tag } from '@/scripts/types'
+import { RepoLanguage } from '@/types'
 
 export interface Predicate {
-  selectedTarget: string
-  operator: string
   argument: unknown
+  operator: string
+  selectedTarget: string
 }
 
 export interface PredicateGroup {
-  logicalType: 'any' | 'all' | 'none'
+  logicalType: 'all' | 'any' | 'none'
   predicates: Predicate[]
 }
 
-type PredicateOperatorCheck =
-  | ((target: string | number) => boolean)
-  | ((source: string, target: string) => boolean)
+export type PredicateOperatorCheck =
+  | ((source: App.Data.TagData[], target: App.Data.TagData[]) => boolean)
   | ((source: number, target: number) => boolean)
-  | ((source: Tag[], target: Tag[]) => boolean)
   | ((source: string, target: RepoLanguage[]) => boolean)
+  | ((source: string, target: string) => boolean)
+  | ((target: number | string) => boolean)
 
 export interface PredicateOperator {
+  check: PredicateOperatorCheck
   key: string
   label: string
-  check: PredicateOperatorCheck
 }
 
-export type PredicateTargetType = 'String' | 'Number' | 'State' | 'Tags' | 'Language' | 'Date'
+export type PredicateTargetType = 'Date' | 'Language' | 'Number' | 'State' | 'String' | 'Tags'
 
-export interface PredicateTarget<T> {
+type PredicateTargetDefault<T extends PredicateTargetType> = T extends 'Date'
+  ? string
+  : T extends 'Language'
+  ? RepoLanguage[]
+  : T extends 'Number'
+  ? string
+  : T extends 'State'
+  ? { key: 'node.isArchived'; label: 'archived' }
+  : T extends 'String'
+  ? string
+  : T extends 'Tags'
+  ? App.Data.TagData[]
+  : never
+
+export interface PredicateTarget<T extends PredicateTargetType> {
+  defaultValue?: PredicateTargetDefault<T>
+  keyPath: string
   label: string
-  key: string
-  type: PredicateTargetType
   operators: PredicateOperator[]
-  defaultValue?: T
+  type: T
 }
 
 export const defaultPredicate: Predicate = {
-  selectedTarget: 'node.nameWithOwner',
-  operator: 'is',
   argument: '',
+  operator: 'is',
+  selectedTarget: 'node.nameWithOwner',
 }
 
 export const defaultGroup: PredicateGroup = {
@@ -47,100 +61,98 @@ export const defaultGroup: PredicateGroup = {
 
 export const stringOperators: PredicateOperator[] = [
   {
+    check: (source: string, target: string) => source.trim().toLowerCase() === target.trim().toLowerCase(),
     key: 'is',
     label: 'is',
-    check: (source: string, target: string) => source.trim().toLowerCase() === target.trim().toLowerCase(),
   },
   {
+    check: (source: string, target: string) => source.trim().toLowerCase() !== target.trim().toLowerCase(),
     key: 'isnt',
     label: "isn't",
-    check: (source: string, target: string) => source.trim().toLowerCase() !== target.trim().toLowerCase(),
   },
   {
+    check: (source: string, substring: string) => source.trim().toLowerCase().includes(substring.trim().toLowerCase()),
     key: 'contains',
     label: 'contains',
-    check: (source: string, substring: string) => source.trim().toLowerCase().includes(substring.trim().toLowerCase()),
   },
   {
+    check: (source: string, substring: string) => !source.trim().toLowerCase().includes(substring.trim().toLowerCase()),
     key: 'notContains',
     label: "doesn't contain",
-    check: (source: string, substring: string) => !source.trim().toLowerCase().includes(substring.trim().toLowerCase()),
   },
 ]
 
 export const numberOperators: PredicateOperator[] = [
   {
+    check: (source: number, target: number) => Number(source) > Number(target),
     key: 'greaterThan',
     label: '>',
-    check: (source: number, target: number) => Number(source) > Number(target),
   },
   {
+    check: (source: number, target: number) => Number(source) >= Number(target),
     key: 'greaterThanOrEqualTo',
     label: '>=',
-    check: (source: number, target: number) => Number(source) >= Number(target),
   },
-  { key: 'equals', label: '=', check: (source: number, target: number) => Number(source) === Number(target) },
-  { key: 'lessThan', label: '<', check: (source: number, target: number) => Number(source) < Number(target) },
+  { check: (source: number, target: number) => Number(source) === Number(target), key: 'equals', label: '=' },
+  { check: (source: number, target: number) => Number(source) < Number(target), key: 'lessThan', label: '<' },
   {
+    check: (source: number, target: number) => Number(source) >= Number(target),
     key: 'lessThanOrEqualTo',
     label: '<=',
-    check: (source: number, target: number) => Number(source) >= Number(target),
   },
 ]
 
 export const tagOperators: PredicateOperator[] = [
   {
-    key: 'hasAnyTags',
-    label: 'has any',
-    check: (source: Tag[], target: Tag[]) => {
+    check: (source: App.Data.TagData[], target: App.Data.TagData[]) => {
       if (source === undefined) {
         return false
       }
 
       return target.map(t => t.name).some(val => source.map(t => t.name).includes(val))
     },
+    key: 'hasAnyTags',
+    label: 'has any',
   },
   {
-    key: 'hasAllTags',
-    label: 'has all',
-    check: (source: Tag[], target: Tag[]) => {
+    check: (source: App.Data.TagData[], target: App.Data.TagData[]) => {
       if (source === undefined) {
         return false
       }
 
       return target.map(t => t.name).every(val => source.map(t => t.name).includes(val))
     },
+    key: 'hasAllTags',
+    label: 'has all',
   },
   {
-    key: 'hasNoneTags',
-    label: 'has none',
-    check: (source: Tag[], target: Tag[]) => {
+    check: (source: App.Data.TagData[], target: App.Data.TagData[]) => {
       if (source === undefined) {
         return false
       }
 
       return !target.map(t => t.name).some(val => source.map(t => t.name).includes(val))
     },
+    key: 'hasNoneTags',
+    label: 'has none',
   },
 ]
 
 export const dateOperators: PredicateOperator[] = [
   {
+    check: (source: string, target: string) => new Date(source).getTime() < new Date(target).getTime(),
     key: 'before',
     label: 'before',
-    check: (source: string, target: string) => new Date(source).getTime() < new Date(target).getTime(),
   },
   {
+    check: (source: string, target: string) => new Date(source).getTime() > new Date(target).getTime(),
     key: 'after',
     label: 'after',
-    check: (source: string, target: string) => new Date(source).getTime() > new Date(target).getTime(),
   },
 ]
 
 export const languageOperators: PredicateOperator[] = [
   {
-    key: 'hasAnyLanguage',
-    label: 'has any',
     check: (source: string, target: RepoLanguage[]) => {
       if (source === undefined) {
         return false
@@ -148,10 +160,10 @@ export const languageOperators: PredicateOperator[] = [
 
       return target.map(l => l.name).includes(source)
     },
+    key: 'hasAnyLanguage',
+    label: 'has any',
   },
   {
-    key: 'hasNoneLanguage',
-    label: 'has none',
     check: (source: string, target: RepoLanguage[]) => {
       if (source === undefined) {
         return false
@@ -159,68 +171,70 @@ export const languageOperators: PredicateOperator[] = [
 
       return !target.map(l => l.name).includes(source)
     },
+    key: 'hasNoneLanguage',
+    label: 'has none',
   },
 ]
 
 export const stateOperators: PredicateOperator[] = [
-  { key: 'isState', label: 'is', check: (target: string | number) => Boolean(target) === true },
-  { key: 'isntState', label: "isn't", check: (target: string | number) => Boolean(target) === false },
+  { check: (target: number | string) => Boolean(target) === true, key: 'isState', label: 'is' },
+  { check: (target: number | string) => Boolean(target) === false, key: 'isntState', label: "isn't" },
 ]
 
-export const predicateTargets: PredicateTarget<string | Tag[] | RepoLanguage[] | Record<string, string>>[] = [
+export const predicateTargets = [
   {
+    defaultValue: '',
+    keyPath: 'node.nameWithOwner',
     label: 'Name',
-    key: 'node.nameWithOwner',
-    type: 'String',
     operators: stringOperators,
-    defaultValue: '',
-  },
+    type: 'String',
+  } as PredicateTarget<'String'>,
   {
+    defaultValue: '',
+    keyPath: 'node.description',
     label: 'Description',
-    key: 'node.description',
-    type: 'String',
     operators: stringOperators,
-    defaultValue: '',
-  },
+    type: 'String',
+  } as PredicateTarget<'String'>,
   {
+    defaultValue: '',
+    keyPath: 'notes',
     label: 'Notes',
-    key: 'notes',
-    type: 'String',
     operators: stringOperators,
-    defaultValue: '',
-  },
+    type: 'String',
+  } as PredicateTarget<'String'>,
   {
-    label: 'Star count',
-    key: 'node.stargazers.totalCount',
-    type: 'Number',
-    operators: numberOperators,
     defaultValue: '0',
-  },
+    keyPath: 'node.stargazers.totalCount',
+    label: 'Star count',
+    operators: numberOperators,
+    type: 'Number',
+  } as PredicateTarget<'Number'>,
   {
+    defaultValue: [] as App.Data.TagData[],
+    keyPath: 'tags',
     label: 'Tags',
-    key: 'tags',
-    type: 'Tags',
     operators: tagOperators,
-    defaultValue: [] as Tag[],
-  },
+    type: 'Tags',
+  } as PredicateTarget<'Tags'>,
   {
-    label: 'Language',
-    key: 'node.primaryLanguage.name',
-    type: 'Language',
-    operators: languageOperators,
     defaultValue: [] as RepoLanguage[],
-  },
+    keyPath: 'node.primaryLanguage.name',
+    label: 'Language',
+    operators: languageOperators,
+    type: 'Language',
+  } as PredicateTarget<'Language'>,
   {
-    label: 'State',
-    type: 'State',
-    key: 'astralRepoState',
-    operators: stateOperators,
     defaultValue: { key: 'node.isArchived', label: 'archived' },
-  },
+    keyPath: 'astralRepoState',
+    label: 'State',
+    operators: stateOperators,
+    type: 'State',
+  } as PredicateTarget<'State'>,
   {
+    keyPath: 'node.pushedAt',
     label: 'Updated at',
-    type: 'Date',
-    key: 'node.pushedAt',
     operators: dateOperators,
-  },
+    type: 'Date',
+  } as PredicateTarget<'Date'>,
 ]

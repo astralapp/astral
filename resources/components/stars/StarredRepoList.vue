@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { ref, watch, nextTick } from 'vue'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
-import { useSyncToLocalStorage } from '@/scripts/composables/useSyncToLocalStorage'
+import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
+import { useStarsStore } from '@/store/useStarsStore'
 // import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import { GitHubRepo } from '@/types'
+import { nextTick, ref, watch } from 'vue'
 // import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { createVirtualScroller } from 'vue-typed-virtual-list'
-import { GitHubRepo } from '@/scripts/types'
 
 const VirtualScroller = createVirtualScroller<GitHubRepo>()
 
@@ -46,7 +46,7 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
     v-if="starsStore.filteredRepos.length"
     :default-size="156"
     :items="starsStore.filteredRepos"
-    class="relative flex-grow bg-white"
+    class="relative flex-grow bg-white dark:bg-black"
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"

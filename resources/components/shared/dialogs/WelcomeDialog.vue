@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import BaseDialog from '@/components/shared/core/BaseDialog.vue'
 import { ref, watch } from 'vue'
-import BaseDialog from '@/views/components/shared/core/BaseDialog.vue'
-import BaseButton from '@/views/components/shared/core/BaseButton.vue'
 
 interface Props {
-  isOpen: boolean
   hide: () => void
+  isOpen: boolean
 }
 
 const props = defineProps<Props>()
@@ -19,11 +19,15 @@ watch(
   }
 )
 
-const noop = () => {}
+const noop = () => {} // eslint-disable-line @typescript-eslint/no-empty-function
 </script>
 
 <template>
-  <BaseDialog :is-open="isOpen" :hide="noop" dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
+  <BaseDialog
+    :is-open="isOpen"
+    :hide="noop"
+    dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl"
+  >
     <div>
       <p>Welcum!!!!!!!!!!!!!!!!!! 🎉🎉🎉🎉🎉</p>
     </div>

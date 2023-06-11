@@ -21,9 +21,9 @@
     "@vueuse/core": "^10.1.2",
     "@vueuse/head": "^1.1.26",
     "axios": "^1.4.0",
-    "hybridly": "^0.3.1",
     "date-fns": "^2.28.0",
     "fuzzysearch": "^1.0.3",
+    "hybridly": "^0.3.1",
     "ky": "^0.33.2",
     "localforage": "^1.9.0",
     "lodash": "^4.17.19",
@@ -39,6 +39,7 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.9",
+    "@types/lodash": "^4.14.195",
     "@types/node": "^20.2.5",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
@@ -46,9 +47,11 @@
     "autoprefixer": "^10.4.14",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-perfectionist": "^1.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.11.0",
     "postcss": "^8.4.24",
+    "postcss-nested": "^6.0.1",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "tailwindcss": "^3.3.2",
@@ -59,6 +62,7 @@
   },
   "postcss": {
     "plugins": {
+      "tailwindcss/nesting": {},
       "autoprefixer": {},
       "tailwindcss": {}
     }

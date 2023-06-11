@@ -1,5 +1,6 @@
-import { useMagicKeys, onKeyStroke, MaybeRef, useEventListener } from '@vueuse/core'
-import { ref, computed, Ref, isRef, watch, unref } from 'vue'
+import { MaybeRef, onKeyStroke, useEventListener, useMagicKeys } from '@vueuse/core'
+import { Ref, computed, isRef, ref, unref, watch } from 'vue'
+
 import { isFocusedElementEditable } from '../utils'
 
 interface ListSelectionStateReturnType<T> {
@@ -28,7 +29,7 @@ const isHoldingMetaKey = computed(() => cmd.value || ctrl.value)
 const isHoldingShiftKey = computed(() => shift.value)
 
 export const useListSelectionState = <T>(
-  items: GenericItems<T> | (() => GenericItems<T>),
+  items: (() => GenericItems<T>) | GenericItems<T>,
   isEnabled: Ref<boolean> = ref(true)
 ): ListSelectionStateReturnType<T> => {
   const selectedItems = ref([]) as Ref<T[]>

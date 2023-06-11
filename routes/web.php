@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('auth', [AuthController::class, 'show'])->name('auth.show');
 Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
 Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
+Route::get('logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('auth.destroy');
 
 Route::redirect('/login', '/auth/github')->name('login.show');
 
@@ -59,6 +62,4 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/revoke-grant', [UserController::class, 'revokeGrant'])->name('revoke-grant');
     Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
-
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });

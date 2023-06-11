@@ -3,10 +3,10 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
 
 interface Props {
+  close?: () => void
   collapsible?: boolean
   isOpen?: boolean
   title: string
-  close?: () => void
 }
 
 defineProps<Props>()
@@ -47,7 +47,10 @@ defineProps<Props>()
       </div>
     </div>
 
-    <DisclosurePanel v-show="isOpen || !collapsible" static>
+    <DisclosurePanel
+      v-show="isOpen || !collapsible"
+      static
+    >
       <slot />
     </DisclosurePanel>
   </Disclosure>

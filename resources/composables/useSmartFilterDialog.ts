@@ -1,29 +1,29 @@
-import { ref, computed, Ref } from 'vue'
-import { BaseDialogReturnType, SmartFilter } from '@/scripts/types'
+import { BaseDialogReturnType } from '@/types'
+import { Ref, computed, ref } from 'vue'
 
 interface SmartFilterDialogReturnType extends Omit<BaseDialogReturnType, 'show'> {
-  isOpen: Ref<boolean>
-  currentSmartFilter: Ref<Nullable<SmartFilter>>
-  show(smartFilter?: SmartFilter): void
+  currentSmartFilter: Ref<Nullable<App.Data.SmartFilterData>>
   hide(): void
+  isOpen: Ref<boolean>
+  show(smartFilter?: App.Data.SmartFilterData): void
 }
 
 const isOpen = ref(false)
-const currentSmartFilter = ref<Nullable<SmartFilter>>(null)
+const currentSmartFilter = ref<Nullable<App.Data.SmartFilterData>>(null)
 
 export const useSmartFilterDialog = (): SmartFilterDialogReturnType => {
   return {
-    isOpen: computed(() => isOpen.value),
     currentSmartFilter: computed(() => currentSmartFilter.value),
-    show: (smartFilter?: SmartFilter) => {
-      if (smartFilter) currentSmartFilter.value = smartFilter
-      isOpen.value = true
-    },
     hide: () => {
       isOpen.value = false
       setTimeout(() => {
         currentSmartFilter.value = null
       }, 200)
+    },
+    isOpen: computed(() => isOpen.value),
+    show: (smartFilter?: App.Data.SmartFilterData) => {
+      if (smartFilter) currentSmartFilter.value = smartFilter
+      isOpen.value = true
     },
   }
 }

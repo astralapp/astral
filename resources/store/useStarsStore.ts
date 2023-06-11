@@ -1,68 +1,135 @@
-import { defineStore } from 'pinia'
-import { router } from '@inertiajs/core'
-import { useUserStore } from '@/scripts/store/useUserStore'
-import { useStarsFilterStore } from '@/scripts/store/useStarsFilterStore'
-import { fetchStarsQuery, removeStarQuery } from '@/scripts/queries'
-import keyBy from 'lodash/keyBy'
-import { Dictionary, every, some, reject, get } from 'lodash'
+import { fetchStarsQuery, removeStarQuery } from '@/queries'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
+import { useUserStore } from '@/store/useUserStore'
 import {
-  UserStar,
+  FetchDirection,
   GitHubRepo,
   GitHubRepoNode,
-  RepoLanguage,
   PaginationResponse,
-  FetchDirection,
+  RepoLanguage,
   StarMetaInput,
   TagEditorTag,
-  Tag,
-} from '@/scripts/types'
+} from '@/types'
 import {
-  PredicateGroup,
   Predicate,
-  stringOperators,
-  numberOperators,
-  tagOperators,
+  PredicateGroup,
+  PredicateOperator,
+  PredicateOperatorCheck,
+  PredicateTarget,
   dateOperators,
   languageOperators,
+  numberOperators,
   stateOperators,
-  PredicateOperator,
-  PredicateTarget,
-} from '@/scripts/utils/predicates'
+  stringOperators,
+  tagOperators,
+} from '@/utils/predicates'
+import { router } from 'hybridly'
+import { Dictionary, every, get, reject, some } from 'lodash'
+import keyBy from 'lodash/keyBy'
+import { defineStore } from 'pinia'
 
 type LogicalOperatorFunction = (predicates: Predicate[], predicateCheck: (predicate: Predicate) => boolean) => boolean
 
 export const useStarsStore = defineStore({
-  id: 'stars',
-  state() {
-    return {
-      isDraggingRepo: false,
-      userStars: [] as UserStar[],
-      starredRepos: [] as GitHubRepo[],
-      pageInfo: {
-        startCursor: null,
+  actions: {
+    addTagToStars(tagId: number, repos: StarMetaInput[]) {
+      router.post(route('star.tags.store'), {
+        data: {
+          repos,
+          tagId,
+        },
+        only: ['stars', 'tags', 'abilities'],
+      })
+    },
+    backfillStarMetadata(starInput: (StarMetaInput & { starId: number })[]) {
+      router.put(route('migrate.update'), {
+        data: {
+          stars: starInput,
+        },
+        only: ['stars', 'errors'],
+      })
+    },
+    clearStarredRepos() {
+      this.starredRepos = []
+    },
+    async fetchReadme(repo: GitHubRepoNode): Promise<string> {
+      const userStore = useUserStore()
+
+      const readme = await (
+        await fetch(`https://api.github.com/repos/${repo.nameWithOwner}/readme`, {
+          headers: {
+            Accept: 'application/vnd.github.v3.html',
+            Authorization: `bearer ${userStore.user?.accessToken}`,
+          },
+        })
+      ).text()
+
+      return readme
+    },
+    async fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
+      this.isFetchingStars = true
+
+      const userStore = useUserStore()
+      const result = await (
+        await fetch('https://api.github.com/graphql', {
+          body: JSON.stringify({
+            query: fetchStarsQuery(cursor, direction),
+          }),
+          headers: {
+            Authorization: `bearer ${userStore.user?.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        })
+      ).json()
+
+      return result.data
+    },
+    async removeStar(id: string) {
+      const userStore = useUserStore()
+      const repo: Maybe<GitHubRepo> = this.starredRepos.find(repo => repo.node.id === id)
+
+      await fetch('https://api.github.com/graphql', {
+        body: JSON.stringify({
+          query: removeStarQuery(id),
+        }),
+        headers: {
+          Authorization: `bearer ${userStore.user?.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      })
+
+      if (repo) {
+        const userStar: Maybe<App.Data.StarData> = this.userStars.find(star => star.repo_id === repo.node.databaseId)
+        this.selectedRepos = this.selectedRepos.filter(selectedRepo => selectedRepo.id !== id)
+        this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
+
+        if (userStar) {
+          router.delete(`/star/${userStar.id}`, { only: ['stars', 'tags', 'abilities'] })
+        }
+      }
+    },
+    resetPageInfo() {
+      this.pageInfo = {
         endCursor: null,
         hasNextPage: true,
-      } as PaginationResponse,
-      totalRepos: 0,
-      selectedRepos: [] as GitHubRepoNode[],
-      draggingRepos: [] as GitHubRepoNode[],
-      hasFetchedFromStorage: false,
-      isFetchingStars: false,
-    }
+        startCursor: null,
+      }
+    },
+    syncTagsToStar(starInput: StarMetaInput, tags: TagEditorTag[]) {
+      router.put(route('star.tags.update'), {
+        data: {
+          ...starInput,
+          tags,
+        },
+        only: ['stars', 'tags', 'abilities', 'errors'],
+      })
+    },
   },
   getters: {
-    userStarsByRepoId(): Dictionary<UserStar> {
-      return keyBy(this.userStars, (star: UserStar) => `${star.repo_id}`)
-    },
     allStars(): GitHubRepo[] {
       return this.starredRepos
-    },
-    untaggedStars(): GitHubRepo[] {
-      return this.allStars.filter(repo => {
-        const userStar: UserStar = this.userStarsByRepoId[repo.node.databaseId]
-
-        return !userStar || !userStar.tags?.length
-      })
     },
     filteredRepos(): GitHubRepo[] {
       const starsFilterStore = useStarsFilterStore()
@@ -90,8 +157,8 @@ export const useStarsStore = defineStore({
         const predicate = JSON.parse(starsFilterStore.selectedSmartFilter.body)
 
         const logicalTypeMap = {
-          any: some,
           all: every,
+          any: some,
           none: reject,
         } as const
 
@@ -117,10 +184,14 @@ export const useStarsStore = defineStore({
 
                     const tags = userStar.tags
 
-                    return operator.check(tags, p.argument as Tag[])
+                    return (operator.check as (source: App.Data.TagData[], target: App.Data.TagData[]) => boolean)(
+                      tags,
+                      p.argument as App.Data.TagData[]
+                    )
                   } else {
-                    if (get(repo, p.selectedTarget)) {
-                      return operator.check(get(repo, p.selectedTarget), p.argument)
+                    const repoKeyValue = get(repo, p.selectedTarget)
+                    if (repoKeyValue) {
+                      return operator.check(repoKeyValue, p.argument)
                     } else {
                       return operator.check(get(repo, (p.argument as PredicateTarget).key))
                     }
@@ -160,6 +231,9 @@ export const useStarsStore = defineStore({
 
       return filteredRepos
     },
+    isAnyRepoSelected(): boolean {
+      return !!Object.keys(this.selectedRepo).length
+    },
     languages(): RepoLanguage[] {
       return Object.entries(
         this.allStars
@@ -175,8 +249,8 @@ export const useStarsStore = defineStore({
           const [name, count] = language
 
           return {
-            name,
             count,
+            name,
           }
         })
         .sort((a, b) => b.count - a.count)
@@ -184,87 +258,33 @@ export const useStarsStore = defineStore({
     selectedRepo(): GitHubRepoNode {
       return this.selectedRepos[0] || {}
     },
-    isAnyRepoSelected(): boolean {
-      return !!Object.keys(this.selectedRepo).length
+    untaggedStars(): GitHubRepo[] {
+      return this.allStars.filter(repo => {
+        const userStar: App.Data.StarData = this.userStarsByRepoId[repo.node.databaseId]
+
+        return !userStar || !userStar.tags?.length
+      })
+    },
+    userStarsByRepoId(): Dictionary<App.Data.StarData> {
+      return keyBy(this.userStars, (star: App.Data.StarData) => `${star.repo_id}`)
     },
   },
-  actions: {
-    async fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
-      this.isFetchingStars = true
-
-      const userStore = useUserStore()
-      const result = await (
-        await fetch('https://api.github.com/graphql', {
-          method: 'POST',
-          headers: {
-            Authorization: `bearer ${userStore.user?.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: fetchStarsQuery(cursor, direction),
-          }),
-        })
-      ).json()
-
-      return result.data
-    },
-    addTagToStars(tagId: number, repos: StarMetaInput[]) {
-      router.post('/stars/tag', { tagId, repos } as any, { only: ['stars', 'tags', 'abilities'] })
-    },
-    syncTagsToStar(starInput: StarMetaInput, tags: TagEditorTag[]) {
-      router.put(`/star/sync-tags`, { ...starInput, tags } as any, { only: ['stars', 'tags', 'abilities', 'errors'] })
-    },
-    async fetchReadme(repo: GitHubRepoNode): Promise<string> {
-      const userStore = useUserStore()
-
-      const readme = await (
-        await fetch(`https://api.github.com/repos/${repo.nameWithOwner}/readme`, {
-          headers: {
-            Accept: 'application/vnd.github.v3.html',
-            Authorization: `bearer ${userStore.user?.access_token}`,
-          },
-        })
-      ).text()
-
-      return readme
-    },
-    async removeStar(id: string) {
-      const userStore = useUserStore()
-      const repo: Maybe<GitHubRepo> = this.starredRepos.find(repo => repo.node.id === id)
-
-      await fetch('https://api.github.com/graphql', {
-        method: 'POST',
-        headers: {
-          Authorization: `bearer ${userStore.user?.access_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: removeStarQuery(id),
-        }),
-      })
-
-      if (repo) {
-        const userStar: Maybe<UserStar> = this.userStars.find(star => star.repo_id === repo.node.databaseId)
-        this.selectedRepos = this.selectedRepos.filter(selectedRepo => selectedRepo.id !== id)
-        this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
-
-        if (userStar) {
-          router.delete(`/star/${userStar.id}`, { only: ['stars', 'tags', 'abilities'] })
-        }
-      }
-    },
-    backfillStarMetadata(starInput: (StarMetaInput & { starId: number })[]) {
-      router.put(`/migrate`, { stars: starInput } as any, { only: ['stars', 'errors'] })
-    },
-    clearStarredRepos() {
-      this.starredRepos = []
-    },
-    resetPageInfo() {
-      this.pageInfo = {
-        startCursor: null,
+  id: 'stars',
+  state() {
+    return {
+      draggingRepos: [] as GitHubRepoNode[],
+      hasFetchedFromStorage: false,
+      isDraggingRepo: false,
+      isFetchingStars: false,
+      pageInfo: {
         endCursor: null,
         hasNextPage: true,
-      }
-    },
+        startCursor: null,
+      } as PaginationResponse,
+      selectedRepos: [] as GitHubRepoNode[],
+      starredRepos: [] as GitHubRepo[],
+      totalRepos: 0,
+      userStars: [] as App.Data.StarData[],
+    }
   },
 })

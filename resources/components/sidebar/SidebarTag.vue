@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import SidebarItem from '@/views/components/sidebar/SidebarItem.vue'
+import WatchValue from '@/components/shared/core/WatchValue.vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
+import { useConfirm } from '@/composables/useConfirm'
+import { useGlobalToast } from '@/composables/useGlobalToast'
+import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
+import { StarDragDataTransferData } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import WatchValue from '@/views/components/shared/core/WatchValue.vue'
 import { TagIcon } from '@heroicons/vue/outline'
 import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
-import { useTagsStore } from '@/scripts/store/useTagsStore'
-import { useRenameTagDialog } from '@/scripts/composables/useRenameTagDialog'
-import { useGlobalToast } from '@/scripts/composables/useGlobalToast'
-import { useConfirm } from '@/scripts/composables/useConfirm'
-import { StarDragDataTransferData, Tag } from '@/scripts/types'
+import { ref } from 'vue'
 
 const props = defineProps<{
-  tag: Tag
   isActive: boolean
+  tag: App.Data.TagData
 }>()
 
 const emit = defineEmits<{
@@ -43,13 +43,13 @@ const onDragLeave = () => (isHighlighted.value = false)
 const onDrop = (e: DragEvent) => {
   if (starsStore.isDraggingRepo && starsStore.draggingRepos.length) {
     emit('starsDropped', {
-      tag: props.tag,
       repos: starsStore.draggingRepos.map(({ databaseId, nameWithOwner, url, description }) => ({
         databaseId,
+        description,
         nameWithOwner,
         url,
-        description,
       })),
+      tag: props.tag,
     })
 
     isHighlighted.value = false
@@ -61,8 +61,8 @@ const onDrop = (e: DragEvent) => {
 const deleteTag = async () => {
   if (
     await isConfirmed(`Are you sure you want to delete the "${props.tag.name}" tag?`, {
-      confirmLabel: "Yes, I'm sure",
       cancelLabel: 'Nevermind',
+      confirmLabel: "Yes, I'm sure",
     })
   ) {
     tagsStore.deleteTag(props.tag.id)
@@ -91,8 +91,15 @@ const deleteTag = async () => {
 
     <template #contextMenu>
       <div :class="[tag.stars_count && 'absolute right-0 top-0']">
-        <Menu v-slot="{ open }" as="div" class="relative">
-          <WatchValue :value="open" @change="isContextMenuActive = !!$event" />
+        <Menu
+          v-slot="{ open }"
+          as="div"
+          class="relative"
+        >
+          <WatchValue
+            :value="open"
+            @change="isContextMenuActive = !!$event"
+          />
 
           <MenuButton
             class="right-0 top-0 h-5 w-5 text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover:opacity-100"

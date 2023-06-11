@@ -1,4 +1,4 @@
-import { FetchDirection } from '@/scripts/types'
+import { FetchDirection } from '@/types'
 
 export const fetchStarsQuery = (
   cursor: Nullable<string> = null,

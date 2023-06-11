@@ -2,6 +2,16 @@ import { Ref } from 'vue'
 
 export type TagEditorTag = Pick<App.Data.TagData, 'id' | 'name'>
 
+type MappedEnum<T extends string> = {
+  [key in Uppercase<T>]: T
+}
+
+export const Ability = {
+  ADD_NOTES: 'add_notes',
+  CREATE_SMART_FILTER: 'create_smart_filter',
+  CREATE_TAG: 'create_tag',
+} as const
+
 export interface GitHubRepoNode {
   databaseId: number
   defaultBranchRef: {
@@ -28,20 +38,26 @@ export interface GitHubRepo {
 }
 
 export interface RepoLanguage {
-  name: string
   count: number
+  name: string
 }
 
 export interface StarDragDataTransferData {
-  tag: App.Data.TagData
   repos: StarMetaInput[]
+  tag: App.Data.TagData
 }
 
 export interface PaginationResponse {
-  startCursor: Nullable<string>
   endCursor: Nullable<string>
   hasNextPage: boolean
+  startCursor: Nullable<string>
 }
+
+export type Limits = Record<App.Data.Enums.Limit, number>
+
+export const Limit: MappedEnum<App.Data.Enums.Limit> = {
+  MAX_TAGS: 'max_tags',
+} as const
 
 export const FetchDirection = {
   ASC: 'ASC',
@@ -49,31 +65,22 @@ export const FetchDirection = {
 } as const
 export type FetchDirection = Values<typeof FetchDirection>
 
-export enum Ability {
-  CREATE_TAG = 'create_tag',
-  CREATE_SMART_FILTER = 'create_smart_filter',
-  ADD_NOTES = 'add_notes',
-}
+export type Authorizations = Record<App.Data.Enums.Ability, boolean>
 
-export type Authorizations = Record<Ability, boolean>
+export type TagSortMethod = keyof Pick<App.Data.TagData, 'name' | 'stars_count'>
 
-export enum Limit {
-  MAX_TAGS = 'max_tags',
-}
-
-export type Limits = Record<Limit, number>
-
-export type TagSortMethod = keyof Pick<App.Data.TagData, 'stars_count' | 'name'>
-
-// export enum AuthScope {
-//   READ_USER = 'read:user',
-//   PUBLIC_REPO = 'public_repo',
-// }
+export const AuthScope = {
+  PUBLIC_REPO: 'public_repo',
+  READ_USER: 'read:user',
+} as const
+export type AuthScope = Values<typeof AuthScope>
 
 export interface BaseDialogReturnType {
+  hide(): void
   isOpen: Ref<boolean>
   show(): void
-  hide(): void
 }
 
-export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'nameWithOwner' | 'url' | 'description'>
+export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'description' | 'nameWithOwner' | 'url'>
+
+export type Errors = Record<string, string>

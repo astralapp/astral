@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { computed, ref, unref, watch } from 'vue'
-import { router } from '@inertiajs/vue3'
-import { useEditor, EditorContent, Editor } from '@tiptap/vue-3'
-import { useNotesEditor } from '@/scripts/composables/useNotesEditor'
-import { useStarsStore } from '@/scripts/store/useStarsStore'
-import { useUserStore } from '@/scripts/store/useUserStore'
-import StarterKit from '@tiptap/starter-kit'
-import Typography from '@tiptap/extension-typography'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import BoldIcon from '@/components/shared/icons/notes-editor/BoldIcon.vue'
+import BulletListIcon from '@/components/shared/icons/notes-editor/BulletListIcon.vue'
+import CodeBlockIcon from '@/components/shared/icons/notes-editor/CodeBlockIcon.vue'
+import CodeIcon from '@/components/shared/icons/notes-editor/CodeIcon.vue'
+import ItalicsIcon from '@/components/shared/icons/notes-editor/ItalicsIcon.vue'
+import LinkIcon from '@/components/shared/icons/notes-editor/LinkIcon.vue'
+import OrderedListIcon from '@/components/shared/icons/notes-editor/OrderedListIcon.vue'
+import UnderlineIcon from '@/components/shared/icons/notes-editor/UnderlineIcon.vue'
+import { useNotesEditor } from '@/composables/useNotesEditor'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useUserStore } from '@/store/useUserStore'
+import { TransitionChild, TransitionRoot } from '@headlessui/vue'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
-import { TransitionChild, TransitionRoot } from '@headlessui/vue'
+import StarterKit from '@tiptap/starter-kit'
+import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
+import { router } from 'hybridly'
 import debounce from 'lodash/debounce'
-import BaseButton from '@/views/components/shared/core/BaseButton.vue'
-import BoldIcon from '@/views/components/shared/icons/notes-editor/BoldIcon.vue'
-import BulletListIcon from '@/views/components/shared/icons/notes-editor/BulletListIcon.vue'
-import OrderedListIcon from '@/views/components/shared/icons/notes-editor/OrderedListIcon.vue'
-import ItalicsIcon from '@/views/components/shared/icons/notes-editor/ItalicsIcon.vue'
-import UnderlineIcon from '@/views/components/shared/icons/notes-editor/UnderlineIcon.vue'
-import CodeIcon from '@/views/components/shared/icons/notes-editor/CodeIcon.vue'
-import CodeBlockIcon from '@/views/components/shared/icons/notes-editor/CodeBlockIcon.vue'
-import LinkIcon from '@/views/components/shared/icons/notes-editor/LinkIcon.vue'
+import { computed, ref, unref, watch } from 'vue'
 
 const starsStore = useStarsStore()
 const userStore = useUserStore()
@@ -41,6 +41,11 @@ try {
 
 const editor = useEditor({
   content: initialEditorValue || '<p></p>',
+  editorProps: {
+    attributes: {
+      class: 'prose focus:outline-none prose-a:text-brand-600',
+    },
+  },
   extensions: [
     StarterKit,
     Typography,
@@ -57,11 +62,6 @@ const editor = useEditor({
       saveNotes(editor)
     }
   }, 1000),
-  editorProps: {
-    attributes: {
-      class: 'prose focus:outline-none prose-a:text-brand-600',
-    },
-  },
 })
 
 watch(
@@ -121,24 +121,28 @@ const saveNotes = (editor: Maybe<Editor>) => {
     isSaving.value = true
     const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
 
-    router.put(
-      '/star/notes',
-      {
-        repoId: starsStore.selectedRepo.databaseId,
+    router.put(route('star.notes.update'), {
+      data: {
         notes: notesData,
+        repoId: starsStore.selectedRepo.databaseId,
       },
-      {
-        onFinish: () => (isSaving.value = false),
-        only: ['stars'],
-      }
-    )
+      only: 'stars',
+      // onFinish: () => (isSaving.value = false),
+    })
   }
 }
 </script>
 
 <template>
-  <TransitionRoot as="template" :show="isOpen" appear>
-    <div class="absolute inset-0 z-30 mt-16" aria-keyshortcuts="n">
+  <TransitionRoot
+    as="template"
+    :show="isOpen"
+    appear
+  >
+    <div
+      class="absolute inset-0 z-30 mt-16"
+      aria-keyshortcuts="n"
+    >
       <TransitionChild
         as="template"
         enter-from="opacity-0"
@@ -146,7 +150,10 @@ const saveNotes = (editor: Maybe<Editor>) => {
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="absolute inset-0 bg-gray-500/75 transition-opacity duration-300" @click.self="hide"></div>
+        <div
+          class="absolute inset-0 bg-gray-500/75 transition-opacity duration-300"
+          @click.self="hide"
+        ></div>
       </TransitionChild>
 
       <div class="relative h-full w-full max-w-prose overflow-hidden py-8">
@@ -158,7 +165,10 @@ const saveNotes = (editor: Maybe<Editor>) => {
           leave-to="opacity-0 -translate-x-full"
         >
           <div class="relative h-full transform rounded-r-md bg-white p-4 shadow transition duration-300">
-            <div v-if="editor" class="flex items-center rounded bg-gray-100 p-2">
+            <div
+              v-if="editor"
+              class="flex items-center rounded bg-gray-100 p-2"
+            >
               <!-- Bold Button -->
               <button
                 class="rounded p-1 hover:bg-gray-200"
@@ -281,7 +291,10 @@ const saveNotes = (editor: Maybe<Editor>) => {
               >
             </div>
 
-            <EditorContent :editor="editor" class="mt-4 h-full" />
+            <EditorContent
+              :editor="editor"
+              class="mt-4 h-full"
+            />
 
             <TransitionRoot
               :show="isSaveToastVisible"
