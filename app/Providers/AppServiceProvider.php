@@ -38,7 +38,9 @@ class AppServiceProvider extends ServiceProvider
         CliDumper::dontIncludeSource();
 
         Validator::excludeUnvalidatedArrayKeys();
-        Model::shouldBeStrict();
+        // Model::shouldBeStrict();
+        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
         Model::unguard();
         Relation::enforceMorphMap([
             'user' => User::class,

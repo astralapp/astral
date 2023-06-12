@@ -10,6 +10,6 @@ class StarsController extends Controller
     {
         $star->delete();
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }

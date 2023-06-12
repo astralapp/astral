@@ -21,3 +21,5 @@ yarn-error.log
 .hybridly
 _ide_helper*
 .phpstorm.meta.php
+**/.DS_Store
+*.tasks

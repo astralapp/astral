@@ -60,7 +60,7 @@ onKeyStroke('n', e => {
 
 <template>
   <div
-    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-600 dark:bg-gray-800"
+    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-950 dark:bg-gray-800 shadow-sm"
   >
     <BaseButton
       size="sm"

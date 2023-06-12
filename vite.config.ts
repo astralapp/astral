@@ -8,6 +8,12 @@ export default defineConfig({
       laravel: {
         valetTls: true,
       },
+      vue: {
+        script: {
+          defineModel: true,
+          propsDestructure: true,
+        },
+      },
     }),
     svgLoader({ svgo: false }),
   ],

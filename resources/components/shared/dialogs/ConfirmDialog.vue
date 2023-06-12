@@ -15,16 +15,18 @@ const { confirmConfig } = useConfirm()
     wrapper-classes="items-end"
   >
     <template #icon>
-      <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+      <div
+        class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-400/10"
+      >
         <ExclamationIcon
-          class="h-6 w-6 text-red-600"
+          class="h-6 w-6 text-red-600 dark:text-red-500"
           aria-hidden="true"
         />
       </div>
     </template>
 
     <template #body>
-      <p class="leading-normal text-gray-500">
+      <p class="leading-normal text-gray-500 dark:text-gray-300">
         {{ confirmConfig.message }}
       </p>
     </template>

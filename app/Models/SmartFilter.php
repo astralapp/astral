@@ -14,12 +14,6 @@ class SmartFilter extends Model
 {
     use HasFactory, Cachable;
 
-    protected $fillable = [
-        'name',
-        'body',
-        'sort_order',
-    ];
-
     protected $casts = [
         'body' => 'array',
     ];

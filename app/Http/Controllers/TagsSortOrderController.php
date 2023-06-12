@@ -20,6 +20,6 @@ class TagsSortOrderController extends Controller
             auth()->user()->tags()->find($tag['id'])->update(['sort_order' => $tag['sort_order']]);
         });
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }

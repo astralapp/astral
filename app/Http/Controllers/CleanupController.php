@@ -26,6 +26,6 @@ class CleanupController extends Controller
             $this->sponsorship->updateUserSponsorshipStatus();
         }
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }

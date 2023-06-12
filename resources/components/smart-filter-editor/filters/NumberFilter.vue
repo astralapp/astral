@@ -1,25 +1,12 @@
 <script setup lang="ts">
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
-import { useVModel } from '@vueuse/core'
 
-interface Props {
-  modelValue?: number
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: 0,
-})
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: number): void
-}>()
-
-const value = useVModel(props, 'modelValue', emit)
+const modelValue = defineModel<number>('modelValue', { default: 0 })
 </script>
 
 <template>
   <BaseTextInput
-    v-model="value"
+    v-model="modelValue"
     type="number"
   />
 </template>

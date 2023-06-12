@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import {
-  Predicate,
-  PredicateGroup,
-  PredicateTargetType,
-  defaultGroup,
-  defaultPredicate,
-  predicateTargets,
-} from '@/utils/predicates'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import BaseSelect from '@/components/shared/core/BaseSelect.vue'
 import DateFilter from '@/components/smart-filter-editor/filters/DateFilter.vue'
@@ -15,6 +7,14 @@ import NumberFilter from '@/components/smart-filter-editor/filters/NumberFilter.
 import StateFilter from '@/components/smart-filter-editor/filters/StateFilter.vue'
 import StringFilter from '@/components/smart-filter-editor/filters/StringFilter.vue'
 import TagsFilter from '@/components/smart-filter-editor/filters/TagsFilter.vue'
+import {
+  Predicate,
+  PredicateGroup,
+  PredicateTargetType,
+  defaultGroup,
+  defaultPredicate,
+  predicateTargets,
+} from '@/utils/predicates'
 import { MinusCircleIcon, MinusIcon, PlusIcon } from '@heroicons/vue/solid'
 import cloneDeep from 'lodash/cloneDeep'
 import { defineComponent, reactive, watch } from 'vue'
@@ -66,11 +66,7 @@ const setDefaultArgumentValue = (predicate: Predicate) => {
   const defaultValue = selectedPredicateTarget(predicate)?.defaultValue
 
   if (defaultValue !== undefined) {
-    if (typeof defaultValue === 'function') {
-      predicate.argument = defaultValue()
-    } else {
-      predicate.argument = defaultValue
-    }
+    predicate.argument = defaultValue
   }
 }
 

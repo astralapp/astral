@@ -47,7 +47,7 @@ class StarTagsController extends Controller
             $star->tags()->syncWithoutDetaching([$tagId]);
         }
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 
     /**

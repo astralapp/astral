@@ -12,7 +12,7 @@ export const useAuthorizationsStore = defineStore({
   state() {
     return {
       abilities: {
-        [Ability.ADD_NOTES]: false,
+        [Ability.ADD_NOTES]: true,
         [Ability.CREATE_SMART_FILTER]: false,
         [Ability.CREATE_TAG]: false,
       } as Authorizations,

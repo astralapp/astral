@@ -17,7 +17,7 @@ class SmartFiltersController extends Controller
         }
 
         $request->validate([
-            'name' => 'bail|required|unique:smart_filters,name,NULL,id,user_id,'.auth()->id(),
+            'name' => 'bail|required|unique:smart_filters,name,NULL,id,user_id,' . auth()->id(),
             'body' => 'required',
         ], [
             'required' => 'You must provide a name for your smart filter.',
@@ -26,13 +26,13 @@ class SmartFiltersController extends Controller
 
         auth()->user()->smartFilters()->create($request->only(['name', 'body']));
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 
     public function update(Request $request, SmartFilter $smartFilter)
     {
         $request->validate([
-            'name' => 'bail|required|unique:smart_filters,name,'.$smartFilter->id.',id,user_id,'.auth()->id(),
+            'name' => 'bail|required|unique:smart_filters,name,' . $smartFilter->id . ',id,user_id,' . auth()->id(),
             'body' => 'required',
         ], [
             'required' => 'You must provide a name for your smart filter.',
@@ -41,13 +41,13 @@ class SmartFiltersController extends Controller
 
         $smartFilter->update($request->only(['name', 'body']));
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 
     public function destroy(SmartFilter $smartFilter)
     {
         $smartFilter->delete();
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }

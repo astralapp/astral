@@ -16,16 +16,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'github_id',
-        'username',
-        'access_token',
-        'scope',
-        'avatar',
-        'is_sponsor',
-    ];
-
     protected $hidden = [
         'remember_token',
     ];
@@ -63,7 +53,7 @@ class User extends Authenticatable
 
     public function writeSetting(string $name, $value, bool $save = true): self
     {
-        throw_if(! in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
+        throw_if(!in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
 
         $this->settings = array_merge($this->settings, [$name => $value]);
 
@@ -117,12 +107,12 @@ class User extends Authenticatable
 
     public function isSponsor(): bool
     {
-        return (bool) $this->is_sponsor || ! (bool) config('app.check_for_sponsorship');
+        return (bool) $this->is_sponsor || !(bool) config('app.check_for_sponsorship');
     }
 
     public function isNotSponsor(): bool
     {
-        return ! (bool) $this->is_sponsor;
+        return !(bool) $this->is_sponsor;
     }
 
     public function setSponsorshipStatus(bool $isSponsor): self

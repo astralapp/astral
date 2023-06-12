@@ -12,11 +12,6 @@ class UserFlag extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'key',
-        'value',
-    ];
-
     protected $casts = [
         'value' => 'boolean',
     ];

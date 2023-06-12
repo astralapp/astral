@@ -14,11 +14,6 @@ class Tag extends Model
 {
     use HasFactory, Cachable;
 
-    protected $fillable = [
-        'name',
-        'sort_order',
-    ];
-
     protected $hidden = ['pivot'];
 
     public function user()

@@ -17,6 +17,6 @@ class UserSettingsController extends Controller
 
         auth()->user()->writeSetting($request->input('key'), (bool) $request->input('enabled'));
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }

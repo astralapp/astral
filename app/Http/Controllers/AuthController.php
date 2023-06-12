@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Socialite;
 
 class AuthController extends Controller
 {
+    public function show()
+    {
+        return hybridly('auth');
+    }
+
     public function redirectToProvider(Request $request)
     {
         $scope = $request->input('scope', 'read:user');
@@ -38,6 +42,8 @@ class AuthController extends Controller
 
         auth()->login($user, true);
 
+        $request->session()->regenerate();
+
         return redirect()->route('dashboard.show');
     }
 
@@ -48,10 +54,14 @@ class AuthController extends Controller
         return hybridly()->external(route('auth.destroy'));
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         auth()->logout();
 
-        return redirect(route('auth.show'));
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        // return redirect(route('auth.show'));
     }
 }

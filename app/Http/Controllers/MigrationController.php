@@ -15,7 +15,8 @@ class MigrationController extends Controller
         ]);
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $request->validate([
             'stars' => ['required', 'array'],
             'stars.*.starId' => ['required', 'integer'],
@@ -30,7 +31,7 @@ class MigrationController extends Controller
         foreach ($stars as $star) {
             $userStar = auth()->user()->stars()->find($star['starId']);
 
-            if(!$userStar) continue;
+            if (!$userStar) continue;
 
             $userStar->update([
                 'repo_id' => $star['databaseId'],
@@ -41,8 +42,7 @@ class MigrationController extends Controller
                 ]
             ]);
 
-            if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true)))
-            {
+            if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {
                 $userStar->update([
                     'notes' => Str::markdown($userStar['notes']),
                 ]);
@@ -51,6 +51,6 @@ class MigrationController extends Controller
 
         auth()->user()->setFlag('2023-migration', true);
 
-        return redirect(route('dashboard.index'));
+        return redirect(route('dashboard.show'));
     }
 }

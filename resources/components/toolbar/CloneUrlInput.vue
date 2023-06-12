@@ -49,7 +49,7 @@ onKeyStroke('c', e => {
     <div>
       <label
         for="repo_clone_url"
-        class="cursor-pointer text-sm font-semibold text-gray-600"
+        class="cursor-pointer text-sm font-semibold text-gray-600 dark:text-gray-300"
         >Clone:</label
       >
 

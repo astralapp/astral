@@ -56,6 +56,7 @@ module.exports = {
     'vue/match-component-import-name': 'error',
     'vue/multi-word-component-names': 'off',
     'vue/no-ref-object-destructure': 'error',
+    'vue/no-setup-props-destructure': 'off',
     'vue/no-unused-refs': 'error',
     'vue/no-useless-v-bind': 'error',
     'vue/padding-line-between-blocks': 'error',

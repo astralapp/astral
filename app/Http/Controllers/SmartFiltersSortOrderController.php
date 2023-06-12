@@ -19,6 +19,6 @@ class SmartFiltersSortOrderController extends Controller
             auth()->user()->smartFilters()->find($filter['id'])->update(['sort_order' => $filter['sort_order']]);
         });
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.show');
     }
 }
