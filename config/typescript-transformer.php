@@ -7,7 +7,7 @@ return [
      */
 
     'auto_discover_types' => [
-        app_path()
+        app_path(),
     ],
 
     /*
@@ -41,10 +41,10 @@ return [
      */
 
     'default_type_replacements' => [
-        DateTime::class => 'string',
-        DateTimeImmutable::class => 'string',
+        DateTime::class               => 'string',
+        DateTimeImmutable::class      => 'string',
         Carbon\CarbonImmutable::class => 'string',
-        Carbon\Carbon::class => 'string',
+        Carbon\Carbon::class          => 'string',
     ],
 
     /*

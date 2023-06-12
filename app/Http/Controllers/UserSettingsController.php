@@ -11,7 +11,7 @@ class UserSettingsController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'key' => ['required', Rule::in(User::AVAILABLE_SETTINGS)],
+            'key'     => ['required', Rule::in(User::AVAILABLE_SETTINGS)],
             'enabled' => 'required|boolean',
         ]);
 
