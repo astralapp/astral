@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class MigrationController extends Controller
 {
@@ -18,12 +18,12 @@ class MigrationController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'stars' => ['required', 'array'],
-            'stars.*.starId' => ['required', 'integer'],
-            'stars.*.databaseId' => ['required', 'integer'],
+            'stars'                 => ['required', 'array'],
+            'stars.*.starId'        => ['required', 'integer'],
+            'stars.*.databaseId'    => ['required', 'integer'],
             'stars.*.nameWithOwner' => ['required', 'string'],
-            'stars.*.url' => ['required', 'string', 'url'],
-            'stars.*.description' => ['nullable', 'string'],
+            'stars.*.url'           => ['required', 'string', 'url'],
+            'stars.*.description'   => ['nullable', 'string'],
         ]);
 
         $stars = $request->input('stars');
@@ -31,15 +31,17 @@ class MigrationController extends Controller
         foreach ($stars as $star) {
             $userStar = auth()->user()->stars()->find($star['starId']);
 
-            if (!$userStar) continue;
+            if (!$userStar) {
+                continue;
+            }
 
             $userStar->update([
                 'repo_id' => $star['databaseId'],
-                'meta' => [
+                'meta'    => [
                     'nameWithOwner' => $star['nameWithOwner'],
-                    'url' => $star['url'],
-                    'description' => $star['description'],
-                ]
+                    'url'           => $star['url'],
+                    'description'   => $star['description'],
+                ],
             ]);
 
             if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {

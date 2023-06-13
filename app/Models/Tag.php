@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Tag extends Model
 {
-    use HasFactory, Cachable;
+    use HasFactory;
+    use Cachable;
 
     protected $hidden = ['pivot'];
 
@@ -33,7 +34,7 @@ class Tag extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope(new SortOrderScope);
+        static::addGlobalScope(new SortOrderScope());
 
         static::creating(function (self $tag) {
             $tag->sort_order = self::where('user_id', auth()->id())->max('sort_order') + 1;
