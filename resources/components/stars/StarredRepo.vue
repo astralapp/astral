@@ -64,7 +64,6 @@ const onDragStart = (e: DragEvent) => {
   $dragImage = document.createElement('div')
   $dragImage.classList.add(
     ...[
-      'star-drag-image',
       'inline-block',
       'bg-white',
       'shadow-md',
@@ -75,6 +74,8 @@ const onDragStart = (e: DragEvent) => {
       'absolute',
       'left-0',
       'z-10',
+      'dark:text-brand-500',
+      'dark:bg-gray-950',
     ]
   )
   if (starsStore.draggingRepos.length > 1) {
@@ -124,7 +125,7 @@ const onDragEnd = () => {
       }"
     ></div>
 
-    <p class="font-semibold text-brand-600">{{ repo.node.nameWithOwner }}</p>
+    <p class="font-semibold text-brand-600 dark:text-brand-500">{{ repo.node.nameWithOwner }}</p>
 
     <p
       class="mt-2 line-clamp-5 text-sm text-gray-700 dark:text-gray-300"

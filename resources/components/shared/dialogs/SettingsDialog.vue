@@ -31,7 +31,7 @@ const updateUserSetting = (setting: string, enabled: boolean) => {
       enabled,
       key: setting,
     },
-    only: 'user',
+    only: ['user'],
   })
 }
 

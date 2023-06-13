@@ -108,14 +108,16 @@ const doShowSmartFilterDialog = () => {
 const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsKey) => {
   sidebarGroupCollapsedState[key] = !sidebarGroupCollapsedState[key]
 
+  const data: App.Data.UpdateUserSettingsRequest = {
+    enabled: sidebarGroupCollapsedState[key],
+    key,
+  }
+
   await nextTick()
 
   router.put(route('settings.update'), {
-    data: {
-      enabled: sidebarGroupCollapsedState[key],
-      key,
-    },
-    only: 'user',
+    data,
+    only: ['user'],
   })
 }
 </script>

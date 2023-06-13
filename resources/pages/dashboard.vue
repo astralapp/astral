@@ -246,7 +246,6 @@ tryOnMounted(() => {
 
         <StarredRepoList
           v-slot="{ repo }"
-          class="focus:outline-none"
           @focus="isStarsListFocused = true"
           @blur="isStarsListFocused = false"
         >

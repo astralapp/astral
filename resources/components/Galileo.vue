@@ -30,13 +30,13 @@ onKeyStroke('/', e => {
     class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-white px-4 dark:border-gray-950 dark:bg-gray-900"
   >
     <div
-      class="relative flex w-full items-center rounded-md border border-transparent bg-white py-2 shadow ring-1 ring-gray-300 transition-colors focus-within:border-gray-400 focus-within:ring-gray-400 dark:bg-gray-700 dark:ring-gray-600 dark:focus-within:border-gray-600"
+      class="relative flex items-center w-full appearance-none rounded-md border border-gray-900/20 bg-white px-3 shadow-md shadow-gray-800/5 focus-within:border-gray-400 focus-within:ring-4 focus-within:ring-gray-500/10 dark:border-gray-700 dark:bg-gray-700/[0.15] dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus-within:border-gray-500 dark:focus-within:ring-gray-400/10"
     >
       <input
         ref="input"
         v-model="searchQuery"
         type="text"
-        class="peer w-full flex-grow border-none py-0 pr-3 pl-9 text-gray-500 placeholder-gray-300 focus:placeholder-gray-400 focus:ring-0 dark:bg-gray-700 dark:text-gray-300"
+        class="peer w-full flex-grow border-none pr-3 pl-6 py-2 text-gray-500 placeholder:text-gray-400 focus:placeholder-gray-400 focus:ring-0 dark:text-gray-200 sm:text-sm bg-transparent"
         placeholder="Gaze through your telescope..."
         aria-keyshortcuts="/"
       />
@@ -47,7 +47,7 @@ onKeyStroke('/', e => {
       />
 
       <span
-        class="pointer-events-none absolute right-2 hidden rounded-sm border border-gray-300 bg-gray-50 px-2 py-1 text-xs font-bold text-gray-300 transition-opacity peer-focus:opacity-0 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 sm:block"
+        class="pointer-events-none absolute right-2 hidden rounded-sm border border-gray-300 bg-gray-50 px-2 py-1 text-xs font-bold text-gray-300 transition-opacity peer-focus:opacity-0 dark:border-gray-600 dark:bg-gray-950 dark:text-gray-400 sm:block"
         aria-hidden="true"
         >/</span
       >

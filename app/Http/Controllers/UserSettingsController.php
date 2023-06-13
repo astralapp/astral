@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Data\UpdateUserSettingsRequest;
 
 class UserSettingsController extends Controller
 {
-    public function update(Request $request)
+    public function update(UpdateUserSettingsRequest $request)
     {
-        $request->validate([
-            'key' => ['required', Rule::in(User::AVAILABLE_SETTINGS)],
-            'enabled' => 'required|boolean',
-        ]);
-
-        auth()->user()->writeSetting($request->input('key'), (bool) $request->input('enabled'));
+        auth()->user()->writeSetting($request->key, (bool) $request->enabled);
 
         return redirect()->route('dashboard.show');
     }

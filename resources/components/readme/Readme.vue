@@ -128,13 +128,13 @@ const patchReadmeImages = () => {
       v-show="contents"
       as="div"
       class="relative z-20 h-full w-full transition-colors overflow-hidden"
-      :class="{ 'grid place-items-center bg-gray-100': selectedRepoCount > 1 }"
+      :class="{ 'grid place-items-center bg-gray-100 dark:bg-gray-900': selectedRepoCount > 1 }"
     >
       <div
         v-for="(stack, $index) in visibleStacks"
         :key="$index"
         :style="{ zIndex: visibleStacks.length - $index, transform: stack.transform }"
-        class="pointer-events-none absolute h-[85vh] w-full max-w-none overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
+        class="pointer-events-none absolute h-[85vh] w-full max-w-none overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl dark:bg-gray-800 border border-transparent dark:border-gray-500"
         aria-hidden="true"
       ></div>
 
@@ -144,9 +144,10 @@ const patchReadmeImages = () => {
       >
         <div
           ref="readmeEl"
-          class="prose max-w-none bg-white p-4 transition-transform dark:prose-invert dark:bg-gray-900 sm:mx-auto sm:max-w-2xl 2xl:max-w-4xl"
+          class="prose max-w-none bg-white p-4 transition-transform dark:prose-invert dark:bg-gray-900 sm:mx-auto sm:max-w-2xl 2xl:max-w-4xl border border-transparent"
           :class="{
-            'pointer-events-none h-[85vh] scale-90 overflow-hidden rounded-lg p-12 shadow-lg': selectedRepoCount > 1,
+            'pointer-events-none h-[85vh] scale-90 overflow-hidden rounded-lg p-12 shadow-lg dark:border-gray-500':
+              selectedRepoCount > 1,
           }"
           v-html="contents"
         ></div>
@@ -171,6 +172,11 @@ const patchReadmeImages = () => {
 </template>
 
 <style>
+/* @media (prefers-color-scheme: dark) {
+  .entry-content a.anchor svg.octicon-link {
+    fill: theme('colors.gray.300');
+  }
+} */
 .entry-content {
   h1,
   h2,
@@ -184,6 +190,10 @@ const patchReadmeImages = () => {
 
       svg.octicon-link {
         display: inline;
+
+        @media (prefers-color-scheme: dark) {
+          fill: theme('colors.gray.300');
+        }
       }
     }
   }

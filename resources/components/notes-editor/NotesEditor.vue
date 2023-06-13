@@ -126,7 +126,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
         notes: notesData,
         repoId: starsStore.selectedRepo.databaseId,
       },
-      only: 'stars',
+      only: ['stars'],
       // onFinish: () => (isSaving.value = false),
     })
   }
@@ -164,10 +164,12 @@ const saveNotes = (editor: Maybe<Editor>) => {
           leave-from="opacity-100 translate-x-0"
           leave-to="opacity-0 -translate-x-full"
         >
-          <div class="relative h-full transform rounded-r-md bg-white p-4 shadow transition duration-300">
+          <div
+            class="relative h-full transform rounded-r-md bg-white dark:bg-gray-800 p-4 shadow transition duration-300"
+          >
             <div
               v-if="editor"
-              class="flex items-center rounded bg-gray-100 p-2"
+              class="flex items-center rounded bg-gray-100 dark:bg-gray-700 p-2"
             >
               <!-- Bold Button -->
               <button
