@@ -17,7 +17,7 @@ defineProps<Props>()
     <div class="group flex w-full items-center">
       <div class="flex items-center">
         <DisclosureButton
-          class="flex items-center text-gray-500"
+          class="flex items-center text-gray-500 dark:text-gray-400"
           :class="{ '-ml-1': collapsible }"
           :as="collapsible ? 'button' : 'h4'"
           @click="close?.()"

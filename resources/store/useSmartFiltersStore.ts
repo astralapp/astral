@@ -9,7 +9,7 @@ export const useSmartFiltersStore = defineStore({
         data: {
           smartFilter,
         },
-        only: ['smartFilters', 'abilities', 'errors'],
+        only: ['smartFilters', 'abilities'],
       })
     },
     deleteSmartFilter(smartFilterId: number) {
@@ -30,7 +30,7 @@ export const useSmartFiltersStore = defineStore({
         data: {
           smartFilters: reorderedSmartFilters,
         },
-        only: 'smartFilters',
+        only: ['smartFilters'],
       })
     },
     updateSmartFilter(smartFilterId: number, smartFilter: Pick<App.Data.SmartFilterData, 'body' | 'name'>) {
@@ -42,7 +42,7 @@ export const useSmartFiltersStore = defineStore({
           data: {
             smartFilter,
           },
-          only: ['smartFilters', 'errors'],
+          only: ['smartFilters'],
         }
       )
     },

@@ -11,7 +11,7 @@ export const useTagsStore = defineStore({
         data: {
           tags,
         },
-        only: 'tags',
+        only: ['tags'],
       })
     },
     addTag(tagName: string) {
@@ -19,11 +19,11 @@ export const useTagsStore = defineStore({
         data: {
           name: tagName,
         },
-        only: ['tags', 'abilities', 'errors'],
+        only: ['tags', 'abilities'],
       })
     },
     deleteTag(tagId: number) {
-      router.delete(route('tags.destroy', { tag: tagId }), { only: 'tags' })
+      router.delete(route('tags.destroy', { tag: tagId }), { only: ['tags'] })
     },
     sortTags(method: TagSortMethod, direction: Lowercase<FetchDirection>) {
       this.tags = orderBy(this.tags, method, direction)

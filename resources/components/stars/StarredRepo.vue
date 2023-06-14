@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
+import { useAuth } from '@/composables/use-auth'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
-import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
 import { GlobeIcon, ShareIcon, StarIcon } from '@heroicons/vue/outline'
 import pick from 'lodash/pick'
@@ -17,8 +17,7 @@ const emit = defineEmits<{
   (e: 'selected', value: GitHubRepo): void
   (e: 'tagSelected', value: App.Data.TagData): void
 }>()
-
-const userStore = useUserStore()
+const { user } = useAuth()
 const starsStore = useStarsStore()
 const tagsStore = useTagsStore()
 
@@ -26,7 +25,7 @@ const tags = computed(() => {
   return starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
 })
 
-const shouldShowLanguageTag = computed(() => !!userStore.user?.settings.show_language_tags)
+const shouldShowLanguageTag = computed(() => user.value?.settings.show_language_tags ?? false)
 
 const isEditingTags = ref(false)
 

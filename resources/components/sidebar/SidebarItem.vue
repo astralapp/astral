@@ -26,16 +26,16 @@ const labelClasses = computed(() => {
   return props.isHighlighted
     ? 'text-white bg-brand-600'
     : props.isActive
-    ? 'text-brand-600'
-    : 'text-gray-400 hover:text-gray-300'
+    ? 'text-brand-600 dark:text-brand-500'
+    : 'text-gray-400 hover:text-gray-300 dark:text-gray-300 dark:hover:text-gray-200'
 })
 
 const badgeClasses = computed(() => {
   return (
     (props.isHighlighted
-      ? 'text-brand-600 bg-white'
+      ? 'text-brand-600 bg-white dark:text-brand-500'
       : props.isActive
-      ? 'text-white bg-brand-600'
+      ? 'text-white bg-brand-600 dark:bg-brand-500/10 dark:text-brand-400'
       : 'text-white bg-gray-700') +
     (props.hasContextMenu ? (props.isContextMenuActive ? ' invisible' : ' group-hover:opacity-0') : '')
   )

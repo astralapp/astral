@@ -195,7 +195,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         <template #default>
           <div class="relative mt-2 flex h-10 items-center">
             <button
-              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-none"
+              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-none dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-300"
               :class="{ 'pointer-events-none': isNewTagFormShowing }"
               type="button"
               @click="showNewTagForm"

@@ -70,6 +70,14 @@ const deleteTag = async () => {
     showToast(`The ${props.tag.name} tag was deleted.`)
   }
 }
+
+const baseMenuItemClasses = 'group/menu-item flex w-full items-center p-2 text-xs font-semibold'
+
+const getMenuItemClasses = (isActive: boolean) => {
+  return isActive
+    ? `${baseMenuItemClasses} bg-indigo-50 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400`
+    : `${baseMenuItemClasses} text-gray-700 dark:text-gray-400`
+}
 </script>
 
 <template>
@@ -118,13 +126,12 @@ const deleteTag = async () => {
             leave-to-class="transform scale-95 opacity-0"
           >
             <MenuItems
-              class="absolute right-2 z-20 mt-2 w-28 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0"
+              class="absolute right-2 z-20 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 dark:bg-gray-800 dark:border dark:border-gray-700"
             >
               <div class="py-1">
                 <MenuItem v-slot="{ active }">
                   <button
-                    class="group/menu-item flex w-full items-center p-2 text-xs font-semibold"
-                    :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
+                    :class="getMenuItemClasses(active)"
                     @click.stop="showRenameTagDialog(tag)"
                   >
                     <PencilAltIcon
@@ -138,8 +145,7 @@ const deleteTag = async () => {
 
                 <MenuItem v-slot="{ active }">
                   <button
-                    class="group/menu-item flex w-full items-center p-2 text-xs font-semibold"
-                    :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
+                    :class="getMenuItemClasses(active)"
                     @click.stop="deleteTag"
                   >
                     <TrashIcon

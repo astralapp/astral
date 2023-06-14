@@ -74,22 +74,28 @@ const checkSponsorshipStatus = () => {
                 v-show="isSponsor"
                 class="flex items-center gap-x-1"
               >
-                <span class="flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-green-200">
+                <span
+                  class="flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-green-200 dark:text-green-950"
+                >
                   <CheckCircleIcon class="h-5 w-5" />
                 </span>
 
-                <span class="text-sm font-bold text-green-800">You're a sponsor and you're awesome!</span>
+                <span class="text-sm font-bold text-green-800 dark:text-green-500"
+                  >You're a sponsor and you're awesome!</span
+                >
               </p>
 
               <p
                 v-show="!isSponsor"
                 class="flex items-center gap-x-1"
               >
-                <span class="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-600 text-yellow-200">
+                <span
+                  class="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-500 text-yellow-200 dark:text-yellow-950"
+                >
                   <XCircleIcon class="h-5 w-5" />
                 </span>
 
-                <span class="text-sm font-bold text-yellow-600">Not sponsoring.</span>
+                <span class="text-sm font-bold text-yellow-600 dark:text-yellow-500">Not sponsoring.</span>
               </p>
             </div>
           </div>

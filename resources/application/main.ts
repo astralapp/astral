@@ -14,4 +14,7 @@ initializeHybridly({
       )
       .use(createPinia())
   },
+  progress: {
+    color: '#059669',
+  },
 })
