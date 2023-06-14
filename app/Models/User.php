@@ -14,14 +14,15 @@ use Illuminate\Support\Facades\Http;
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $hidden = [
         'remember_token',
     ];
 
     protected $casts = [
-        'settings' => 'array',
+        'settings'   => 'array',
         'is_sponsor' => 'boolean',
     ];
 

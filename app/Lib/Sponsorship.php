@@ -18,7 +18,7 @@ class Sponsorship
         $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'.$this->user->username.'") }}';
 
         $client = GitHub::getFactory()->make([
-            'token' => $this->user->access_token,
+            'token'  => $this->user->access_token,
             'method' => 'token',
         ]);
 

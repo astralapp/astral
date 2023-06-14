@@ -3,8 +3,8 @@
 namespace App\Data;
 
 use App\Models\User;
-use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Attributes\Validation\In;
+use Spatie\LaravelData\Data;
 
 class UpdateUserSettingsRequest extends Data
 {
