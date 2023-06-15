@@ -1,3 +1,5 @@
+import { NavigationResponse } from 'hybridly'
+
 // Taken from: https://github.com/vueuse/vueuse/blob/main/packages/core/onStartTyping/index.ts
 export const isFocusedElementEditable = (): boolean => {
   const { activeElement, body } = document
@@ -32,4 +34,8 @@ export const moveSort = <T>(array: T[], oldIndex: number, newIndex: number): T[]
 
 export const randomIntFromRange = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+export const getNavigationResponseErrors = (response: NavigationResponse): Record<string, string> => {
+  return response.response?.data.view.properties.errors
 }

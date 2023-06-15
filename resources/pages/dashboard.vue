@@ -16,13 +16,14 @@ import StarredRepo from '@/components/stars/StarredRepo.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
 import { useAuth } from '@/composables/use-auth'
+import { useFlashBag } from '@/composables/use-flash-bag'
+import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
 import { useListSelectionState } from '@/composables/useListSelectionState'
 import { useSettingsDialog } from '@/composables/useSettingsDialog'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useSyncValuesToStores } from '@/composables/useSyncValuesToStores'
 import { useUrlParams } from '@/composables/useUrlParams'
 import LogoSvg from '@/img/logo.svg?component'
-import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -36,9 +37,9 @@ import { computed, nextTick, ref, watch } from 'vue'
 
 const props = defineProps<App.Data.DashboardData>()
 const { user } = useAuth()
+const flashBag = useFlashBag()
 
 const userStore = useUserStore()
-const authorizationsStore = useAuthorizationsStore()
 const tagsStore = useTagsStore()
 const starsStore = useStarsStore()
 const starsFilterStore = useStarsFilterStore()
@@ -46,11 +47,10 @@ const smartFiltersStore = useSmartFiltersStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showSettingsDialog } = useSettingsDialog()
 const { params: urlParams, clearParams } = useUrlParams()
+const { show: showToast } = useGlobalToast()
 
 useSyncValuesToStores(
   [userStore, 'user', user],
-  // [authorizationsStore, 'abilities', computed(() => props.abilities)],
-  // [authorizationsStore, 'limits', computed(() => props.limits)],
   [tagsStore, 'tags', computed(() => props.tags)],
   [starsStore, 'userStars', computed(() => props.stars)],
   [smartFiltersStore, 'smartFilters', computed(() => props.smartFilters)]
@@ -69,8 +69,15 @@ const { selectItem, selectedItems } = useListSelectionState(
  * sponsorship. If true, show them the Sponsor dialog.
  */
 registerHook('error', errors => {
+  console.log('ERRORZ:', errors)
   if (errors.sponsorship_required) {
     showSponsorshipDialog(errors.sponsorship_required as App.Data.Enums.Ability)
+  }
+})
+
+registerHook('success', () => {
+  if (flashBag.success) {
+    showToast(flashBag.success, ToastType.Success)
   }
 })
 

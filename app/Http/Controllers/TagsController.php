@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lib\Abilities;
+use App\Data\Enums\Ability;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -28,9 +28,11 @@ class TagsController extends Controller
     {
         if (auth()->user()->cannot('create', Tag::class)) {
             return redirect()->back()->withErrors([
-                'sponsorship_required' => [Abilities::CREATE_TAG],
+                'sponsorship_required' => [Ability::CREATE_TAG],
             ]);
         }
+
+
 
         $request->validate([
             'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,' . auth()->id(),
@@ -39,9 +41,11 @@ class TagsController extends Controller
             'unique' => 'You already have a tag with that name.',
         ]);
 
-        auth()->user()->tags()->create(['name' => $request->input('name')]);
+        $tagName = $request->input('name');
 
-        return redirect()->route('dashboard.show');
+        auth()->user()->tags()->create(['name' => $tagName]);
+
+        return redirect()->route('dashboard.show')->with('success', "The '{$tagName}' tag was added");
     }
 
     /**

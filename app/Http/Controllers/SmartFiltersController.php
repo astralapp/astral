@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lib\Abilities;
+use App\Data\Enums\Ability;
 use App\Models\SmartFilter;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class SmartFiltersController extends Controller
     {
         if (auth()->user()->cannot('create', SmartFilter::class)) {
             return redirect()->back()->withErrors([
-                'sponsorship_required' => [Abilities::CREATE_SMART_FILTER],
+                'sponsorship_required' => [Ability::CREATE_SMART_FILTER],
             ]);
         }
 

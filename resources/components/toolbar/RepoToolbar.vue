@@ -3,23 +3,21 @@ import BaseButton from '@/components/shared/core/BaseButton.vue'
 import EmptyNoteIcon from '@/components/shared/icons/notes-editor/EmptyNoteIcon.vue'
 import ExistingNoteIcon from '@/components/shared/icons/notes-editor/ExistingNoteIcon.vue'
 import CloneUrlInput from '@/components/toolbar/CloneUrlInput.vue'
+import { useAuth } from '@/composables/use-auth'
 import { useConfirm } from '@/composables/useConfirm'
 import { useNotesEditor } from '@/composables/useNotesEditor'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDialog'
-import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useStarsStore } from '@/store/useStarsStore'
-import { useUserStore } from '@/store/useUserStore'
 import { Ability, AuthScope } from '@/types'
 import { isFocusedElementEditable } from '@/utils'
 import { StarIcon } from '@heroicons/vue/outline'
 import { onKeyStroke } from '@vueuse/core'
 import { computed } from 'vue'
 
+const { user } = useAuth()
 const starsStore = useStarsStore()
-const userStore = useUserStore()
 const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } = useNotesEditor()
-const authorizationsStore = useAuthorizationsStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showUpgradeAuthScopeDialog } = useUpgradeAuthScopeDialog()
 const { isConfirmed } = useConfirm()
@@ -28,7 +26,7 @@ const { isConfirmed } = useConfirm()
 const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes)
 
 const handleToggleNotesEditor = () => {
-  if (authorizationsStore.abilities[Ability.ADD_NOTES]) {
+  if (user.value?.abilities[Ability.ADD_NOTES]) {
     toggleNotesEditor()
   } else {
     showSponsorshipDialog(Ability.ADD_NOTES)
@@ -36,7 +34,7 @@ const handleToggleNotesEditor = () => {
 }
 
 const removeSelectedStar = async () => {
-  if (userStore.user?.scope !== AuthScope.PUBLIC_REPO) {
+  if (user.value?.scope !== AuthScope.PUBLIC_REPO) {
     showUpgradeAuthScopeDialog()
   } else {
     if (

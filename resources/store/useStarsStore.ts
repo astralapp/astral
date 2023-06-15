@@ -38,7 +38,7 @@ export const useStarsStore = defineStore({
           repos,
           tagId,
         },
-        only: ['stars', 'tags', 'abilities'],
+        only: ['stars', 'tags'],
       })
     },
     backfillStarMetadata(starInput: (StarMetaInput & { starId: number })[]) {
@@ -106,7 +106,7 @@ export const useStarsStore = defineStore({
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
         if (userStar) {
-          router.delete(`/star/${userStar.id}`, { only: ['stars', 'tags', 'abilities'] })
+          router.delete(`/star/${userStar.id}`, { only: ['stars', 'tags'] })
         }
       }
     },
@@ -123,7 +123,7 @@ export const useStarsStore = defineStore({
           ...starInput,
           tags,
         },
-        only: ['stars', 'tags', 'abilities', 'errors'],
+        only: ['stars', 'tags'],
       })
     },
   },

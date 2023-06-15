@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lib\Abilities;
+use App\Data\Enums\Ability;
 use App\Models\Star;
 use Illuminate\Http\Request;
 
@@ -11,7 +11,7 @@ class StarNotesController extends Controller
     public function __invoke(Request $request)
     {
         if (auth()->user()->cannot('addNotes', Star::class)) {
-            return redirect()->route('dashboard.show')->with('sponsorship_required', Abilities::ADD_NOTES);
+            return redirect()->route('dashboard.show')->with('sponsorship_required', Ability::ADD_NOTES);
         }
 
         $request->validate([

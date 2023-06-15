@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lib\Abilities;
+use App\Data\Enums\Ability;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -92,7 +92,7 @@ class StarTagsController extends Controller
             DB::rollBack();
 
             return redirect()->back()->withErrors([
-                'sponsorship_required' => [Abilities::CREATE_TAG],
+                'sponsorship_required' => [Ability::CREATE_TAG],
             ]);
         }
 

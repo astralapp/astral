@@ -9,7 +9,7 @@ export const useSmartFiltersStore = defineStore({
         data: {
           smartFilter,
         },
-        only: ['smartFilters', 'abilities'],
+        only: ['smartFilters'],
       })
     },
     deleteSmartFilter(smartFilterId: number) {
@@ -17,7 +17,7 @@ export const useSmartFiltersStore = defineStore({
         route('smart-filters.destroy', {
           smartFilter: smartFilterId,
         }),
-        { only: ['smartFilters', 'abilities'] }
+        { only: ['smartFilters'] }
       )
     },
     syncSmartFiltersOrder(oldIndex: number, newIndex: number) {

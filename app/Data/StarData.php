@@ -15,8 +15,8 @@ class StarData extends Data
         public int $id,
         public int $user_id,
         public int $repo_id,
-        public string $notes,
-        public string $meta,
+        public ?string $notes,
+        public ?array $meta,
         #[DataCollectionOf(TagData::class)]
         public readonly DataCollection $tags,
     ) {

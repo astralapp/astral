@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
+import { useAuth } from '@/composables/use-auth'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
-import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { Ability } from '@/types'
 import { UserGroupIcon } from '@heroicons/vue/outline'
 import { Ref, computed } from 'vue'
 
+const { user } = useAuth()
 const { isOpen, hide, currentContext } = useSponsorshipDialog()
-const authorizationsStore = useAuthorizationsStore()
 
 const DIALOG_MESSAGES: Record<App.Data.Enums.Ability, string> = {
   [Ability.ADD_NOTES]: 'To add notes to your starred repos',
   [Ability.CREATE_SMART_FILTER]: 'To create smart filters',
-  [Ability.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
+  [Ability.CREATE_TAG]: `To create more than ${user.value?.limits?.max_tags} tags`,
 }
 
 const currentMessage: Ref<null | string> = computed(() =>

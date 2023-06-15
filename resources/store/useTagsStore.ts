@@ -19,7 +19,12 @@ export const useTagsStore = defineStore({
         data: {
           name: tagName,
         },
-        only: ['tags', 'abilities'],
+        // hooks: {
+        //   error: errors => {
+        //     console.log('ERRORZ:', errors)
+        //   },
+        // },
+        only: ['tags'],
       })
     },
     deleteTag(tagId: number) {

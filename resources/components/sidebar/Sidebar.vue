@@ -9,14 +9,15 @@ import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
-import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { Ability, Errors, StarDragDataTransferData } from '@/types'
+import { getNavigationResponseErrors } from '@/utils'
 // import { Errors } from '@inertiajs/core'
 import { InboxIcon, PlusCircleIcon, RefreshIcon, StarIcon } from '@heroicons/vue/outline'
+import { formToJSON } from 'axios'
 import { router } from 'hybridly'
 import { Sortable } from 'sortablejs-vue3'
 import { computed, nextTick, reactive, ref } from 'vue'
@@ -39,7 +40,6 @@ const starsFilterStore = useStarsFilterStore()
 const tagsStore = useTagsStore()
 const starsStore = useStarsStore()
 const smartFiltersStore = useSmartFiltersStore()
-const authorizationsStore = useAuthorizationsStore()
 const { show: showSmartFilterDialog } = useSmartFilterDialog()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showToast } = useGlobalToast()
@@ -77,17 +77,10 @@ const showNewTagForm = () => {
 }
 
 const doAddTag = async (tagName: string) => {
-  try {
-    await tagsStore.addTag(tagName)
-    showToast(`The '${tagName}' tag was added.`)
+  const res = await tagsStore.addTag(tagName)
+  console.log(res)
 
-    newTag.value = ''
-  } catch (e) {
-    const errors = e as Errors
-    if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
-      showToast(errors[Object.keys(errors)[0]], ToastType.Error)
-    }
-  }
+  newTag.value = ''
 }
 
 const tagIsSelected = (tag: App.Data.TagData): boolean => tag.id === starsFilterStore.selectedTag?.id
@@ -98,7 +91,7 @@ const languageIsSelected = (language: string): boolean => language === starsFilt
 const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
 
 const doShowSmartFilterDialog = () => {
-  if (authorizationsStore.abilities[Ability.CREATE_SMART_FILTER]) {
+  if (user.value?.abilities[Ability.CREATE_SMART_FILTER]) {
     showSmartFilterDialog()
   } else {
     showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
