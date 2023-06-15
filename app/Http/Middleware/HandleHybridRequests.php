@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Data\UserData;
-use App\Data\SharedData;
 use App\Data\SecurityData;
+use App\Data\SharedData;
+use App\Data\UserData;
 use Hybridly\Http\Middleware;
 
 class HandleHybridRequests extends Middleware
