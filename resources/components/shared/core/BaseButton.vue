@@ -33,16 +33,18 @@ const classesForSizeProp = {
 }[props.size]
 
 const classesForKindProp = {
-  base: 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus-visible:ring-gray-200 font-medium active:bg-gray-100 hover:dark:bg-gray-950 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 border shadow-sm',
+  base: 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus-visible:ring-gray-200 font-medium active:bg-gray-100 hover:dark:bg-black dark:bg-gray-950 dark:border-gray-700 dark:text-gray-200 border shadow-sm',
   'base-borderless': 'text-gray-700 bg-transparent focus-visible:ring-brand-200 font-medium dark:text-gray-900',
   danger:
     'text-white bg-red-600 border-transparent hover:bg-red-700 focus-visible:ring-red-200 font-semibold border shadow-sm',
-  'danger-borderless': 'text-red-600 border-transparent hover:text-red-700 focus-visible:ring-red-200 font-semibold',
+  'danger-borderless':
+    'text-red-600 border-transparent hover:text-red-700 focus-visible:ring-red-200 font-semibold dark:text-red-500 dark:hover:text-red-400',
   primary:
     'text-white bg-brand-600 border-transparent hover:bg-brand-700 focus-visible:ring-brand-200 font-semibold border shadow-sm',
-  'primary-borderless': 'text-brand-600 hover:text-brand-700 focus-visible:ring-brand-200 font-semibold',
+  'primary-borderless':
+    'text-brand-600 hover:text-brand-700 focus-visible:ring-brand-200 font-semibold dark:text-brand-500 dark:hover:text-brand-400',
   warning:
-    'text-white bg-yellow-500 border-transparent hover:bg-yellow-600 focus-visible:ring-yellow-200 font-semibold border shadow-sm',
+    'text-yellow-950 bg-yellow-500 border-transparent hover:bg-yellow-400 focus-visible:ring-yellow-200 font-semibold border shadow-sm',
   'warning-borderless': 'text-yellow-500 hover:text-yellow-600 focus-visible:ring-yellow-200 font-semibold',
 }[props.kind]
 </script>

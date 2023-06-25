@@ -43,7 +43,7 @@ const editor = useEditor({
   content: initialEditorValue || '<p></p>',
   editorProps: {
     attributes: {
-      class: 'prose focus:outline-none prose-a:text-brand-600',
+      class: 'prose focus:outline-none prose-a:text-brand-600 dark:prose-invert dark:prose-a:text-brand-500',
     },
   },
   extensions: [
@@ -126,8 +126,12 @@ const saveNotes = (editor: Maybe<Editor>) => {
         notes: notesData,
         repoId: starsStore.selectedRepo.databaseId,
       },
+      hooks: {
+        success: () => {
+          isSaving.value = false
+        },
+      },
       only: ['stars'],
-      // onFinish: () => (isSaving.value = false),
     })
   }
 }
@@ -151,7 +155,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
         leave-to="opacity-0"
       >
         <div
-          class="absolute inset-0 bg-gray-500/75 transition-opacity duration-300"
+          class="absolute inset-0 bg-gray-500/75 dark:bg-gray-700/75 transition-opacity duration-300"
           @click.self="hide"
         ></div>
       </TransitionChild>
@@ -165,17 +169,19 @@ const saveNotes = (editor: Maybe<Editor>) => {
           leave-to="opacity-0 -translate-x-full"
         >
           <div
-            class="relative h-full transform rounded-r-md bg-white dark:bg-gray-800 p-4 shadow transition duration-300"
+            class="relative h-full transform rounded-r-md bg-white dark:bg-gray-900 p-4 shadow transition duration-300"
           >
             <div
               v-if="editor"
-              class="flex items-center rounded bg-gray-100 dark:bg-gray-700 p-2"
+              class="flex items-center rounded bg-gray-100 dark:bg-gray-800 p-2"
             >
               <!-- Bold Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('bold'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('bold'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('bold'),
                 }"
                 aria-label="Bold"
                 @click="editor?.chain().focus().toggleBold().run()"
@@ -187,9 +193,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- Italics Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('italic'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('italic'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('italic'),
                 }"
                 aria-label="Italic"
                 @click="editor?.chain().focus().toggleItalic().run()"
@@ -201,9 +209,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- Underline Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('underline'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('underline'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('underline'),
                 }"
                 aria-label="Underline"
                 @click="editor?.chain().focus().toggleUnderline().run()"
@@ -215,9 +225,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- BulletList Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('bulletList'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('bulletList'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('bulletList'),
                 }"
                 aria-label="Bullet list"
                 @click="editor?.chain().focus().toggleBulletList().run()"
@@ -229,9 +241,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- OrderedList Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('orderedList'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('orderedList'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('orderedList'),
                 }"
                 aria-label="Ordered list"
                 @click="editor?.chain().focus().toggleOrderedList().run()"
@@ -243,9 +257,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- Link Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('link'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('link'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('link'),
                 }"
                 aria-label="Link"
                 @click="setLink"
@@ -257,9 +273,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- Code Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('code'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('code'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('code'),
                 }"
                 aria-label="Inline Code"
                 @click="editor?.chain().focus().toggleCode().run()"
@@ -271,9 +289,11 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <!-- CodeBlock Button -->
               <button
-                class="rounded p-1 hover:bg-gray-200"
+                class="rounded p-1"
                 :class="{
-                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('codeBlock'),
+                  'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
+                    editor.isActive('codeBlock'),
+                  'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('codeBlock'),
                 }"
                 aria-label="Code Block"
                 @click="editor?.chain().focus().toggleCodeBlock().run()"
@@ -307,7 +327,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
               as="template"
             >
               <div
-                class="absolute bottom-0 right-0 z-30 mb-4 mr-4 transform rounded-full bg-brand-200 px-3 py-2 text-sm font-semibold text-brand-700 transition"
+                class="absolute bottom-0 right-0 z-30 mb-4 mr-4 transform rounded-full bg-brand-200 px-3 py-2 text-sm font-semibold text-brand-700 transition dark:bg-brand-500/10 dark:text-brand-400"
                 aria-role="status"
                 aria-live="assertive"
               >

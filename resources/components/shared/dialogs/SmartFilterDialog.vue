@@ -97,7 +97,8 @@ const resetForm = () => {
     dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl"
   >
     <div>
-      <DialogTitle class="rounded bg-gray-50 px-4 py-3 text-center text-xl font-bold text-gray-700"
+      <DialogTitle
+        class="rounded bg-gray-50 dark:bg-gray-900 px-4 py-3 text-center text-xl font-bold text-gray-700 dark:text-gray-300"
         >{{ currentSmartFilter ? 'Update' : 'Create' }} smart filter</DialogTitle
       >
 
@@ -105,7 +106,7 @@ const resetForm = () => {
         <div class="mt-6 flex w-1/2 flex-col items-start pb-8 pt-2">
           <label
             for="smart-filter-name"
-            class="inline-block text-sm"
+            class="inline-block text-sm dark:text-gray-300"
             >Filter name</label
           >
 
@@ -117,7 +118,7 @@ const resetForm = () => {
           ></BaseTextInput>
         </div>
 
-        <div class="max-h-[62vh] overflow-y-auto border-t border-gray-200">
+        <div class="max-h-[62vh] overflow-y-auto border-t border-gray-200 dark:border-gray-700">
           <SmartFilterEditor v-model="form.fields.body" />
 
           <div
@@ -127,7 +128,7 @@ const resetForm = () => {
           ></div>
         </div>
 
-        <div class="mt-4 flex items-center justify-end space-x-2 rounded bg-gray-50 px-4 py-3">
+        <div class="mt-4 flex items-center justify-end space-x-2 rounded bg-gray-50 dark:bg-gray-900 px-4 py-3">
           <BaseButton
             kind="base"
             @click="hideDialog"

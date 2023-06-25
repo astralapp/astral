@@ -148,7 +148,7 @@ const onDragEnd = () => {
     >
       <li
         v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
-        class="mb-1 mr-1 cursor-pointer rounded-sm bg-brand-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
+        class="mb-1 mr-1 cursor-pointer rounded-sm bg-brand-100 dark:bg-brand-500/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 f dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
         role="button"
         @click.stop="emit('languageSelected', repo.node.primaryLanguage?.name as string)"
       >

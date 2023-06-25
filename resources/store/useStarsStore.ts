@@ -46,7 +46,7 @@ export const useStarsStore = defineStore({
         data: {
           stars: starInput,
         },
-        only: ['stars', 'errors'],
+        only: ['stars'],
       })
     },
     clearStarredRepos() {

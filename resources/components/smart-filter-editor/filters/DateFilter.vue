@@ -6,10 +6,6 @@ import { ArrowSmLeftIcon, ArrowSmRightIcon } from '@heroicons/vue/solid'
 import * as dateFns from 'date-fns'
 import { computed, nextTick, reactive, ref, unref } from 'vue'
 
-interface Props {
-  modelValue?: string
-}
-
 interface DateWithMeta {
   date: Date
   isCurrentMonth: boolean
@@ -17,11 +13,7 @@ interface DateWithMeta {
   isToday: boolean
 }
 
-const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
+const modelValue = defineModel<string>('modelValue', { default: '' })
 
 // https://codepen.io/sdbrannum/pen/QYqKzw
 const DAY_LABELS = ['S', 'M', 'T', 'W', 'Th', 'F', 'S']
@@ -48,7 +40,7 @@ const inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'height' | 'left'
   top: 0,
 })
 
-const selectedDate = ref(props.modelValue ? dateFns.parse(props.modelValue, 'yyyy-MM-dd', new Date()) : new Date())
+const selectedDate = ref(modelValue.value ? dateFns.parse(modelValue.value, 'yyyy-MM-dd', new Date()) : new Date())
 const today = ref(new Date())
 const dateCursor = ref(unref(today))
 
@@ -81,7 +73,7 @@ const formatDateToDay = (date: Date) => dateFns.format(date, 'd')
 
 const setSelectedDate = (day: DateWithMeta) => {
   selectedDate.value = day.date
-  emit('update:modelValue', dateFns.format(selectedDate.value, 'yyyy-MM-dd'))
+  modelValue.value = dateFns.format(selectedDate.value, 'yyyy-MM-dd')
 
   if (!day.isCurrentMonth) {
     dateCursor.value = dateFns.setMonth(dateCursor.value, dateFns.getMonth(selectedDate.value))
@@ -154,7 +146,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
       <div v-show="isDatePickerShowing && open">
         <PopoverPanel
           static
-          class="datepicker absolute z-10 -mt-2 w-64 -translate-y-full rounded border bg-white p-2 text-xs shadow-sm"
+          class="absolute z-10 -mt-2 w-64 -translate-y-full rounded border bg-white dark:bg-gray-900 p-2 text-xs shadow-sm dark:border-gray-700"
           :style="{
             left: inputRect.left + 'px',
             top: inputRect.top + 'px',
@@ -162,7 +154,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
         >
           <div class="relative grid h-full grid-cols-7 overflow-hidden">
             <header
-              class="col-span-7 flex items-center justify-between px-3 pt-2 pb-4 text-center font-semibold text-gray-700"
+              class="col-span-7 flex items-center justify-between px-3 pt-2 pb-4 text-center font-semibold text-gray-700 dark:text-gray-300"
             >
               <button
                 aria-label="Previous Month"
@@ -186,7 +178,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
             <div
               v-for="dayLabel in DAY_LABELS"
               :key="dayLabel"
-              class="headings text-center font-semibold"
+              class="headings text-center font-semibold dark:text-white"
             >
               {{ dayLabel }}
             </div>
@@ -194,12 +186,13 @@ const setDatePickerVisibility = (isVisible: boolean) => {
             <PopoverButton
               v-for="(day, index) in dates"
               :key="index"
-              class="aspect-square w-full rounded border border-transparent text-center hover:border-gray-300"
+              class="aspect-square w-full rounded border border-transparent text-center hover:border-gray-300 dark:hover:border-gray-600"
               :class="{
-                'bg-gray-100': day.isToday,
-                'text-gray-700': day.isCurrentMonth,
-                'text-gray-300': !day.isCurrentMonth,
-                'bg-brand-100 font-bold text-brand-700 hover:border-brand-400': day.isSelected,
+                'bg-gray-100 dark:bg-gray-800 font-bold': day.isToday,
+                'text-gray-700 dark:text-gray-300': day.isCurrentMonth && !day.isSelected,
+                'text-gray-300 dark:text-gray-500': !day.isCurrentMonth && !day.isSelected,
+                'bg-brand-100 font-bold text-brand-700 hover:border-brand-400 dark:bg-brand-500/10 dark:text-brand-400':
+                  day.isSelected,
               }"
               type="button"
               @click="setSelectedDate(day)"

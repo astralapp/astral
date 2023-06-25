@@ -9,6 +9,9 @@ use Hybridly\Http\Middleware;
 
 class HandleHybridRequests extends Middleware
 {
+    protected array $persistent = [
+        'security.user'
+    ];
     /**
      * Defines the properties that are shared to all requests.
      */

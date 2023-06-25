@@ -60,29 +60,41 @@ onKeyStroke('n', e => {
   <div
     class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-950 dark:bg-gray-800 shadow-sm"
   >
-    <BaseButton
-      size="sm"
-      @click="handleToggleNotesEditor()"
-    >
-      <component
-        :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon"
-        class="-ml-2 h-4"
-      />
+    <div class="block sm:hidden">
+      <BaseButton
+        size="sm"
+        @click="starsStore.selectedRepos = []"
+        >Back</BaseButton
+      >
+    </div>
 
-      <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} notes</span>
-    </BaseButton>
+    <div class="hidden sm:block">
+      <BaseButton
+        size="sm"
+        @click="handleToggleNotesEditor()"
+      >
+        <component
+          :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon"
+          class="-ml-2 h-4"
+        />
 
-    <BaseButton
-      size="sm"
-      class="ml-2"
-      @click="removeSelectedStar"
-    >
-      <StarIcon class="-ml-1 h-4" />
+        <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} notes</span>
+      </BaseButton>
+    </div>
 
-      <span class="ml-1">Unstar</span>
-    </BaseButton>
+    <div class="hidden sm:block">
+      <BaseButton
+        size="sm"
+        class="ml-2"
+        @click="removeSelectedStar"
+      >
+        <StarIcon class="-ml-1 h-4" />
 
-    <div class="ml-auto flex-shrink-0">
+        <span class="ml-1">Unstar</span>
+      </BaseButton>
+    </div>
+
+    <div class="ml-auto flex-shrink-0 hidden sm:block">
       <CloneUrlInput />
     </div>
   </div>

@@ -3,6 +3,7 @@ import BaseButton from '@/components/shared/core/BaseButton.vue'
 import BaseDialog from '@/components/shared/core/BaseDialog.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import BaseToggle from '@/components/shared/core/BaseToggle.vue'
+import { useAuth } from '@/composables/use-auth'
 import { useSettingsDialog } from '@/composables/useSettingsDialog'
 import { useUserStore } from '@/store/useUserStore'
 import { DialogTitle } from '@headlessui/vue'
@@ -11,6 +12,7 @@ import { router } from 'hybridly'
 import { computed, nextTick, ref } from 'vue'
 import ConfettiExplosion from 'vue-confetti-explosion'
 
+const { user } = useAuth()
 const { isOpen, hide } = useSettingsDialog()
 const userStore = useUserStore()
 const isRequestingDeleteConfirmation = ref(false)
@@ -22,7 +24,7 @@ const deleteButtonLabel = computed(() =>
 )
 
 const deleteButtonIsDisabled = computed(() => {
-  return isRequestingDeleteConfirmation.value && usernameConfirmation.value !== userStore.user?.username
+  return isRequestingDeleteConfirmation.value && usernameConfirmation.value !== user.value?.username
 })
 
 const updateUserSetting = (setting: string, enabled: boolean) => {
@@ -118,7 +120,7 @@ const checkSponsorshipStatus = () => {
 
           <BaseToggle
             class="ml-auto"
-            :enabled="userStore.user?.settings.show_language_tags"
+            :enabled="user?.settings.show_language_tags"
             @change="updateUserSetting('show_language_tags', !!$event)"
           />
         </div>
@@ -134,7 +136,7 @@ const checkSponsorshipStatus = () => {
 
           <BaseToggle
             class="ml-auto"
-            :enabled="userStore.user?.settings.autosave_notes"
+            :enabled="user?.settings.autosave_notes"
             @change="updateUserSetting('autosave_notes', !!$event)"
           />
         </div>

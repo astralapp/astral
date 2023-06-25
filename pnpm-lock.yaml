@@ -33,7 +33,7 @@ specifiers:
   ky: ^0.33.2
   localforage: ^1.9.0
   lodash: ^4.17.19
-  lssm: ^1.0.0
+  lssm: ^1.1.0
   nanoid: ^3.1.30
   pinia: ^2.0.29
   postcss: ^8.4.24
@@ -71,7 +71,7 @@ dependencies:
   ky: 0.33.3
   localforage: 1.10.0
   lodash: 4.17.21
-  lssm: 1.0.0
+  lssm: 1.1.0
   nanoid: 3.3.6
   pinia: 2.1.3_typescript@5.1.3+vue@3.3.4
   sortablejs: 1.15.0
@@ -2757,8 +2757,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /lssm/1.0.0:
-    resolution: {integrity: sha512-gRfqhrXEOVHoLCM5ap1lUly7QKEaVBrubGXpRD5FvajQerORYO4TIvZIb4xgSbHBjclBRx/CbQwRZ838t7A8uw==}
+  /lssm/1.1.0:
+    resolution: {integrity: sha512-bx57j+U6b9hAlsoqyrwi2lu8n7puegMlv7jminHO03QJsyh569Fb34hkPgcQcXSEiPMJsC+VU6hTOrxWOhVQRw==}
     dev: false
 
   /magic-string/0.30.0:

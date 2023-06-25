@@ -7,7 +7,7 @@ export const useSmartFiltersStore = defineStore({
     addSmartFilter(smartFilter: Pick<App.Data.SmartFilterData, 'body' | 'name'>) {
       return router.post(route('smart-filters.store'), {
         data: {
-          smartFilter,
+          ...smartFilter,
         },
         only: ['smartFilters'],
       })

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+import EmptyState from '@/components/readme/EmptyState.vue'
 import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
 import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
-import ReadmeNotSelectedSvg from '@/img/readme-not-selected.svg?component'
 import { useStarsStore } from '@/store/useStarsStore'
 import { randomIntFromRange } from '@/utils'
 import { debouncedWatch } from '@vueuse/core'
@@ -118,7 +118,7 @@ const patchReadmeImages = () => {
       v-show="noRepoSelected"
       class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-50 p-4 text-center text-gray-500 dark:bg-gray-900"
     >
-      <ReadmeNotSelectedSvg
+      <EmptyState
         aria-label="No Readme Selected"
         class="w-full max-w-sm"
       />
@@ -172,11 +172,6 @@ const patchReadmeImages = () => {
 </template>
 
 <style>
-/* @media (prefers-color-scheme: dark) {
-  .entry-content a.anchor svg.octicon-link {
-    fill: theme('colors.gray.300');
-  }
-} */
 .entry-content {
   h1,
   h2,

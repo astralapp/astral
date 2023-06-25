@@ -50,7 +50,7 @@ const { params: urlParams, clearParams } = useUrlParams()
 const { show: showToast } = useGlobalToast()
 
 useSyncValuesToStores(
-  [userStore, 'user', user],
+  [userStore, 'user', computed(() => user.value)],
   [tagsStore, 'tags', computed(() => props.tags)],
   [starsStore, 'userStars', computed(() => props.stars)],
   [smartFiltersStore, 'smartFilters', computed(() => props.smartFilters)]
@@ -69,7 +69,6 @@ const { selectItem, selectedItems } = useListSelectionState(
  * sponsorship. If true, show them the Sponsor dialog.
  */
 registerHook('error', errors => {
-  console.log('ERRORZ:', errors)
   if (errors.sponsorship_required) {
     showSponsorshipDialog(errors.sponsorship_required as App.Data.Enums.Ability)
   }

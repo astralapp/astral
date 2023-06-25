@@ -111,7 +111,7 @@ const removeGroup = (index: number) => {
     <div
       v-for="(group, i) in filterBody.groups"
       :key="`group-${i}`"
-      class="group border-b border-gray-200 py-8"
+      class="group border-b border-gray-200 dark:border-gray-700 py-8"
     >
       <div class="flex items-center">
         <BaseSelect
@@ -127,7 +127,7 @@ const removeGroup = (index: number) => {
 
         <BaseButton
           v-if="filterBody.groups.length > 1"
-          class="btn btn-grey ml-auto space-x-1 opacity-0 transition-opacity hover:bg-red-50 group-hover:opacity-100"
+          class="btn btn-grey ml-auto space-x-1 opacity-0 transition-opacity hover:bg-red-50 group-hover:opacity-100 dark:hover:bg-red-500/10"
           kind="danger-borderless"
           size="sm"
           @click="removeGroup(i)"
@@ -184,7 +184,7 @@ const removeGroup = (index: number) => {
         <div class="ml-auto flex-shrink-0 space-x-2 pl-2">
           <button
             type="button"
-            class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-300 dark:active:bg-gray-800"
             aria-label="Add row"
             @click="appendRow(i)"
           >
@@ -194,7 +194,7 @@ const removeGroup = (index: number) => {
           <button
             v-if="group.predicates.length > 1"
             type="button"
-            class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-300 dark:active:bg-gray-800"
             aria-label="Remove row"
             @click="removeRow(i, j)"
           >
@@ -206,7 +206,7 @@ const removeGroup = (index: number) => {
 
     <div class="mt-4">
       <BaseButton
-        class="btn btn-grey space-x-1 hover:bg-brand-50"
+        class="space-x-1 hover:bg-brand-50 dark:hover:bg-brand-500/10"
         kind="primary-borderless"
         @click="appendGroup"
       >
