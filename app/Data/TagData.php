@@ -2,9 +2,9 @@
 
 namespace App\Data;
 
+use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\CamelCaseMapper;
-use Spatie\LaravelData\Attributes\MapOutputName;
 
 class TagData extends Data
 {

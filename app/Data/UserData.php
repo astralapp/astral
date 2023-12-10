@@ -2,16 +2,14 @@
 
 namespace App\Data;
 
-use App\Models\User;
-use App\Data\Enums\Limit;
-use App\Data\UserFlagData;
 use App\Data\Enums\Ability;
+use App\Data\Enums\Limit;
+use App\Models\User;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
-use App\Data\UserSettingsData;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Mappers\CamelCaseMapper;
-use Spatie\LaravelData\Attributes\MapOutputName;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\TypeScriptTransformer\Attributes\RecordTypeScriptType;
 
 #[MapOutputName(CamelCaseMapper::class)]
@@ -51,9 +49,9 @@ class UserData extends Data
             UserFlagData::collection($user->flags),
             $user->limits(),
             [
-                'create_tag' => $user->can('create', Tag::class),
+                'create_tag'          => $user->can('create', Tag::class),
                 'create_smart_filter' => $user->can('create', SmartFilter::class),
-                'add_notes' => $user->can('addNotes', Star::class),
+                'add_notes'           => $user->can('addNotes', Star::class),
             ]
         );
     }

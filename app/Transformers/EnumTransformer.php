@@ -9,9 +9,9 @@ class EnumTransformer implements Transformer
 {
     public function transform(\ReflectionClass $class, string $name): ?TransformedType
     {
-        $typescriptType = "{\n" . collect($class->getConstants())->map(function ($item, $key) {
+        $typescriptType = "{\n".collect($class->getConstants())->map(function ($item, $key) {
             return "  {$key}: \"$item->value\"";
-        })->implode(",\n") . "} as const;\nexport type {$name} = (typeof {$name})[keyof typeof {$name}]";
+        })->implode(",\n")."} as const;\nexport type {$name} = (typeof {$name})[keyof typeof {$name}]";
 
         return TransformedType::create($class, $name, $typescriptType, null, false, 'const');
     }
