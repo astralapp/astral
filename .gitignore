@@ -17,6 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/storage/debugbar
 
 .hybridly
 _ide_helper*

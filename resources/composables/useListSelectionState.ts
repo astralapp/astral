@@ -1,6 +1,6 @@
 import { GitHubRepoNode } from '@/types'
 import { MaybeRef, onKeyStroke, useEventListener, useMagicKeys } from '@vueuse/core'
-import { ListSelectionStateManager as Lssm } from 'lssm'
+import { ListSelectionStateManager, ListSelectionStateManager as Lssm } from 'lssm'
 import { Ref, ref, watch } from 'vue'
 
 import { isFocusedElementEditable } from '../utils'
@@ -32,14 +32,19 @@ export const useListSelectionState = (
   isEnabled: Ref<boolean> = ref(true)
 ): ListSelectionStateReturnType => {
   const allItems = (): GitHubRepoNode[] => {
+    // Strip any reactivity out
     return JSON.parse(JSON.stringify(toValue(items)))
   }
 
-  let manager = new Lssm(allItems(), (a, b) => a.id === b.id)
+  let manager: ListSelectionStateManager<GitHubRepoNode>
 
-  watch(items, () => {
-    manager = new Lssm(allItems(), (a, b) => a.id === b.id)
-  })
+  watch(
+    items,
+    () => {
+      manager = new Lssm(allItems(), (a, b) => a.id === b.id)
+    },
+    { immediate: true }
+  )
 
   const selectedItems = ref([]) as Ref<GitHubRepoNode[]>
 
@@ -55,7 +60,8 @@ export const useListSelectionState = (
 
   onKeyStroke('ArrowDown', e => {
     if (!isFocusedElementEditable() && isEnabled.value) {
-      // selectNextItem()
+      manager.next()
+      selectedItems.value = manager.get()
 
       e.preventDefault()
     }
@@ -63,7 +69,8 @@ export const useListSelectionState = (
 
   onKeyStroke('ArrowUp', e => {
     if (!isFocusedElementEditable() && isEnabled.value) {
-      // selectPrevItem()
+      manager.previous()
+      selectedItems.value = manager.get()
 
       e.preventDefault()
     }

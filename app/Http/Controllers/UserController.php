@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-
 class UserController extends Controller
 {
     public function revokeGrant()
     {
         auth()->user()->revokeGrant();
 
-        return Inertia::location(route('logout'));
+        return hybridly()->external(route('auth.destroy'));
     }
 
     public function destroy()
@@ -19,6 +17,6 @@ class UserController extends Controller
         auth()->logout();
         $user->delete();
 
-        return Inertia::location(route('auth'));
+        return hybridly()->external(route('login.show'));
     }
 }

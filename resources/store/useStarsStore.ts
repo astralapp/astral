@@ -52,17 +52,25 @@ export const useStarsStore = defineStore({
     clearStarredRepos() {
       this.starredRepos = []
     },
-    async fetchReadme(repo: GitHubRepoNode): Promise<string> {
+    async fetchReadme(repoName?: string) {
+      if (!repoName) {
+        return Promise.resolve('')
+      }
+
       const userStore = useUserStore()
 
-      const readme = await (
-        await fetch(`https://api.github.com/repos/${repo.nameWithOwner}/readme`, {
-          headers: {
-            Accept: 'application/vnd.github.v3.html',
-            Authorization: `bearer ${userStore.user?.accessToken}`,
-          },
-        })
-      ).text()
+      const response = await fetch(`https://api.github.com/repos/${repoName}/readme`, {
+        headers: {
+          Accept: 'application/vnd.github.v3.html',
+          Authorization: `bearer ${userStore.user?.accessToken}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error(`Unable to fetch readme for ${repoName}`)
+      }
+
+      const readme = await response.text()
 
       return readme
     },

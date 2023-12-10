@@ -10,6 +10,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
     "@heroicons/vue": "^1.0.0",
+    "@tanstack/vue-query": "^5.13.4",
     "@tiptap/core": "2.0.1",
     "@tiptap/extension-link": "^2.0.1",
     "@tiptap/extension-placeholder": "2.0.1",
@@ -27,7 +28,7 @@
     "ky": "^0.33.2",
     "localforage": "^1.9.0",
     "lodash": "^4.17.19",
-    "lssm": "^1.1.0",
+    "lssm": "link:../lssm",
     "nanoid": "^3.1.30",
     "pinia": "^2.0.29",
     "sortablejs": "^1.15.0",

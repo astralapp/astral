@@ -37,6 +37,8 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
 
       starsStore.starredRepos = starsStore.starredRepos.concat(viewer.starredRepositories.edges)
     }
+
+    starsStore.isFetchingStars = false
   }
 })
 </script>

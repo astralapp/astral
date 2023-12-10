@@ -1,13 +1,16 @@
 <script lang="ts" setup>
+import { computed, nextTick, ref, watch } from 'vue'
+import { debouncedWatch } from '@vueuse/core'
 import EmptyState from '@/components/readme/EmptyState.vue'
 import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
 import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
 import { useStarsStore } from '@/store/useStarsStore'
+import { useReadmeQuery } from '@/composables/queries/useReadmeQuery'
 import { randomIntFromRange } from '@/utils'
-import { debouncedWatch } from '@vueuse/core'
-import { computed, nextTick, ref, watch } from 'vue'
 
 const starsStore = useStarsStore()
+
+const { data: readmeContents, refetch: fetchReadme } = useReadmeQuery()
 
 const contents = ref<string>('')
 const isReadmeLoading = ref(false)
@@ -40,16 +43,15 @@ watch(
     }
   }
 )
-
 debouncedWatch(
   () => starsStore.selectedRepo,
   async selectedRepo => {
     if (Object.keys(selectedRepo).length) {
       if (readmeContainerEl.value && readmeEl.value) {
-        const readmeContents = await starsStore.fetchReadme(selectedRepo)
-        readmeContainerEl.value.scrollTo(0, 0)
-        contents.value = readmeContents
+        await fetchReadme()
 
+        readmeContainerEl.value.scrollTo(0, 0)
+        contents.value = readmeContents.value ?? ''
         await nextTick()
 
         patchReadmeAnchors()
@@ -158,16 +160,21 @@ const patchReadmeImages = () => {
         >
           {{ selectedRepoCount }} Stars selected
         </div>
+
+        <TransitionFade
+          :show="isReadmeLoading"
+          as="div"
+          class="absolute inset-0 z-30 flex w-full items-center justify-center text-center text-gray-500"
+          :class="{
+            'h-[85vh] scale-90 overflow-hidden rounded-lg p-12 bg-white/75 dark:bg-gray-900/75 backdrop-blur-sm':
+              selectedRepoCount > 1,
+            'bg-white dark:bg-gray-900 h-full': selectedRepoCount === 1,
+          }"
+        >
+          <LoadingSpinner class="text-gray-200 h-8 w-8" />
+        </TransitionFade>
       </div>
     </div>
-
-    <TransitionFade
-      :show="isReadmeLoading"
-      as="div"
-      class="absolute inset-0 z-30 flex h-full w-full items-center justify-center bg-white text-center text-gray-500 dark:bg-gray-900"
-    >
-      <LoadingSpinner />
-    </TransitionFade>
   </div>
 </template>
 
