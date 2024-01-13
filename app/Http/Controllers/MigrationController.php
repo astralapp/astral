@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MigrationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('migrate', [
+        return hybridly('migrate', [
             'stars' => auth()->user()->stars()->get(),
         ]);
     }
@@ -28,28 +29,37 @@ class MigrationController extends Controller
 
         $stars = $request->input('stars');
 
-        foreach ($stars as $star) {
-            $userStar = auth()->user()->stars()->find($star['starId']);
+        DB::beginTransaction();
 
-            if (!$userStar) continue;
+        try {
+            foreach ($stars as $star) {
+                $userStar = auth()->user()->stars()->find($star['starId']);
 
-            $userStar->update([
-                'repo_id' => $star['databaseId'],
-                'meta' => [
-                    'nameWithOwner' => $star['nameWithOwner'],
-                    'url' => $star['url'],
-                    'description' => $star['description'],
-                ]
-            ]);
+                if (!$userStar) continue;
 
-            if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {
-                $userStar->update([
-                    'notes' => Str::markdown($userStar['notes']),
-                ]);
+
+                    $userStar->update([
+                        'repo_id' => $star['databaseId'],
+                        'meta' => [
+                            'nameWithOwner' => $star['nameWithOwner'],
+                            'url' => $star['url'],
+                            'description' => $star['description'],
+                        ]
+                    ]);
+
+                    if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {
+                        $userStar->update([
+                            'notes' => Str::markdown($userStar['notes']),
+                        ]);
+                    }
             }
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
 
         auth()->user()->setFlag('2023-migration', true);
+
+        DB::commit();
 
         return redirect(route('dashboard.show'));
     }

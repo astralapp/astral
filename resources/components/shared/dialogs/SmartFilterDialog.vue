@@ -98,7 +98,7 @@ const resetForm = () => {
   >
     <div>
       <DialogTitle
-        class="rounded bg-gray-50 dark:bg-gray-900 px-4 py-3 text-center text-xl font-bold text-gray-700 dark:text-gray-300"
+        class="rounded bg-gray-50 dark:bg-gray-900/60 px-4 py-3 text-center text-xl font-bold text-gray-700 dark:text-gray-300"
         >{{ currentSmartFilter ? 'Update' : 'Create' }} smart filter</DialogTitle
       >
 
@@ -128,7 +128,7 @@ const resetForm = () => {
           ></div>
         </div>
 
-        <div class="mt-4 flex items-center justify-end space-x-2 rounded bg-gray-50 dark:bg-gray-900 px-4 py-3">
+        <div class="mt-4 flex items-center justify-end space-x-2 rounded bg-gray-50 dark:bg-gray-900/60 px-4 py-3">
           <BaseButton
             kind="base"
             @click="hideDialog"

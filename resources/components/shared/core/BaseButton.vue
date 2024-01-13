@@ -33,7 +33,7 @@ const classesForSizeProp = {
 }[props.size]
 
 const classesForKindProp = {
-  base: 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus-visible:ring-gray-200 font-medium active:bg-gray-100 hover:dark:bg-black dark:bg-gray-950 dark:border-gray-700 dark:text-gray-200 border shadow-sm',
+  base: 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus-visible:ring-gray-200 font-medium active:bg-gray-100 hover:dark:bg-gray-900 dark:bg-gray-950 dark:border-black dark:text-gray-200 border shadow-sm dark:shadow-md',
   'base-borderless': 'text-gray-700 bg-transparent focus-visible:ring-brand-200 font-medium dark:text-gray-900',
   danger:
     'text-white bg-red-600 border-transparent hover:bg-red-700 focus-visible:ring-red-200 font-semibold border shadow-sm',
