@@ -15,7 +15,8 @@ import {
   defaultPredicate,
   predicateTargets,
 } from '@/utils/predicates'
-import { MinusCircleIcon, MinusIcon, PlusIcon } from '@heroicons/vue/solid'
+import { MinusCircleIcon } from '@heroicons/vue/16/solid'
+import { MinusIcon, PlusIcon } from '@heroicons/vue/24/solid'
 import cloneDeep from 'lodash/cloneDeep'
 import { defineComponent, reactive, watch } from 'vue'
 

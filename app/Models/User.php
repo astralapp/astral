@@ -23,6 +23,8 @@ class User extends Authenticatable
     protected $casts = [
         'settings' => 'array',
         'is_sponsor' => 'boolean',
+        'access_token' => 'encrypted',
+        'openai_token' => 'encrypted',
     ];
 
     protected $with = ['flags'];
@@ -37,8 +39,9 @@ class User extends Authenticatable
     {
         static::deleting(function (self $user) {
             $user->revokeGrant();
-            $user->tags->each->delete();
-            $user->stars->each->delete();
+            $user->tags()->delete();
+            $user->stars()->delete();
+            $user->flags()->delete();
         });
     }
 
@@ -62,16 +65,6 @@ class User extends Authenticatable
         }
 
         return $this;
-    }
-
-    public function getAccessTokenAttribute($value)
-    {
-        return $value ? Crypt::decryptString($value) : null;
-    }
-
-    public function setAccessTokenAttribute($value)
-    {
-        $this->attributes['access_token'] = $value ? Crypt::encryptString($value) : null;
     }
 
     public function updateFromGitHubProfile($githubUser): self

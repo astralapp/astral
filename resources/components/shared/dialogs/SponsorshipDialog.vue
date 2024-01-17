@@ -4,7 +4,7 @@ import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { useAuth } from '@/composables/use-auth'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { Ability } from '@/types'
-import { UserGroupIcon } from '@heroicons/vue/outline'
+import { UserGroupIcon } from '@heroicons/vue/24/outline'
 import { Ref, computed } from 'vue'
 
 const { user } = useAuth()

@@ -2,7 +2,7 @@
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDialog'
-import { ExclamationIcon } from '@heroicons/vue/outline'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
 </script>
@@ -14,7 +14,7 @@ const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
   >
     <template #icon>
       <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-400/10">
-        <ExclamationIcon
+        <ExclamationTriangleIcon
           class="h-6 w-6 text-yellow-800 dark:text-yellow-500"
           aria-hidden="true"
         /></div

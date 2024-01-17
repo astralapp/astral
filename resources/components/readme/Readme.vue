@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from 'vue'
-import { debouncedWatch } from '@vueuse/core'
 import EmptyState from '@/components/readme/EmptyState.vue'
 import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
 import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
-import { useStarsStore } from '@/store/useStarsStore'
 import { useReadmeQuery } from '@/composables/queries/useReadmeQuery'
+import { useStarsStore } from '@/store/useStarsStore'
 import { randomIntFromRange } from '@/utils'
+import { debouncedWatch } from '@vueuse/core'
+// import Cookie from 'js-cookie'
+import { computed, nextTick, ref, watch } from 'vue'
 
 const starsStore = useStarsStore()
 
@@ -53,7 +54,7 @@ debouncedWatch(
         readmeContainerEl.value.scrollTo(0, 0)
         contents.value = readmeContents.value ?? ''
         await nextTick()
-
+        // fetchReadmeSummary()
         patchReadmeAnchors()
         patchReadmeImages()
       }
@@ -108,6 +109,29 @@ const patchReadmeImages = () => {
       img.src = `https://github.com/${repoName}/raw/${repoBranch}/${imgSrc}`
     }
   })
+}
+
+async function fetchReadmeSummary() {
+  if (!contents.value?.trim()) return
+
+  try {
+    const res = await (
+      await fetch('/openai-summary', {
+        body: JSON.stringify({
+          readme: contents.value,
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-Xsrf-Token': Cookie.get('XSRF-TOKEN'),
+        },
+        method: 'POST',
+      })
+    ).json()
+    console.log(res)
+  } catch (e) {
+    console.log('Error', e)
+  }
 }
 </script>
 

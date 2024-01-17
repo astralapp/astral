@@ -6,7 +6,7 @@ import NotesEditor from '@/components/notes-editor/NotesEditor.vue'
 import Readme from '@/components/readme/Readme.vue'
 import ConfirmDialog from '@/components/shared/dialogs/ConfirmDialog.vue'
 import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
-import SettingsDialog from '@/components/shared/dialogs/SettingsDialog.vue'
+import SettingsDialog from '@/components/shared/dialogs/SettingsDialog/SettingsDialog.vue'
 import SmartFiltersDialog from '@/components/shared/dialogs/SmartFilterDialog.vue'
 import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
 import UpgradeOAuthScopeDialog from '@/components/shared/dialogs/UpgradeAuthScopeDialog.vue'
@@ -30,7 +30,11 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo } from '@/types'
-import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
+import {
+  ArrowLeftCircleIcon,
+  XCircleIcon as CloseIcon,
+  Bars3CenterLeftIcon as MenuIcon,
+} from '@heroicons/vue/24/outline'
 import { tryOnMounted } from '@vueuse/core'
 import localForage from 'localforage'
 import { computed, nextTick, ref, watch } from 'vue'
@@ -276,7 +280,7 @@ tryOnMounted(() => {
           class="absolute left-0 top-0 z-10 ml-5 mt-20 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 text-gray-700 sm:hidden"
           @click="isReadmeOpen = false"
         >
-          <ArrowCircleLeftIcon />
+          <ArrowLeftCircleIcon />
         </button>
 
         <div class="relative flex h-full flex-col">

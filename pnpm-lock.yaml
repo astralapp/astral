@@ -9,8 +9,8 @@ dependencies:
     specifier: ^1.7.14
     version: 1.7.14(vue@3.3.4)
   '@heroicons/vue':
-    specifier: ^1.0.0
-    version: 1.0.6(vue@3.3.4)
+    specifier: ^2.1.1
+    version: 2.1.1(vue@3.3.4)
   '@tanstack/vue-query':
     specifier: ^5.13.4
     version: 5.13.4(vue@3.3.4)
@@ -56,6 +56,9 @@ dependencies:
   hybridly:
     specifier: ^0.3.1
     version: 0.3.1(@vueuse/core@10.1.2)(axios@1.4.0)(vite@4.3.9)(vue@3.3.4)
+  js-cookie:
+    specifier: ^3.0.5
+    version: 3.0.5
   ky:
     specifier: ^0.33.2
     version: 0.33.3
@@ -67,7 +70,7 @@ dependencies:
     version: 4.17.21
   lssm:
     specifier: link:../lssm
-    version: 1.1.0
+    version: link:../lssm
   nanoid:
     specifier: ^3.1.30
     version: 3.3.6
@@ -656,8 +659,8 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@heroicons/vue@1.0.6(vue@3.3.4):
-    resolution: {integrity: sha512-ng2YcCQrdoQWEFpw+ipFl2rZo8mZ56v0T5+MyfQQvNqfKChwgP6DMloZLW+rl17GEcHkE3H82UTAMKBKZr4+WA==}
+  /@heroicons/vue@2.1.1(vue@3.3.4):
+    resolution: {integrity: sha512-Yi5nh/89L193ALgHyJUQUdNLsKXPrrE3yj5yiR8WAlo7nZyXGxGauQcEAmBsa2XJGMhBMuEdoOiuZ8wEwTBxVQ==}
     peerDependencies:
       vue: '>= 3'
     dependencies:
@@ -2698,6 +2701,11 @@ packages:
     resolution: {integrity: sha512-QAdOptna2NYiSSpv0O/BwoHBSmz4YhpzJHyi+fnMRTXFjp7B8i/YG5Z8IfusxB1ufjcD2Sre1F3R+nX3fvy7gg==}
     hasBin: true
 
+  /js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
+    dev: false
+
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: false
@@ -2837,10 +2845,6 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
-
-  /lssm@1.1.0:
-    resolution: {integrity: sha512-bx57j+U6b9hAlsoqyrwi2lu8n7puegMlv7jminHO03QJsyh569Fb34hkPgcQcXSEiPMJsC+VU6hTOrxWOhVQRw==}
-    dev: false
 
   /magic-string@0.30.0:
     resolution: {integrity: sha512-LA+31JYDJLs82r2ScLrlz1GjSgu66ZV518eyWT+S8VhyQn/JL0u9MeBOvQMGYiPk1DBiSN9DDMOcXvigJZaViQ==}

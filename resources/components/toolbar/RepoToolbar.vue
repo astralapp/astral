@@ -11,7 +11,7 @@ import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDial
 import { useStarsStore } from '@/store/useStarsStore'
 import { Ability, AuthScope } from '@/types'
 import { isFocusedElementEditable } from '@/utils'
-import { StarIcon } from '@heroicons/vue/outline'
+import { StarIcon } from '@heroicons/vue/16/solid'
 import { onKeyStroke } from '@vueuse/core'
 import { computed } from 'vue'
 

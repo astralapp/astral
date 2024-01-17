@@ -2,7 +2,7 @@
 import AutocompleteMenu from '@/components/tags-editor/AutocompleteMenu.vue'
 import { useTagsStore } from '@/store/useTagsStore'
 import { TagEditorTag } from '@/types'
-import { XIcon } from '@heroicons/vue/solid'
+import { XMarkIcon } from '@heroicons/vue/16/solid'
 import { whenever } from '@vueuse/core'
 import { nanoid } from 'nanoid'
 import { computed, nextTick, reactive, ref, unref, watch } from 'vue'
@@ -157,7 +157,7 @@ nextTick(() => {
           @mousedown.prevent
           @click.stop="deleteTagAtIndex(i)"
         >
-          <XIcon class="h-3 w-3 fill-current" />
+          <XMarkIcon class="h-3 w-3 fill-current" />
         </button>
       </li>
 

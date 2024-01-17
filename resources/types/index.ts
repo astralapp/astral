@@ -81,6 +81,8 @@ export interface BaseDialogReturnType {
   show(): void
 }
 
+export type SettingsTab = 'data-controls' | 'general'
+
 export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'description' | 'nameWithOwner' | 'url'>
 
 export type Errors = Record<string, string>

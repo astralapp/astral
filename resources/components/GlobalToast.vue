@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
 import { TransitionRoot } from '@headlessui/vue'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
 const { isVisible, currentMessage, currentType } = useGlobalToast()

@@ -8,8 +8,8 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { StarDragDataTransferData } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { TagIcon } from '@heroicons/vue/outline'
-import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
+import { TagIcon } from '@heroicons/vue/24/outline'
+import { EllipsisHorizontalIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -114,7 +114,7 @@ const getMenuItemClasses = (isActive: boolean) => {
             :class="[open && 'opacity-100']"
             @click.stop
           >
-            <DotsHorizontalIcon />
+            <EllipsisHorizontalIcon />
           </MenuButton>
 
           <transition
@@ -134,7 +134,7 @@ const getMenuItemClasses = (isActive: boolean) => {
                     :class="getMenuItemClasses(active)"
                     @click.stop="showRenameTagDialog(tag)"
                   >
-                    <PencilAltIcon
+                    <PencilSquareIcon
                       class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
                       aria-hidden="true"
                     />

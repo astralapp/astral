@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
-    "@heroicons/vue": "^1.0.0",
+    "@heroicons/vue": "^2.1.1",
     "@tanstack/vue-query": "^5.13.4",
     "@tiptap/core": "2.0.1",
     "@tiptap/extension-link": "^2.0.1",
@@ -25,6 +25,7 @@
     "date-fns": "^2.28.0",
     "fuzzysearch": "^1.0.3",
     "hybridly": "^0.3.1",
+    "js-cookie": "^3.0.5",
     "ky": "^0.33.2",
     "localforage": "^1.9.0",
     "lodash": "^4.17.19",

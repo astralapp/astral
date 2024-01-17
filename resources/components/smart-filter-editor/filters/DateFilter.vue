@@ -2,7 +2,7 @@
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import WatchValue from '@/components/shared/core/WatchValue.vue'
 import { Popover, PopoverButton, PopoverPanel, Portal } from '@headlessui/vue'
-import { ArrowSmLeftIcon, ArrowSmRightIcon } from '@heroicons/vue/solid'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/16/solid'
 import * as dateFns from 'date-fns'
 import { computed, nextTick, reactive, ref, unref } from 'vue'
 
@@ -161,7 +161,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
                 type="button"
                 @click="previousMonth()"
               >
-                <ArrowSmLeftIcon class="h-4 w-4" />
+                <ArrowLeftIcon class="h-4 w-4" />
               </button>
 
               <span>{{ currentMonthLabel }} {{ currentYear }}</span>
@@ -171,7 +171,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
                 type="button"
                 @click="nextMonth()"
               >
-                <ArrowSmRightIcon class="h-4 w-4" />
+                <ArrowRightIcon class="h-4 w-4" />
               </button>
             </header>
 

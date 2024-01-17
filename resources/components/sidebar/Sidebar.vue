@@ -16,7 +16,7 @@ import { useTagsStore } from '@/store/useTagsStore'
 import { Ability, Errors, StarDragDataTransferData } from '@/types'
 import { getNavigationResponseErrors } from '@/utils'
 // import { Errors } from '@inertiajs/core'
-import { InboxIcon, PlusCircleIcon, RefreshIcon, StarIcon } from '@heroicons/vue/outline'
+import { ArrowPathIcon, InboxIcon, PlusCircleIcon, StarIcon } from '@heroicons/vue/24/outline'
 import { router } from 'hybridly'
 import { Sortable } from 'sortablejs-vue3'
 import { computed, nextTick, reactive, ref } from 'vue'
@@ -130,7 +130,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               }"
               @click="emit('reload-stars')"
             >
-              <RefreshIcon
+              <ArrowPathIcon
                 class="h-4 w-4"
                 :class="{
                   'animate-spin': starsStore.isFetchingStars,

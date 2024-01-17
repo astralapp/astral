@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
+import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/24/solid'
 
 interface Props {
   close?: () => void

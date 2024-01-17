@@ -2,7 +2,7 @@
 import { computed, h, useSlots } from 'vue'
 
 interface Props {
-  count?: number
+  count?: null | number
   hasContextMenu?: boolean
   isActive?: boolean
   isContextMenuActive?: boolean

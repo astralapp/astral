@@ -5,7 +5,7 @@ import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCount
 import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
 import { FetchDirection, TagSortMethod } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { SwitchVerticalIcon } from '@heroicons/vue/solid'
+import { ArrowsUpDownIcon } from '@heroicons/vue/16/solid'
 
 const emit = defineEmits<{
   (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
@@ -32,7 +32,7 @@ const getMenuItemClasses = (isActive: boolean) => {
     >
       <span class="text-xs uppercase tracking-wider">Sort</span>
 
-      <SwitchVerticalIcon
+      <ArrowsUpDownIcon
         class="ml-1 h-4 w-4"
         aria-hidden="true"
       />

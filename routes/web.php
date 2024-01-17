@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MigrationController;
+use App\Http\Controllers\OpenAiReadmeSummaryController;
+use App\Http\Controllers\OpenAiTokenController;
 use App\Http\Controllers\SmartFiltersController;
 use App\Http\Controllers\SmartFiltersSortOrderController;
 use App\Http\Controllers\StarNotesController;
@@ -59,6 +61,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
+    Route::put('openai-token', OpenAiTokenController::class)->name('openai-token.update');
+    Route::post('openai-summary', OpenAiReadmeSummaryController::class)->name('openai-summary.fetch');
 
     Route::post('/revoke-grant', [UserController::class, 'revokeGrant'])->name('revoke-grant');
     Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');

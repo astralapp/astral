@@ -6,8 +6,8 @@ import { useGlobalToast } from '@/composables/useGlobalToast'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { FilterIcon } from '@heroicons/vue/outline'
-import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
+import { FunnelIcon as FilterIcon } from '@heroicons/vue/24/outline'
+import { EllipsisHorizontalIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -63,7 +63,7 @@ const deleteSmartFilter = async () => {
             :class="[open && 'opacity-100']"
             @click.stop
           >
-            <DotsHorizontalIcon />
+            <EllipsisHorizontalIcon />
           </MenuButton>
 
           <transition
@@ -84,7 +84,7 @@ const deleteSmartFilter = async () => {
                     :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
                     @click.stop="showSmartFilterDialog(smartFilter)"
                   >
-                    <PencilAltIcon
+                    <PencilSquareIcon
                       class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
                       aria-hidden="true"
                     />

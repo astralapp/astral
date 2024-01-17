@@ -3,13 +3,13 @@ import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
 import { useUserStore } from '@/store/useUserStore'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import {
-  ChatAlt2Icon,
+  ArrowRightStartOnRectangleIcon,
+  ChatBubbleLeftRightIcon,
   ChevronDownIcon,
   CogIcon,
   ExclamationCircleIcon,
-  LogoutIcon,
   UserGroupIcon,
-} from '@heroicons/vue/solid'
+} from '@heroicons/vue/16/solid'
 
 const emit = defineEmits<{
   (e: 'showSettings'): void
@@ -134,7 +134,7 @@ const userStore = useUserStore()
                   : 'text-gray-700 dark:text-gray-400',
               ]"
             >
-              <ChatAlt2Icon
+              <ChatBubbleLeftRightIcon
                 class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
                 aria-hidden="true"
               />
@@ -176,7 +176,7 @@ const userStore = useUserStore()
                   : 'text-gray-700 dark:text-gray-400',
               ]"
             >
-              <LogoutIcon
+              <ArrowRightStartOnRectangleIcon
                 class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
                 aria-hidden="true"
               />

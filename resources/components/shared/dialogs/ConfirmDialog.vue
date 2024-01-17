@@ -2,7 +2,7 @@
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { useConfirm } from '@/composables/useConfirm'
-import { ExclamationIcon } from '@heroicons/vue/outline'
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 const { confirmConfig } = useConfirm()
 </script>
@@ -18,7 +18,7 @@ const { confirmConfig } = useConfirm()
       <div
         class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-400/10"
       >
-        <ExclamationIcon
+        <ExclamationTriangleIcon
           class="h-6 w-6 text-red-600 dark:text-red-500"
           aria-hidden="true"
         />
