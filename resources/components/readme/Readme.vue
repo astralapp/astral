@@ -6,7 +6,7 @@ import { useReadmeQuery } from '@/composables/queries/useReadmeQuery'
 import { useStarsStore } from '@/store/useStarsStore'
 import { randomIntFromRange } from '@/utils'
 import { debouncedWatch } from '@vueuse/core'
-// import Cookie from 'js-cookie'
+import Cookie from 'js-cookie'
 import { computed, nextTick, ref, watch } from 'vue'
 
 const starsStore = useStarsStore()

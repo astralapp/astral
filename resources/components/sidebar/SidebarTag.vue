@@ -8,8 +8,8 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { StarDragDataTransferData } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { TagIcon } from '@heroicons/vue/24/outline'
 import { EllipsisHorizontalIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid'
+import { Tag as TagIcon } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -94,7 +94,7 @@ const getMenuItemClasses = (isActive: boolean) => {
     @drop="onDrop"
   >
     <template #icon>
-      <TagIcon />
+      <TagIcon class="w-full h-full" />
     </template>
 
     <template #contextMenu>

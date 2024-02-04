@@ -1,7 +1,7 @@
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createHead } from '@vueuse/head'
 import { createPinia } from 'pinia'
 import { initializeHybridly } from 'virtual:hybridly/config'
-import { VueQueryPlugin } from '@tanstack/vue-query'
 
 import './tailwind.css'
 
