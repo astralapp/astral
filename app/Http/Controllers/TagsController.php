@@ -34,10 +34,10 @@ class TagsController extends Controller
         }
 
         $request->validate([
-            'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,' . auth()->id(),
+            'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,'.auth()->id(),
         ], [
             'required' => 'You must give a name to your tag.',
-            'unique' => 'You already have a tag with that name.',
+            'unique'   => 'You already have a tag with that name.',
         ]);
 
         $tagName = $request->input('name');
@@ -55,10 +55,10 @@ class TagsController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $this->validate($request, [
-            'name' => 'bail|required|string|unique:tags,name,' . $tag->id . ',id,user_id,' . auth()->id(),
+            'name' => 'bail|required|string|unique:tags,name,'.$tag->id.',id,user_id,'.auth()->id(),
         ], [
             'required' => 'You must give a name to your tag.',
-            'unique' => 'You already have a tag with that name.',
+            'unique'   => 'You already have a tag with that name.',
         ]);
 
         $tag->name = $request->input('name');

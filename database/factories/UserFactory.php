@@ -25,11 +25,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
-            'github_id' => $this->faker->unique()->randomNumber(),
-            'username' => $this->faker->userName(),
-            'avatar' => $this->faker->imageUrl(100, 100),
-            'access_token' => $this->faker->sha256(),
+            'name'           => $this->faker->name,
+            'github_id'      => $this->faker->unique()->randomNumber(),
+            'username'       => $this->faker->userName(),
+            'avatar'         => $this->faker->imageUrl(100, 100),
+            'access_token'   => $this->faker->sha256(),
             'remember_token' => Str::random(10),
         ];
     }
