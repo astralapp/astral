@@ -53,9 +53,9 @@ class UserData extends Data
             UserFlagData::collection($user->flags),
             $user->limits(),
             [
-                'create_tag' => $user->can('create', Tag::class),
+                'create_tag'          => $user->can('create', Tag::class),
                 'create_smart_filter' => $user->can('create', SmartFilter::class),
-                'add_notes' => $user->can('addNotes', Star::class),
+                'add_notes'           => $user->can('addNotes', Star::class),
             ]
         );
     }

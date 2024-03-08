@@ -41,8 +41,8 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::excludeUnvalidatedArrayKeys();
         // Model::shouldBeStrict();
-        Model::preventLazyLoading(! app()->isProduction());
-        Model::preventSilentlyDiscardingAttributes(! app()->isProduction());
+        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
         Model::unguard();
         Relation::enforceMorphMap([
             'user' => User::class,

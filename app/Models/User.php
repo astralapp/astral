@@ -15,15 +15,16 @@ use Illuminate\Support\Facades\Http;
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     protected $hidden = [
         'remember_token',
     ];
 
     protected $casts = [
-        'settings' => 'array',
-        'is_sponsor' => 'boolean',
+        'settings'     => 'array',
+        'is_sponsor'   => 'boolean',
         'access_token' => 'encrypted',
         'openai_token' => 'encrypted',
     ];
@@ -57,7 +58,7 @@ class User extends Authenticatable
 
     public function writeSetting(string $name, $value, bool $save = true): self
     {
-        throw_if(! in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
+        throw_if(!in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
 
         $this->settings = array_merge($this->settings, [$name => $value]);
 
@@ -101,12 +102,12 @@ class User extends Authenticatable
 
     public function isSponsor(): bool
     {
-        return (bool) $this->is_sponsor || ! (bool) config('app.check_for_sponsorship');
+        return (bool) $this->is_sponsor || !(bool) config('app.check_for_sponsorship');
     }
 
     public function isNotSponsor(): bool
     {
-        return ! (bool) $this->is_sponsor;
+        return !(bool) $this->is_sponsor;
     }
 
     public function setSponsorshipStatus(bool $isSponsor): self

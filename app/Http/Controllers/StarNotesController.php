@@ -17,11 +17,11 @@ class StarNotesController extends Controller
         }
 
         $request->validate([
-            'repoId' => 'required|numeric',
+            'repoId'        => 'required|numeric',
             'nameWithOwner' => ['required', 'string'],
-            'url' => ['required', 'string', 'url'],
-            'description' => ['nullable', 'string'],
-            'notes' => ['present', 'nullable'],
+            'url'           => ['required', 'string', 'url'],
+            'description'   => ['nullable', 'string'],
+            'notes'         => ['present', 'nullable'],
         ]);
 
         $meta = $request->only(['nameWithOwner', 'url', 'description']);
@@ -33,7 +33,7 @@ class StarNotesController extends Controller
                 ['repo_id' => $request->input('repoId')],
                 [
                     'notes' => $request->input('notes'),
-                    'meta' => $meta,
+                    'meta'  => $meta,
                 ]
             );
 
