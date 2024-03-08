@@ -20,7 +20,8 @@ import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
 import { router } from 'hybridly'
 import debounce from 'lodash/debounce'
-import { computed, ref, unref, watch } from 'vue'
+import { Markdown } from 'tiptap-markdown'
+import { computed, ref, watch } from 'vue'
 
 const starsStore = useStarsStore()
 const userStore = useUserStore()
@@ -30,20 +31,11 @@ const isSaveToastVisible = ref(false)
 
 const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
 
-const initialNotes = unref(userStar)?.notes ?? ''
-let initialEditorValue = ''
-
-try {
-  initialEditorValue = JSON.parse(initialNotes || '{"type":"doc","content":[]}')
-} catch (e) {
-  initialEditorValue = initialNotes
-}
-
 const editor = useEditor({
-  content: initialEditorValue || '<p></p>',
+  content: '',
   editorProps: {
     attributes: {
-      class: 'prose focus:outline-none prose-a:text-brand-600 dark:prose-invert dark:prose-a:text-brand-500',
+      class: 'prose focus:outline-none prose-a:text-brand-600 dark:prose-invert dark:prose-a:text-brand-500 h-full',
     },
   },
   extensions: [
@@ -53,6 +45,7 @@ const editor = useEditor({
       openOnClick: false,
     }),
     Underline,
+    Markdown,
     Placeholder.configure({
       placeholder: 'Add some notes about this repo...',
     }),
@@ -64,23 +57,7 @@ const editor = useEditor({
   }, 1000),
 })
 
-watch(
-  () => starsStore.selectedRepo,
-  () => {
-    const initialNotes = userStar.value?.notes ?? ''
-    let initialEditorValue = ''
-
-    try {
-      initialEditorValue = JSON.parse(initialNotes || '{}')
-    } catch (e) {
-      initialEditorValue = initialNotes
-    }
-
-    editor.value?.commands.setContent(initialEditorValue || '<p></p>')
-    editor.value?.commands.focus('end')
-  },
-  { immediate: true }
-)
+watch(() => starsStore.selectedRepo, setInitialEditorContents, { immediate: true })
 
 watch(isOpen, newVal => {
   if (newVal) {
@@ -97,7 +74,16 @@ watch(isSaving, newVal => {
   }
 })
 
-const setLink = () => {
+onMounted(setInitialEditorContents)
+
+function setInitialEditorContents() {
+  let initialEditorValue = userStar.value?.notes ?? ''
+
+  editor.value?.commands.setContent(initialEditorValue)
+  editor.value?.commands.focus('end')
+}
+
+function setLink() {
   const previousUrl = editor.value?.getAttributes('link').href
 
   const url = window.prompt('URL', previousUrl)
@@ -116,15 +102,19 @@ const setLink = () => {
   editor.value?.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
 }
 
-const saveNotes = (editor: Maybe<Editor>) => {
+function saveNotes(editor: Maybe<Editor>) {
   if (editor) {
     isSaving.value = true
-    const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
+    const notesData = editor.isEmpty ? null : editor.storage.markdown.getMarkdown()
+    const { description, nameWithOwner, databaseId: repoId, url } = starsStore.selectedRepo
 
     router.put(route('star.notes.update'), {
       data: {
+        description,
+        nameWithOwner,
         notes: notesData,
-        repoId: starsStore.selectedRepo.databaseId,
+        repoId,
+        url,
       },
       hooks: {
         success: () => {
@@ -184,7 +174,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('bold'),
                 }"
                 aria-label="Bold"
-                @click="editor?.chain().focus().toggleBold().run()"
+                @click="editor.chain().focus().toggleBold().run()"
               >
                 <BoldIcon class="h-5" />
               </button>
@@ -200,7 +190,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('italic'),
                 }"
                 aria-label="Italic"
-                @click="editor?.chain().focus().toggleItalic().run()"
+                @click="editor.chain().focus().toggleItalic().run()"
               >
                 <ItalicsIcon class="h-5" />
               </button>
@@ -216,7 +206,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('underline'),
                 }"
                 aria-label="Underline"
-                @click="editor?.chain().focus().toggleUnderline().run()"
+                @click="editor.chain().focus().toggleUnderline().run()"
               >
                 <UnderlineIcon class="h-5" />
               </button>
@@ -232,7 +222,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('bulletList'),
                 }"
                 aria-label="Bullet list"
-                @click="editor?.chain().focus().toggleBulletList().run()"
+                @click="editor.chain().focus().toggleBulletList().run()"
               >
                 <BulletListIcon class="h-5" />
               </button>
@@ -248,7 +238,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('orderedList'),
                 }"
                 aria-label="Ordered list"
-                @click="editor?.chain().focus().toggleOrderedList().run()"
+                @click="editor.chain().focus().toggleOrderedList().run()"
               >
                 <OrderedListIcon class="h-5" />
               </button>
@@ -280,7 +270,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('code'),
                 }"
                 aria-label="Inline Code"
-                @click="editor?.chain().focus().toggleCode().run()"
+                @click="editor.chain().focus().toggleCode().run()"
               >
                 <CodeIcon class="h-5" />
               </button>
@@ -296,7 +286,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                   'hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-gray-100': !editor.isActive('codeBlock'),
                 }"
                 aria-label="Code Block"
-                @click="editor?.chain().focus().toggleCodeBlock().run()"
+                @click="editor.chain().focus().toggleCodeBlock().run()"
               >
                 <CodeBlockIcon class="h-5" />
               </button>
@@ -341,20 +331,13 @@ const saveNotes = (editor: Maybe<Editor>) => {
   </TransitionRoot>
 </template>
 
-<style>
-.ProseMirror {
-  @apply h-full;
-}
-
-.ProseMirror p.is-editor-empty:first-child::before {
+<style scoped>
+:deep(.tiptap p.is-editor-empty:first-child::before) {
+  @apply pointer-events-none float-left h-0 text-gray-400;
   content: attr(data-placeholder);
-  float: left;
-  color: #ced4da;
-  pointer-events: none;
-  height: 0;
 }
 
-.ProseMirror li > p {
+:deep(.tiptap li > p) {
   margin: 0;
 }
 </style>

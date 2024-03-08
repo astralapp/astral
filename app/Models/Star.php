@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -42,7 +44,7 @@ class Star extends Model
 
     public function isOrphan(): bool
     {
-        return !(bool) $this->notes && $this->tags()->count() < 1;
+        return ! (bool) $this->notes && $this->tags()->count() < 1;
     }
 
     public function removeAllTags()

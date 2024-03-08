@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Models\User;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Mappers\CamelCaseMapper;
-use Spatie\LaravelData\Attributes\MapOutputName;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
 
 #[MapOutputName(CamelCaseMapper::class)]
 class DashboardData extends Data

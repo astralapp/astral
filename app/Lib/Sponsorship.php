@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Lib;
 
 use App\Models\User;
@@ -15,7 +17,7 @@ class Sponsorship
     {
         throw_unless($this->user);
 
-        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'.$this->user->username.'") }}';
+        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "' . $this->user->username . '") }}';
 
         $client = GitHub::getFactory()->make([
             'token' => $this->user->access_token,

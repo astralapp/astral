@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MigrationController extends Controller
 {
@@ -35,23 +36,24 @@ class MigrationController extends Controller
             foreach ($stars as $star) {
                 $userStar = auth()->user()->stars()->find($star['starId']);
 
-                if (!$userStar) continue;
+                if (! $userStar) {
+                    continue;
+                }
 
+                $userStar->update([
+                    'repo_id' => $star['databaseId'],
+                    'meta' => [
+                        'nameWithOwner' => $star['nameWithOwner'],
+                        'url' => $star['url'],
+                        'description' => $star['description'],
+                    ],
+                ]);
 
+                if (! is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {
                     $userStar->update([
-                        'repo_id' => $star['databaseId'],
-                        'meta' => [
-                            'nameWithOwner' => $star['nameWithOwner'],
-                            'url' => $star['url'],
-                            'description' => $star['description'],
-                        ]
+                        'notes' => Str::markdown($userStar['notes']),
                     ]);
-
-                    if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {
-                        $userStar->update([
-                            'notes' => Str::markdown($userStar['notes']),
-                        ]);
-                    }
+                }
             }
         } catch (\Exception $e) {
             DB::rollBack();

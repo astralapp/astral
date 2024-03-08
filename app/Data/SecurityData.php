@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
-use App\Data\UserData;
 use Spatie\LaravelData\Data;
 
 class SecurityData extends Data

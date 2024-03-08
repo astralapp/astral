@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
-use App\Models\User;
 use App\Lib\Sponsorship;
 use App\Lib\StarsJanitor;
+use App\Models\User;
 use Carbon\CarbonImmutable;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Http\HtmlDumper;
-use Illuminate\Foundation\Console\CliDumper;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Console\CliDumper;
+use Illuminate\Foundation\Http\HtmlDumper;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,8 +41,8 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::excludeUnvalidatedArrayKeys();
         // Model::shouldBeStrict();
-        Model::preventLazyLoading(!app()->isProduction());
-        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
+        Model::preventSilentlyDiscardingAttributes(! app()->isProduction());
         Model::unguard();
         Relation::enforceMorphMap([
             'user' => User::class,

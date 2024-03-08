@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     /*
      * The paths where typescript-transformer will look for PHP classes
@@ -7,7 +9,7 @@ return [
      */
 
     'auto_discover_types' => [
-        app_path()
+        app_path(),
     ],
 
     /*

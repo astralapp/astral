@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Data\Enums\Ability;
@@ -23,7 +25,6 @@ class StarTagsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -36,7 +37,7 @@ class StarTagsController extends Controller
             'repos.*.description' => ['nullable', 'string'],
             'tagId' => ['required', Rule::exists('tags', 'id')->where(function ($query) {
                 return $query->where('user_id', auth()->id());
-            }),],
+            }), ],
         ]);
 
         $repos = $request->input('repos');
@@ -53,8 +54,6 @@ class StarTagsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Star  $star
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)

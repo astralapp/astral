@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Data\Enums\Ability;
@@ -21,7 +23,6 @@ class TagsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -31,8 +32,6 @@ class TagsController extends Controller
                 'sponsorship_required' => [Ability::CREATE_TAG],
             ]);
         }
-
-
 
         $request->validate([
             'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,' . auth()->id(),
@@ -51,8 +50,6 @@ class TagsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Tag  $tag
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Tag $tag)
@@ -73,7 +70,6 @@ class TagsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Tag  $tag
      * @return \Illuminate\Http\Response
      */
     public function destroy(Tag $tag)
