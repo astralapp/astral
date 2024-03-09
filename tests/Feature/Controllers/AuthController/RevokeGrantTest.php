@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Http;
 use App\Exceptions\InvalidAccessTokenException;
+use Illuminate\Support\Facades\Http;
 
 it('sends an API reqest to GitHub to revoke the user\'s access token', function () {
     Http::fake([

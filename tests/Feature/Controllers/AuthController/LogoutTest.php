@@ -1,6 +1,8 @@
 <?php
 
-it('logs out an authenticated user', function() {
+declare(strict_types=1);
+
+it('logs out an authenticated user', function () {
     $this->login()
         ->get('/logout')
         ->assertRedirect(route('auth.show'));
