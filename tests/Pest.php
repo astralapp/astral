@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -15,7 +17,7 @@ declare(strict_types=1);
 
 uses(
     Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
+    LazilyRefreshDatabase::class
 )->in('Feature');
 
 /*
@@ -29,9 +31,9 @@ uses(
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
+// expect()->extend('toBeOne', function () {
+//     return $this->toBe(1);
+// });
 
 /*
 |--------------------------------------------------------------------------

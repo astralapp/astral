@@ -30,9 +30,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('auth', [AuthController::class, 'show'])->name('auth.show');
-Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
-Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('auth', [AuthController::class, 'show'])->name('auth.show');
+    Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
+    Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
+});
+
 Route::get('logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('auth.destroy');
@@ -66,6 +69,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('openai-token', OpenAiTokenController::class)->name('openai-token.update');
     Route::post('openai-summary', OpenAiReadmeSummaryController::class)->name('openai-summary.fetch');
 
-    Route::post('/revoke-grant', [UserController::class, 'revokeGrant'])->name('revoke-grant');
+    Route::post('/revoke-grant', [AuthController::class, 'revokeGrant'])->name('revoke-grant');
     Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
 });

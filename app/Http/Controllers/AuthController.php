@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Socialite;
 
 class AuthController extends Controller
@@ -17,6 +18,10 @@ class AuthController extends Controller
 
     public function redirectToProvider(Request $request)
     {
+        $request->validate([
+            'scope' => ['nullable', 'string', Rule::in(['read:user', 'public_repo'])],
+        ]);
+
         $scope = $request->input('scope', 'read:user');
         $request->session()->put(['auth_scope' => $scope]);
 
@@ -61,9 +66,8 @@ class AuthController extends Controller
         auth()->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        // return redirect(route('auth.show'));
+        return hybridly()->external(route('auth.show'));
     }
 }

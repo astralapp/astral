@@ -2,18 +2,16 @@ name: run-tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, next]
   pull_request:
-    branches:
-      - main
+    branches: [main, next]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2

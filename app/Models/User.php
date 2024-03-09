@@ -90,11 +90,11 @@ class User extends Authenticatable
             ->withHeaders(['Accept' => 'application/vnd.github.v3+json'])
             ->delete("https://api.github.com/applications/{$clientId}/grant", ['access_token' => $this->access_token]);
 
-        $this->update(['access_token' => null]);
-
         if ($response->getStatusCode() == 404) {
             throw new InvalidAccessTokenException();
         }
+
+        $this->update(['access_token' => null]);
 
         return $this;
     }
