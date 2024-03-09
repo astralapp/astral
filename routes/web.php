@@ -45,8 +45,8 @@ Route::redirect('/login', '/auth/github')->name('login.show');
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show');
 
-    Route::get('/migrate', [MigrationController::class, 'index'])->name('migrate.index');
-    Route::put('/migrate', [MigrationController::class, 'update'])->name('migrate.update');
+    Route::get('migrate', [MigrationController::class, 'index'])->name('migrate.index');
+    Route::put('migrate', [MigrationController::class, 'update'])->name('migrate.update');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
@@ -69,6 +69,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('openai-token', OpenAiTokenController::class)->name('openai-token.update');
     Route::post('openai-summary', OpenAiReadmeSummaryController::class)->name('openai-summary.fetch');
 
-    Route::post('/revoke-grant', [AuthController::class, 'revokeGrant'])->name('revoke-grant');
-    Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('revoke-grant', [AuthController::class, 'revokeGrant'])->name('revoke-grant');
+    Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
 });
