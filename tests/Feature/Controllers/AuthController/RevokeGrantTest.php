@@ -12,7 +12,7 @@ it('sends an API reqest to GitHub to revoke the user\'s access token', function 
 
     $this
         ->login()
-        ->post('/revoke-grant')->assertRedirect(route('auth.destroy'));
+        ->post('/revoke-grant')->assertRedirectToRoute('auth.destroy');
 
     expect(auth()->user()->access_token)->toBeNull();
 });
@@ -33,4 +33,4 @@ it('throws an InvalidAccessTokenException if the api request comes back with a 4
 
 it('redirects guest users back to the login page')
     ->post('/revoke-grant')
-    ->assertRedirect('/login');
+    ->assertRedirectToRoute('login.show');
