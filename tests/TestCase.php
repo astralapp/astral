@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Http;
 
@@ -23,7 +24,8 @@ abstract class TestCase extends BaseTestCase
 
     protected function login(User $user = null)
     {
-        $user ??= User::factory()->create()->first();
+        /** @var Authenticatable $user * */
+        $user ??= User::factory()->create();
 
         $this->actingAs($user);
 

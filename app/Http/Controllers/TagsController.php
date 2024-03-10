@@ -11,16 +11,6 @@ use Illuminate\Http\Request;
 class TagsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return auth()->user()->tags;
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
@@ -29,7 +19,7 @@ class TagsController extends Controller
     {
         if (auth()->user()->cannot('create', Tag::class)) {
             return redirect()->back()->withErrors([
-                'sponsorship_required' => [Ability::CREATE_TAG],
+                'sponsorship_required' => [Ability::CREATE_TAG->value],
             ]);
         }
 
