@@ -13,16 +13,6 @@ use Illuminate\Validation\Rule;
 class StarTagsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @return \Illuminate\Http\Response
@@ -35,16 +25,25 @@ class StarTagsController extends Controller
             'repos.*.nameWithOwner' => ['required', 'string'],
             'repos.*.url' => ['required', 'string', 'url'],
             'repos.*.description' => ['nullable', 'string'],
-            'tagId' => ['required', Rule::exists('tags', 'id')->where(function ($query) {
-                return $query->where('user_id', auth()->id());
-            }), ],
+            'tagId' => [
+                'required',
+                Rule::exists('tags', 'id')
+                    ->where(fn ($query) => $query->where('user_id', auth()->id())),
+            ],
         ]);
 
         $repos = $request->input('repos');
         $tagId = $request->input('tagId');
 
         foreach ($repos as $repo) {
-            $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repo['databaseId']], ['meta' => collect($repo)->except(['databaseId'])->toArray()]);
+            $star = auth()
+                ->user()
+                ->stars()
+                ->firstOrCreate(
+                    ['repo_id' => $repo['databaseId']],
+                    ['meta' => collect($repo)->except(['databaseId'])->toArray()]
+                );
+
             $star->tags()->syncWithoutDetaching([$tagId]);
         }
 
@@ -73,7 +72,13 @@ class StarTagsController extends Controller
         $tags = $request->input('tags');
         $meta = $request->only(['nameWithOwner', 'url', 'description']);
 
-        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId], ['meta' => $meta]);
+        $star = auth()
+            ->user()
+            ->stars()
+            ->firstOrCreate(
+                ['repo_id' => $repoId],
+                ['meta' => $meta]
+            );
 
         $ids = [];
 
