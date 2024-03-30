@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Models\Tag;
 use App\Models\Star;
+use App\Models\Tag;
 
 it('redirects guests to the login page')
     ->post('/stars/tag')
     ->assertRedirect('/login');
 
-it('creates a new `Star` record + pivot entry for each repository passed to the request', function () {
+it('creates a new `Star` record for each repository passed to the request', function () {
     $repoData = [
         [
             'databaseId' => 1234,
@@ -49,7 +49,7 @@ it('creates a new `Star` record + pivot entry for each repository passed to the 
     }
 });
 
-it('doesn\'t create a new `Star` if it already exists for that user', function () {
+it('does not create a new `Star` record if it already exists for that user', function () {
     $repoData = [
         [
             'databaseId' => 1234,
@@ -104,7 +104,7 @@ describe('Validating repository data', function () {
         ['[]', 'repos'],
     ]);
 
-    it('requires a valid `databaseId` field for each repository passed', function ($badData, array|string $errors) {
+    it('requires a valid `databaseId` value for each repository passed', function ($badData, array|string $errors) {
         $this
             ->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repos' => $badData])
             ->assertInvalid($errors);
@@ -115,7 +115,7 @@ describe('Validating repository data', function () {
         fn () => [[[...$this->metaWithoutDatabaseId, 'databaseId' => []]], 'repos.0.databaseId'],
     ]);
 
-    it('requires a valid `nameWithOwner` field for each repository passed', function ($badData, array|string $errors) {
+    it('requires a valid `nameWithOwner` value for each repository passed', function ($badData, array|string $errors) {
         $this
             ->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repos' => $badData])
             ->assertInvalid($errors);
@@ -126,7 +126,7 @@ describe('Validating repository data', function () {
         fn () => [[[...$this->metaWithoutNameWithOwner, 'nameWithOwner' => []]], 'repos.0.nameWithOwner'],
     ]);
 
-    it('requires a valid `url` field for each repository passed', function ($badData, array|string $errors) {
+    it('requires a valid `url` value for each repository passed', function ($badData, array|string $errors) {
         $this
             ->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repos' => $badData])
             ->assertInvalid($errors);
@@ -138,7 +138,7 @@ describe('Validating repository data', function () {
         fn () => [[[...$this->metaWithoutUrl, 'url' => []]], 'repos.0.url'],
     ]);
 
-    it('validates the `description` field if present', function ($badData, array|string $errors) {
+    it('validates the `description` value if present', function ($badData, array|string $errors) {
         $this
             ->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repos' => $badData])
             ->assertInvalid($errors);

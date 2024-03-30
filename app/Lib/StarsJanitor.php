@@ -16,7 +16,14 @@ class StarsJanitor
     {
         throw_unless($this->user);
 
-        $this->user->stars()->doesntHave('tags')->whereNull('notes')->get()->each->delete();
+        $this
+            ->user
+            ->stars()
+            ->doesntHave('tags')
+            ->whereNull('notes')
+            ->get()
+            ->each
+            ->delete();
 
         return $this;
     }

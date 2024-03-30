@@ -80,6 +80,9 @@ class StarTagsController extends Controller
                 ['meta' => $meta]
             );
 
+        $star->meta = $meta;
+        $star->save();
+
         $ids = [];
 
         if (empty($tags)) {
