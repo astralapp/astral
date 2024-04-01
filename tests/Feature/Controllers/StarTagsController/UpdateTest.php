@@ -146,14 +146,40 @@ describe('Validating repository data', function () {
             ])
             ->assertInvalid($errors);
     })->with([
-        fn () => [[$this->metaWithoutDatabaseId], 'nameWithOwner'],
-        fn () => [[[...$this->metaWithoutDatabaseId, 'nameWithOwner' => 420]], 'nameWithOwner'],
-        fn () => [[[...$this->metaWithoutDatabaseId, 'nameWithOwner' => null]], 'nameWithOwner'],
-        fn () => [[[...$this->metaWithoutDatabaseId, 'nameWithOwner' => []]], 'nameWithOwner'],
+        fn () => [[$this->metaWithoutNameWithOwner], 'nameWithOwner'],
+        fn () => [[[...$this->metaWithoutNameWithOwner, 'nameWithOwner' => 420]], 'nameWithOwner'],
+        fn () => [[[...$this->metaWithoutNameWithOwner, 'nameWithOwner' => null]], 'nameWithOwner'],
+        fn () => [[[...$this->metaWithoutNameWithOwner, 'nameWithOwner' => []]], 'nameWithOwner'],
     ]);
-});
 
-it('requires a valid `url` value')->todo();
-it('validates the `description` value if present')->todo();
-it('validates the tags are an array')->todo();
-it('validates that each tag has a valid `name` value')->todo();
+    it('requires a valid `url` value', function ($badData, array|string $errors) {
+        $this
+            ->put(route('star.tags.update'), [
+                ...$badData,
+                'tags' => [['name' => 'Livestreaming']],
+            ])
+            ->assertInvalid($errors);
+    })
+        ->with([
+            fn () => [[$this->metaWithoutUrl], 'url'],
+            fn () => [[[...$this->metaWithoutUrl, 'url' => 420]], 'url'],
+            fn () => [[[...$this->metaWithoutUrl, 'url' => 'foobar']], 'url'],
+            fn () => [[[...$this->metaWithoutUrl, 'url' => null]], 'url'],
+            fn () => [[[...$this->metaWithoutUrl, 'url' => []]], 'url'],
+        ]);
+
+    it('validates the `description` value if present', function ($badData, array|string $errors) {
+        $this
+            ->put(route('star.tags.update'), [
+                ...$badData,
+                'tags' => [['name' => 'Livestreaming']],
+            ])->assertInvalid($errors);
+    })
+        ->with([
+            fn () => [[...$this->meta, 'description' => 12345], 'description'],
+            fn () => [[...$this->meta, 'description' => []], 'description'],
+        ]);
+
+    it('validates the tags are an array')->todo();
+    it('validates that each tag has a valid `name` value')->todo();
+});

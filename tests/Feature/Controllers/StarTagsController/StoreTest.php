@@ -143,7 +143,7 @@ describe('Validating repository data', function () {
             ->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repos' => $badData])
             ->assertInvalid($errors);
     })->with([
-        fn () => [[[...$this->metaWithoutUrl, 'description' => 12345]], 'repos.0.description'],
-        fn () => [[[...$this->metaWithoutUrl, 'description' => []]], 'repos.0.description'],
+        fn () => [[[...$this->meta, 'description' => 12345]], 'repos.0.description'],
+        fn () => [[[...$this->meta, 'description' => []]], 'repos.0.description'],
     ]);
 });
