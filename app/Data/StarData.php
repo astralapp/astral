@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Mappers\CamelCaseMapper;
 
 class StarData extends Data
@@ -19,8 +18,8 @@ class StarData extends Data
         public int $repo_id,
         public ?string $notes,
         public ?array $meta,
-        #[DataCollectionOf(TagData::class)]
-        public readonly DataCollection $tags,
+        /** @var Collection<int, TagData> */
+        public readonly Collection $tags,
     ) {
     }
 }

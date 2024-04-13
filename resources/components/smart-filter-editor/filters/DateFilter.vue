@@ -13,7 +13,7 @@ interface DateWithMeta {
   isToday: boolean
 }
 
-const modelValue = defineModel<string>('modelValue', { default: '' })
+const modelValue = defineModel<string>('modelValue', { default: new Date().toISOString() })
 
 // https://codepen.io/sdbrannum/pen/QYqKzw
 const DAY_LABELS = ['S', 'M', 'T', 'W', 'Th', 'F', 'S']

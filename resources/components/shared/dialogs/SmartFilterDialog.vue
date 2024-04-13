@@ -66,6 +66,7 @@ const updateSmartFilter = async () => {
       showToast(`The '${form.fields.name}' smart filter was updated.`)
     }
   } catch (e) {
+    console.log(e)
     const errors = e as Errors
     if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
       showToast(errors[Object.keys(errors)[0]], ToastType.Error)

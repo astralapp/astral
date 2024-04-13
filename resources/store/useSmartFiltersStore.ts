@@ -15,7 +15,7 @@ export const useSmartFiltersStore = defineStore({
     deleteSmartFilter(smartFilterId: number) {
       router.delete(
         route('smart-filters.destroy', {
-          smartFilter: smartFilterId,
+          smart_filter: smartFilterId,
         }),
         { only: ['smartFilters'] }
       )
@@ -34,13 +34,13 @@ export const useSmartFiltersStore = defineStore({
       })
     },
     updateSmartFilter(smartFilterId: number, smartFilter: Pick<App.Data.SmartFilterData, 'body' | 'name'>) {
-      return router.post(
+      return router.put(
         route('smart-filters.update', {
-          smartFilter: smartFilterId,
+          smart_filter: smartFilterId,
         }),
         {
           data: {
-            smartFilter,
+            ...smartFilter,
           },
           only: ['smartFilters'],
         }

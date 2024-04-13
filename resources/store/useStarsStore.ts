@@ -199,8 +199,10 @@ export const useStarsStore = defineStore({
                   } else {
                     const repoKeyValue = get(repo, p.selectedTarget)
                     if (repoKeyValue) {
+                      // @ts-expect-error its complicated
                       return operator.check(repoKeyValue, p.argument)
                     } else {
+                      // @ts-expect-error its complicated
                       return operator.check(get(repo, (p.argument as PredicateTarget).key))
                     }
                   }

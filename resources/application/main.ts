@@ -1,4 +1,3 @@
-import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createHead } from '@vueuse/head'
 import { createPinia } from 'pinia'
 import { initializeHybridly } from 'virtual:hybridly/config'
@@ -14,7 +13,6 @@ initializeHybridly({
         })
       )
       .use(createPinia())
-      .use(VueQueryPlugin)
   },
   progress: {
     color: '#059669',

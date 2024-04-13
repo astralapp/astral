@@ -76,8 +76,7 @@ const showNewTagForm = () => {
 }
 
 const doAddTag = async (tagName: string) => {
-  const res = await tagsStore.addTag(tagName)
-  console.log(res)
+  await tagsStore.addTag(tagName)
 
   newTag.value = ''
 }

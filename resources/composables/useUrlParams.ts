@@ -8,7 +8,7 @@ interface UseUrlParamsReturnValue {
 
 export const useUrlParams = (): UseUrlParamsReturnValue => {
   const urlParams = new URLSearchParams(location.search || '')
-  const params: Record<string, null | string> = reactive(Object.assign({}))
+  const params: Record<string, null | string> = reactive({})
 
   urlParams.forEach((value, key) => (params[key] = value))
 
@@ -24,7 +24,7 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
     if (!Object.keys(params).length) {
       clearParams()
     } else {
-      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`)
+      window.history.replaceState(window.history.state, '', `${window.location.pathname}?${urlParams.toString()}`)
     }
   })
 

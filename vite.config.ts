@@ -5,8 +5,9 @@ import svgLoader from 'vite-svg-loader'
 export default defineConfig({
   plugins: [
     hybridly({
+      icons: false,
       laravel: {
-        valetTls: true,
+        detectTls: true,
       },
       vue: {
         script: {

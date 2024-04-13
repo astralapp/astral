@@ -1,9 +1,3 @@
 {
-  "extends": "./.hybridly/tsconfig.json",
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-      "@/*": ["resources/*"]
-    }
-  }
+  "extends": "./.hybridly/tsconfig.json"
 }

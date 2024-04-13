@@ -10,7 +10,6 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
     "@heroicons/vue": "^2.1.1",
-    "@tanstack/vue-query": "^5.13.4",
     "@tiptap/core": "2.2.4",
     "@tiptap/extension-link": "2.2.4",
     "@tiptap/extension-placeholder": "2.2.4",
@@ -21,10 +20,10 @@
     "@tiptap/vue-3": "2.2.4",
     "@vueuse/core": "^10.1.2",
     "@vueuse/head": "^1.1.26",
-    "axios": "^1.4.0",
+    "axios": "^1.6.8",
     "date-fns": "^2.28.0",
     "fuzzysearch": "^1.0.3",
-    "hybridly": "^0.3.1",
+    "hybridly": "^0.7.3",
     "js-cookie": "^3.0.5",
     "ky": "^0.33.2",
     "localforage": "^1.9.0",
@@ -61,8 +60,8 @@
     "prettier-plugin-tailwindcss": "^0.2.8",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.1.3",
-    "vite": "^4.0.0",
-    "vite-svg-loader": "^4.0.0",
+    "vite": "^5.2.8",
+    "vite-svg-loader": "^5.1.0",
     "vue-eslint-parser": "^9.3.1"
   },
   "postcss": {
