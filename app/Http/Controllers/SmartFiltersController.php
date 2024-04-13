@@ -43,13 +43,17 @@ class SmartFiltersController extends Controller
 
         $smartFilter->update($request->only(['name', 'body']));
 
-        return redirect()->route('dashboard.show');
+        return redirect()
+            ->route('dashboard.show')
+            ->with('success', 'Your smart filter has been updated.');
     }
 
     public function destroy(SmartFilter $smartFilter)
     {
         $smartFilter->delete();
 
-        return redirect()->route('dashboard.show');
+        return redirect()
+            ->route('dashboard.show')
+            ->with('success', 'Your smart filter was deleted.');
     }
 }

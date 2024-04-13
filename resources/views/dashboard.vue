@@ -79,8 +79,8 @@ registerHook('error', errors => {
 })
 
 registerHook('success', () => {
-  if (flashBag.success) {
-    showToast(flashBag.success, ToastType.Success)
+  if (flashBag.success.value) {
+    showToast(flashBag.success.value, ToastType.Success)
   }
 })
 

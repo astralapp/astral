@@ -2,7 +2,6 @@
 import WatchValue from '@/components/shared/core/WatchValue.vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import { useConfirm } from '@/composables/useConfirm'
-import { useGlobalToast } from '@/composables/useGlobalToast'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
@@ -17,7 +16,6 @@ const props = defineProps<{
 const smartFiltersStore = useSmartFiltersStore()
 const { show: showSmartFilterDialog } = useSmartFilterDialog()
 const { isConfirmed } = useConfirm()
-const { show: showToast } = useGlobalToast()
 
 const isContextMenuActive = ref(false)
 
@@ -29,7 +27,6 @@ const deleteSmartFilter = async () => {
     })
   ) {
     smartFiltersStore.deleteSmartFilter(props.smartFilter.id)
-    showToast(`'${props.smartFilter.name}' was deleted.`)
   }
 }
 </script>

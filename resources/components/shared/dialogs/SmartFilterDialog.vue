@@ -48,7 +48,6 @@ watch(
 const addSmartFilter = async () => {
   try {
     await smartFiltersStore.addSmartFilter(form.fields)
-    showToast(`The '${form.fields.name}' smart filter was added.`)
   } catch (e) {
     const errors = e as Errors
     if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
@@ -63,7 +62,6 @@ const updateSmartFilter = async () => {
   try {
     if (currentSmartFilter.value) {
       await smartFiltersStore.updateSmartFilter(currentSmartFilter.value.id, form.fields)
-      showToast(`The '${form.fields.name}' smart filter was updated.`)
     }
   } catch (e) {
     console.log(e)
