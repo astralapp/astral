@@ -205,171 +205,177 @@ const patchReadmeImages = () => {
 </template>
 
 <style>
-.entry-content {
-  h1,
-  h2,
-  h3,
-  h4,
-  h4,
-  h5,
-  h6 {
-    > a.anchor {
-      margin-right: 0.3em;
+.entry-content .markdown-heading {
+  width: 100%;
+  position: relative;
+}
+.entry-content .markdown-heading a.anchor {
+  margin-right: 0.3em;
+  position: absolute;
+  left: -1.5em;
+}
 
-      svg.octicon-link {
-        display: inline;
+.entry-content .markdown-heading h1 + a.anchor {
+  top: 0.3em;
+}
 
-        @media (prefers-color-scheme: dark) {
-          fill: theme('colors.gray.300');
-        }
-      }
-    }
+.entry-content .markdown-heading .heading-element:is(h2, h3, h4, h5, h6) + a.anchor {
+  top: 0;
+}
+
+.entry-content .heading-element + a.anchor .octicon-link {
+  display: inline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .entry-content .heading-element + a.anchor .octicon-link {
+    fill: theme('colors.gray.300');
   }
+}
 
-  p[dir] a > img {
-    display: inline-block;
-    margin: 0;
-  }
+.entry-content p[dir] a > img {
+  display: inline-block;
+  margin: 0;
+}
 
-  /* Syntax highlighting */
-  .highlight {
-    margin-bottom: 16px;
-  }
+/* Syntax highlighting */
+.highlight {
+  margin-bottom: 1rem;
+}
 
-  .highlight pre {
-    margin-bottom: 0;
-    word-break: normal;
-    padding: 0.5rem;
-  }
+.highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+  padding: 0.5rem;
+}
 
-  /*!
+/*!
   * GitHub Dark v0.5.0
   * Copyright (c) 2012 - 2017 GitHub, Inc.
   * Licensed under MIT (https://github.com/primer/github-syntax-theme-generator/blob/master/LICENSE)
   */
 
-  .pl-c /* comment, punctuation.definition.comment, string.comment */ {
-    color: #959da5;
-  }
+.pl-c /* comment, punctuation.definition.comment, string.comment */ {
+  color: #959da5;
+}
 
-  .pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
+.pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
   .pl-s .pl-v /* string variable */ {
-    color: #c8e1ff;
-  }
+  color: #c8e1ff;
+}
 
-  .pl-e /* entity */,
+.pl-e /* entity */,
   .pl-en /* entity.name */ {
-    color: #b392f0;
-  }
+  color: #b392f0;
+}
 
-  .pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
+.pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
   .pl-s .pl-s1 /* string source */ {
-    color: #f6f8fa;
-  }
+  color: #f6f8fa;
+}
 
-  .pl-ent /* entity.name.tag */ {
-    color: #7bcc72;
-  }
+.pl-ent /* entity.name.tag */ {
+  color: #7bcc72;
+}
 
-  .pl-k /* keyword, storage, storage.type */ {
-    color: #ea4a5a;
-  }
+.pl-k /* keyword, storage, storage.type */ {
+  color: #ea4a5a;
+}
 
-  .pl-s /* string */,
+.pl-s /* string */,
   .pl-pds /* punctuation.definition.string, source.regexp, string.regexp.character-class */,
   .pl-s .pl-pse .pl-s1 /* string punctuation.section.embedded source */,
   .pl-sr /* string.regexp */,
   .pl-sr .pl-cce /* string.regexp constant.character.escape */,
   .pl-sr .pl-sre /* string.regexp source.ruby.embedded */,
   .pl-sr .pl-sra /* string.regexp string.regexp.arbitrary-repitition */ {
-    color: #79b8ff;
-  }
+  color: #79b8ff;
+}
 
-  .pl-v /* variable */,
+.pl-v /* variable */,
   .pl-ml /* markup.list, sublimelinter.mark.warning */ {
-    color: #fb8532;
-  }
+  color: #fb8532;
+}
 
-  .pl-bu /* invalid.broken, invalid.deprecated, invalid.unimplemented, message.error, brackethighlighter.unmatched, sublimelinter.mark.error */ {
-    color: #d73a49;
-  }
+.pl-bu /* invalid.broken, invalid.deprecated, invalid.unimplemented, message.error, brackethighlighter.unmatched, sublimelinter.mark.error */ {
+  color: #d73a49;
+}
 
-  .pl-ii /* invalid.illegal */ {
-    color: #fafbfc;
-    background-color: #d73a49;
-  }
+.pl-ii /* invalid.illegal */ {
+  color: #fafbfc;
+  background-color: #d73a49;
+}
 
-  .pl-c2 /* carriage-return */ {
-    color: #fafbfc;
-    background-color: #d73a49;
-  }
+.pl-c2 /* carriage-return */ {
+  color: #fafbfc;
+  background-color: #d73a49;
+}
 
-  .pl-c2::before /* carriage-return */ {
-    content: '^M';
-  }
+.pl-c2::before /* carriage-return */ {
+  content: '^M';
+}
 
-  .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
-    font-weight: bold;
-    color: #7bcc72;
-  }
+.pl-sr .pl-cce /* string.regexp constant.character.escape */ {
+  font-weight: bold;
+  color: #7bcc72;
+}
 
-  .pl-mh /* markup.heading */,
+.pl-mh /* markup.heading */,
   .pl-mh .pl-en /* markup.heading entity.name */,
   .pl-ms /* meta.separator */ {
-    font-weight: bold;
-    color: #0366d6;
-  }
+  font-weight: bold;
+  color: #0366d6;
+}
 
-  .pl-mi /* markup.italic */ {
-    font-style: italic;
-    color: #f6f8fa;
-  }
+.pl-mi /* markup.italic */ {
+  font-style: italic;
+  color: #f6f8fa;
+}
 
-  .pl-mb /* markup.bold */ {
-    font-weight: bold;
-    color: #f6f8fa;
-  }
+.pl-mb /* markup.bold */ {
+  font-weight: bold;
+  color: #f6f8fa;
+}
 
-  .pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
-    color: #ff9491;
-    background-color: #380200;
-  }
+.pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
+  color: #ff9491;
+  background-color: #380200;
+}
 
-  .pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
-    color: #66b66d;
-    background-color: #334641;
-  }
+.pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
+  color: #66b66d;
+  background-color: #334641;
+}
 
-  .pl-mc /* markup.changed, punctuation.definition.changed */ {
-    color: #b08800;
-    background-color: #fffdef;
-  }
+.pl-mc /* markup.changed, punctuation.definition.changed */ {
+  color: #b08800;
+  background-color: #fffdef;
+}
 
-  .pl-mi2 /* markup.ignored, markup.untracked */ {
-    color: #2f363d;
-    background-color: #959da5;
-  }
+.pl-mi2 /* markup.ignored, markup.untracked */ {
+  color: #2f363d;
+  background-color: #959da5;
+}
 
-  .pl-mdr /* meta.diff.range */ {
-    font-weight: bold;
-    color: #b392f0;
-  }
+.pl-mdr /* meta.diff.range */ {
+  font-weight: bold;
+  color: #b392f0;
+}
 
-  .pl-mo /* meta.output */ {
-    color: #0366d6;
-  }
+.pl-mo /* meta.output */ {
+  color: #0366d6;
+}
 
-  .pl-ba /* brackethighlighter.tag, brackethighlighter.curly, brackethighlighter.round, brackethighlighter.square, brackethighlighter.angle, brackethighlighter.quote */ {
-    color: #ffeef0;
-  }
+.pl-ba /* brackethighlighter.tag, brackethighlighter.curly, brackethighlighter.round, brackethighlighter.square, brackethighlighter.angle, brackethighlighter.quote */ {
+  color: #ffeef0;
+}
 
-  .pl-sg /* sublimelinter.gutter-mark */ {
-    color: #6a737d;
-  }
+.pl-sg /* sublimelinter.gutter-mark */ {
+  color: #6a737d;
+}
 
-  .pl-corl /* constant.other.reference.link, string.other.link */ {
-    text-decoration: underline;
-    color: #79b8ff;
-  }
+.pl-corl /* constant.other.reference.link, string.other.link */ {
+  text-decoration: underline;
+  color: #79b8ff;
 }
 </style>
