@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { isFocusedElementEditable } from '@/utils'
-import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { onKeyStroke } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
@@ -41,7 +40,7 @@ onKeyStroke('/', e => {
         aria-keyshortcuts="/"
       />
 
-      <MagnifyingGlassIcon
+      <i-lucide-search
         class="pointer-events-none absolute left-2 h-5 w-5 text-gray-300 transition-colors peer-focus:text-gray-400 dark:text-gray-400"
         aria-hidden="true"
       />

@@ -5,7 +5,6 @@ import { useConfirm } from '@/composables/useConfirm'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { FunnelIcon as FilterIcon } from '@heroicons/vue/24/outline'
 import { EllipsisHorizontalIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
@@ -29,6 +28,14 @@ const deleteSmartFilter = async () => {
     smartFiltersStore.deleteSmartFilter(props.smartFilter.id)
   }
 }
+
+const baseMenuItemClasses = 'group/menu-item flex w-full items-center p-2 text-xs font-semibold'
+
+const getMenuItemClasses = (isActive: boolean) => {
+  return isActive
+    ? `${baseMenuItemClasses} bg-indigo-50 text-indigo-700 dark:bg-indigo-400/10 dark:text-indigo-400`
+    : `${baseMenuItemClasses} text-gray-700 dark:text-gray-400`
+}
 </script>
 
 <template>
@@ -40,7 +47,7 @@ const deleteSmartFilter = async () => {
     class="group/sidebar-item rounded-md py-1"
   >
     <template #icon>
-      <FilterIcon />
+      <i-lucide-filter class="w-full h-full" />
     </template>
 
     <template #contextMenu>
@@ -60,7 +67,12 @@ const deleteSmartFilter = async () => {
             :class="[open && 'opacity-100']"
             @click.stop
           >
-            <EllipsisHorizontalIcon />
+            <i-lucide-ellipsis
+              class="w-full-h-full"
+              role="presentation"
+            />
+
+            <span class="sr-only">Smart filter menu</span>
           </MenuButton>
 
           <transition
@@ -72,18 +84,17 @@ const deleteSmartFilter = async () => {
             leave-to-class="transform scale-95 opacity-0"
           >
             <MenuItems
-              class="absolute right-2 z-20 mt-2 w-28 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0"
+              class="absolute right-2 z-20 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 dark:bg-gray-800 dark:border dark:border-gray-700"
             >
               <div class="py-1">
                 <MenuItem v-slot="{ active }">
                   <button
-                    class="group/menu-item flex w-full items-center p-2 text-xs font-semibold"
-                    :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
+                    :class="getMenuItemClasses(active)"
                     @click.stop="showSmartFilterDialog(smartFilter)"
                   >
-                    <PencilSquareIcon
+                    <i-lucide-square-pen
                       class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
-                      aria-hidden="true"
+                      role="presentation"
                     />
 
                     <span>Edit</span>
@@ -92,13 +103,12 @@ const deleteSmartFilter = async () => {
 
                 <MenuItem v-slot="{ active }">
                   <button
-                    class="group/menu-item flex w-full items-center p-2 text-xs font-semibold"
-                    :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
+                    :class="getMenuItemClasses(active)"
                     @click.stop="deleteSmartFilter"
                   >
-                    <TrashIcon
+                    <i-lucide-trash-2
                       class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
-                      aria-hidden="true"
+                      role="presentation"
                     />
 
                     <span>Delete</span>

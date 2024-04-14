@@ -33,15 +33,15 @@ const userStore = useUserStore()
         <img
           :src="userStore.user?.avatar ?? undefined"
           :alt="userStore.user?.username"
-          class="image-rendering-crisp h-10 w-10 rounded-md"
+          class="image-rendering-crisp h-8 w-8 rounded-md"
         />
 
         <span class="ml-2 hidden text-sm font-semibold sm:inline-block">{{ userStore.user?.username }}</span>
 
-        <ChevronDownIcon
+        <i-lucide-chevron-down
           class="mt-0.5 ml-1 h-4 w-4 flex-shrink-0"
           :class="{ 'rotate-180': open }"
-          aria-hidden="true"
+          role="presentation"
         />
       </MenuButton>
     </div>
@@ -55,7 +55,7 @@ const userStore = useUserStore()
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems
-        class="absolute right-2 z-20 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 dark:bg-gray-800 dark:divide-gray-700 dark:border dark:border-gray-700"
+        class="absolute right-2 z-20 mt-0.5 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 dark:bg-gray-800 dark:divide-gray-700 dark:border dark:border-gray-700 top-full"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">
@@ -64,14 +64,18 @@ const userStore = useUserStore()
               class="group flex w-full items-center px-4 py-2 text-sm"
               :class="[
                 active
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-300'
-                  : 'text-gray-700 dark:text-gray-400',
+                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-200'
+                  : 'text-gray-700 dark:text-gray-300',
               ]"
               @click="emit('showSettings')"
             >
               <CogIcon
-                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
-                aria-hidden="true"
+                class="mr-3 h-5 w-5 group-hover:text-gray-500 dark:group-hover:text-gray-200 text-gray-400"
+                :class="{
+                  'dark:text-gray-200': active,
+                  'dark:text-gray-500 ': !active,
+                }"
+                role="presentation"
               />
 
               <span>Settings</span>
@@ -86,13 +90,17 @@ const userStore = useUserStore()
               class="group flex items-center px-4 py-2 text-sm"
               :class="[
                 active
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-300'
-                  : 'text-gray-700 dark:text-gray-400',
+                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-200'
+                  : 'text-gray-700 dark:text-gray-300',
               ]"
             >
               <UserGroupIcon
-                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
-                aria-hidden="true"
+                class="mr-3 h-5 w-5 group-hover:text-gray-500 dark:group-hover:text-gray-200 text-gray-400"
+                :class="{
+                  'dark:text-gray-200': active,
+                  'dark:text-gray-500 ': !active,
+                }"
+                role="presentation"
               />
 
               <span>Become a sponsor</span>
@@ -109,13 +117,17 @@ const userStore = useUserStore()
               class="group flex items-center px-4 py-2 text-sm"
               :class="[
                 active
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-300'
-                  : 'text-gray-700 dark:text-gray-400',
+                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-200'
+                  : 'text-gray-700 dark:text-gray-300',
               ]"
             >
               <GitHubLogoIcon
-                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
-                aria-hidden="true"
+                class="mr-3 h-5 w-5 group-hover:text-gray-500 dark:group-hover:text-gray-200 text-gray-400"
+                :class="{
+                  'dark:text-gray-200': active,
+                  'dark:text-gray-500 ': !active,
+                }"
+                role="presentation"
               />
 
               <span>View on GitHub</span>
@@ -130,13 +142,17 @@ const userStore = useUserStore()
               class="group flex items-center px-4 py-2 text-sm"
               :class="[
                 active
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-300'
-                  : 'text-gray-700 dark:text-gray-400',
+                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-200'
+                  : 'text-gray-700 dark:text-gray-300',
               ]"
             >
               <ChatBubbleLeftRightIcon
-                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
-                aria-hidden="true"
+                class="mr-3 h-5 w-5 group-hover:text-gray-500 dark:group-hover:text-gray-200 text-gray-400"
+                :class="{
+                  'dark:text-gray-200': active,
+                  'dark:text-gray-500 ': !active,
+                }"
+                role="presentation"
               />
 
               <span>Discussions</span>
@@ -151,13 +167,17 @@ const userStore = useUserStore()
               class="group flex items-center px-4 py-2 text-sm"
               :class="[
                 active
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-300'
-                  : 'text-gray-700 dark:text-gray-400',
+                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-200'
+                  : 'text-gray-700 dark:text-gray-300',
               ]"
             >
               <ExclamationCircleIcon
-                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
-                aria-hidden="true"
+                class="mr-3 h-5 w-5 group-hover:text-gray-500 dark:group-hover:text-gray-200 text-gray-400"
+                :class="{
+                  'dark:text-gray-200': active,
+                  'dark:text-gray-500 ': !active,
+                }"
+                role="presentation"
               />
 
               <span>File an issue</span>
@@ -172,13 +192,17 @@ const userStore = useUserStore()
               class="group flex items-center px-4 py-2 text-sm"
               :class="[
                 active
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-300'
-                  : 'text-gray-700 dark:text-gray-400',
+                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-200'
+                  : 'text-gray-700 dark:text-gray-300',
               ]"
             >
               <ArrowRightStartOnRectangleIcon
-                class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-300"
-                aria-hidden="true"
+                class="mr-3 h-5 w-5 group-hover:text-gray-500 dark:group-hover:text-gray-200 text-gray-400"
+                :class="{
+                  'dark:text-gray-200': active,
+                  'dark:text-gray-500 ': !active,
+                }"
+                role="presentation"
               />
 
               <span>Sign out</span>

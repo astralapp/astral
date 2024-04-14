@@ -15,7 +15,10 @@ defineProps<{
     dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-lg"
   >
     <div>
-      <slot name="icon" />
+      <slot
+        name="icon"
+        role="presentation"
+      />
 
       <div class="mt-3 text-center sm:mt-5">
         <DialogTitle

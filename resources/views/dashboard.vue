@@ -237,10 +237,10 @@ tryOnMounted(() => {
           @click="isSidebarOpen = !isSidebarOpen"
         >
           <div
-            class="inline-flex h-10 w-10 items-center justify-center text-4xl text-white"
-            aria-hidden="true"
+            class="inline-flex h-8 w-8 items-center justify-center text-4xl text-white/75"
+            role="presentation"
           >
-            <CloseIcon />
+            <i-lucide-circle-x class="w-full h-full" />
           </div>
         </button>
       </div>

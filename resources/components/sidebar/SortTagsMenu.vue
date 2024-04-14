@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
-import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
-import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
-import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
 import { FetchDirection, TagSortMethod } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { ArrowsUpDownIcon } from '@heroicons/vue/16/solid'
 
 const emit = defineEmits<{
   (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
@@ -32,9 +27,9 @@ const getMenuItemClasses = (isActive: boolean) => {
     >
       <span class="text-xs uppercase tracking-wider">Sort</span>
 
-      <ArrowsUpDownIcon
+      <i-lucide-arrow-down-up
         class="ml-1 h-4 w-4"
-        aria-hidden="true"
+        role="presentation"
       />
     </MenuButton>
 
@@ -56,7 +51,7 @@ const getMenuItemClasses = (isActive: boolean) => {
               :class="getMenuItemClasses(active)"
               @click="emit('sortTags', 'name', 'asc')"
             >
-              <NameAZIcon
+              <i-lucide-arrow-up-a-z
                 class="mr-1 h-4 w-4 text-gray-400 dark:text-gray-500 group-hover/menu-item:text-indigo-500 dark:group-hover/menu-item:text-indigo-400"
                 aria-hidden="true"
               />
@@ -71,7 +66,7 @@ const getMenuItemClasses = (isActive: boolean) => {
               :class="getMenuItemClasses(active)"
               @click="emit('sortTags', 'name', 'desc')"
             >
-              <NameZAIcon
+              <i-lucide-arrow-down-z-a
                 class="mr-1 h-4 w-4 text-gray-400 dark:text-gray-500 group-hover/menu-item:text-indigo-500 dark:group-hover/menu-item:text-indigo-400"
                 aria-hidden="true"
               />
@@ -86,7 +81,7 @@ const getMenuItemClasses = (isActive: boolean) => {
               :class="getMenuItemClasses(active)"
               @click="emit('sortTags', 'stars_count', 'desc')"
             >
-              <StarsCountHighIcon
+              <i-lucide-arrow-up-1-0
                 class="mr-1 h-4 w-4 text-gray-400 dark:text-gray-500 group-hover/menu-item:text-indigo-500 dark:group-hover/menu-item:text-indigo-400"
                 aria-hidden="true"
               />
@@ -101,7 +96,7 @@ const getMenuItemClasses = (isActive: boolean) => {
               :class="getMenuItemClasses(active)"
               @click="emit('sortTags', 'stars_count', 'asc')"
             >
-              <StarsCountLowIcon
+              <i-lucide-arrow-down-0-1
                 class="mr-1 h-4 w-4 text-gray-400 dark:text-gray-500 group-hover/menu-item:text-indigo-500 dark:group-hover/menu-item:text-indigo-400"
                 aria-hidden="true"
               />

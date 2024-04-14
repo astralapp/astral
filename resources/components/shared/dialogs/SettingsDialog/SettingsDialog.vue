@@ -73,7 +73,7 @@ const checkSponsorshipStatus = () => {
   <BaseDialog
     :is-open="isOpen"
     :hide="hide"
-    dialog-classes="sm:max-w-[680px] px-0 pt-0 pb-0 sm:p-0 sm:pb-4"
+    dialog-classes="sm:max-w-[680px] px-0 pt-0 pb-0 sm:p-0 sm:pb-4 sm:h-[560px]"
   >
     <DialogTitle
       class="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 py-4 px-5 text-xl font-bold text-gray-700 dark:text-gray-200"
@@ -111,15 +111,9 @@ const checkSponsorshipStatus = () => {
 
                   <p
                     v-show="!isSponsor"
-                    class="flex items-center gap-x-1"
+                    class="text-sm font-bold text-yellow-600 dark:text-yellow-500"
                   >
-                    <span
-                      class="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-500 text-yellow-200 dark:text-yellow-950"
-                    >
-                      <XCircleIcon class="h-5 w-5" />
-                    </span>
-
-                    <span class="text-sm font-bold text-yellow-600 dark:text-yellow-500">Not sponsoring.</span>
+                    Not sponsoring.
                   </p>
                 </div>
               </div>

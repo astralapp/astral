@@ -8,8 +8,6 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { StarDragDataTransferData } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { EllipsisHorizontalIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid'
-import { Tag as TagIcon } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -94,7 +92,7 @@ const getMenuItemClasses = (isActive: boolean) => {
     @drop="onDrop"
   >
     <template #icon>
-      <TagIcon class="w-full h-full" />
+      <i-lucide-tag class="w-full h-full" />
     </template>
 
     <template #contextMenu>
@@ -114,7 +112,12 @@ const getMenuItemClasses = (isActive: boolean) => {
             :class="[open && 'opacity-100']"
             @click.stop
           >
-            <EllipsisHorizontalIcon />
+            <i-lucide-ellipsis
+              class="w-full-h-full"
+              role="presentation"
+            />
+
+            <span class="sr-only">Tag menu</span>
           </MenuButton>
 
           <transition
@@ -134,9 +137,9 @@ const getMenuItemClasses = (isActive: boolean) => {
                     :class="getMenuItemClasses(active)"
                     @click.stop="showRenameTagDialog(tag)"
                   >
-                    <PencilSquareIcon
+                    <i-lucide-square-pen
                       class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
-                      aria-hidden="true"
+                      role="presentation"
                     />
 
                     <span>Rename</span>
@@ -148,9 +151,9 @@ const getMenuItemClasses = (isActive: boolean) => {
                     :class="getMenuItemClasses(active)"
                     @click.stop="deleteTag"
                   >
-                    <TrashIcon
+                    <i-lucide-trash-2
                       class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
-                      aria-hidden="true"
+                      role="presentation"
                     />
 
                     <span>Delete</span>

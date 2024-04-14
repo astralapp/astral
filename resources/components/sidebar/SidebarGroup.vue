@@ -22,12 +22,12 @@ defineProps<Props>()
           :as="collapsible ? 'button' : 'h4'"
           @click="close?.()"
         >
-          <CaretIcon
+          <i-lucide-chevron-right
             v-if="collapsible"
             class="relative h-5 w-5 flex-shrink-0 transform"
             :class="{ 'rotate-90': isOpen }"
             style="top: -1px"
-            aria-hidden="true"
+            role="presentation"
           />
 
           <span class="select-none text-xs font-bold uppercase tracking-wider">

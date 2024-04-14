@@ -41,7 +41,6 @@ const starsStore = useStarsStore()
 const smartFiltersStore = useSmartFiltersStore()
 const { show: showSmartFilterDialog } = useSmartFilterDialog()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
-const { show: showToast } = useGlobalToast()
 
 const newTagForm = ref<HTMLElement>()
 const newTag = ref('')
@@ -129,7 +128,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               }"
               @click="emit('reload-stars')"
             >
-              <ArrowPathIcon
+              <i-lucide-refresh-cw
                 class="h-4 w-4"
                 :class="{
                   'animate-spin': starsStore.isFetchingStars,
@@ -151,7 +150,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             @click="emit('all-stars-selected')"
           >
             <template #icon>
-              <InboxIcon />
+              <i-lucide-inbox class="w-full h-full" />
             </template>
           </SidebarItem>
 
@@ -162,7 +161,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             @click="emit('untagged-selected')"
           >
             <template #icon>
-              <StarIcon />
+              <i-lucide-star class="w-full h-full" />
             </template>
           </SidebarItem>
         </ul>
@@ -191,9 +190,9 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               type="button"
               @click="showNewTagForm"
             >
-              <PlusCircleIcon
+              <i-lucide-circle-plus
                 class="h-5 w-5 flex-shrink-0"
-                aria-hidden="true"
+                role="presentation"
               />
 
               <span class="ml-2">Add a tag...</span>
@@ -259,9 +258,9 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             aria-label="Add smart filter"
             @click="doShowSmartFilterDialog"
           >
-            <PlusCircleIcon
+            <i-lucide-circle-plus
               class="h-5 w-5 flex-shrink-0"
-              aria-hidden="true"
+              role="presentation"
             />
           </button>
         </template>

@@ -4,7 +4,7 @@ import { useAuth } from '@/composables/use-auth'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
-import { GlobeAmericasIcon as GlobeIcon, ShareIcon, StarIcon } from '@heroicons/vue/16/solid'
+// import { GlobeAmericasIcon as GlobeIcon, ShareIcon, StarIcon } from '@heroicons/vue/16/solid'
 import pick from 'lodash/pick'
 import { computed, ref } from 'vue'
 
@@ -177,29 +177,51 @@ const onDragEnd = () => {
       </li>
     </ul>
 
-    <div class="mt-4 flex items-center space-x-4 text-gray-500 dark:text-gray-400">
-      <div class="flex items-center">
-        <StarIcon class="h-4 w-4" />
+    <div class="mt-4 flex items-center justify-start gap-x-4 text-gray-500 dark:text-gray-400 w-full">
+      <div class="inline-flex items-center">
+        <i-ph-star
+          class="h-4 w-4"
+          role="presentation"
+        />
 
-        <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount.toLocaleString() }}</span>
+        <span class="ml-0.5 text-sm font-medium">{{ repo.node.stargazers.totalCount.toLocaleString() }}</span>
       </div>
 
-      <div class="flex items-center">
-        <ShareIcon class="h-4 w-4" />
+      <div class="inline-flex items-center">
+        <i-ph-git-fork
+          class="h-4 w-4"
+          role="presentation"
+        />
 
-        <span class="ml-1 text-xs font-medium">{{ repo.node.forkCount.toLocaleString() }}</span>
+        <span class="ml-0.5 text-sm font-medium">{{ repo.node.forkCount.toLocaleString() }}</span>
       </div>
 
       <a
-        class="group-scope flex items-center transition-colors"
+        class="transition-opacity group-hover:opacity-100 opacity-100 sm:opacity-0 group/repo-link inline-flex items-center ml-auto hover:text-brand-500 px-2 relative"
         :href="repo.node.url"
         target="_blank"
         rel="noopener noreferrer"
         @click.stop
       >
-        <GlobeIcon class="h-4 w-4" />
+        <i-ph-github-logo
+          class="h-5 w-5 transition group-hover/repo-link:rotate-[-30deg]"
+          role="presentation"
+        />
 
-        <span class="group-scope-hover:underline ml-1 text-xs font-medium">Visit</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          class="w-3.5 h-3.5 rotate-[75deg] hidden sm:inline-block sm:opacity-0 transition group-hover/repo-link:opacity-100 relative -top-1"
+          role="presentation"
+        >
+          <path
+            fill="currentColor"
+            d="M6.03 7.03a.75.75 0 0 1-1.06-1.06l4-4a.75.75 0 0 1 1.06 0l4 4a.75.75 0 0 1-1.06 1.06l-2.72-2.72v5.44c0 1.947.245 3.321.74 4.366c.486 1.026 1.243 1.8 2.396 2.49a.75.75 0 1 1-.772 1.287c-1.347-.808-2.34-1.785-2.98-3.134c-.63-1.33-.884-2.956-.884-5.009V4.31z"
+          />
+        </svg>
+
+        <!-- <span class="group-hover/repo-link:underline ml-0.5 text-sm font-medium">Visit</span> -->
+        <span class="sr-only">Visit</span>
       </a>
     </div>
   </div>

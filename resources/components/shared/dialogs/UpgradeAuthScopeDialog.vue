@@ -14,10 +14,7 @@ const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
   >
     <template #icon>
       <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-400/10">
-        <ExclamationTriangleIcon
-          class="h-6 w-6 text-yellow-800 dark:text-yellow-500"
-          aria-hidden="true"
-        /></div
+        <i-lucide-shield-alert class="h-6 w-6 text-yellow-800 dark:text-yellow-500" /></div
     ></template>
 
     <template #title>Elevated privileges required</template>

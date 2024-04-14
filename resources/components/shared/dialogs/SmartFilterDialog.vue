@@ -64,7 +64,6 @@ const updateSmartFilter = async () => {
       await smartFiltersStore.updateSmartFilter(currentSmartFilter.value.id, form.fields)
     }
   } catch (e) {
-    console.log(e)
     const errors = e as Errors
     if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
       showToast(errors[Object.keys(errors)[0]], ToastType.Error)

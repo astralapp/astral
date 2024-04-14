@@ -73,9 +73,14 @@ onKeyStroke('n', e => {
         size="sm"
         @click="handleToggleNotesEditor()"
       >
-        <component
-          :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon"
-          class="-ml-2 h-4"
+        <i-lucide-notebook
+          v-if="currentStarHasNotes"
+          class="h-4"
+        />
+
+        <i-lucide-notebook-text
+          v-else
+          class="h-4"
         />
 
         <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} notes</span>
@@ -88,7 +93,10 @@ onKeyStroke('n', e => {
         class="ml-2"
         @click="removeSelectedStar"
       >
-        <StarIcon class="-ml-1 h-4" />
+        <i-lucide-star-off
+          class="-ml-1 h-4"
+          role="presentation"
+        />
 
         <span class="ml-1">Unstar</span>
       </BaseButton>
