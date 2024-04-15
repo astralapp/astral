@@ -5,7 +5,7 @@ import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import { randomIntFromRange } from '@/utils'
 import { debouncedWatch } from '@vueuse/core'
-import Cookie from 'js-cookie'
+// import Cookie from 'js-cookie'
 import { computed, nextTick, ref, watch } from 'vue'
 
 const starsStore = useStarsStore()
@@ -138,10 +138,7 @@ const patchReadmeImages = () => {
 </script>
 
 <template>
-  <div
-    ref="readmeContainerEl"
-    class="relative flex-grow overflow-y-auto"
-  >
+  <div class="relative flex-grow overflow-y-auto">
     <div
       v-show="noRepoSelected"
       class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-50 p-4 text-center text-gray-500 dark:bg-gray-900"
@@ -168,6 +165,7 @@ const patchReadmeImages = () => {
 
       <div
         class="relative h-full overflow-auto"
+        ref="readmeContainerEl"
         :style="{ zIndex: visibleStacks.length + 1 }"
       >
         <div
