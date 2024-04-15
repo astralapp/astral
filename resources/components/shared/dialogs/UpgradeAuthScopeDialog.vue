@@ -2,7 +2,6 @@
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDialog'
-import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
 </script>

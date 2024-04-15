@@ -73,7 +73,7 @@ const checkSponsorshipStatus = () => {
   <BaseDialog
     :is-open="isOpen"
     :hide="hide"
-    dialog-classes="sm:max-w-[680px] px-0 pt-0 pb-0 sm:p-0 sm:pb-4 sm:h-[560px]"
+    dialog-classes="sm:max-w-[740px] px-0 pt-0 pb-0 sm:p-0 sm:pb-4 sm:h-[560px]"
   >
     <DialogTitle
       class="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 py-4 px-5 text-xl font-bold text-gray-700 dark:text-gray-200"

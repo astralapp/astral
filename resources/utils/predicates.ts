@@ -86,19 +86,19 @@ export const numberOperators: PredicateOperator[] = [
   {
     check: (source: number, target: number) => Number(source) > Number(target),
     key: 'greaterThan',
-    label: '>',
+    label: 'greater than',
   },
   {
     check: (source: number, target: number) => Number(source) >= Number(target),
     key: 'greaterThanOrEqualTo',
-    label: '>=',
+    label: 'greater than or equal to',
   },
-  { check: (source: number, target: number) => Number(source) === Number(target), key: 'equals', label: '=' },
-  { check: (source: number, target: number) => Number(source) < Number(target), key: 'lessThan', label: '<' },
+  { check: (source: number, target: number) => Number(source) === Number(target), key: 'equals', label: 'equals' },
+  { check: (source: number, target: number) => Number(source) < Number(target), key: 'lessThan', label: 'less than' },
   {
-    check: (source: number, target: number) => Number(source) >= Number(target),
+    check: (source: number, target: number) => Number(source) <= Number(target),
     key: 'lessThanOrEqualTo',
-    label: '<=',
+    label: 'less than or equal to',
   },
 ]
 
