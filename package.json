@@ -32,7 +32,7 @@
     "nanoid": "^3.1.30",
     "pinia": "^2.0.29",
     "sortablejs": "^1.15.0",
-    "sortablejs-vue3": "^1.2.2",
+    "sortablejs-vue3": "^1.2.11",
     "tiptap-markdown": "^0.8.9",
     "vue": "^3.3.4",
     "vue-confetti-explosion": "^1.0.2",

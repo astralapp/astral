@@ -30,11 +30,7 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo } from '@/types'
-import {
-  ArrowLeftCircleIcon,
-  XCircleIcon as CloseIcon,
-  Bars3CenterLeftIcon as MenuIcon,
-} from '@heroicons/vue/24/outline'
+import { ArrowLeftCircleIcon, Bars3CenterLeftIcon as MenuIcon } from '@heroicons/vue/24/outline'
 import { tryOnMounted } from '@vueuse/core'
 import localForage from 'localforage'
 import { computed, nextTick, ref, watch } from 'vue'

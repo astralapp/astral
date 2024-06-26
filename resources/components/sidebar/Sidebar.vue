@@ -5,18 +5,13 @@ import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
 import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
 import { useAuth } from '@/composables/use-auth'
-import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
-import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
-import { Ability, Errors, StarDragDataTransferData } from '@/types'
-import { getNavigationResponseErrors } from '@/utils'
-// import { Errors } from '@inertiajs/core'
-import { ArrowPathIcon, InboxIcon, PlusCircleIcon, StarIcon } from '@heroicons/vue/24/outline'
+import { Ability, StarDragDataTransferData } from '@/types'
 import { router } from 'hybridly'
 import { Sortable } from 'sortablejs-vue3'
 import { computed, nextTick, reactive, ref } from 'vue'
@@ -98,7 +93,7 @@ const doShowSmartFilterDialog = () => {
 const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsKey) => {
   sidebarGroupCollapsedState[key] = !sidebarGroupCollapsedState[key]
 
-  const data: App.Data.UpdateUserSettingsRequest = {
+  const data: App.Requests.UpdateUserSettingsRequest = {
     enabled: sidebarGroupCollapsedState[key],
     key,
   }

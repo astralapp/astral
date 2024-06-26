@@ -4,7 +4,6 @@ import { useAuth } from '@/composables/use-auth'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
-// import { GlobeAmericasIcon as GlobeIcon, ShareIcon, StarIcon } from '@heroicons/vue/16/solid'
 import pick from 'lodash/pick'
 import { computed, ref } from 'vue'
 
@@ -220,7 +219,6 @@ const onDragEnd = () => {
           />
         </svg>
 
-        <!-- <span class="group-hover/repo-link:underline ml-0.5 text-sm font-medium">Visit</span> -->
         <span class="sr-only">Visit</span>
       </a>
     </div>

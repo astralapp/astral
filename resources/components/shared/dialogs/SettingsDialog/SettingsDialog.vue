@@ -9,7 +9,7 @@ import { useSettingsDialog } from '@/composables/useSettingsDialog'
 import { useUserStore } from '@/store/useUserStore'
 import { SettingsTab } from '@/types'
 import { DialogTitle } from '@headlessui/vue'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid'
+import { CheckCircleIcon } from '@heroicons/vue/24/solid'
 import { router } from 'hybridly'
 import { computed, nextTick, ref } from 'vue'
 import ConfettiExplosion from 'vue-confetti-explosion'
@@ -63,7 +63,8 @@ const deleteUser = async () => {
   }
 }
 
-const isSponsor = ref(false)
+const isSponsor = ref(user.value?.isSponsor ?? false)
+
 const checkSponsorshipStatus = () => {
   isSponsor.value = true
 }

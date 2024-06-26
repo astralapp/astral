@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\Requests;
 
 use App\Models\User;
 use Spatie\LaravelData\Attributes\Validation\In;

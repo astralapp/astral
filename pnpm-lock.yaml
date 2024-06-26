@@ -78,8 +78,8 @@ dependencies:
     specifier: ^1.15.0
     version: 1.15.0
   sortablejs-vue3:
-    specifier: ^1.2.2
-    version: 1.2.9(sortablejs@1.15.0)(vue@3.3.4)
+    specifier: ^1.2.11
+    version: 1.2.11(sortablejs@1.15.0)(vue@3.3.4)
   tiptap-markdown:
     specifier: ^0.8.9
     version: 0.8.9(@tiptap/core@2.2.4)
@@ -3459,8 +3459,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /sortablejs-vue3@1.2.9(sortablejs@1.15.0)(vue@3.3.4):
-    resolution: {integrity: sha512-l0IIBdu+nRIwC2+KOkiavXw5vRfsn6MIPVSVSf7ItBevcuRZ4mVzC7dgnr/Hs/VPH2Q+nF2PYP3FsrnrG+7qCw==}
+  /sortablejs-vue3@1.2.11(sortablejs@1.15.0)(vue@3.3.4):
+    resolution: {integrity: sha512-oKOA6N7yu2ktmqYXPHlPTQWbe9G4v16mn5ewogb+Ybc9Bk1Y+MIURrpbgedEv7f9TS5Bptvh81HGjazh5FEyJw==}
     peerDependencies:
       sortablejs: ^1.15.0
       vue: ^3.2.25
