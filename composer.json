@@ -10,22 +10,21 @@
   "license": "BSD-3-Clause",
   "type": "project",
   "require": {
-    "php": "^7.2",
-    "doctrine/dbal": "^2.9",
-    "fideloper/proxy": "^4.0",
-    "guzzlehttp/guzzle": "^6.5",
-    "laravel/framework": "^7.0",
-    "laravel/socialite": "^4.3.2",
+    "php": "^8.2",
+    "doctrine/dbal": "^3.0",
+    "guzzlehttp/guzzle": "^7.0.1",
+    "laravel/framework": "^10.0",
+    "laravel/socialite": "^5.6",
     "laravel/tinker": "^2.0",
-    "predis/predis": "^1.1"
+    "laravel/legacy-factories": "^1.4.0"
   },
   "require-dev": {
-    "facade/ignition": "^2.0",
+    "spatie/laravel-ignition": "^2.0",
     "filp/whoops": "~2.0",
     "fzaninotto/faker": "^1.4",
     "mockery/mockery": "~1.0",
-    "phpunit/phpunit": "^8.5",
-    "nunomaduro/collision": "^4.1",
+    "phpunit/phpunit": "^10.0",
+    "nunomaduro/collision": "^7.0",
     "sempro/phpunit-pretty-print": "^1.1.11"
   },
   "autoload": {
@@ -66,5 +65,6 @@
     "preferred-install": "dist",
     "sort-packages": true,
     "optimize-autoloader": true
-  }
+  },
+  "minimum-stability": "stable"
 }

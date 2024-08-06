@@ -30,7 +30,7 @@ class AuthController extends Controller
             return redirect('/auth?error=true');
         }
 
-        $githubUser = Socialite::driver('github')->stateless()->user();
+        $githubUser = Socialite::driver('github')->user();
         $id = $githubUser->getId();
         $user = User::where('github_id', $id)->first();
         // If no user is found, create a new one

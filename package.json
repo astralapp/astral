@@ -88,6 +88,7 @@
     "vue-jest": "4.0.0-beta.2",
     "vue-loader": "^15.9.5",
     "vue-template-compiler": "^2.6.0",
-    "vuex-mock-store": "^0.0.7"
+    "vuex-mock-store": "^0.0.7",
+    "webpack": "^5.1.3"
   }
 }
