@@ -1,0 +1,35 @@
+version: "3.5"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+#    image: astral:latest
+    restart: unless-stopped
+    volumes:
+      - ./.env:/var/www/html/.env
+    ports:
+      - 127.0.0.1:8080:80
+    networks:
+      - network
+    environment:
+      TZ: Europe/Paris
+  mariadb:
+    image: mariadb:10.3.14-bionic
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:3306:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - network
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: Europe/Paris
+
+networks:
+  network:
+    driver: bridge
