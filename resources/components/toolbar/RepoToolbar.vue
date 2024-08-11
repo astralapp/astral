@@ -73,12 +73,12 @@ onKeyStroke('n', e => {
         size="sm"
         @click="handleToggleNotesEditor()"
       >
-        <i-lucide-notebook
+        <i-lucide-notebook-text
           v-if="currentStarHasNotes"
           class="h-4"
         />
 
-        <i-lucide-notebook-text
+        <i-lucide-notebook
           v-else
           class="h-4"
         />

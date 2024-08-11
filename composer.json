@@ -1,5 +1,5 @@
 {
-  "name": "laravel/laravel",
+  "name": "astralapp/astral",
   "type": "project",
   "description": "The Laravel Framework.",
   "keywords": [
@@ -14,7 +14,7 @@
     "graham-campbell/github": "^12.2",
     "guzzlehttp/guzzle": "^7.2",
     "http-interop/http-factory-guzzle": "^1.0",
-    "hybridly/laravel": "^0.7.3",
+    "hybridly/laravel": "^0.7.13",
     "laravel/framework": "^10.10",
     "laravel/sanctum": "^3.2",
     "laravel/socialite": "^5.6",

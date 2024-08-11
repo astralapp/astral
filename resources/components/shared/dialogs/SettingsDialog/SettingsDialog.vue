@@ -11,8 +11,11 @@ import { SettingsTab } from '@/types'
 import { DialogTitle } from '@headlessui/vue'
 import { CheckCircleIcon } from '@heroicons/vue/24/solid'
 import { router } from 'hybridly'
+import { throttle } from 'lodash'
 import { computed, nextTick, ref } from 'vue'
 import ConfettiExplosion from 'vue-confetti-explosion'
+
+const CONFETTI_DURATION = 3500
 
 const { user } = useAuth()
 const { isOpen, hide } = useSettingsDialog()
@@ -20,20 +23,23 @@ const userStore = useUserStore()
 
 const activeTab = ref<SettingsTab>('general')
 
+const isSponsor = ref(user.value?.isSponsor ?? false)
+const hasCheckedForSponsorShip = ref(false)
+
 const isRequestingDeleteConfirmation = ref(false)
 const usernameConfirmation = ref('')
 const confirmInput = ref<null | typeof BaseTextInput>()
 
-const openAiForm = useForm({
-  fields: {
-    openai_token: user.value?.openaiToken ?? '',
-  },
-  method: 'PUT',
-  only: ['user'],
-  reset: false,
-  timeout: 1500,
-  url: route('openai-token.update'),
-})
+// const openAiForm = useForm({
+//   fields: {
+//     openai_token: user.value?.openaiToken ?? '',
+//   },
+//   method: 'PUT',
+//   only: ['user'],
+//   reset: false,
+//   timeout: 1500,
+//   url: route('openai-token.update'),
+// })
 
 const deleteButtonLabel = computed(() =>
   isRequestingDeleteConfirmation.value ? 'Confirm deletion' : 'Delete my account'
@@ -63,11 +69,17 @@ const deleteUser = async () => {
   }
 }
 
-const isSponsor = ref(user.value?.isSponsor ?? false)
-
-const checkSponsorshipStatus = () => {
-  isSponsor.value = true
-}
+const checkSponsorshipStatus = throttle(
+  () => {
+    isSponsor.value = true
+    hasCheckedForSponsorShip.value = true
+    setTimeout(() => {
+      hasCheckedForSponsorShip.value = false
+    }, CONFETTI_DURATION)
+  },
+  CONFETTI_DURATION,
+  { leading: true, trailing: false }
+)
 </script>
 
 <template>
@@ -105,14 +117,12 @@ const checkSponsorshipStatus = () => {
                       <CheckCircleIcon class="h-5 w-5" />
                     </span>
 
-                    <span class="text-sm font-bold text-green-800 dark:text-green-500"
-                      >You're a sponsor and you're awesome!</span
-                    >
+                    <span class="text-sm font-bold text-green-800 dark:text-green-500">You're a sponsor!</span>
                   </p>
 
                   <p
                     v-show="!isSponsor"
-                    class="text-sm font-bold text-yellow-600 dark:text-yellow-500"
+                    class="text-sm font-bold text-gray-500 dark:text-gray-400"
                   >
                     Not sponsoring.
                   </p>
@@ -127,7 +137,7 @@ const checkSponsorshipStatus = () => {
                 >Check now</BaseButton
               >
 
-              <ConfettiExplosion v-if="isSponsor" />
+              <ConfettiExplosion v-if="hasCheckedForSponsorShip && isSponsor" />
             </div>
           </div>
 
@@ -163,7 +173,7 @@ const checkSponsorshipStatus = () => {
             </p>
           </div>
 
-          <div class="px-4 py-5">
+          <!-- <div class="px-4 py-5">
             <div class="flex items-center gap-x-6">
               <p class="font-bold text-gray-600 dark:text-gray-300 text-sm flex-shrink-0">OpenAI token</p>
 
@@ -190,7 +200,7 @@ const checkSponsorshipStatus = () => {
             <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
               Enables various AI-powered features, such as auto-generated notes and suggested tags.
             </p>
-          </div>
+          </div> -->
         </template>
 
         <template v-if="activeTab === 'data-controls'">
