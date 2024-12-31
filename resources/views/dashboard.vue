@@ -31,7 +31,6 @@ import { useTagsStore } from '@/store/useTagsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo } from '@/types'
 import { ArrowLeftCircleIcon, Bars3CenterLeftIcon as MenuIcon } from '@heroicons/vue/24/outline'
-import { tryOnMounted } from '@vueuse/core'
 import localForage from 'localforage'
 import { computed, nextTick, ref, watch } from 'vue'
 
@@ -57,6 +56,8 @@ useSyncValuesToStores(
 )
 
 const isStarsListFocused = ref(false)
+const isSidebarOpen = ref(false)
+const isReadmeOpen = ref(false)
 
 const { selectItem, selectedItems } = useListSelectionState(
   computed(() => starsStore.filteredRepos.map(repo => repo.node)),
@@ -79,9 +80,6 @@ registerHook('success', () => {
     showToast(flashBag.success.value, ToastType.Success)
   }
 })
-
-const isSidebarOpen = ref(false)
-const isReadmeOpen = ref(false)
 
 const onAllStarsSelected = () => {
   isSidebarOpen.value = false
@@ -164,9 +162,9 @@ watch(
 
 // Show welcome dialog the first time a user logs in
 const shouldShowWelcomeMessage = ref(false)
-tryOnMounted(() => {
-  shouldShowWelcomeMessage.value = !user.value?.flags.find(flag => flag.key === 'has-seen-welcome-message')?.value
-})
+// tryOnMounted(() => {
+//   shouldShowWelcomeMessage.value = !user.value?.flags.find(flag => flag.key === 'has-seen-welcome-message')?.value
+// })
 </script>
 
 <template>
@@ -302,10 +300,10 @@ tryOnMounted(() => {
 
     <SmartFiltersDialog />
 
-    <WelcomeDialog
+    <!-- <WelcomeDialog
       :is-open="shouldShowWelcomeMessage"
       :hide="() => (shouldShowWelcomeMessage = false)"
-    />
+    /> -->
 
     <GlobalToast />
 

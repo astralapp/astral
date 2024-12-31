@@ -7,6 +7,11 @@ import { nextTick, ref, watch } from 'vue'
 // import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { createVirtualScroller } from 'vue-typed-virtual-list'
 
+const emit = defineEmits<{
+  blur: [e: FocusEvent]
+  focus: [e: FocusEvent]
+}>()
+
 const VirtualScroller = createVirtualScroller<GitHubRepo>()
 
 /** Stars Fetch Lifecycle
@@ -48,11 +53,13 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
     v-if="starsStore.filteredRepos.length"
     :default-size="156"
     :items="starsStore.filteredRepos"
-    class="relative flex-grow bg-white dark:bg-black focus:outline-none"
+    class="relative h-full bg-white dark:bg-black focus:outline-none"
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"
     tabindex="0"
+    @focus="emit('focus', $event)"
+    @blur="emit('blur', $event)"
   >
     <template #item="{ ref: item }">
       <slot :repo="(item as GitHubRepo)" />
@@ -60,15 +67,15 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
   </VirtualScroller>
 
   <div
-    v-if="starsStore.isFetchingStars && !starsStore.filteredRepos.length"
-    class="flex h-full items-center justify-center"
+    v-if="!starsStore.filteredRepos.length && starsStore.isFetchingStars"
+    class="flex w-full h-full items-center justify-center"
   >
     <p class="text-center text-gray-500">Loading starred repositories...</p>
   </div>
 
   <div
     v-if="!starsStore.filteredRepos.length && !starsStore.isFetchingStars"
-    class="flex h-full items-center justify-center"
+    class="flex w-full h-full items-center justify-center"
   >
     <p class="text-center text-gray-500">No results found</p>
   </div>
