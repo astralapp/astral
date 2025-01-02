@@ -1,15 +1,7 @@
-import { FetchDirection } from '@/types'
-
-export const fetchStarsQuery = (
-  cursor: Nullable<string> = null,
-  direction: FetchDirection = FetchDirection.DESC,
-  perPage = 100
-): string => {
-  const cursorFilter = cursor ? `after:"${cursor}"` : 'after:null'
-
-  return `{
+export const fetchStarsQuery = (perPage = 100): string => {
+  return `query FetchStars($cursor: String, $direction: OrderDirection!) {
   viewer {
-    starredRepositories(first: ${perPage}, orderBy: {field: STARRED_AT, direction: ${direction}}, ${cursorFilter}) {
+    starredRepositories(first: ${perPage}, orderBy: {field: STARRED_AT, direction: $direction}, after: $cursor) {
       totalCount
       edges {
         node {
@@ -19,24 +11,15 @@ export const fetchStarsQuery = (
           url
           databaseId
           isArchived
-          defaultBranchRef {
-            name
-          }
           primaryLanguage {
             name
           }
-          stargazers {
-            totalCount
+          defaultBranchRef {
+            name
           }
+          stargazerCount
           forkCount
           pushedAt
-          releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {
-            edges {
-              node {
-                tagName
-              }
-            }
-          }
         }
         cursor
       }

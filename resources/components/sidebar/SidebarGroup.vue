@@ -17,14 +17,14 @@ defineProps<Props>()
     <div class="group flex w-full items-center">
       <div class="flex items-center">
         <DisclosureButton
-          class="flex items-center text-gray-500 dark:text-gray-400"
+          class="flex items-center text-gray-500 dark:text-gray-400 gap-x-0.5"
           :class="{ '-ml-1': collapsible }"
           :as="collapsible ? 'button' : 'h4'"
           @click="close?.()"
         >
           <i-lucide-chevron-right
             v-if="collapsible"
-            class="relative h-5 w-5 flex-shrink-0 transform"
+            class="relative h-4 w-4 flex-shrink-0 transform"
             :class="{ 'rotate-90': isOpen }"
             style="top: -1px"
             role="presentation"

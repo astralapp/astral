@@ -205,7 +205,7 @@ export const predicateTargets = [
   } as PredicateTarget<'String'>,
   {
     defaultValue: '0',
-    keyPath: 'node.stargazers.totalCount',
+    keyPath: 'node.stargazerCount',
     label: 'Star count',
     operators: numberOperators,
     type: 'Number',

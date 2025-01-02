@@ -1,3 +1,5 @@
+import { Octokit } from 'octokit'
+import { paginateGraphQL } from '@octokit/plugin-paginate-graphql'
 import { fetchStarsQuery, removeStarQuery } from '@/queries'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useUserStore } from '@/store/useUserStore'
@@ -30,6 +32,8 @@ import { defineStore } from 'pinia'
 
 type LogicalOperatorFunction = (predicates: Predicate[], predicateCheck: (predicate: Predicate) => boolean) => boolean
 
+const GqlOctokit = Octokit.plugin(paginateGraphQL)
+
 export const useStarsStore = defineStore({
   actions: {
     addTagToStars(tagId: number, repos: StarMetaInput[]) {
@@ -59,39 +63,31 @@ export const useStarsStore = defineStore({
 
       const userStore = useUserStore()
 
-      const response = await fetch(`https://api.github.com/repos/${repoName}/readme`, {
+      const octokit = new Octokit({ auth: userStore.user?.accessToken })
+      const { data } = await octokit.request(`GET /repos/${repoName}/readme`, {
         headers: {
           Accept: 'application/vnd.github.v3.html',
-          Authorization: `bearer ${userStore.user?.accessToken}`,
         },
       })
 
-      if (!response.ok) {
-        throw new Error(`Unable to fetch readme for ${repoName}`)
-      }
-
-      const readme = await response.text()
-
-      return readme
+      return data
     },
     async fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
       this.isFetchingStars = true
 
       const userStore = useUserStore()
-      const result = await (
-        await fetch('https://api.github.com/graphql', {
-          body: JSON.stringify({
-            query: fetchStarsQuery(cursor, direction),
-          }),
-          headers: {
-            Authorization: `bearer ${userStore.user?.accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-        })
-      ).json()
+      const octokit = new GqlOctokit({ auth: userStore.user?.accessToken })
+      const pageIterator = octokit.graphql.paginate.iterator(fetchStarsQuery(), {
+        ...(cursor && { cursor }),
+        direction,
+      })
 
-      return result.data
+      for await (const response of pageIterator) {
+        this.totalRepos = response.viewer.starredRepositories.totalCount
+        this.pageInfo = response.viewer.starredRepositories.pageInfo
+        this.starredRepos = this.starredRepos.concat(response.viewer.starredRepositories.edges)
+      }
+      this.isFetchingStars = false
     },
     async removeStar(id: string) {
       const userStore = useUserStore()

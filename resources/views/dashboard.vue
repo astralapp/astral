@@ -126,16 +126,7 @@ const onReloadStars = async () => {
 
   await nextTick()
 
-  while (starsStore.pageInfo.hasNextPage) {
-    const { viewer } = await starsStore.fetchStars(starsStore.pageInfo.endCursor)
-
-    starsStore.totalRepos = viewer.starredRepositories.totalCount
-    starsStore.pageInfo = viewer.starredRepositories.pageInfo
-
-    starsStore.starredRepos = starsStore.starredRepos.concat(viewer.starredRepositories.edges)
-  }
-
-  starsStore.isFetchingStars = false
+  await starsStore.fetchStars(starsStore.pageInfo.endCursor)
 }
 
 watch(selectedItems, repos => {

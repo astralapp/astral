@@ -145,7 +145,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             @click="emit('all-stars-selected')"
           >
             <template #icon>
-              <i-lucide-inbox class="w-full h-full" />
+              <i-lucide-inbox class="w-4 h-4" />
             </template>
           </SidebarItem>
 
@@ -156,7 +156,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             @click="emit('untagged-selected')"
           >
             <template #icon>
-              <i-lucide-star class="w-full h-full" />
+              <i-lucide-star class="w-4 h-4" />
             </template>
           </SidebarItem>
         </ul>
@@ -186,7 +186,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               @click="showNewTagForm"
             >
               <i-lucide-circle-plus
-                class="h-5 w-5 flex-shrink-0"
+                class="h-4 w-4 flex-shrink-0"
                 role="presentation"
               />
 
@@ -254,7 +254,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             @click="doShowSmartFilterDialog"
           >
             <i-lucide-circle-plus
-              class="h-5 w-5 flex-shrink-0"
+              class="h-4 w-4 flex-shrink-0"
               role="presentation"
             />
           </button>

@@ -34,16 +34,7 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
   if (syncChecks.every(Boolean) && starsStore.pageInfo.hasNextPage) {
     // We're ready to start fetching stars
     await nextTick()
-    while (starsStore.pageInfo.hasNextPage) {
-      const { viewer } = await starsStore.fetchStars(starsStore.pageInfo.endCursor)
-
-      starsStore.totalRepos = viewer.starredRepositories.totalCount
-      starsStore.pageInfo = viewer.starredRepositories.pageInfo
-
-      starsStore.starredRepos = starsStore.starredRepos.concat(viewer.starredRepositories.edges)
-    }
-
-    starsStore.isFetchingStars = false
+    await starsStore.fetchStars(starsStore.pageInfo.endCursor)
   }
 })
 </script>

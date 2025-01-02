@@ -26,9 +26,7 @@ export interface GitHubRepoNode {
   releases?: {
     edges: Array<{ node: { tagName: string } }>
   }
-  stargazers: {
-    totalCount: number
-  }
+  stargazerCount: number
   url: string
 }
 

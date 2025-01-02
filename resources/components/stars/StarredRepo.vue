@@ -183,7 +183,7 @@ const onDragEnd = () => {
           role="presentation"
         />
 
-        <span class="ml-0.5 text-sm font-medium">{{ repo.node.stargazers.totalCount.toLocaleString() }}</span>
+        <span class="ml-0.5 text-sm font-medium">{{ repo.node.stargazerCount.toLocaleString() }}</span>
       </div>
 
       <div class="inline-flex items-center">

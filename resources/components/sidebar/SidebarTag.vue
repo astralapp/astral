@@ -92,7 +92,7 @@ const getMenuItemClasses = (isActive: boolean) => {
     @drop="onDrop"
   >
     <template #icon>
-      <i-lucide-tag class="w-full h-full" />
+      <i-lucide-tag class="w-4 h-4" />
     </template>
 
     <template #contextMenu>
