@@ -14,8 +14,18 @@ http.interceptors.response.use(
   },
   function(error) {
     const resp = error.response
-    if ('status' in resp && resp.status === 422) return Promise.reject(resp.data)
-    router.push('auth/logout')
+    if ('status' in resp) {
+      if (resp.status === 422) {
+        return Promise.reject(resp.data)
+      }
+
+      if (resp.status >= 400 && resp.status < 500) {
+        router.push('auth/logout')
+        return Promise.reject(resp.data)
+      }
+
+      return Promise.reject(resp.data)
+    }
   }
 )
 

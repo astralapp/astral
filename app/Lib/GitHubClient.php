@@ -14,7 +14,7 @@ class GitHubClient
         $this->endpoint = 'https://api.github.com/graphql';
     }
 
-    public function fetchStars($cursor = null, $perPage = 100)
+    public function fetchStars($cursor = null, $perPage = 75)
     {
         $token = auth()->user()->access_token;
         $cursorString = $cursor ? 'after:"'.$cursor.'"' : 'after: null';
@@ -80,12 +80,14 @@ GQL;
 
             throw new InvalidAccessTokenException();
         }
+        $json = $response->json();
 
-        if (!array_key_exists('data', $response->json())) {
-            info('Stars fetch failed.', ['response' => $response->json()]);
+        if (!array_key_exists('data', $json) || (isset($json['data']) && is_null($json['data']))) {
+            info('Stars fetch failed.', ['response' => $json]);
+            throw new \Exception('Stars fetch failed.');
         }
 
-        return $response->json()['data']['viewer']['starredRepositories'];
+        return $json['data']['viewer']['starredRepositories'];
     }
 
     public function unstarStar($nodeId)
