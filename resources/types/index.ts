@@ -12,6 +12,11 @@ export const Ability = {
   CREATE_TAG: 'create_tag',
 } as const
 
+export interface GitHubRepo {
+  cursor: string
+  node: GitHubRepoNode
+}
+
 export interface GitHubRepoNode {
   databaseId: number
   defaultBranchRef: {
@@ -30,9 +35,13 @@ export interface GitHubRepoNode {
   url: string
 }
 
-export interface GitHubRepo {
-  cursor: string
-  node: GitHubRepoNode
+export type Limits = Record<App.Data.Enums.Limit, number>
+
+export interface PaginationResponse {
+  endCursor: Nullable<string>
+  hasNextPage: boolean
+  hasPreviousPage: boolean
+  startCursor: Nullable<string>
 }
 
 export interface RepoLanguage {
@@ -45,14 +54,6 @@ export interface StarDragDataTransferData {
   tag: App.Data.TagData
 }
 
-export interface PaginationResponse {
-  endCursor: Nullable<string>
-  hasNextPage: boolean
-  startCursor: Nullable<string>
-}
-
-export type Limits = Record<App.Data.Enums.Limit, number>
-
 export const Limit: MappedEnum<App.Data.Enums.Limit> = {
   MAX_TAGS: 'max_tags',
 } as const
@@ -63,7 +64,13 @@ export const FetchDirection = {
 } as const
 export type FetchDirection = Values<typeof FetchDirection>
 
+export const CursorDirection = {
+  AFTER: 'after',
+  BEFORE: 'before',
+} as const
 export type Authorizations = Record<App.Data.Enums.Ability, boolean>
+
+export type CursorDirection = Values<typeof CursorDirection>
 
 export type TagSortMethod = keyof Pick<App.Data.TagData, 'name' | 'stars_count'>
 
@@ -79,8 +86,8 @@ export interface BaseDialogReturnType {
   show(): void
 }
 
+export type Errors = Record<string, string>
+
 export type SettingsTab = 'data-controls' | 'general'
 
 export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'description' | 'nameWithOwner' | 'url'>
-
-export type Errors = Record<string, string>

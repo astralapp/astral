@@ -22,7 +22,7 @@ abstract class TestCase extends BaseTestCase
         Http::preventStrayRequests();
     }
 
-    protected function login(User $user = null)
+    protected function login(?User $user = null): self
     {
         /** @var Authenticatable $user * */
         $user ??= User::factory()->create();

@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { PredicateOperator } from '@/utils/predicates'
 import BaseSelect from '@/components/shared/core/BaseSelect.vue'
 
+interface StateOption {
+  key: 'node.isArchived'
+  label: 'archived'
+}
+
 interface Props {
-  modelValue?: Maybe<PredicateOperator>
+  modelValue?: Maybe<StateOption>
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -11,17 +15,23 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Maybe<string>): void
+  (e: 'update:modelValue', value: Maybe<StateOption>): void
 }>()
 
-const stateOptions = [{ key: 'node.isArchived', label: 'archived' }]
+const stateOptions: StateOption[] = [{ key: 'node.isArchived', label: 'archived' }]
+
+const updateState = (selectedKey: string): void => {
+  const selectedState = stateOptions.find(state => state.key === selectedKey) ?? stateOptions[0]
+
+  emit('update:modelValue', selectedState)
+}
 </script>
 
 <template>
   <BaseSelect
-    :model-value="modelValue?.key"
+    :model-value="props.modelValue?.key ?? stateOptions[0].key"
     class="w-auto"
-    @change="$emit('update:modelValue', modelValue?.key)"
+    @update:model-value="updateState"
   >
     <option
       v-for="state in stateOptions"

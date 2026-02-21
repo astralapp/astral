@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+import pick from 'lodash/pick'
+import { computed, ref } from 'vue'
+
 import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
 import { useAuth } from '@/composables/use-auth'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
-import pick from 'lodash/pick'
-import { computed, ref } from 'vue'
 
 const props = defineProps<{
   repo: GitHubRepo
@@ -184,6 +185,8 @@ const onDragEnd = () => {
         />
 
         <span class="ml-0.5 text-sm font-medium">{{ repo.node.stargazerCount.toLocaleString() }}</span>
+
+        <span class="sr-only">&nbsp; stargazers</span>
       </div>
 
       <div class="inline-flex items-center">
@@ -193,6 +196,8 @@ const onDragEnd = () => {
         />
 
         <span class="ml-0.5 text-sm font-medium">{{ repo.node.forkCount.toLocaleString() }}</span>
+
+        <span class="sr-only">&nbsp; forks</span>
       </div>
 
       <a

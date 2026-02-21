@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
-import { useStarsStore } from '@/store/useStarsStore'
-// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import { GitHubRepo } from '@/types'
+import { watchOnce } from '@vueuse/core'
 import { nextTick, ref, watch } from 'vue'
 // import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { createVirtualScroller } from 'vue-typed-virtual-list'
+
+import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
+import { useStarsStore } from '@/store/useStarsStore'
+// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import { CursorDirection, FetchDirection, GitHubRepo } from '@/types'
 
 const emit = defineEmits<{
   blur: [e: FocusEvent]
@@ -31,10 +33,16 @@ useSyncToLocalStorage(starsStore, 'pageInfo').then(() => {
 })
 
 watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
-  if (syncChecks.every(Boolean) && starsStore.pageInfo.hasNextPage) {
+  if (syncChecks.every(Boolean)) {
     // We're ready to start fetching stars
     await nextTick()
-    await starsStore.fetchStars(starsStore.pageInfo.endCursor)
+    if (!starsStore.starredRepos.length) {
+      await starsStore.fetchStars()
+    } else if (starsStore.pageInfo.hasNextPage) {
+      await starsStore.fetchStars(starsStore.pageInfo.endCursor)
+    }
+
+    await starsStore.fetchStars(starsStore.starredRepos[0].cursor, CursorDirection.BEFORE)
   }
 })
 </script>
@@ -53,7 +61,7 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
     @blur="emit('blur', $event)"
   >
     <template #item="{ ref: item }">
-      <slot :repo="(item as GitHubRepo)" />
+      <slot :repo="item as GitHubRepo" />
     </template>
   </VirtualScroller>
 

@@ -1,7 +1,16 @@
-export const fetchStarsQuery = (perPage = 100): string => {
-  return `query FetchStars($cursor: String, $direction: OrderDirection!) {
+import { CursorDirection } from '@/types'
+
+export const fetchStarsQuery = (cursorDirection: CursorDirection = CursorDirection.AFTER, perPage = 100): string => {
+  const pageInfo =
+    cursorDirection === CursorDirection.AFTER
+      ? `endCursor
+        hasNextPage`
+      : `startCursor
+        hasPreviousPage`
+
+  return `query FetchStars($cursor: String) {
   viewer {
-    starredRepositories(first: ${perPage}, orderBy: {field: STARRED_AT, direction: $direction}, after: $cursor) {
+    starredRepositories(first: ${perPage}, orderBy: {field: STARRED_AT, direction: DESC}, ${cursorDirection}: $cursor) {
       totalCount
       edges {
         node {
@@ -24,9 +33,7 @@ export const fetchStarsQuery = (perPage = 100): string => {
         cursor
       }
       pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
+        ${pageInfo}
       }
     }
   }

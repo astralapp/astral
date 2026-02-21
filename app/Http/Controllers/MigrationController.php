@@ -59,7 +59,7 @@ class MigrationController extends Controller
             DB::rollBack();
         }
 
-        auth()->user()->setFlag('2023-migration', true);
+        auth()->user()->setFlag('2025-migration', true);
 
         DB::commit();
 

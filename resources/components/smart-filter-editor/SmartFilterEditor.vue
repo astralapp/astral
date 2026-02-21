@@ -10,6 +10,7 @@ import TagsFilter from '@/components/smart-filter-editor/filters/TagsFilter.vue'
 import {
   Predicate,
   PredicateGroup,
+  PredicateTarget,
   PredicateTargetType,
   defaultGroup,
   defaultPredicate,
@@ -19,6 +20,10 @@ import { MinusCircleIcon } from '@heroicons/vue/16/solid'
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/solid'
 import cloneDeep from 'lodash/cloneDeep'
 import { defineComponent, reactive, watch } from 'vue'
+
+interface SmartFilterBody {
+  groups: PredicateGroup[]
+}
 
 const props = defineProps<{ modelValue: string }>()
 
@@ -35,14 +40,102 @@ const predicateTargetFilters: Record<PredicateTargetType, ReturnType<typeof defi
   Tags: TagsFilter,
 }
 
-const filterBody = reactive<Record<'groups', PredicateGroup[]>>({
-  groups: [],
-})
+const predicateTargetsByKeyPath = new Map(predicateTargets.map(target => [target.keyPath, target]))
+
+const createDefaultPredicate = (): Predicate => {
+  return cloneDeep(defaultPredicate)
+}
+
+const createDefaultGroup = (): PredicateGroup => {
+  return {
+    logicalType: defaultGroup.logicalType,
+    predicates: [createDefaultPredicate()],
+  }
+}
+
+const createDefaultFilterBody = (): SmartFilterBody => {
+  return {
+    groups: [createDefaultGroup()],
+  }
+}
+
+const getPredicateTarget = (selectedTarget: string): PredicateTarget<PredicateTargetType> => {
+  return (predicateTargetsByKeyPath.get(selectedTarget) as PredicateTarget<PredicateTargetType>) ?? predicateTargets[0]
+}
+
+const normalizePredicate = (predicate: Predicate): Predicate => {
+  const target = getPredicateTarget(predicate.selectedTarget)
+
+  predicate.selectedTarget = target.keyPath
+
+  if (!target.operators.some(operator => operator.key === predicate.operator)) {
+    predicate.operator = target.operators[0]?.key ?? ''
+  }
+
+  if (predicate.argument === undefined && target.defaultValue !== undefined) {
+    predicate.argument = cloneDeep(target.defaultValue)
+  }
+
+  return predicate
+}
+
+const normalizeGroup = (group: Partial<PredicateGroup>): PredicateGroup => {
+  const logicalType = group.logicalType === 'all' || group.logicalType === 'none' ? group.logicalType : 'any'
+  const predicates = Array.isArray(group.predicates)
+    ? group.predicates.map(predicate => normalizePredicate(predicate as Predicate))
+    : [createDefaultPredicate()]
+
+  return {
+    logicalType,
+    predicates: predicates.length ? predicates : [createDefaultPredicate()],
+  }
+}
+
+const parseFilterBody = (value: string): SmartFilterBody => {
+  try {
+    const parsed = JSON.parse(value) as Partial<SmartFilterBody>
+
+    if (!Array.isArray(parsed.groups) || !parsed.groups.length) {
+      return createDefaultFilterBody()
+    }
+
+    return {
+      groups: parsed.groups.map(group => normalizeGroup(group as Partial<PredicateGroup>)),
+    }
+  } catch {
+    return createDefaultFilterBody()
+  }
+}
+
+const filterBody = reactive<SmartFilterBody>(createDefaultFilterBody())
+
+const predicateTarget = (predicate: Predicate): PredicateTarget<PredicateTargetType> => {
+  return getPredicateTarget(predicate.selectedTarget)
+}
+
+const operatorsForPredicate = (predicate: Predicate) => {
+  return predicateTarget(predicate).operators
+}
+
+const setPredicateTarget = (predicate: Predicate, selectedTarget: string): void => {
+  const target = getPredicateTarget(selectedTarget)
+
+  predicate.selectedTarget = target.keyPath
+  predicate.operator = target.operators[0]?.key ?? ''
+
+  if (target.defaultValue !== undefined) {
+    predicate.argument = cloneDeep(target.defaultValue)
+  }
+}
+
+let isUpdatingFromModel = false
 
 watch(
   () => props.modelValue,
   value => {
-    Object.assign(filterBody, JSON.parse(value) as PredicateGroup[])
+    isUpdatingFromModel = true
+    filterBody.groups = parseFilterBody(value).groups
+    isUpdatingFromModel = false
   },
   { immediate: true }
 )
@@ -50,59 +143,32 @@ watch(
 watch(
   filterBody,
   filter => {
-    emit('update:modelValue', JSON.stringify(filter))
+    if (isUpdatingFromModel) {
+      return
+    }
+
+    const serializedFilter = JSON.stringify(filter)
+
+    if (serializedFilter !== props.modelValue) {
+      emit('update:modelValue', serializedFilter)
+    }
   },
   { deep: true }
 )
 
-const setPredicateOperator = (e: Event, predicate: Predicate) => {
-  predicate.operator = (e.target as HTMLSelectElement).value
+const appendRow = (groupIndex: number): void => {
+  filterBody.groups[groupIndex].predicates.push(createDefaultPredicate())
 }
 
-const selectedPredicateTarget = (predicate: Predicate) => {
-  return predicateTargets.find(target => target.keyPath === predicate.selectedTarget)
-}
-
-const setDefaultArgumentValue = (predicate: Predicate) => {
-  const defaultValue = selectedPredicateTarget(predicate)?.defaultValue
-
-  if (defaultValue !== undefined) {
-    predicate.argument = defaultValue
-  }
-}
-
-const currentOperator = (predicate: Predicate) => {
-  if (
-    selectedPredicateTarget(predicate) &&
-    selectedPredicateTarget(predicate)
-      ?.operators.map(o => o.key)
-      .includes(predicate.operator)
-  ) {
-    return predicate.operator
-  } else {
-    const operator = selectedPredicateTarget(predicate)?.operators[0].key
-
-    if (operator) {
-      predicate.operator = operator
-    }
-
-    return operator
-  }
-}
-
-const appendRow = (i: number) => {
-  filterBody.groups[i].predicates.push(cloneDeep(defaultPredicate))
-}
-
-const removeRow = (groupIndex: number, predicateIndex: number) => {
+const removeRow = (groupIndex: number, predicateIndex: number): void => {
   filterBody.groups[groupIndex].predicates.splice(predicateIndex, 1)
 }
 
-const appendGroup = () => {
-  filterBody.groups.push(defaultGroup)
+const appendGroup = (): void => {
+  filterBody.groups.push(createDefaultGroup())
 }
 
-const removeGroup = (index: number) => {
+const removeGroup = (index: number): void => {
   filterBody.groups.splice(index, 1)
 }
 </script>
@@ -149,12 +215,12 @@ const removeGroup = (index: number) => {
       >
         <div class="flex w-full items-center space-x-2">
           <BaseSelect
-            v-model="predicate.selectedTarget"
-            @change="setDefaultArgumentValue(predicate)"
+            :model-value="predicate.selectedTarget"
+            @update:model-value="setPredicateTarget(predicate, $event)"
           >
             <option
-              v-for="(target, k) in predicateTargets"
-              :key="`group-${i}-predicate-${j}-target-${k}`"
+              v-for="target in predicateTargets"
+              :key="`group-${i}-predicate-${j}-target-${target.keyPath}`"
               :value="target.keyPath"
             >
               {{ target.label }}
@@ -162,12 +228,11 @@ const removeGroup = (index: number) => {
           </BaseSelect>
 
           <BaseSelect
-            :model-value="currentOperator(predicate)"
+            v-model="predicate.operator"
             class="ml-4"
-            @change="setPredicateOperator($event, predicate)"
           >
             <option
-              v-for="operator in selectedPredicateTarget(predicate)?.operators"
+              v-for="operator in operatorsForPredicate(predicate)"
               :key="operator.key"
               :value="operator.key"
             >
@@ -176,8 +241,7 @@ const removeGroup = (index: number) => {
           </BaseSelect>
 
           <component
-            :is="predicateTargetFilters[selectedPredicateTarget(predicate)?.type || 'String']"
-            v-if="selectedPredicateTarget(predicate)?.type"
+            :is="predicateTargetFilters[predicateTarget(predicate).type]"
             v-model="predicate.argument"
           />
         </div>

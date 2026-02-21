@@ -1,9 +1,15 @@
-import { Octokit } from 'octokit'
 import { paginateGraphQL } from '@octokit/plugin-paginate-graphql'
+import { router } from 'hybridly'
+import { Dictionary, every, get, reject, some } from 'lodash'
+import keyBy from 'lodash/keyBy'
+import { Octokit } from 'octokit'
+import { defineStore } from 'pinia'
+
 import { fetchStarsQuery, removeStarQuery } from '@/queries'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useUserStore } from '@/store/useUserStore'
 import {
+  CursorDirection,
   FetchDirection,
   GitHubRepo,
   GitHubRepoNode,
@@ -13,22 +19,16 @@ import {
   TagEditorTag,
 } from '@/types'
 import {
-  Predicate,
-  PredicateGroup,
-  PredicateOperator,
-  PredicateOperatorCheck,
-  PredicateTarget,
   dateOperators,
   languageOperators,
   numberOperators,
+  Predicate,
+  PredicateGroup,
+  PredicateOperator,
   stateOperators,
   stringOperators,
   tagOperators,
 } from '@/utils/predicates'
-import { router } from 'hybridly'
-import { Dictionary, every, get, reject, some } from 'lodash'
-import keyBy from 'lodash/keyBy'
-import { defineStore } from 'pinia'
 
 type LogicalOperatorFunction = (predicates: Predicate[], predicateCheck: (predicate: Predicate) => boolean) => boolean
 
@@ -72,21 +72,29 @@ export const useStarsStore = defineStore({
 
       return data
     },
-    async fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
+    async fetchStars(cursor: Nullable<string> = null, cursorDirection: CursorDirection = CursorDirection.AFTER) {
       this.isFetchingStars = true
 
       const userStore = useUserStore()
       const octokit = new GqlOctokit({ auth: userStore.user?.accessToken })
-      const pageIterator = octokit.graphql.paginate.iterator(fetchStarsQuery(), {
+
+      const pageIterator = octokit.graphql.paginate.iterator(fetchStarsQuery(cursorDirection), {
         ...(cursor && { cursor }),
-        direction,
       })
 
       for await (const response of pageIterator) {
+        const pageInfo = response?.viewer?.starredRepositories?.pageInfo as PaginationResponse
+
+        this.pageInfo = pageInfo
+
+        if (cursorDirection === CursorDirection.AFTER) {
+          this.starredRepos = [...this.starredRepos, ...response.viewer.starredRepositories.edges]
+        } else {
+          this.starredRepos = [...response.viewer.starredRepositories.edges, ...this.starredRepos]
+        }
         this.totalRepos = response.viewer.starredRepositories.totalCount
-        this.pageInfo = response.viewer.starredRepositories.pageInfo
-        this.starredRepos = this.starredRepos.concat(response.viewer.starredRepositories.edges)
       }
+
       this.isFetchingStars = false
     },
     async removeStar(id: string) {
@@ -117,7 +125,8 @@ export const useStarsStore = defineStore({
     resetPageInfo() {
       this.pageInfo = {
         endCursor: null,
-        hasNextPage: true,
+        hasNextPage: false,
+        hasPreviousPage: false,
         startCursor: null,
       }
     },
@@ -194,13 +203,17 @@ export const useStarsStore = defineStore({
                     )
                   } else {
                     const repoKeyValue = get(repo, p.selectedTarget)
-                    if (repoKeyValue) {
-                      // @ts-expect-error its complicated
-                      return operator.check(repoKeyValue, p.argument)
-                    } else {
-                      // @ts-expect-error its complicated
-                      return operator.check(get(repo, (p.argument as PredicateTarget).key))
+                    if (repoKeyValue !== undefined && repoKeyValue !== null) {
+                      return (operator.check as (source: unknown, target: unknown) => boolean)(repoKeyValue, p.argument)
                     }
+
+                    if (typeof p.argument === 'object' && p.argument !== null && 'key' in p.argument) {
+                      return (operator.check as (target: number | string) => boolean)(
+                        get(repo, (p.argument as { key: string }).key)
+                      )
+                    }
+
+                    return false
                   }
                 } else {
                   return false
@@ -284,7 +297,8 @@ export const useStarsStore = defineStore({
       isFetchingStars: false,
       pageInfo: {
         endCursor: null,
-        hasNextPage: true,
+        hasNextPage: false,
+        hasPreviousPage: false,
         startCursor: null,
       } as PaginationResponse,
       selectedRepos: [] as GitHubRepoNode[],

@@ -8,29 +8,30 @@
   ],
   "license": "MIT",
   "require": {
-    "php": "^8.1",
+    "php": "^8.2",
     "doctrine/dbal": "^3.4",
-    "genealabs/laravel-model-caching": "^0.13.4",
-    "graham-campbell/github": "^12.2",
+    "genealabs/laravel-model-caching": "^12.0",
+    "graham-campbell/github": "^13.0",
     "guzzlehttp/guzzle": "^7.2",
     "http-interop/http-factory-guzzle": "^1.0",
-    "hybridly/laravel": "^0.7.13",
-    "laravel/framework": "^10.10",
-    "laravel/sanctum": "^3.2",
+    "hybridly/laravel": "^0.9.1",
+    "laravel/framework": "^12.0",
+    "laravel/sanctum": "^4.0",
     "laravel/socialite": "^5.6",
     "laravel/tinker": "^2.8",
     "spatie/laravel-data": "^4.0"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.8",
-    "barryvdh/laravel-ide-helper": "^2.13",
+    "barryvdh/laravel-ide-helper": "^3.6",
     "fakerphp/faker": "^1.9.1",
+    "laravel/boost": "^2.2",
     "laravel/pint": "^1.0",
     "laravel/sail": "^1.18",
     "mockery/mockery": "^1.4.4",
-    "nunomaduro/collision": "^7.0",
-    "pestphp/pest": "^2.0",
-    "pestphp/pest-plugin-laravel": "^2.0",
+    "nunomaduro/collision": "^8.8",
+    "pestphp/pest": "^3.8",
+    "pestphp/pest-plugin-laravel": "^3.2",
     "predis/predis": "^2.2",
     "spatie/laravel-ignition": "^2.0",
     "spatie/laravel-typescript-transformer": "^2.3"
@@ -54,7 +55,8 @@
       "@autocomplete"
     ],
     "post-update-cmd": [
-      "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+      "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+      "@php artisan boost:update --ansi"
     ],
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
