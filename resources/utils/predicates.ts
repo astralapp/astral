@@ -1,4 +1,6 @@
-import { RepoLanguage } from '@/types'
+import { GitHubRepo, RepoLanguage } from '@/types'
+import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 export interface Predicate {
   argument: unknown
@@ -9,6 +11,10 @@ export interface Predicate {
 export interface PredicateGroup {
   logicalType: 'all' | 'any' | 'none'
   predicates: Predicate[]
+}
+
+export interface SmartFilterBody {
+  groups: PredicateGroup[]
 }
 
 export type PredicateOperatorCheck =
@@ -238,3 +244,159 @@ export const predicateTargets = [
     type: 'Date',
   } as PredicateTarget<'Date'>,
 ]
+
+const predicateTargetsByKeyPath = new Map(predicateTargets.map(target => [target.keyPath, target]))
+
+export const predicateOperators: PredicateOperator[] = [
+  ...stringOperators,
+  ...numberOperators,
+  ...tagOperators,
+  ...dateOperators,
+  ...languageOperators,
+  ...stateOperators,
+]
+
+const predicateOperatorsByKey = new Map(predicateOperators.map(operator => [operator.key, operator]))
+
+export const createDefaultPredicate = (): Predicate => {
+  return cloneDeep(defaultPredicate)
+}
+
+export const createDefaultGroup = (): PredicateGroup => {
+  return {
+    logicalType: defaultGroup.logicalType,
+    predicates: [createDefaultPredicate()],
+  }
+}
+
+export const createDefaultFilterBody = (): SmartFilterBody => {
+  return {
+    groups: [createDefaultGroup()],
+  }
+}
+
+export const getPredicateTarget = (selectedTarget: string): PredicateTarget<PredicateTargetType> => {
+  return (predicateTargetsByKeyPath.get(selectedTarget) as PredicateTarget<PredicateTargetType>) ?? predicateTargets[0]
+}
+
+export const getOperatorsForPredicate = (predicate: Predicate): PredicateOperator[] => {
+  return getPredicateTarget(predicate.selectedTarget).operators
+}
+
+export const applyPredicateTarget = (predicate: Predicate, selectedTarget: string): void => {
+  const target = getPredicateTarget(selectedTarget)
+
+  predicate.selectedTarget = target.keyPath
+  predicate.operator = target.operators[0]?.key ?? ''
+
+  if (target.defaultValue !== undefined) {
+    predicate.argument = cloneDeep(target.defaultValue)
+  }
+}
+
+export const normalizePredicate = (predicate: Partial<Predicate>): Predicate => {
+  const target = getPredicateTarget(String(predicate.selectedTarget || defaultPredicate.selectedTarget))
+  const argument =
+    predicate.argument !== undefined
+      ? cloneDeep(predicate.argument)
+      : target.defaultValue !== undefined
+      ? cloneDeep(target.defaultValue)
+      : undefined
+
+  return {
+    argument,
+    operator: target.operators.some(operator => operator.key === predicate.operator)
+      ? String(predicate.operator)
+      : target.operators[0]?.key ?? '',
+    selectedTarget: target.keyPath,
+  }
+}
+
+export const normalizeGroup = (group: Partial<PredicateGroup>): PredicateGroup => {
+  const logicalType = group.logicalType === 'all' || group.logicalType === 'none' ? group.logicalType : 'any'
+  const predicates = Array.isArray(group.predicates)
+    ? group.predicates.map(predicate => normalizePredicate(predicate as Partial<Predicate>))
+    : [createDefaultPredicate()]
+
+  return {
+    logicalType,
+    predicates: predicates.length ? predicates : [createDefaultPredicate()],
+  }
+}
+
+export const parseSmartFilterBody = (value: string): SmartFilterBody => {
+  try {
+    const parsed = JSON.parse(value) as Partial<SmartFilterBody>
+
+    if (!Array.isArray(parsed.groups) || !parsed.groups.length) {
+      return createDefaultFilterBody()
+    }
+
+    return {
+      groups: parsed.groups.map(group => normalizeGroup(group as Partial<PredicateGroup>)),
+    }
+  } catch {
+    return createDefaultFilterBody()
+  }
+}
+
+export const stringifySmartFilterBody = (body: SmartFilterBody): string => {
+  return JSON.stringify(body)
+}
+
+export const evaluatePredicate = (
+  predicate: Predicate,
+  repo: GitHubRepo,
+  userStar: Maybe<App.Data.StarData> = undefined
+): boolean => {
+  const operator = predicateOperatorsByKey.get(predicate.operator)
+
+  if (!operator) {
+    return false
+  }
+
+  if (predicate.selectedTarget === 'tags') {
+    if (!userStar) {
+      return false
+    }
+
+    return (operator.check as (source: App.Data.TagData[], target: App.Data.TagData[]) => boolean)(
+      userStar.tags,
+      predicate.argument as App.Data.TagData[]
+    )
+  }
+
+  const repoKeyValue = get(repo, predicate.selectedTarget)
+
+  if (repoKeyValue !== undefined && repoKeyValue !== null) {
+    return (operator.check as (source: unknown, target: unknown) => boolean)(repoKeyValue, predicate.argument)
+  }
+
+  if (typeof predicate.argument === 'object' && predicate.argument !== null && 'key' in predicate.argument) {
+    const argumentKeyPath = (predicate.argument as { key: string }).key
+
+    return (operator.check as (target: number | string) => boolean)(get(repo, argumentKeyPath))
+  }
+
+  return false
+}
+
+export const evaluateGroup = (group: PredicateGroup, predicateCheck: (predicate: Predicate) => boolean): boolean => {
+  if (group.logicalType === 'all') {
+    return group.predicates.every(predicateCheck)
+  }
+
+  if (group.logicalType === 'none') {
+    return !group.predicates.some(predicateCheck)
+  }
+
+  return group.predicates.some(predicateCheck)
+}
+
+export const evaluateSmartFilterBody = (
+  body: SmartFilterBody,
+  repo: GitHubRepo,
+  userStar: Maybe<App.Data.StarData> = undefined
+): boolean => {
+  return body.groups.every(group => evaluateGroup(group, predicate => evaluatePredicate(predicate, repo, userStar)))
+}

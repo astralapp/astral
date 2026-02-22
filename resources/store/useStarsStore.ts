@@ -1,6 +1,6 @@
 import { paginateGraphQL } from '@octokit/plugin-paginate-graphql'
 import { router } from 'hybridly'
-import { Dictionary, every, get, reject, some } from 'lodash'
+import { Dictionary } from 'lodash'
 import keyBy from 'lodash/keyBy'
 import { Octokit } from 'octokit'
 import { defineStore } from 'pinia'
@@ -18,19 +18,7 @@ import {
   StarMetaInput,
   TagEditorTag,
 } from '@/types'
-import {
-  dateOperators,
-  languageOperators,
-  numberOperators,
-  Predicate,
-  PredicateGroup,
-  PredicateOperator,
-  stateOperators,
-  stringOperators,
-  tagOperators,
-} from '@/utils/predicates'
-
-type LogicalOperatorFunction = (predicates: Predicate[], predicateCheck: (predicate: Predicate) => boolean) => boolean
+import { evaluateSmartFilterBody, parseSmartFilterBody } from '@/utils/predicates'
 
 const GqlOctokit = Octokit.plugin(paginateGraphQL)
 
@@ -74,28 +62,35 @@ export const useStarsStore = defineStore({
     },
     async fetchStars(cursor: Nullable<string> = null, cursorDirection: CursorDirection = CursorDirection.AFTER) {
       this.isFetchingStars = true
+      try {
+        const userStore = useUserStore()
+        const octokit = new GqlOctokit({ auth: userStore.user?.accessToken })
+        const pagesToPrepend: GitHubRepo[][] = []
 
-      const userStore = useUserStore()
-      const octokit = new GqlOctokit({ auth: userStore.user?.accessToken })
+        const pageIterator = octokit.graphql.paginate.iterator(fetchStarsQuery(cursorDirection), {
+          ...(cursor && { cursor }),
+        })
 
-      const pageIterator = octokit.graphql.paginate.iterator(fetchStarsQuery(cursorDirection), {
-        ...(cursor && { cursor }),
-      })
+        for await (const response of pageIterator) {
+          const pageInfo = response?.viewer?.starredRepositories?.pageInfo as PaginationResponse
+          const repos = response?.viewer?.starredRepositories?.edges as GitHubRepo[]
 
-      for await (const response of pageIterator) {
-        const pageInfo = response?.viewer?.starredRepositories?.pageInfo as PaginationResponse
+          this.pageInfo = pageInfo
+          this.totalRepos = response.viewer.starredRepositories.totalCount
 
-        this.pageInfo = pageInfo
-
-        if (cursorDirection === CursorDirection.AFTER) {
-          this.starredRepos = [...this.starredRepos, ...response.viewer.starredRepositories.edges]
-        } else {
-          this.starredRepos = [...response.viewer.starredRepositories.edges, ...this.starredRepos]
+          if (cursorDirection === CursorDirection.AFTER) {
+            this.starredRepos.push(...repos)
+          } else {
+            pagesToPrepend.push(repos)
+          }
         }
-        this.totalRepos = response.viewer.starredRepositories.totalCount
-      }
 
-      this.isFetchingStars = false
+        if (cursorDirection === CursorDirection.BEFORE && pagesToPrepend.length) {
+          this.starredRepos = pagesToPrepend.reverse().flat().concat(this.starredRepos)
+        }
+      } finally {
+        this.isFetchingStars = false
+      }
     },
     async removeStar(id: string) {
       const userStore = useUserStore()
@@ -167,60 +162,10 @@ export const useStarsStore = defineStore({
       }
 
       if (starsFilterStore.isFilteringBySmartFilter && starsFilterStore.selectedSmartFilter) {
-        const predicate = JSON.parse(starsFilterStore.selectedSmartFilter.body)
-
-        const logicalTypeMap = {
-          all: every,
-          any: some,
-          none: reject,
-        } as const
-
-        const operators: PredicateOperator[] = [
-          ...stringOperators,
-          ...numberOperators,
-          ...tagOperators,
-          ...dateOperators,
-          ...languageOperators,
-          ...stateOperators,
-        ]
+        const smartFilterBody = parseSmartFilterBody(starsFilterStore.selectedSmartFilter.body)
 
         filteredRepos = this.allStars.filter(repo => {
-          return predicate.groups.every((group: PredicateGroup) => {
-            return (get(logicalTypeMap, group.logicalType) as LogicalOperatorFunction)(
-              group.predicates,
-              (p: Predicate) => {
-                const operator: Maybe<PredicateOperator> = operators.find(o => o.key === p.operator)
-                if (operator) {
-                  if (p.selectedTarget === 'tags') {
-                    const userStar = this.userStarsByRepoId[repo.node.databaseId]
-                    if (!userStar) return false
-
-                    const tags = userStar.tags
-
-                    return (operator.check as (source: App.Data.TagData[], target: App.Data.TagData[]) => boolean)(
-                      tags,
-                      p.argument as App.Data.TagData[]
-                    )
-                  } else {
-                    const repoKeyValue = get(repo, p.selectedTarget)
-                    if (repoKeyValue !== undefined && repoKeyValue !== null) {
-                      return (operator.check as (source: unknown, target: unknown) => boolean)(repoKeyValue, p.argument)
-                    }
-
-                    if (typeof p.argument === 'object' && p.argument !== null && 'key' in p.argument) {
-                      return (operator.check as (target: number | string) => boolean)(
-                        get(repo, (p.argument as { key: string }).key)
-                      )
-                    }
-
-                    return false
-                  }
-                } else {
-                  return false
-                }
-              }
-            )
-          })
+          return evaluateSmartFilterBody(smartFilterBody, repo, this.userStarsByRepoId[repo.node.databaseId])
         })
       }
 
