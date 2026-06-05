@@ -35,7 +35,7 @@ const editor = useEditor({
   content: '',
   editorProps: {
     attributes: {
-      class: 'prose focus:outline-none prose-a:text-brand-600 dark:prose-invert dark:prose-a:text-brand-500 h-full',
+      class: 'prose focus:outline-hidden prose-a:text-brand-600 dark:prose-invert dark:prose-a:text-brand-500 h-full',
     },
   },
   extensions: [
@@ -159,15 +159,15 @@ function saveNotes(editor: Maybe<Editor>) {
           leave-to="opacity-0 -translate-x-full"
         >
           <div
-            class="relative h-full transform rounded-r-md bg-white dark:bg-gray-900 p-4 shadow transition duration-300"
+            class="relative h-full transform rounded-r-md bg-white dark:bg-gray-900 p-4 shadow-sm transition duration-300"
           >
             <div
               v-if="editor"
-              class="flex items-center rounded bg-gray-100 dark:bg-gray-800 p-2"
+              class="flex items-center rounded-sm bg-gray-100 dark:bg-gray-800 p-2"
             >
               <!-- Bold Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('bold'),
@@ -183,7 +183,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- Italics Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('italic'),
@@ -199,7 +199,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- Underline Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('underline'),
@@ -215,7 +215,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- BulletList Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('bulletList'),
@@ -231,7 +231,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- OrderedList Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('orderedList'),
@@ -247,7 +247,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- Link Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('link'),
@@ -263,7 +263,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- Code Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('code'),
@@ -279,7 +279,7 @@ function saveNotes(editor: Maybe<Editor>) {
 
               <!-- CodeBlock Button -->
               <button
-                class="rounded p-1"
+                class="rounded-sm p-1"
                 :class="{
                   'bg-brand-100 text-brand-800 dark:bg-brand-500/10 dark:text-brand-400 hover:bg-brand-200 dark:hover:bg-brand-500/20':
                     editor.isActive('codeBlock'),
@@ -296,7 +296,7 @@ function saveNotes(editor: Maybe<Editor>) {
                 v-if="editor"
                 size="sm"
                 kind="primary"
-                class="ml-auto flex-shrink-0"
+                class="ml-auto shrink-0"
                 :disabled="isSaving"
                 @click="saveNotes(editor)"
                 >{{ isSaving ? 'Saving' : 'Save' }}</BaseButton
@@ -332,6 +332,8 @@ function saveNotes(editor: Maybe<Editor>) {
 </template>
 
 <style scoped>
+@reference '../../application/tailwind.css';
+
 :deep(.tiptap p.is-editor-empty:first-child::before) {
   @apply pointer-events-none float-left h-0 text-gray-400;
   content: attr(data-placeholder);

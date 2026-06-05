@@ -50,7 +50,7 @@ const currentMessage: Ref<null | string> = computed(() =>
           href="https://github.com/sponsors"
           target="_blank"
           rel="noopener noreferrer"
-          class="font-semibold text-brand-700 dark:text-brand-500 focus:outline-none"
+          class="font-semibold text-brand-700 dark:text-brand-500 focus:outline-hidden"
           >GitHub Sponsor</a
         >
         of the project. You can sponsor for as little as $1/month to get full access to all of Astral's features.

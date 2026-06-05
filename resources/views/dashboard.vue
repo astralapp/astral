@@ -177,7 +177,7 @@ const shouldShowWelcomeMessage = ref(false)
           </button>
         </div>
 
-        <div class="flex w-1/3 flex-shrink-0 items-center justify-start">
+        <div class="flex w-1/3 shrink-0 items-center justify-start">
           <LogoSvg
             class="h-6 fill-current text-white sm:h-8"
             aria-label="Astral"
@@ -195,7 +195,7 @@ const shouldShowWelcomeMessage = ref(false)
         :aria-hidden="!isSidebarOpen"
         :class="{
           'pointer-events-none bg-opacity-0': !isSidebarOpen,
-          'bg-opacity-75 backdrop-blur-sm': isSidebarOpen,
+          'bg-opacity-75 backdrop-blur-xs': isSidebarOpen,
         }"
       >
         <div
@@ -217,7 +217,7 @@ const shouldShowWelcomeMessage = ref(false)
 
         <button
           v-show="isSidebarOpen"
-          class="flex flex-grow justify-center pt-5"
+          class="flex grow justify-center pt-5"
           aria-label="Close Sidebar"
           @click="isSidebarOpen = !isSidebarOpen"
         >

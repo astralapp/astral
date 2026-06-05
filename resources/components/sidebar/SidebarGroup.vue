@@ -24,7 +24,7 @@ defineProps<Props>()
         >
           <i-lucide-chevron-right
             v-if="collapsible"
-            class="relative h-4 w-4 flex-shrink-0 transform"
+            class="relative h-4 w-4 shrink-0 transform"
             :class="{ 'rotate-90': isOpen }"
             style="top: -1px"
             role="presentation"
@@ -37,7 +37,7 @@ defineProps<Props>()
       </div>
 
       <div
-        class="ml-auto flex-shrink-0"
+        class="ml-auto shrink-0"
         :class="{
           'pointer-events-auto opacity-100': isOpen || !collapsible,
           'pointer-events-none opacity-0': !isOpen,

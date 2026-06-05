@@ -130,7 +130,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
       <BaseTextInput
         ref="inputRef"
         :model-value="dateFns.format(selectedDate, 'yyyy-MM-dd')"
-        class="flex-grow"
+        class="grow"
         :class="{ 'border-gray-400 ring-gray-400 dark:ring-gray-600': open && isDatePickerShowing }"
         readonly
       />
@@ -146,7 +146,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
       <div v-show="isDatePickerShowing && open">
         <PopoverPanel
           static
-          class="absolute z-10 -mt-2 w-64 -translate-y-full rounded border bg-white dark:bg-gray-900 p-2 text-xs shadow-sm dark:border-gray-700"
+          class="absolute z-10 -mt-2 w-64 -translate-y-full rounded-sm border bg-white dark:bg-gray-900 p-2 text-xs shadow-xs dark:border-gray-700"
           :style="{
             left: inputRect.left + 'px',
             top: inputRect.top + 'px',
@@ -186,7 +186,7 @@ const setDatePickerVisibility = (isVisible: boolean) => {
             <PopoverButton
               v-for="(day, index) in dates"
               :key="index"
-              class="aspect-square w-full rounded border border-transparent text-center hover:border-gray-300 dark:hover:border-gray-600"
+              class="aspect-square w-full rounded-sm border border-transparent text-center hover:border-gray-300 dark:hover:border-gray-600"
               :class="{
                 'bg-gray-100 dark:bg-gray-800 font-bold': day.isToday,
                 'text-gray-700 dark:text-gray-300': day.isCurrentMonth && !day.isSelected,

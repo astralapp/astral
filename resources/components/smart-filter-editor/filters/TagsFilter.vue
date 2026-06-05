@@ -26,7 +26,7 @@ const autocompleteOptions = computed(() => {
     :tags="modelValue ?? []"
     :can-create="false"
     :autocomplete-options="autocompleteOptions"
-    class="flex-grow"
+    class="grow"
     @change="emit('update:modelValue', $event)"
   />
 </template>

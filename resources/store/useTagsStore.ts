@@ -19,11 +19,6 @@ export const useTagsStore = defineStore({
         data: {
           name: tagName,
         },
-        // hooks: {
-        //   error: errors => {
-        //     console.log('ERRORZ:', errors)
-        //   },
-        // },
         only: ['tags'],
       })
     },

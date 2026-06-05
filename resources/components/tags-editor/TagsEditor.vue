@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'blur'): void
+  (e: 'blur-sm'): void
   (e: 'change', value: TagEditorTag[]): void
 }>()
 
@@ -140,14 +140,14 @@ nextTick(() => {
 
 <template>
   <div
-    class="pt-2 pb-0 min-w-0 flex-auto appearance-none rounded-md border border-gray-900/20 bg-white px-1 shadow-md shadow-gray-800/5 placeholder:text-gray-400 focus-within:border-gray-400 focus-within:outline-none focus-within:ring-4 focus-within:ring-gray-500/10 dark:border-gray-700 dark:bg-gray-700/[0.15] dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus-within:border-gray-500 dark:focus-within:ring-gray-400/10 sm:text-sm"
+    class="pt-2 pb-0 min-w-0 flex-auto appearance-none rounded-md border border-gray-900/20 bg-white px-1 shadow-md shadow-gray-800/5 placeholder:text-gray-400 focus-within:border-gray-400 focus-within:outline-hidden focus-within:ring-4 focus-within:ring-gray-500/10 dark:border-gray-700 dark:bg-gray-700/15 dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus-within:border-gray-500 dark:focus-within:ring-gray-400/10 sm:text-sm"
     @click.stop
   >
     <ul class="relative flex w-full flex-wrap items-center">
       <li
         v-for="(tag, i) in mutableTags"
         :key="tag.name"
-        class="mx-1 mb-2 flex items-center rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-400 ring-1 ring-inset ring-transparent dark:ring-indigo-400/30"
+        class="mx-1 mb-2 flex items-center rounded-xs bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-400 ring-1 ring-inset ring-transparent dark:ring-indigo-400/30"
       >
         <span>{{ tag.name }}</span>
 
@@ -162,14 +162,14 @@ nextTick(() => {
       </li>
 
       <li
-        class="relative isolate mx-1 mb-2 flex-grow leading-none"
+        class="relative isolate mx-1 mb-2 grow leading-none"
         style="flex-basis: 82px"
       >
         <input
           ref="input"
           v-model="tagText"
           type="text"
-          class="w-full min-w-0 border-0 bg-transparent p-0 text-base leading-none focus:border-0 focus:outline-none focus:ring-0 sm:text-sm"
+          class="w-full min-w-0 border-0 bg-transparent p-0 text-base leading-none focus:border-0 focus:outline-hidden focus:ring-0 sm:text-sm"
           :placeholder="placeholder"
           role="combobox"
           :aria-activedescendant="autocompleteUUID"

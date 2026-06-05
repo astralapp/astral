@@ -59,7 +59,7 @@ const Render = () =>
           'div',
           {
             ariaHidden: true,
-            class: `flex-shrink-0 w-4 h-4 mr-2 ${iconClasses.value}`,
+            class: `shrink-0 w-4 h-4 mr-2 ${iconClasses.value}`,
           },
           slots.icon()
         ),
@@ -70,7 +70,7 @@ const Render = () =>
             'div',
             {
               ariaLive: 'polite',
-              class: `transition-opacity rounded-full px-2 h-5 text-xs inline-flex items-center flex-shrink-0 ${badgeClasses.value}`,
+              class: `transition-opacity rounded-full px-2 h-5 text-xs inline-flex items-center shrink-0 ${badgeClasses.value}`,
               role: 'region',
             },
             props.count.toLocaleString()

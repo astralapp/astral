@@ -103,7 +103,7 @@ const onDragEnd = () => {
 
 <template>
   <div
-    class="group relative cursor-pointer border-b border-gray-300 dark:border-gray-700/50 p-4 shadow-sm"
+    class="group relative cursor-pointer border-b border-gray-300 dark:border-gray-700/50 p-4 shadow-xs"
     :class="{
       'bg-gray-100 shadow-inner dark:bg-gray-900': isSelected,
       'bg-white dark:bg-gray-800/80': !isSelected,
@@ -148,7 +148,7 @@ const onDragEnd = () => {
     >
       <li
         v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
-        class="mb-1 mr-1 cursor-pointer rounded-sm bg-brand-100 dark:bg-brand-500/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 f dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
+        class="mb-1 mr-1 cursor-pointer rounded-xs bg-brand-100 dark:bg-brand-500/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 f dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
         role="button"
         @click.stop="emit('languageSelected', repo.node.primaryLanguage?.name as string)"
       >
@@ -158,7 +158,7 @@ const onDragEnd = () => {
       <li
         v-for="tag in tags"
         :key="tag.id"
-        class="mb-1 mr-1 cursor-pointer rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-400 ring-1 ring-inset ring-transparent dark:ring-indigo-400/30"
+        class="mb-1 mr-1 cursor-pointer rounded-xs bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-400 ring-1 ring-inset ring-transparent dark:ring-indigo-400/30"
         role="button"
         @click.stop="emit('tagSelected', tag)"
       >
@@ -166,7 +166,7 @@ const onDragEnd = () => {
       </li>
 
       <li
-        class="cursor-pointer rounded-sm bg-gray-200 px-2 py-0.5 text-xs font-semibold tracking-wide text-gray-600 opacity-0 transition-opacity group-hover:opacity-100 dark:bg-gray-600 dark:text-gray-200"
+        class="cursor-pointer rounded-xs bg-gray-200 px-2 py-0.5 text-xs font-semibold tracking-wide text-gray-600 opacity-0 transition-opacity group-hover:opacity-100 dark:bg-gray-600 dark:text-gray-200"
         :class="{
           'opacity-100': !tags.length && !repo.node.primaryLanguage?.name,
         }"
@@ -215,7 +215,7 @@ const onDragEnd = () => {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
-          class="w-3.5 h-3.5 rotate-[75deg] hidden sm:inline-block sm:opacity-0 transition group-hover/repo-link:opacity-100 relative -top-1"
+          class="w-3.5 h-3.5 rotate-75 hidden sm:inline-block sm:opacity-0 transition group-hover/repo-link:opacity-100 relative -top-1"
           role="presentation"
         >
           <path

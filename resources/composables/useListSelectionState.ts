@@ -21,7 +21,7 @@ const { shift, cmd, ctrl } = useMagicKeys()
  * fire, but the keyup event won't. The fix is to manually dispatch a keyup
  * event when the window blur event fires.
  */
-useEventListener(window, 'blur', () => {
+useEventListener(window, 'blur-sm', () => {
   ;['shift', 'meta', 'control'].forEach(key => {
     window.dispatchEvent(new KeyboardEvent('keyup', { key }))
   })

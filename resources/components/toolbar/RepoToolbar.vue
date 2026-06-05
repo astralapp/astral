@@ -58,7 +58,7 @@ onKeyStroke('n', e => {
 
 <template>
   <div
-    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-950 dark:bg-gray-800 shadow-sm"
+    class="flex h-16 shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-950 dark:bg-gray-800 shadow-xs"
   >
     <div class="block sm:hidden">
       <BaseButton
@@ -102,7 +102,7 @@ onKeyStroke('n', e => {
       </BaseButton>
     </div>
 
-    <div class="ml-auto flex-shrink-0 hidden sm:block">
+    <div class="ml-auto shrink-0 hidden sm:block">
       <CloneUrlInput />
     </div>
   </div>

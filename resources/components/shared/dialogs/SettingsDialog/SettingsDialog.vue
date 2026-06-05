@@ -175,7 +175,7 @@ const checkSponsorshipStatus = throttle(
 
           <!-- <div class="px-4 py-5">
             <div class="flex items-center gap-x-6">
-              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm flex-shrink-0">OpenAI token</p>
+              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm shrink-0">OpenAI token</p>
 
               <form
                 class="ml-auto flex items-center gap-x-2 w-full"

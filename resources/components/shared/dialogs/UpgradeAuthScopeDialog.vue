@@ -35,7 +35,7 @@ const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
           href="https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps"
           target="_blank"
           rel="noopener noreferrer"
-          class="font-semibold text-gray-800 dark:text-gray-200 underline focus-within:outline-none"
+          class="font-semibold text-gray-800 dark:text-gray-200 underline focus-within:outline-hidden"
           >official GitHub documentation</a
         >.
       </p>

@@ -27,7 +27,7 @@ const userStore = useUserStore()
   >
     <div>
       <MenuButton
-        class="flex items-center py-1 pl-2 pr-2 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-800 focus:ring-offset-2 focus:ring-offset-brand-600 sm:rounded-md sm:pl-1 sm:hover:bg-brand-800"
+        class="flex items-center py-1 pl-2 pr-2 text-white transition-colors focus:outline-hidden focus:ring-2 focus:ring-brand-800 focus:ring-offset-2 focus:ring-offset-brand-600 sm:rounded-md sm:pl-1 sm:hover:bg-brand-800"
         :class="{ 'bg-brand-800': open }"
       >
         <img
@@ -39,7 +39,7 @@ const userStore = useUserStore()
         <span class="ml-2 hidden text-sm font-semibold sm:inline-block">{{ userStore.user?.username }}</span>
 
         <i-lucide-chevron-down
-          class="mt-0.5 ml-1 h-4 w-4 flex-shrink-0"
+          class="mt-0.5 ml-1 h-4 w-4 shrink-0"
           :class="{ 'rotate-180': open }"
           role="presentation"
         />
@@ -55,7 +55,7 @@ const userStore = useUserStore()
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems
-        class="absolute right-2 z-20 mt-0.5 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0 dark:bg-gray-800 dark:divide-gray-700 dark:border dark:border-gray-700 top-full"
+        class="absolute right-2 z-20 mt-0.5 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden sm:right-0 dark:bg-gray-800 dark:divide-gray-700 dark:border dark:border-gray-700 top-full"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">

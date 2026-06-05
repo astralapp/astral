@@ -117,7 +117,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               aria-label="Reload stars"
               :aria-busy="starsStore.isFetchingStars"
               :disabled="starsStore.isFetchingStars"
-              class="rounded p-1 text-gray-400 transition-colors"
+              class="rounded-sm p-1 text-gray-400 transition-colors"
               :class="{
                 'hover:bg-gray-700 hover:text-white': !starsStore.isFetchingStars,
               }"
@@ -180,13 +180,13 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         <template #default>
           <div class="relative mt-2 flex h-10 items-center">
             <button
-              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-none dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-300"
+              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-hidden dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-300"
               :class="{ 'pointer-events-none': isNewTagFormShowing }"
               type="button"
               @click="showNewTagForm"
             >
               <i-lucide-circle-plus
-                class="h-4 w-4 flex-shrink-0"
+                class="h-4 w-4 shrink-0"
                 role="presentation"
               />
 
@@ -205,7 +205,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
                 v-model="newTag"
                 type="text"
                 placeholder="Enter a tag name..."
-                class="w-full rounded-sm border-0 bg-white focus:ring-2 focus:ring-transparent dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 sm:text-sm"
+                class="w-full rounded-xs border-0 bg-white focus:ring-2 focus:ring-transparent dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 sm:text-sm"
                 @blur="isNewTagFormShowing = false"
               />
             </form>
@@ -248,13 +248,13 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
       >
         <template #right-action>
           <button
-            class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-none group-hover:opacity-100"
+            class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-hidden group-hover:opacity-100"
             type="button"
             aria-label="Add smart filter"
             @click="doShowSmartFilterDialog"
           >
             <i-lucide-circle-plus
-              class="h-4 w-4 flex-shrink-0"
+              class="h-4 w-4 shrink-0"
               role="presentation"
             />
           </button>

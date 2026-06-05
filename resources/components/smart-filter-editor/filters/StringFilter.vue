@@ -20,6 +20,6 @@ const value = useVModel(props, 'modelValue', emit)
 <template>
   <BaseTextInput
     v-model="value"
-    class="flex-grow"
+    class="grow"
   />
 </template>

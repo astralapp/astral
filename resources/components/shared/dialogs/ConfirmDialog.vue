@@ -15,7 +15,7 @@ const { confirmConfig } = useConfirm()
   >
     <template #icon>
       <div
-        class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-400/10"
+        class="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-400/10"
       >
         <i-lucide-triangle-alert
           class="h-6 w-6 text-red-600 dark:text-red-500"

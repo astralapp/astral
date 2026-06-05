@@ -164,7 +164,7 @@ const removeGroup = (index: number): void => {
           />
         </div>
 
-        <div class="ml-auto flex-shrink-0 space-x-2 pl-2">
+        <div class="ml-auto shrink-0 space-x-2 pl-2">
           <button
             type="button"
             class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-300 dark:active:bg-gray-800"

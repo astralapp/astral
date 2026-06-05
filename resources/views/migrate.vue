@@ -98,10 +98,10 @@ const updateStarMetadata = () => {
 
 <template>
   <div
-    class="fixed inset-0 flex items-center bg-gray-900 bg-[length:1000px_1000px] bg-repeat"
+    class="fixed inset-0 flex items-center bg-gray-900 bg-size-[1000px_1000px] bg-repeat"
     :style="{ backgroundImage: 'url(/img/migrate-bg.svg)' }"
   >
-    <div class="mx-auto flex w-full max-w-screen-lg justify-between">
+    <div class="mx-auto flex w-full max-w-(--breakpoint-lg) justify-between">
       <img
         class="h-auto w-full max-w-xs motion-safe:animate-float"
         alt="a waving astronaut"
@@ -139,17 +139,17 @@ const updateStarMetadata = () => {
           <div class="mt-4 flex w-full items-center gap-x-4">
             <div
               role="progressbar"
-              class="h-8 w-full overflow-hidden rounded-full bg-gray-900 ring-2 ring-inset ring-white [transform:translateZ(0)]"
+              class="h-8 w-full overflow-hidden rounded-full bg-gray-900 ring-2 ring-inset ring-white transform-[translateZ(0)]"
             >
               <div
-                class="relative h-full w-full rounded-full bg-white transition-[translate] duration-[660ms] ease-[cubic-bezier(0.65,0,0.35,1)]"
+                class="relative h-full w-full rounded-full bg-white transition-[translate] duration-660 ease-[cubic-bezier(0.65,0,0.35,1)]"
                 :style="{ translate: `-${progress}% 0%` }"
               ></div>
             </div>
 
             <p
               v-if="starsStore.totalRepos > 0"
-              class="flex-shrink-0 font-semibold tabular-nums text-white"
+              class="shrink-0 font-semibold tabular-nums text-white"
             >
               {{ starsStore.allStars.length }} / {{ starsStore.totalRepos }}
             </p>
