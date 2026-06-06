@@ -1,0 +1,22 @@
+# SQLite overlay: switch the app roles to a file-based database and drop MySQL.
+# The base file marks the db dependency `required: false`, so excluding the db
+# service via its profile is enough — no depends_on overrides are needed here.
+services:
+  app:
+    environment:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /var/www/html/storage/database.sqlite
+
+  queue:
+    environment:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /var/www/html/storage/database.sqlite
+
+  scheduler:
+    environment:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /var/www/html/storage/database.sqlite
+
+  db:
+    profiles:
+      - mysql

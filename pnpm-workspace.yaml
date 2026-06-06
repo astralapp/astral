@@ -1,0 +1,7 @@
+# pnpm 11 moved settings out of package.json's "pnpm" field. This records which
+# dependencies are allowed to run install/build scripts (the format written by
+# `pnpm approve-builds`). esbuild needs its postinstall to set up its binary;
+# vue-demi's postinstall selects its Vue target.
+allowBuilds:
+  esbuild: true
+  vue-demi: true

@@ -1,0 +1,72 @@
+# Local development overlay: live source mounts, dev tooling, and host-exposed
+# ports. Layered on top of compose.yml.
+services:
+  app:
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: "http://localhost:${APP_PORT:-8080}"
+    volumes:
+      - ./:/var/www/html
+      - vendor-data:/var/www/html/vendor
+
+  queue:
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+    volumes:
+      - ./:/var/www/html
+      - vendor-data:/var/www/html/vendor
+
+  scheduler:
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+    volumes:
+      - ./:/var/www/html
+      - vendor-data:/var/www/html/vendor
+
+  # In dev, serve the live ./public from the host so asset/route changes show up
+  # without rebuilding the image.
+  web:
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public:/var/www/html/public:ro
+
+  db:
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+
+  redis:
+    ports:
+      - "${FORWARD_REDIS_PORT:-6379}:6379"
+
+  # The Vite dev server runs Hybridly's plugin, which shells out to
+  # `php artisan`, so it uses the PHP+Node dev image and shares the app's vendor
+  # volume. It waits for the app role to install dependencies before starting.
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    image: astral/app-dev:local
+    working_dir: /var/www/html
+    entrypoint: ["sh", "-lc"]
+    command:
+      - "until [ -f vendor/bin/pest ]; do echo 'waiting for dependencies...'; sleep 2; done; corepack enable && pnpm install --frozen-lockfile && pnpm run dev --host 0.0.0.0 --port 5173"
+    restart: unless-stopped
+    environment:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+      # Keep pnpm's content store inside the node_modules volume rather than the
+      # bind-mounted project root.
+      npm_config_store_dir: /var/www/html/node_modules/.pnpm-store
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    volumes:
+      - ./:/var/www/html
+      - vendor-data:/var/www/html/vendor
+      - node-modules-data:/var/www/html/node_modules
+
+volumes:
+  vendor-data:
+  node-modules-data:

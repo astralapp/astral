@@ -1,0 +1,120 @@
+name: astral
+
+# Shared environment for the app/queue/scheduler roles. These point Laravel at
+# the in-network services and default to Redis-backed cache/session/queue so the
+# bundled Redis and queue worker are actually used. Values fall back to .env when
+# present, otherwise to sane defaults that match the db service below — so a bare
+# clone runs without hand-editing .env.
+x-app-env: &app-env
+  DB_CONNECTION: mysql
+  DB_HOST: db
+  DB_PORT: "3306"
+  DB_DATABASE: "${DB_DATABASE:-astral}"
+  DB_USERNAME: "${DB_USERNAME:-astral}"
+  DB_PASSWORD: "${DB_PASSWORD:-secret}"
+  REDIS_HOST: redis
+  CACHE_DRIVER: redis
+  SESSION_DRIVER: redis
+  QUEUE_CONNECTION: redis
+
+x-app: &app
+  image: astral/app:local
+  restart: unless-stopped
+  env_file:
+    - path: .env
+      required: false
+  depends_on:
+    db:
+      condition: service_healthy
+      required: false
+    redis:
+      condition: service_healthy
+  volumes:
+    - app-storage:/var/www/html/storage
+
+services:
+  app:
+    <<: *app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    environment:
+      <<: *app-env
+      CONTAINER_ROLE: app
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep php-fpm >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 60s
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+    image: astral/web:local
+    restart: unless-stopped
+    depends_on:
+      # service_started (not service_healthy): on first boot the app may run
+      # composer install + migrations before php-fpm comes up. nginx just
+      # retries until then — this avoids `up` aborting on a slow first build.
+      app:
+        condition: service_started
+    ports:
+      - "${APP_PORT:-8080}:80"
+
+  queue:
+    <<: *app
+    environment:
+      <<: *app-env
+      CONTAINER_ROLE: queue
+
+  scheduler:
+    <<: *app
+    environment:
+      <<: *app-env
+      CONTAINER_ROLE: scheduler
+
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE:-astral}"
+      MYSQL_USER: "${DB_USERNAME:-astral}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-secret}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root}"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "127.0.0.1",
+          "-uroot",
+          "-p${DB_ROOT_PASSWORD:-root}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  app-storage:
+  db-data:
+  redis-data:

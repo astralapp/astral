@@ -1,5 +1,6 @@
 /.phpunit.cache
 /node_modules
+/.pnpm-store
 /public/build
 /public/hot
 /public/storage

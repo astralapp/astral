@@ -1,0 +1,57 @@
+# Keep the build context small, reproducible, and free of secrets.
+# Everything the image needs is either committed source or produced by a
+# build stage (vendor, public/build), so local artifacts are excluded.
+
+# VCS / CI / editor config
+.git
+.gitignore
+.gitattributes
+.github
+.editorconfig
+.idea
+.vscode
+.fleet
+.DS_Store
+
+# Secrets — never bake an env file into the image
+.env
+.env.*
+!.env.example
+
+# Dependencies (reinstalled inside the image)
+/vendor
+/node_modules
+/.pnpm-store
+
+# Frontend build output (produced by the frontend_assets stage)
+/public/build
+/public/hot
+
+# Laravel runtime state (recreated by the entrypoint / framework at boot).
+# bootstrap/cache/*.php is excluded so a dev-generated package manifest (which
+# may reference dev-only providers like debugbar) can't leak into a prod image.
+/bootstrap/cache/*.php
+/storage/logs/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/*.sqlite
+/storage/database.sqlite
+
+# Tooling caches / test output
+.phpunit.cache
+.phpunit.result.cache
+/tests/coverage
+
+# Assistant / agent scratch dirs
+.claude
+.codex
+.agents
+.boost
+
+# Docker + tooling files not needed inside the image
+# (docker-entrypoint.sh is excluded here but COPYed explicitly in the Dockerfile)
+compose*.yml
+Makefile
+README.md
+AGENTS.md
