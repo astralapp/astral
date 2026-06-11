@@ -40,7 +40,7 @@ const classesForKindProp = {
   'danger-borderless':
     'text-red-600 border-transparent hover:text-red-700 focus-visible:ring-red-200 font-semibold dark:text-red-500 dark:hover:text-red-400',
   primary:
-    'text-white bg-brand-600 border-transparent hover:bg-brand-700 focus-visible:ring-brand-200 font-semibold border shadow-xs',
+    'text-white bg-brand-700 border-transparent hover:bg-brand-800 active:bg-brand-900 focus-visible:ring-brand-200 font-semibold border shadow-xs',
   'primary-borderless':
     'text-brand-600 hover:text-brand-700 focus-visible:ring-brand-200 font-semibold dark:text-brand-500 dark:hover:text-brand-400',
   warning:
