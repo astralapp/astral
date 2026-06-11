@@ -25,3 +25,9 @@ _ide_helper*
 .phpstorm.meta.php
 **/.DS_Store
 *.tasks
+
+# Local agent / skill tooling
+/.agents
+/.claude
+/.github/skills
+/.impeccable
