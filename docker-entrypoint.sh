@@ -69,15 +69,23 @@ if [ -z "${APP_KEY:-}" ] && app_key_present; then
     export APP_KEY
 fi
 
+# The setup above runs as root, so the SQLite database, logs, and caches it
+# created/migrated are root-owned. Hand the writable paths to www-data — the
+# user php-fpm workers and the queue/scheduler (via su-exec below) run as — so
+# the app isn't writing to a read-only database. storage is a Docker volume;
+# bootstrap/cache may be a bind mount where chown is a harmless no-op.
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+
 case "${role}" in
     app)
+        # php-fpm master stays root so it can bind and fork www-data workers.
         exec php-fpm -F
         ;;
     queue)
-        exec php artisan queue:work --tries=3 --timeout=90
+        exec su-exec www-data php artisan queue:work --tries=3 --timeout=90
         ;;
     scheduler)
-        exec php artisan schedule:work
+        exec su-exec www-data php artisan schedule:work
         ;;
     *)
         echo "Unknown CONTAINER_ROLE: ${role}" >&2

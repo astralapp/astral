@@ -60,6 +60,10 @@ RUN apk add --no-cache \
 # pdo_sqlite / sqlite3 ship enabled by default in the official PHP image,
 # so SQLite mode works without extra extensions.
 
+# su-exec lets the entrypoint drop the queue/scheduler to www-data (separate
+# layer so the extension build above stays cached).
+RUN apk add --no-cache su-exec
+
 COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 # 3. Frontend assets. Hybridly's Vite plugin shells out to `php artisan

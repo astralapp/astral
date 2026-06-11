@@ -3,7 +3,8 @@ COMPOSE_DEV_SQLITE = docker compose -f compose.yml -f compose.dev.yml -f compose
 COMPOSE_PROD = docker compose -f compose.yml
 COMPOSE_PROD_SQLITE = docker compose -f compose.yml -f compose.sqlite.yml
 
-.PHONY: help setup setup-sqlite up down restart build logs ps shell key migrate seed test pint artisan \
+.PHONY: help setup setup-sqlite up down restart build logs ps shell shell-vite pnpm key migrate seed test pint artisan \
+	shell-vite-sqlite pnpm-sqlite \
 	up-sqlite down-sqlite restart-sqlite build-sqlite logs-sqlite ps-sqlite shell-sqlite \
 	key-sqlite migrate-sqlite seed-sqlite test-sqlite artisan-sqlite \
 	prod-up prod-down prod-restart prod-build prod-logs prod-ps prod-migrate \
@@ -38,6 +39,9 @@ help:
 	@echo "  make pint           Run Laravel Pint"
 	@echo "  make artisan cmd=\"about\""
 	@echo "  make artisan-sqlite cmd=\"about\""
+	@echo "  make shell-vite     Open shell in vite (Node/pnpm) container"
+	@echo "  make pnpm cmd=\"run lint\"   Run pnpm in the vite container"
+	@echo "  make pnpm-sqlite cmd=\"run lint\""
 	@echo "  make prod-up        Start production stack"
 	@echo "  make prod-up-sqlite Start production stack (SQLite mode)"
 	@echo "  make prod-down      Stop production stack"
@@ -145,6 +149,21 @@ artisan:
 
 artisan-sqlite:
 	$(COMPOSE_DEV_SQLITE) exec app php artisan $(cmd)
+
+# Node/pnpm live in the vite container (the app container is PHP-only). The Vite
+# dev server already runs there as the main process — these are for one-off
+# pnpm commands (lint, format, adding packages, etc.).
+shell-vite:
+	$(COMPOSE_DEV) exec vite sh
+
+shell-vite-sqlite:
+	$(COMPOSE_DEV_SQLITE) exec vite sh
+
+pnpm:
+	$(COMPOSE_DEV) exec vite pnpm $(cmd)
+
+pnpm-sqlite:
+	$(COMPOSE_DEV_SQLITE) exec vite pnpm $(cmd)
 
 prod-up:
 	$(COMPOSE_PROD) up --build -d

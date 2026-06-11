@@ -22,4 +22,12 @@ export default defineConfig({
       '@': '/resources',
     },
   },
+  server: {
+    watch: {
+      // Docker bind mounts on macOS don't forward inotify events into the
+      // container, so Vite's watcher never sees host edits. Poll instead.
+      usePolling: true,
+      interval: 300,
+    },
+  },
 })
