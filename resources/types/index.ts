@@ -13,7 +13,7 @@ export const Ability = {
 } as const
 
 export interface GitHubRepo {
-  cursor: string
+  cursor?: string
   node: GitHubRepoNode
 }
 
@@ -28,6 +28,7 @@ export interface GitHubRepoNode {
   isArchived: boolean
   nameWithOwner: string
   primaryLanguage: Nullable<{ name: string }>
+  pushedAt: string
   releases?: {
     edges: Array<{ node: { tagName: string } }>
   }

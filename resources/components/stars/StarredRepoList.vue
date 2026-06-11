@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-import { watchOnce } from '@vueuse/core'
 import { nextTick, ref, watch } from 'vue'
-// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { createVirtualScroller } from 'vue-typed-virtual-list'
 
+import StarFetchProgress from '@/components/stars/StarFetchProgress.vue'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
 import { useStarsStore } from '@/store/useStarsStore'
-// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import { CursorDirection, FetchDirection, GitHubRepo } from '@/types'
+import { GitHubRepo } from '@/types'
 
 const emit = defineEmits<{
   blur: [e: FocusEvent]
@@ -16,33 +14,30 @@ const emit = defineEmits<{
 
 const VirtualScroller = createVirtualScroller<GitHubRepo>()
 
-/** Stars Fetch Lifecycle
- * 1. if hasNextPage is true, fetch using whatever the end cursor is, even if it's null
- * 2. Keep fetching until `hasNextPage` is false.
- * 3. fetch any new repos in ASC order using the first repo's cursor, fetch until `hasNextPage` is false
+/** Stars fetch lifecycle
+ * - First sync / cleared cache (`!isFullySynced`): fetch the full list in parallel.
+ * - Returning visit (cached): fetch only stars added since last sync and prepend them.
  **/
 const starsStore = useStarsStore()
 const reposHaveSynced = ref(false)
-const pageInfoHasSynced = ref(false)
+const syncStateHasSynced = ref(false)
 
 useSyncToLocalStorage(starsStore, 'starredRepos').then(() => {
   reposHaveSynced.value = true
 })
-useSyncToLocalStorage(starsStore, 'pageInfo').then(() => {
-  pageInfoHasSynced.value = true
+useSyncToLocalStorage(starsStore, 'isFullySynced').then(() => {
+  syncStateHasSynced.value = true
 })
 
-watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
+watch([reposHaveSynced, syncStateHasSynced], async syncChecks => {
   if (syncChecks.every(Boolean)) {
-    // We're ready to start fetching stars
     await nextTick()
-    if (!starsStore.starredRepos.length) {
-      await starsStore.fetchStars()
-    } else if (starsStore.pageInfo.hasNextPage) {
-      await starsStore.fetchStars(starsStore.pageInfo.endCursor)
-    }
 
-    await starsStore.fetchStars(starsStore.starredRepos[0].cursor, CursorDirection.BEFORE)
+    if (!starsStore.isFullySynced) {
+      await starsStore.fetchAllStars()
+    } else {
+      await starsStore.fetchNewStars()
+    }
   }
 })
 </script>
@@ -67,9 +62,14 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
 
   <div
     v-if="!starsStore.filteredRepos.length && starsStore.isFetchingStars"
-    class="flex w-full h-full items-center justify-center"
+    class="flex w-full h-full items-center justify-center p-8"
   >
-    <p class="text-center text-gray-500">Loading starred repositories...</p>
+    <StarFetchProgress
+      class="max-w-md"
+      label="Loading your stars…"
+      :fetched-count="starsStore.fetchedCount"
+      :total-repos="starsStore.totalRepos"
+    />
   </div>
 
   <div

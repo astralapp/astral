@@ -121,12 +121,11 @@ const onRepoSelected = (repo: GitHubRepo) => {
 
 const onReloadStars = async () => {
   await localForage.clear()
-  starsStore.resetPageInfo()
   starsStore.clearStarredRepos()
 
   await nextTick()
 
-  await starsStore.fetchStars(starsStore.pageInfo.endCursor)
+  await starsStore.fetchAllStars()
 }
 
 watch(selectedItems, repos => {

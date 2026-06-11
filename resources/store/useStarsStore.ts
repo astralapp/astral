@@ -1,26 +1,78 @@
-import { paginateGraphQL } from '@octokit/plugin-paginate-graphql'
 import { router } from 'hybridly'
 import { Dictionary } from 'lodash'
 import keyBy from 'lodash/keyBy'
 import { Octokit } from 'octokit'
 import { defineStore } from 'pinia'
 
-import { fetchStarsQuery, removeStarQuery } from '@/queries'
+import { removeStarQuery } from '@/queries'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useUserStore } from '@/store/useUserStore'
-import {
-  CursorDirection,
-  FetchDirection,
-  GitHubRepo,
-  GitHubRepoNode,
-  PaginationResponse,
-  RepoLanguage,
-  StarMetaInput,
-  TagEditorTag,
-} from '@/types'
+import { GitHubRepo, GitHubRepoNode, PaginationResponse, RepoLanguage, StarMetaInput, TagEditorTag } from '@/types'
+import { runWithConcurrency } from '@/utils'
 import { evaluateSmartFilterBody, parseSmartFilterBody } from '@/utils/predicates'
 
-const GqlOctokit = Octokit.plugin(paginateGraphQL)
+const STARS_PER_PAGE = 100
+const STARS_FETCH_CONCURRENCY = 6
+
+interface GitHubStarItem {
+  repo: {
+    archived: boolean
+    default_branch: string
+    description: Nullable<string>
+    forks_count: number
+    full_name: string
+    html_url: string
+    id: number
+    language: Nullable<string>
+    node_id: string
+    pushed_at: string
+    stargazers_count: number
+  }
+  starred_at: string
+}
+
+const mapStarItemToRepo = (item: GitHubStarItem): GitHubRepo => ({
+  node: {
+    databaseId: item.repo.id,
+    defaultBranchRef: { name: item.repo.default_branch },
+    description: item.repo.description ?? undefined,
+    forkCount: item.repo.forks_count,
+    id: item.repo.node_id,
+    isArchived: item.repo.archived,
+    nameWithOwner: item.repo.full_name,
+    primaryLanguage: item.repo.language ? { name: item.repo.language } : null,
+    pushedAt: item.repo.pushed_at,
+    stargazerCount: item.repo.stargazers_count,
+    url: item.repo.html_url,
+  },
+})
+
+const getLastPage = (link?: string): Nullable<number> => {
+  if (!link) return null
+
+  const lastSegment = link.split(',').find(segment => segment.includes('rel="last"'))
+  const url = lastSegment?.match(/<([^>]+)>/)?.[1]
+
+  if (!url) return null
+
+  const page = new URL(url).searchParams.get('page')
+
+  return page ? Number(page) : null
+}
+
+const dedupeById = (repos: GitHubRepo[]): GitHubRepo[] => {
+  const seen = new Set<number>()
+  const deduped: GitHubRepo[] = []
+
+  for (const repo of repos) {
+    if (seen.has(repo.node.databaseId)) continue
+
+    seen.add(repo.node.databaseId)
+    deduped.push(repo)
+  }
+
+  return deduped
+}
 
 export const useStarsStore = defineStore({
   actions: {
@@ -60,33 +112,97 @@ export const useStarsStore = defineStore({
 
       return data
     },
-    async fetchStars(cursor: Nullable<string> = null, cursorDirection: CursorDirection = CursorDirection.AFTER) {
+    async fetchAllStars() {
+      const userStore = useUserStore()
+      const octokit = new Octokit({ auth: userStore.user?.accessToken })
+
       this.isFetchingStars = true
+      this.isFullySynced = false
+
       try {
-        const userStore = useUserStore()
-        const octokit = new GqlOctokit({ auth: userStore.user?.accessToken })
-        const pagesToPrepend: GitHubRepo[][] = []
+        // Keep any cached (possibly partial) list visible while we re-fetch every page from
+        // scratch, so a reload shows stars immediately instead of an empty screen. The cached
+        // prefix is progressively replaced by authoritative pages and fully dropped at the end —
+        // which keeps the result correct even if stars were added or removed since an interrupted
+        // run (a page-offset resume would miss top-of-list changes).
+        const prefix = this.starredRepos.slice()
+        const pages: GitHubRepo[][] = [] // 1-indexed by page number
 
-        const pageIterator = octokit.graphql.paginate.iterator(fetchStarsQuery(cursorDirection), {
-          ...(cursor && { cursor }),
-        })
+        this.fetchedCount = prefix.length
 
-        for await (const response of pageIterator) {
-          const pageInfo = response?.viewer?.starredRepositories?.pageInfo as PaginationResponse
-          const repos = response?.viewer?.starredRepositories?.edges as GitHubRepo[]
-
-          this.pageInfo = pageInfo
-          this.totalRepos = response.viewer.starredRepositories.totalCount
-
-          if (cursorDirection === CursorDirection.AFTER) {
-            this.starredRepos.push(...repos)
-          } else {
-            pagesToPrepend.push(repos)
+        const commit = () => {
+          const fetched: GitHubRepo[] = []
+          for (let page = 1; pages[page] !== undefined; page++) {
+            fetched.push(...pages[page])
           }
+          // Show fetched pages, falling back to not-yet-refetched cached rows so the list never
+          // shrinks mid-fetch.
+          this.starredRepos = dedupeById(fetched.concat(prefix.slice(fetched.length)))
+          this.fetchedCount = this.starredRepos.length
         }
 
-        if (cursorDirection === CursorDirection.BEFORE && pagesToPrepend.length) {
-          this.starredRepos = pagesToPrepend.reverse().flat().concat(this.starredRepos)
+        const firstPage = await octokit.request('GET /user/starred', {
+          headers: { accept: 'application/vnd.github.star+json' },
+          page: 1,
+          per_page: STARS_PER_PAGE,
+        })
+
+        const lastPage = getLastPage(firstPage.headers.link) ?? 1
+        pages[1] = (firstPage.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
+        this.totalRepos = Math.max(lastPage * STARS_PER_PAGE, prefix.length)
+        commit()
+
+        const remainingPages = Array.from({ length: lastPage - 1 }, (_, index) => index + 2)
+
+        await runWithConcurrency(remainingPages, STARS_FETCH_CONCURRENCY, async page => {
+          const response = await octokit.request('GET /user/starred', {
+            headers: { accept: 'application/vnd.github.star+json' },
+            page,
+            per_page: STARS_PER_PAGE,
+          })
+
+          pages[page] = (response.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
+          commit()
+        })
+
+        this.starredRepos = dedupeById(pages.slice(1).flat())
+        this.totalRepos = this.starredRepos.length
+        this.fetchedCount = this.starredRepos.length
+        this.isFullySynced = true
+      } finally {
+        this.isFetchingStars = false
+      }
+    },
+    async fetchNewStars() {
+      const userStore = useUserStore()
+      const octokit = new Octokit({ auth: userStore.user?.accessToken })
+
+      this.isFetchingStars = true
+
+      try {
+        const existingIds = new Set(this.starredRepos.map(repo => repo.node.databaseId))
+        const newRepos: GitHubRepo[] = []
+
+        let page = 1
+        let hasMore = true
+
+        while (hasMore) {
+          const response = await octokit.request('GET /user/starred', {
+            headers: { accept: 'application/vnd.github.star+json' },
+            page,
+            per_page: STARS_PER_PAGE,
+          })
+
+          const repos = (response.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
+          const fresh = repos.filter(repo => !existingIds.has(repo.node.databaseId))
+
+          newRepos.push(...fresh)
+          hasMore = repos.length === STARS_PER_PAGE && fresh.length === repos.length
+          page++
+        }
+
+        if (newRepos.length) {
+          this.starredRepos = newRepos.concat(this.starredRepos)
         }
       } finally {
         this.isFetchingStars = false
@@ -237,9 +353,11 @@ export const useStarsStore = defineStore({
   state() {
     return {
       draggingRepos: [] as GitHubRepoNode[],
+      fetchedCount: 0,
       hasFetchedFromStorage: false,
       isDraggingRepo: false,
       isFetchingStars: false,
+      isFullySynced: false,
       pageInfo: {
         endCursor: null,
         hasNextPage: false,

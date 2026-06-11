@@ -22,6 +22,30 @@ export const isFocusedElementEditable = (): boolean => {
 
 export const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms))
 
+/**
+ * Runs `task` over `items` with at most `limit` promises in flight at once,
+ * returning results in the same order as `items`.
+ */
+export const runWithConcurrency = async <T, R>(
+  items: T[],
+  limit: number,
+  task: (item: T, index: number) => Promise<R>
+): Promise<R[]> => {
+  const results = new Array<R>(items.length)
+  let cursor = 0
+
+  const worker = async (): Promise<void> => {
+    while (cursor < items.length) {
+      const index = cursor++
+      results[index] = await task(items[index], index)
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+
+  return results
+}
+
 export const moveSort = <T>(array: T[], oldIndex: number, newIndex: number): T[] => {
   const itemRemovedArray = [...array.slice(0, oldIndex), ...array.slice(oldIndex + 1, array.length)]
 

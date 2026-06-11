@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import StarFetchProgress from '@/components/stars/StarFetchProgress.vue'
 import { useAuth } from '@/composables/use-auth'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
 import { useSyncValuesToStores } from '@/composables/useSyncValuesToStores'
@@ -6,9 +7,8 @@ import LogoSvg from '@/img/logo.svg?component'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { StarMetaInput } from '@/types'
-import localForage from 'localforage'
 import { pick } from 'lodash'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 // This page is a one-off, just do everything here
 const props = defineProps<{
@@ -20,57 +20,28 @@ const { user } = useAuth()
 const starsStore = useStarsStore()
 const userStore = useUserStore()
 
-const reposHaveSynced = ref(false)
-const pageInfoHasSynced = ref(false)
-
-const isReadyToBeginMigration = ref(true)
 const hasMigrationStarted = ref(false)
-
 const haveStarsBeenFetched = ref(false)
-
-const progress = computed(() => {
-  if (starsStore.totalRepos === 0) return 100
-
-  return 100 - (starsStore.allStars.length / starsStore.totalRepos) * 100
-})
 
 useSyncValuesToStores(
   [userStore, 'user', computed(() => user.value)],
   [starsStore, 'userStars', computed(() => props.stars)]
 )
 
-useSyncToLocalStorage(starsStore, 'starredRepos').then(() => {
-  reposHaveSynced.value = true
-})
-useSyncToLocalStorage(starsStore, 'pageInfo').then(() => {
-  pageInfoHasSynced.value = true
-})
-
-watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
-  if (syncChecks.every(Boolean) && starsStore.pageInfo.hasNextPage) {
-    // We're ready to start fetching stars
-    await nextTick()
-    isReadyToBeginMigration.value = true
-  }
-})
+// Wire persistence so the fetched list survives the redirect to the dashboard, and so an
+// interrupted migration can be resumed instead of restarted.
+const reposRestored = useSyncToLocalStorage(starsStore, 'starredRepos')
+const syncStateRestored = useSyncToLocalStorage(starsStore, 'isFullySynced')
 
 const beginMigration = async () => {
   hasMigrationStarted.value = true
 
-  await localForage.clear()
-  starsStore.resetPageInfo()
-  starsStore.clearStarredRepos()
+  // Wait for any cached partial to be restored so fetchAllStars resumes from it.
+  await Promise.all([reposRestored, syncStateRestored])
 
   await nextTick()
 
-  while (starsStore.pageInfo.hasNextPage) {
-    const { viewer } = await starsStore.fetchStars(starsStore.pageInfo.endCursor)
-
-    starsStore.totalRepos = viewer.starredRepositories.totalCount
-    starsStore.pageInfo = viewer.starredRepositories.pageInfo
-
-    starsStore.starredRepos = starsStore.starredRepos.concat(viewer.starredRepositories.edges)
-  }
+  await starsStore.fetchAllStars()
 
   haveStarsBeenFetched.value = true
 
@@ -125,8 +96,7 @@ const updateStarMetadata = () => {
           <button
             v-show="!hasMigrationStarted"
             type="button"
-            :disabled="!isReadyToBeginMigration"
-            class="relative rounded-full bg-brand-600 px-6 py-4 text-2xl font-bold text-white shadow-lg shadow-brand-900 transition-all hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-800 active:top-px disabled:pointer-events-none disabled:opacity-50"
+            class="relative rounded-full bg-brand-600 px-6 py-4 text-2xl font-bold text-white shadow-lg shadow-brand-900 transition-all hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-800 active:top-px"
             @click="beginMigration"
           >
             Begin Migration 🚀
@@ -134,26 +104,12 @@ const updateStarMetadata = () => {
         </div>
 
         <div v-if="hasMigrationStarted && !haveStarsBeenFetched">
-          <p class="animate-pulse text-lg font-bold text-white">Fetching stars...</p>
-
-          <div class="mt-4 flex w-full items-center gap-x-4">
-            <div
-              role="progressbar"
-              class="h-8 w-full overflow-hidden rounded-full bg-gray-900 ring-2 ring-inset ring-white transform-[translateZ(0)]"
-            >
-              <div
-                class="relative h-full w-full rounded-full bg-white transition-[translate] duration-660 ease-[cubic-bezier(0.65,0,0.35,1)]"
-                :style="{ translate: `-${progress}% 0%` }"
-              ></div>
-            </div>
-
-            <p
-              v-if="starsStore.totalRepos > 0"
-              class="shrink-0 font-semibold tabular-nums text-white"
-            >
-              {{ starsStore.allStars.length }} / {{ starsStore.totalRepos }}
-            </p>
-          </div>
+          <StarFetchProgress
+            variant="onDark"
+            label="Fetching stars…"
+            :fetched-count="starsStore.fetchedCount"
+            :total-repos="starsStore.totalRepos"
+          />
         </div>
 
         <div v-if="hasMigrationStarted && haveStarsBeenFetched">

@@ -1,4 +1,5 @@
 import localForage from 'localforage'
+import throttle from 'lodash/throttle'
 import { Store } from 'pinia'
 import { watch } from 'vue'
 
@@ -11,17 +12,24 @@ export const useSyncToLocalStorage = async <TStore extends Store, TKey extends k
   store: TStore,
   key: TKey
 ): Promise<void> => {
-  let storedValue: Nullable<TStore[TKey]> = null
-  watch(
-    () => store[key],
-    async newVal => {
-      await localForage.setItem(key as string, JSON.parse(JSON.stringify(newVal)))
-    }
+  // Leading + trailing throttle: a single commit (e.g. the full star list) is written
+  // immediately, while bursts of rapid mutations collapse into at most one write per window.
+  const persist = throttle(
+    (value: TStore[TKey]) => {
+      localForage.setItem(key as string, JSON.parse(JSON.stringify(value)))
+    },
+    800,
+    { leading: true, trailing: true }
   )
 
-  storedValue = (await localForage.getItem(key as string)) as TStore[TKey]
+  watch(
+    () => store[key],
+    newVal => persist(newVal)
+  )
 
-  if (storedValue) {
+  const storedValue = (await localForage.getItem(key as string)) as Nullable<TStore[TKey]>
+
+  if (storedValue !== null) {
     store[key] = storedValue
   }
 
