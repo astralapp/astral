@@ -5,9 +5,9 @@ import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
 import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
+import { useAbilities } from '@/composables/use-abilities'
 import { useAuth } from '@/composables/use-auth'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
-import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -38,7 +38,7 @@ const tagsStore = useTagsStore()
 const starsStore = useStarsStore()
 const smartFiltersStore = useSmartFiltersStore()
 const { show: showSmartFilterDialog } = useSmartFilterDialog()
-const { show: showSponsorshipDialog } = useSponsorshipDialog()
+const { gate } = useAbilities()
 
 const newTagForm = ref<null | typeof BaseTextInput>(null)
 const newTag = ref('')
@@ -113,13 +113,7 @@ watch(
 
 const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
 
-const doShowSmartFilterDialog = () => {
-  if (user.value?.abilities[Ability.CREATE_SMART_FILTER]) {
-    showSmartFilterDialog()
-  } else {
-    showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
-  }
-}
+const doShowSmartFilterDialog = () => gate(Ability.CREATE_SMART_FILTER, showSmartFilterDialog)
 
 const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsKey) => {
   sidebarGroupCollapsedState[key] = !sidebarGroupCollapsedState[key]

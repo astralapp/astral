@@ -95,12 +95,12 @@ class StarTagsController extends Controller
             $star->tags()->sync($ids);
         }
 
+        // Authorized after the writes: syncing can firstOrCreate new tags, so the
+        // sponsorship cap is only knowable against the resulting tag count.
         if (auth()->user()->cannot('sync', Tag::class)) {
             DB::rollBack();
 
-            return redirect()->back()->withErrors([
-                'sponsorship_required' => [Ability::CREATE_TAG],
-            ]);
+            return $this->sponsorshipRequired(Ability::CREATE_TAG);
         }
 
         DB::commit();

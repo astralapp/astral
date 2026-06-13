@@ -24,6 +24,7 @@ class HandleHybridRequests extends Middleware
             'security' => SecurityData::from([
                 'user' => UserData::optional(auth()->user()),
             ]),
+            'sponsorUrl' => 'https://github.com/sponsors/' . config('app.github_sponsoree_login'),
         ]);
     }
 }

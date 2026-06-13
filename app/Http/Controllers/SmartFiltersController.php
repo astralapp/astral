@@ -13,9 +13,7 @@ class SmartFiltersController extends Controller
     public function store(Request $request)
     {
         if (auth()->user()->cannot('create', SmartFilter::class)) {
-            return redirect()->back()->withErrors([
-                'sponsorship_required' => [Ability::CREATE_SMART_FILTER],
-            ]);
+            return $this->sponsorshipRequired(Ability::CREATE_SMART_FILTER);
         }
 
         $request->validate([

@@ -9,6 +9,7 @@ import { Ref, computed } from 'vue'
 
 const { user } = useAuth()
 const { isOpen, hide, currentContext } = useSponsorshipDialog()
+const sponsorUrl = useProperty('sponsorUrl')
 
 const DIALOG_MESSAGES: Record<App.Data.Enums.Ability, string> = {
   [Ability.ADD_NOTES]: 'To add notes to your starred repos',
@@ -47,7 +48,7 @@ const currentMessage: Ref<null | string> = computed(() =>
         <span>{{ currentMessage }}</span>
         you must be an active
         <a
-          href="https://github.com/sponsors"
+          :href="sponsorUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="font-semibold text-brand-700 dark:text-brand-500 focus:outline-hidden"
@@ -68,7 +69,7 @@ const currentMessage: Ref<null | string> = computed(() =>
       <BaseButton
         as="link"
         kind="primary"
-        href="https://github.com/sponsors/syropian"
+        :href="sponsorUrl"
         rel="noopener noreferrer"
         target="_blank"
         class="w-full"

@@ -2,10 +2,10 @@
 import CloneMenu from '@/components/toolbar/CloneMenu.vue'
 import EditTagsMenu from '@/components/toolbar/EditTagsMenu.vue'
 import ToolbarButton from '@/components/toolbar/ToolbarButton.vue'
+import { useAbilities } from '@/composables/use-abilities'
 import { useAuth } from '@/composables/use-auth'
 import { useConfirm } from '@/composables/useConfirm'
 import { useNotesEditor } from '@/composables/useNotesEditor'
-import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDialog'
 import { useStarsStore } from '@/store/useStarsStore'
 import { Ability, AuthScope } from '@/types'
@@ -17,7 +17,7 @@ import { computed } from 'vue'
 const { user } = useAuth()
 const starsStore = useStarsStore()
 const { isOpen: isNotesEditorOpen, show: showNotesEditor, toggle: toggleNotesEditor } = useNotesEditor()
-const { show: showSponsorshipDialog } = useSponsorshipDialog()
+const { gate } = useAbilities()
 const { show: showUpgradeAuthScopeDialog } = useUpgradeAuthScopeDialog()
 const { isConfirmed } = useConfirm()
 
@@ -29,15 +29,7 @@ const repoOwner = computed(() => repo.value.nameWithOwner?.split('/')[0] ?? '')
 const repoName = computed(() => repo.value.nameWithOwner?.split('/').slice(1).join('/') ?? '')
 const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[repo.value.databaseId]?.notes)
 
-const ifAllowedToAddNotes = (action: () => void) => {
-  if (user.value?.abilities[Ability.ADD_NOTES]) {
-    action()
-  } else {
-    showSponsorshipDialog(Ability.ADD_NOTES)
-  }
-}
-
-const handleToggleNotesEditor = () => ifAllowedToAddNotes(toggleNotesEditor)
+const handleToggleNotesEditor = () => gate(Ability.ADD_NOTES, toggleNotesEditor)
 
 const goBack = () => (starsStore.selectedRepos = [])
 
@@ -59,7 +51,7 @@ const removeSelectedStar = async () => {
 onKeyStroke('n', e => {
   if (!isFocusedElementEditable()) {
     e.preventDefault()
-    ifAllowedToAddNotes(showNotesEditor)
+    gate(Ability.ADD_NOTES, showNotesEditor)
   }
 })
 </script>

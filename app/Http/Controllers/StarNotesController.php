@@ -13,7 +13,7 @@ class StarNotesController extends Controller
     public function __invoke(Request $request)
     {
         if (auth()->user()->cannot('addNotes', Star::class)) {
-            return redirect()->route('dashboard.show')->with('sponsorship_required', Ability::ADD_NOTES);
+            return $this->sponsorshipRequired(Ability::ADD_NOTES);
         }
 
         $request->validate([

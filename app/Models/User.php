@@ -106,7 +106,7 @@ class User extends Authenticatable
 
     public function isNotSponsor(): bool
     {
-        return ! (bool) $this->is_sponsor;
+        return ! $this->isSponsor();
     }
 
     public function setSponsorshipStatus(bool $isSponsor): self
@@ -133,6 +133,7 @@ class User extends Authenticatable
 
     public function limits()
     {
+        // Sponsors are unlimited; -1 is the "no limit" sentinel the client understands.
         return $this->isNotSponsor() ?
             config('limits') :
             collect(config('limits'))->map(fn () => -1)->toArray();

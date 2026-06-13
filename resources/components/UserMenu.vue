@@ -16,6 +16,7 @@ const emit = defineEmits<{
 }>()
 
 const userStore = useUserStore()
+const sponsorUrl = useProperty('sponsorUrl')
 </script>
 
 <template>
@@ -84,7 +85,7 @@ const userStore = useUserStore()
 
           <MenuItem v-slot="{ active }">
             <a
-              href="https://github.com/sponsors/syropian"
+              :href="sponsorUrl"
               target="_blank"
               rel="noopener noreferrer"
               class="group flex items-center px-4 py-2 text-sm"

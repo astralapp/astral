@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MigrationController;
 use App\Http\Controllers\OpenAiReadmeSummaryController;
 use App\Http\Controllers\OpenAiTokenController;
 use App\Http\Controllers\SmartFiltersController;
 use App\Http\Controllers\SmartFiltersSortOrderController;
+use App\Http\Controllers\SponsorshipController;
 use App\Http\Controllers\StarNotesController;
 use App\Http\Controllers\StarsController;
 use App\Http\Controllers\StarTagsController;
@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.update');
     Route::delete('smart-filters/{smart_filter}', [SmartFiltersController::class, 'destroy'])->name('smart-filters.destroy');
 
-    Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
+    Route::post('sponsorship/recheck', SponsorshipController::class)->name('sponsor.check');
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
     Route::put('settings/appearance', [UserSettingsController::class, 'updateAppearance'])->name('settings.appearance.update');

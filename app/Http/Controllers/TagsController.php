@@ -18,9 +18,7 @@ class TagsController extends Controller
     public function store(Request $request)
     {
         if (auth()->user()->cannot('create', Tag::class)) {
-            return redirect()->back()->withErrors([
-                'sponsorship_required' => [Ability::CREATE_TAG->value],
-            ]);
+            return $this->sponsorshipRequired(Ability::CREATE_TAG);
         }
 
         $request->validate([

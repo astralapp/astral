@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Lib\Sponsorship;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Socialite;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -30,7 +33,7 @@ class AuthController extends Controller
             ->redirect();
     }
 
-    public function handleProviderCallback(Request $request)
+    public function handleProviderCallback(Request $request, Sponsorship $sponsorship)
     {
         $scope = $request->session()->pull('auth_scope', 'read:user');
 
@@ -46,6 +49,15 @@ class AuthController extends Controller
         $user->updateFromGitHubProfile($githubUser);
 
         $user->save();
+
+        if (config('app.check_for_sponsorship')) {
+            try {
+                $sponsorship->updateUserSponsorshipStatus($user);
+            } catch (Throwable $e) {
+                // A sponsorship lookup failure must never block sign-in.
+                Log::warning('Sponsorship check failed during login', ['user_id' => $user->id, 'exception' => $e]);
+            }
+        }
 
         auth()->login($user, true);
 

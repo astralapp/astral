@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/use-auth'
+import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
 import { SettingsTab } from '@/types'
+import { router } from 'hybridly'
 import { throttle } from 'lodash'
 import { computed, ref } from 'vue'
 import ConfettiExplosion from 'vue-confetti-explosion'
@@ -16,6 +18,7 @@ const emit = defineEmits<{
 }>()
 
 const { user } = useAuth()
+const { show: showToast } = useGlobalToast()
 
 const tabs = [
   { id: 'general', label: 'General' },
@@ -26,16 +29,34 @@ const tabs = [
 const displayName = computed(() => user.value?.name || user.value?.username || 'Your account')
 const handle = computed(() => (user.value?.name ? `@${user.value.username}` : null))
 
-const isSponsor = ref(user.value?.isSponsor ?? false)
+const isSponsor = computed(() => user.value?.isSponsor ?? false)
 const justConfirmedSponsorship = ref(false)
 
 const checkSponsorshipStatus = throttle(
   () => {
-    isSponsor.value = true
-    justConfirmedSponsorship.value = true
-    setTimeout(() => {
-      justConfirmedSponsorship.value = false
-    }, CONFETTI_DURATION)
+    const wasSponsor = isSponsor.value
+
+    router.post(route('sponsor.check'), {
+      only: ['security'],
+      hooks: {
+        success: () => {
+          if (!isSponsor.value) {
+            showToast("We couldn't find an active sponsorship for your account.", ToastType.Error)
+            return
+          }
+
+          if (wasSponsor) {
+            showToast("You're an active sponsor — thank you!", ToastType.Success)
+            return
+          }
+
+          justConfirmedSponsorship.value = true
+          setTimeout(() => {
+            justConfirmedSponsorship.value = false
+          }, CONFETTI_DURATION)
+        },
+      },
+    })
   },
   CONFETTI_DURATION,
   { leading: true, trailing: false }

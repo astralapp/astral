@@ -27,6 +27,7 @@ class TagPolicy
             return true;
         }
 
+        // Creating adds exactly one tag, so the current count must be below the cap.
         return $user->tags()->count() < config('limits.max_tags');
     }
 
@@ -36,6 +37,8 @@ class TagPolicy
             return true;
         }
 
+        // Checked after a star's tags are synced (which may create tags): the
+        // resulting total must not exceed the cap.
         return $user->tags()->count() <= config('limits.max_tags');
     }
 }
