@@ -89,6 +89,6 @@ export interface BaseDialogReturnType {
 
 export type Errors = Record<string, string>
 
-export type SettingsTab = 'data-controls' | 'general'
+export type SettingsTab = 'data-controls' | 'general' | 'shortcuts'
 
 export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'description' | 'nameWithOwner' | 'url'>

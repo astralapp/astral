@@ -1,267 +1,115 @@
 <script setup lang="ts">
-import BaseButton from '@/components/shared/core/BaseButton.vue'
 import BaseDialog from '@/components/shared/core/BaseDialog.vue'
-import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
-import BaseToggle from '@/components/shared/core/BaseToggle.vue'
-import SettingsSidebar from '@/components/shared/dialogs/SettingsDialog/SettingsSidebar.vue'
-import { useAuth } from '@/composables/use-auth'
+import SettingsRail from '@/components/shared/dialogs/SettingsDialog/SettingsRail.vue'
+import DataControlsPanel from '@/components/shared/dialogs/SettingsDialog/panels/DataControlsPanel.vue'
+import GeneralPanel from '@/components/shared/dialogs/SettingsDialog/panels/GeneralPanel.vue'
+import ShortcutsPanel from '@/components/shared/dialogs/SettingsDialog/panels/ShortcutsPanel.vue'
 import { useSettingsDialog } from '@/composables/useSettingsDialog'
-import { useUserStore } from '@/store/useUserStore'
 import { SettingsTab } from '@/types'
 import { DialogTitle } from '@headlessui/vue'
-import { CheckCircleIcon } from '@heroicons/vue/24/solid'
-import { router } from 'hybridly'
-import { throttle } from 'lodash'
-import { computed, nextTick, ref } from 'vue'
-import ConfettiExplosion from 'vue-confetti-explosion'
+import { computed, ref } from 'vue'
 
-const CONFETTI_DURATION = 3500
-
-const { user } = useAuth()
 const { isOpen, hide } = useSettingsDialog()
-const userStore = useUserStore()
 
 const activeTab = ref<SettingsTab>('general')
 
-const isSponsor = ref(user.value?.isSponsor ?? false)
-const hasCheckedForSponsorShip = ref(false)
+const sections = {
+  general: { description: 'Tune how your library looks and behaves.', title: 'General' },
+  shortcuts: { description: 'Move through Astral without leaving the keyboard.', title: 'Shortcuts' },
+  'data-controls': { description: 'Manage your GitHub connection and your account.', title: 'Data controls' },
+} satisfies Record<SettingsTab, { description: string; title: string }>
 
-const isRequestingDeleteConfirmation = ref(false)
-const usernameConfirmation = ref('')
-const confirmInput = ref<null | typeof BaseTextInput>()
-
-// const openAiForm = useForm({
-//   fields: {
-//     openai_token: user.value?.openaiToken ?? '',
-//   },
-//   method: 'PUT',
-//   only: ['user'],
-//   reset: false,
-//   timeout: 1500,
-//   url: route('openai-token.update'),
-// })
-
-const deleteButtonLabel = computed(() =>
-  isRequestingDeleteConfirmation.value ? 'Confirm deletion' : 'Delete my account'
-)
-
-const deleteButtonIsDisabled = computed(() => {
-  return isRequestingDeleteConfirmation.value && usernameConfirmation.value !== user.value?.username
-})
-
-const updateUserSetting = (setting: string, enabled: boolean) => {
-  router.put(route('settings.update'), {
-    data: {
-      enabled,
-      key: setting,
-    },
-    only: ['user'],
-  })
-}
-
-const deleteUser = async () => {
-  if (!isRequestingDeleteConfirmation.value) {
-    isRequestingDeleteConfirmation.value = true
-    await nextTick()
-    confirmInput.value?.$el.focus()
-  } else {
-    userStore.deleteUser()
-  }
-}
-
-const checkSponsorshipStatus = throttle(
-  () => {
-    isSponsor.value = true
-    hasCheckedForSponsorShip.value = true
-    setTimeout(() => {
-      hasCheckedForSponsorShip.value = false
-    }, CONFETTI_DURATION)
-  },
-  CONFETTI_DURATION,
-  { leading: true, trailing: false }
-)
+const activeSection = computed(() => sections[activeTab.value])
 </script>
 
 <template>
   <BaseDialog
     :is-open="isOpen"
     :hide="hide"
-    dialog-classes="sm:max-w-[740px] px-0 pt-0 pb-0 sm:p-0 sm:pb-4 sm:h-[560px]"
+    dialog-classes="w-full sm:w-[820px] sm:max-w-[calc(100vw-3rem)] sm:h-[600px] sm:max-h-[calc(100vh-4rem)]"
   >
-    <DialogTitle
-      class="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 py-4 px-5 text-xl font-bold text-gray-700 dark:text-gray-200"
-      >Settings</DialogTitle
-    >
+    <DialogTitle class="sr-only">Settings</DialogTitle>
 
-    <div class="flex items-start gap-x-4">
-      <SettingsSidebar
+    <div class="flex flex-col sm:h-full sm:flex-row">
+      <SettingsRail
         :active-tab="activeTab"
         @tab-selected="activeTab = $event"
       />
 
-      <div class="divide-y divide-gray-100 dark:divide-gray-700">
-        <template v-if="activeTab === 'general'">
-          <div class="px-4 py-5">
-            <div class="flex items-center">
-              <div>
-                <p class="font-bold text-gray-600 dark:text-gray-300 text-sm">Sponsorship status</p>
+      <section class="flex min-w-0 flex-1 flex-col bg-white dark:bg-gray-900">
+        <header
+          class="flex items-start justify-between gap-x-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:px-8 sm:py-5"
+        >
+          <div class="min-w-0">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ activeSection.title }}</h2>
 
-                <div class="mt-2">
-                  <p
-                    v-show="isSponsor"
-                    class="flex items-center gap-x-1"
-                  >
-                    <span
-                      class="flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-green-200 dark:text-green-950"
-                    >
-                      <CheckCircleIcon class="h-5 w-5" />
-                    </span>
-
-                    <span class="text-sm font-bold text-green-800 dark:text-green-500">You're a sponsor!</span>
-                  </p>
-
-                  <p
-                    v-show="!isSponsor"
-                    class="text-sm font-bold text-gray-500 dark:text-gray-400"
-                  >
-                    Not sponsoring.
-                  </p>
-                </div>
-              </div>
-
-              <BaseButton
-                class="ml-auto"
-                kind="primary"
-                size="sm"
-                @click="checkSponsorshipStatus"
-                >Check now</BaseButton
-              >
-
-              <ConfettiExplosion v-if="hasCheckedForSponsorShip && isSponsor" />
-            </div>
+            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ activeSection.description }}</p>
           </div>
 
-          <div class="px-4 py-5">
-            <div class="flex items-center">
-              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm">Show language tags</p>
+          <button
+            type="button"
+            aria-label="Close settings"
+            class="-mr-2 -mt-1 inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-500/40 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+            @click="hide"
+          >
+            <i-lucide-x
+              class="h-5 w-5"
+              role="presentation"
+            />
+          </button>
+        </header>
 
-              <BaseToggle
-                class="ml-auto"
-                :enabled="user?.settings.show_language_tags"
-                @change="updateUserSetting('show_language_tags', !!$event)"
-              />
-            </div>
+        <div class="flex-1 overflow-y-auto px-6 py-4 sm:px-8 sm:py-5">
+          <Transition
+            name="panel"
+            mode="out-in"
+          >
+            <GeneralPanel
+              v-if="activeTab === 'general'"
+              key="general"
+            />
 
-            <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
-              Shows or hides the language tag on repos in your list.
-            </p>
-          </div>
+            <ShortcutsPanel
+              v-else-if="activeTab === 'shortcuts'"
+              key="shortcuts"
+            />
 
-          <div class="px-4 py-5">
-            <div class="flex items-center">
-              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm">Auto-save notes</p>
-
-              <BaseToggle
-                class="ml-auto"
-                :enabled="user?.settings.autosave_notes"
-                @change="updateUserSetting('autosave_notes', !!$event)"
-              />
-            </div>
-
-            <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
-              While this is turned on, notes will auto-save every few seconds as you type.
-            </p>
-          </div>
-
-          <!-- <div class="px-4 py-5">
-            <div class="flex items-center gap-x-6">
-              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm shrink-0">OpenAI token</p>
-
-              <form
-                class="ml-auto flex items-center gap-x-2 w-full"
-                @submit.prevent="openAiForm.submit"
-              >
-                <BaseTextInput
-                  class="w-full"
-                  v-model="openAiForm.fields.openai_token"
-                  type="password"
-                />
-
-                <BaseButton
-                  kind="primary"
-                  type="submit"
-                  size="sm"
-                  :disabled="openAiForm.processing || openAiForm.recentlySuccessful"
-                  >{{ openAiForm.recentlySuccessful ? 'Saved' : openAiForm.processing ? 'Saving' : 'Save' }}</BaseButton
-                >
-              </form>
-            </div>
-
-            <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
-              Enables various AI-powered features, such as auto-generated notes and suggested tags.
-            </p>
-          </div> -->
-        </template>
-
-        <template v-if="activeTab === 'data-controls'">
-          <div class="px-4 py-5">
-            <div class="flex items-center">
-              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm">GitHub access</p>
-
-              <BaseButton
-                class="ml-auto"
-                kind="danger"
-                size="sm"
-                @click="router.post('/revoke-grant')"
-                >Revoke access</BaseButton
-              >
-            </div>
-
-            <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
-              This will log you out and revoke your authorization granted to Astral for accessing your GitHub account.
-              You will not lose any data.
-            </p>
-          </div>
-
-          <div class="px-4 py-5">
-            <div class="flex items-center">
-              <p class="font-bold text-gray-600 dark:text-gray-300 text-sm">Delete account</p>
-
-              <div class="ml-auto flex items-center space-x-3">
-                <div v-show="isRequestingDeleteConfirmation">
-                  <label
-                    for="confirm-user-delete"
-                    class="sr-only"
-                    >Enter your username to confirm</label
-                  >
-
-                  <BaseTextInput
-                    id="confirm-user-delete"
-                    ref="confirmInput"
-                    v-model="usernameConfirmation"
-                    placeholder="Enter your username to confirm"
-                    class="w-60"
-                  />
-                </div>
-
-                <BaseButton
-                  kind="danger"
-                  size="sm"
-                  :disabled="deleteButtonIsDisabled"
-                  @click="deleteUser"
-                  >{{ deleteButtonLabel }}</BaseButton
-                >
-              </div>
-            </div>
-
-            <p class="mt-4 w-2/3 text-sm text-gray-500 dark:text-gray-300">
-              This will permanently delete <strong>all</strong> of your data on this site, and revoke your authorization
-              granted to Astral.
-              <em>Be careful!</em>
-            </p>
-          </div>
-        </template>
-      </div>
+            <DataControlsPanel
+              v-else
+              key="data-controls"
+            />
+          </Transition>
+        </div>
+      </section>
     </div>
   </BaseDialog>
 </template>
+
+<style scoped>
+.panel-enter-active,
+.panel-leave-active {
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
+}
+
+.panel-enter-from {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.panel-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-enter-active,
+  .panel-leave-active {
+    transition: none;
+  }
+
+  .panel-enter-from,
+  .panel-leave-to {
+    transform: none;
+  }
+}
+</style>

@@ -1,39 +1,26 @@
 <script setup lang="ts">
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
-import { useAuth } from '@/composables/use-auth'
+import { useCloneProtocol } from '@/composables/useCloneProtocol'
 import { useStarsStore } from '@/store/useStarsStore'
 import { isFocusedElementEditable } from '@/utils'
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue'
 import { onKeyStroke } from '@vueuse/core'
-import { router } from 'hybridly'
-import { Ref, computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 
-type CloneUrlType = 'https' | 'ssh'
-
-const { user } = useAuth()
+const { cloneProtocol } = useCloneProtocol()
 const starsStore = useStarsStore()
 
-const currentUrlType: Ref<CloneUrlType> = ref(user.value?.settings.clone_https_url ? 'https' : 'ssh')
 const input = ref<null | typeof BaseTextInput>(null)
 
-const cloneUrl = computed(() => {
-  return currentUrlType.value === 'ssh'
+const cloneUrl = computed(() =>
+  cloneProtocol.value === 'ssh'
     ? `git@github.com:${starsStore.selectedRepo?.nameWithOwner}.git`
     : `${starsStore.selectedRepo?.url}.git`
-})
+)
 
 const selectUrlText = (e: FocusEvent) => {
   ;(e?.currentTarget as HTMLInputElement)?.select()
 }
-
-watch(currentUrlType, newValue => {
-  router.put(route('settings.update'), {
-    data: {
-      enabled: newValue === 'https',
-      key: 'clone_https_url',
-    },
-  })
-})
 
 onKeyStroke('c', e => {
   const inputEl: HTMLInputElement = input.value?.$el
@@ -66,7 +53,7 @@ onKeyStroke('c', e => {
     </div>
 
     <RadioGroup
-      v-model="currentUrlType"
+      v-model="cloneProtocol"
       class="isolate px-3"
     >
       <RadioGroupLabel class="sr-only">Clone URL Type</RadioGroupLabel>

@@ -4,6 +4,7 @@ import { ref, watch } from 'vue'
 
 const props = withDefaults(defineProps<Props>(), {
   enabled: false,
+  label: 'Use setting',
 })
 
 const emit = defineEmits<{
@@ -12,6 +13,7 @@ const emit = defineEmits<{
 
 interface Props {
   enabled?: boolean
+  label?: string
 }
 
 const enabledState = ref(props.enabled)
@@ -25,7 +27,7 @@ watch(enabledState, () => emit('change', enabledState.value))
     class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
     :class="[enabledState ? 'bg-brand-600' : 'bg-gray-200']"
   >
-    <span class="sr-only">Use setting</span>
+    <span class="sr-only">{{ label }}</span>
 
     <span
       class="pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out"
