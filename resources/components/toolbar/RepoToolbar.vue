@@ -17,7 +17,7 @@ import { computed } from 'vue'
 
 const { user } = useAuth()
 const starsStore = useStarsStore()
-const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } = useNotesEditor()
+const { isOpen: isNotesEditorOpen, show: showNotesEditor, toggle: toggleNotesEditor } = useNotesEditor()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showUpgradeAuthScopeDialog } = useUpgradeAuthScopeDialog()
 const { isConfirmed } = useConfirm()
@@ -25,13 +25,15 @@ const { isConfirmed } = useConfirm()
 // TODO: Should this just be a getter in the store?
 const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes)
 
-const handleToggleNotesEditor = () => {
+const ifAllowedToAddNotes = (action: () => void) => {
   if (user.value?.abilities[Ability.ADD_NOTES]) {
-    toggleNotesEditor()
+    action()
   } else {
     showSponsorshipDialog(Ability.ADD_NOTES)
   }
 }
+
+const handleToggleNotesEditor = () => ifAllowedToAddNotes(toggleNotesEditor)
 
 const removeSelectedStar = async () => {
   if (user.value?.scope !== AuthScope.PUBLIC_REPO) {
@@ -51,7 +53,7 @@ const removeSelectedStar = async () => {
 onKeyStroke('n', e => {
   if (!isFocusedElementEditable()) {
     e.preventDefault()
-    handleToggleNotesEditor()
+    ifAllowedToAddNotes(showNotesEditor)
   }
 })
 </script>
@@ -71,6 +73,7 @@ onKeyStroke('n', e => {
     <div class="hidden sm:block">
       <BaseButton
         size="sm"
+        aria-keyshortcuts="n"
         @click="handleToggleNotesEditor()"
       >
         <i-lucide-notebook-text

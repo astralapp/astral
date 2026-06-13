@@ -18,6 +18,7 @@ import Typography from '@tiptap/extension-typography'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent, useEditor } from '@tiptap/vue-3'
+import { onKeyStroke } from '@vueuse/core'
 import { router } from 'hybridly'
 import debounce from 'lodash/debounce'
 import { Markdown } from 'tiptap-markdown'
@@ -28,6 +29,10 @@ const userStore = useUserStore()
 const { isOpen, hide } = useNotesEditor()
 const isSaving = ref(false)
 const isSaveToastVisible = ref(false)
+
+onKeyStroke('Escape', () => {
+  if (isOpen.value) hide()
+})
 
 const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
 
@@ -135,7 +140,7 @@ function saveNotes(editor: Maybe<Editor>) {
   >
     <div
       class="absolute inset-0 z-30 mt-16"
-      aria-keyshortcuts="n"
+      aria-keyshortcuts="Escape"
     >
       <TransitionChild
         as="template"
