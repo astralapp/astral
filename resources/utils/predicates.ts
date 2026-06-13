@@ -97,14 +97,14 @@ export const numberOperators: PredicateOperator[] = [
   {
     check: (source: number, target: number) => Number(source) >= Number(target),
     key: 'greaterThanOrEqualTo',
-    label: 'greater than or equal to',
+    label: 'at least',
   },
   { check: (source: number, target: number) => Number(source) === Number(target), key: 'equals', label: 'equals' },
   { check: (source: number, target: number) => Number(source) < Number(target), key: 'lessThan', label: 'less than' },
   {
     check: (source: number, target: number) => Number(source) <= Number(target),
     key: 'lessThanOrEqualTo',
-    label: 'less than or equal to',
+    label: 'at most',
   },
 ]
 
@@ -238,6 +238,7 @@ export const predicateTargets = [
     type: 'State',
   } as PredicateTarget<'State'>,
   {
+    defaultValue: '',
     keyPath: 'node.pushedAt',
     label: 'Updated at',
     operators: dateOperators,

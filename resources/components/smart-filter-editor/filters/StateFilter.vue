@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseSelect from '@/components/shared/core/BaseSelect.vue'
+import FilterSelect from '@/components/smart-filter-editor/FilterSelect.vue'
 
 interface StateOption {
   key: 'node.isArchived'
@@ -28,9 +28,10 @@ const updateState = (selectedKey: string): void => {
 </script>
 
 <template>
-  <BaseSelect
+  <FilterSelect
     :model-value="props.modelValue?.key ?? stateOptions[0].key"
-    class="w-auto"
+    class="w-full"
+    aria-label="State"
     @update:model-value="updateState"
   >
     <option
@@ -40,5 +41,5 @@ const updateState = (selectedKey: string): void => {
     >
       {{ state.label }}
     </option>
-  </BaseSelect>
+  </FilterSelect>
 </template>
