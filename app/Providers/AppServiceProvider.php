@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Lib\Sponsorship;
-use App\Lib\StarsJanitor;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
@@ -23,12 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(StarsJanitor::class, function () {
-            return new StarsJanitor(auth()->user());
-        });
-        $this->app->bind(Sponsorship::class, function () {
-            return new Sponsorship(auth()->user());
-        });
+        //
     }
 
     /**

@@ -8,16 +8,9 @@ use App\Models\User;
 
 class StarsJanitor
 {
-    public function __construct(public User $user)
+    public function deleteEmptyStars(User $user): static
     {
-    }
-
-    public function deleteEmptyStars()
-    {
-        throw_unless($this->user);
-
-        $this
-            ->user
+        $user
             ->stars()
             ->doesntHave('tags')
             ->whereNull('notes')

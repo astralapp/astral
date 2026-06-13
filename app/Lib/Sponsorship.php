@@ -9,23 +9,19 @@ use GitHub;
 
 class Sponsorship
 {
-    public function __construct(public User $user)
+    public function updateUserSponsorshipStatus(User $user): void
     {
-    }
+        $sponsoree = config('app.github_sponsoree_login');
 
-    public function updateUserSponsorshipStatus()
-    {
-        throw_unless($this->user);
-
-        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "' . $this->user->username . '") }}';
+        $query = '{user(login: "' . $sponsoree . '") { isSponsoredBy(accountLogin: "' . $user->username . '") }}';
 
         $client = GitHub::getFactory()->make([
-            'token' => $this->user->access_token,
+            'token' => $user->access_token,
             'method' => 'token',
         ]);
 
         $result = $client->api('graphql')->execute($query);
 
-        $this->user->setSponsorshipStatus((bool) $result['data']['user']['isSponsoredBy']);
+        $user->setSponsorshipStatus((bool) $result['data']['user']['isSponsoredBy']);
     }
 }
