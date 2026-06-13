@@ -190,11 +190,11 @@ const shouldShowWelcomeMessage = ref(false)
 
       <!-- Sidebar -->
       <div
-        class="absolute inset-0 z-20 col-start-1 row-start-2 row-end-3 flex bg-gray-900 backdrop-filter transition-colors duration-300 ease-in-out sm:pointer-events-auto sm:relative"
+        class="absolute inset-0 z-20 col-start-1 row-start-2 row-end-3 flex transition-colors duration-300 ease-in-out sm:pointer-events-auto sm:relative"
         :aria-hidden="!isSidebarOpen"
         :class="{
-          'pointer-events-none bg-opacity-0': !isSidebarOpen,
-          'bg-opacity-75 backdrop-blur-xs': isSidebarOpen,
+          'pointer-events-none bg-gray-900/0': !isSidebarOpen,
+          'bg-gray-900/75 backdrop-blur-xs': isSidebarOpen,
         }"
       >
         <div

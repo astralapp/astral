@@ -95,7 +95,7 @@ onKeyStroke('Escape', () => (isVisible.value = false))
     >
       <ul
         v-show="shouldShow"
-        class="absolute z-50 min-w-[150px] divide-y divide-gray-100 rounded-md border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:divide-gray-700 ring-1 ring-black ring-opacity-5"
+        class="absolute z-50 min-w-[150px] divide-y divide-gray-100 rounded-md border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:divide-gray-700 ring-1 ring-black/5"
         role="combobox"
         v-bind="$attrs"
         :hidden="!shouldShow"
