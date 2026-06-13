@@ -16,7 +16,8 @@ const groups = computed<Array<{ title: string; shortcuts: Shortcut[] }>>(() => [
     shortcuts: [
       { keys: ['/'], label: 'Focus the search bar' },
       { keys: ['N'], label: 'Toggle the notes panel' },
-      { keys: ['C'], label: 'Focus the clone field' },
+      { keys: ['C'], label: 'Copy the clone URL' },
+      { keys: ['T'], label: 'Edit tags for the selected repo' },
     ],
   },
   {
