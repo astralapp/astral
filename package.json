@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "format": "prettier  \"resources/**/*.{ts,vue}\" -w -u",
-    "lint": "eslint \"resources/**/*.{ts,vue}\" --fix"
+    "lint": "eslint \"resources/**/*.{ts,vue}\" --fix",
+    "test": "vitest run"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
@@ -69,6 +70,7 @@
     "unplugin-icons": "^0.18.5",
     "vite": "^6.0.0",
     "vite-svg-loader": "^5.1.0",
+    "vitest": "^4.1.8",
     "vue-eslint-parser": "^10.2.0"
   },
   "postcss": {
