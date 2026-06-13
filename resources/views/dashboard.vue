@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Galileo from '@/components/Galileo.vue'
+import Galileo from '@/components/galileo/Galileo.vue'
 import GlobalToast from '@/components/GlobalToast.vue'
 import UserMenu from '@/components/UserMenu.vue'
 import NotesEditor from '@/components/notes-editor/NotesEditor.vue'

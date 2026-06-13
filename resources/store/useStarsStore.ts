@@ -10,6 +10,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo, GitHubRepoNode, PaginationResponse, RepoLanguage, StarMetaInput, TagEditorTag } from '@/types'
 import { runWithConcurrency } from '@/utils'
 import { evaluateSmartFilterBody, parseSmartFilterBody } from '@/utils/predicates'
+import { freeTextWords, parsePendingInput, repoMatchesSearch } from '@/utils/search'
 
 const STARS_PER_PAGE = 100
 const STARS_FETCH_CONCURRENCY = 6
@@ -286,26 +287,18 @@ export const useStarsStore = defineStore({
       }
 
       if (starsFilterStore.isFilteringBySearch) {
-        const search = starsFilterStore.search
+        const words = freeTextWords(parsePendingInput(starsFilterStore.searchText).freeText)
+        const tokens = starsFilterStore.searchTokens
 
         filteredRepos = filteredRepos.filter((repo: GitHubRepo) => {
-          const starNotes = this.userStarsByRepoId[repo.node.databaseId]?.notes || ''
-          const repoTextHaystack = [repo.node.nameWithOwner, repo.node.description, starNotes]
-            .filter(Boolean)
-            .join(' ')
-            .toLowerCase()
-          const repoHasStringMatches = search.strings.every(searchString => repoTextHaystack.includes(searchString))
+          const userStar = this.userStarsByRepoId[repo.node.databaseId]
 
-          if (search.tags.length) {
-            const repoTagNames = (this.userStarsByRepoId[repo.node.databaseId]?.tags || []).map(tag =>
-              tag.name.toLowerCase()
-            )
-            const repoHasTagMatches = search.tags.every(tag => repoTagNames.includes(tag))
-
-            return repoHasTagMatches && repoHasStringMatches
-          } else {
-            return repoHasStringMatches
-          }
+          return repoMatchesSearch(tokens, words, {
+            haystack: this.searchHaystackByRepoId[repo.node.databaseId] ?? '',
+            isArchived: repo.node.isArchived,
+            primaryLanguage: repo.node.primaryLanguage?.name.toLowerCase() ?? null,
+            tagNames: (userStar?.tags ?? []).map(tag => tag.name.toLowerCase()),
+          })
         })
       }
 
@@ -334,6 +327,20 @@ export const useStarsStore = defineStore({
           }
         })
         .sort((a, b) => b.count - a.count)
+    },
+    searchHaystackByRepoId(): Record<number, string> {
+      const haystacks: Record<number, string> = {}
+
+      for (const repo of this.allStars) {
+        const notes = this.userStarsByRepoId[repo.node.databaseId]?.notes || ''
+
+        haystacks[repo.node.databaseId] = [repo.node.nameWithOwner, repo.node.description, notes]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+      }
+
+      return haystacks
     },
     selectedRepo(): GitHubRepoNode {
       return this.selectedRepos[0] || {}
