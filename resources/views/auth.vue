@@ -1,19 +1,18 @@
 <script lang="ts" setup>
+import AuthStarfield from '@/components/auth/AuthStarfield.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import LogoSvg from '@/img/logo.svg?component'
 </script>
 
 <template>
   <div class="relative grid min-h-dvh w-full place-items-center overflow-hidden bg-gray-950 px-6 py-12">
-    <!-- Cosmic field: a faint aurora glow and a sparse, static starfield. Decorative. -->
+    <!-- Cosmic field: a faint aurora glow and a starfield. Decorative; static under reduced motion. -->
     <div
       class="aurora pointer-events-none absolute inset-0"
       aria-hidden="true"
     ></div>
-    <div
-      class="starfield pointer-events-none absolute inset-0"
-      aria-hidden="true"
-    ></div>
+
+    <AuthStarfield class="absolute inset-0" />
 
     <div class="auth-content relative z-10 flex w-full max-w-sm flex-col items-center text-center">
       <h1 class="m-0">
@@ -51,31 +50,24 @@ import LogoSvg from '@/img/logo.svg?component'
 <style scoped>
 /* A faint green aurora behind the wordmark, plus a low horizon glow. */
 .aurora {
-  background:
-    radial-gradient(55% 45% at 50% 36%, rgba(16, 185, 129, 0.16), transparent 70%),
+  background: radial-gradient(55% 45% at 50% 36%, rgba(16, 185, 129, 0.16), transparent 70%),
     radial-gradient(45% 32% at 50% 102%, rgba(5, 150, 105, 0.1), transparent 70%);
 }
 
-/* Sparse static starfield. Each layer paints a single faint point. */
-.starfield {
-  background-repeat: no-repeat;
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(255, 255, 255, 0.7), transparent 60%),
-    radial-gradient(1px 1px at 27% 42%, rgba(255, 255, 255, 0.45), transparent 60%),
-    radial-gradient(1px 1px at 41% 12%, rgba(255, 255, 255, 0.5), transparent 60%),
-    radial-gradient(2px 2px at 55% 28%, rgba(255, 255, 255, 0.6), transparent 60%),
-    radial-gradient(1px 1px at 68% 9%, rgba(255, 255, 255, 0.4), transparent 60%),
-    radial-gradient(1.5px 1.5px at 80% 22%, rgba(255, 255, 255, 0.55), transparent 60%),
-    radial-gradient(1px 1px at 90% 38%, rgba(255, 255, 255, 0.4), transparent 60%),
-    radial-gradient(1px 1px at 8% 62%, rgba(255, 255, 255, 0.35), transparent 60%),
-    radial-gradient(1.5px 1.5px at 33% 72%, rgba(255, 255, 255, 0.4), transparent 60%),
-    radial-gradient(1px 1px at 60% 80%, rgba(255, 255, 255, 0.3), transparent 60%),
-    radial-gradient(1px 1px at 73% 66%, rgba(255, 255, 255, 0.35), transparent 60%),
-    radial-gradient(2px 2px at 88% 78%, rgba(255, 255, 255, 0.4), transparent 60%),
-    radial-gradient(1px 1px at 18% 88%, rgba(255, 255, 255, 0.3), transparent 60%),
-    radial-gradient(1px 1px at 48% 54%, rgba(255, 255, 255, 0.28), transparent 60%),
-    radial-gradient(1.5px 1.5px at 95% 55%, rgba(255, 255, 255, 0.4), transparent 60%),
-    radial-gradient(1px 1px at 5% 35%, rgba(255, 255, 255, 0.4), transparent 60%);
+@media (prefers-reduced-motion: no-preference) {
+  .aurora {
+    animation: aurora-breathe 12s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes aurora-breathe {
+  from {
+    opacity: 0.75;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* One restrained entrance for the brand moment. */
