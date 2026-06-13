@@ -40,7 +40,7 @@ defineProps<Props>()
         class="ml-auto shrink-0"
         :class="{
           'pointer-events-auto opacity-100': isOpen || !collapsible,
-          'pointer-events-none opacity-0': !isOpen,
+          'pointer-events-none opacity-0': collapsible && !isOpen,
         }"
       >
         <slot name="right-action"></slot>
