@@ -3,6 +3,16 @@
 	<head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            (function () {
+                var appearance = @json(auth()->user()?->readSetting('appearance', 'system') ?? 'system');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (appearance === 'dark' || (appearance === 'system' && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
         <meta name="description" content="Astral is the best way to manage your starred repositories on GitHub using tags, notes and a powerful search feature.">
         <meta name="keywords" content="astral, stars, github, tags, app, organize">
         <link rel="preconnect" href="https://fonts.googleapis.com">

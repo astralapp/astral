@@ -3,6 +3,11 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+/* Dark mode is driven by a `.dark` class on <html> (set before paint in
+   root.blade.php and synced by useAppearance), not the OS media query, so the
+   in-app appearance setting can override the system preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --animate-float: float 3s ease-in-out infinite;
 

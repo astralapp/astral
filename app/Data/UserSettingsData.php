@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data;
 
+use App\Data\Enums\Appearance;
 use Spatie\LaravelData\Data;
 
 class UserSettingsData extends Data
@@ -15,6 +16,6 @@ class UserSettingsData extends Data
         public readonly bool $sidebar_tags_collapsed,
         public readonly bool $sidebar_smart_filters_collapsed,
         public readonly bool $sidebar_languages_collapsed,
-    ) {
-    }
+        public readonly Appearance $appearance = Appearance::SYSTEM,
+    ) {}
 }

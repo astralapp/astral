@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
+    Route::put('settings/appearance', [UserSettingsController::class, 'updateAppearance'])->name('settings.appearance.update');
     Route::put('openai-token', OpenAiTokenController::class)->name('openai-token.update');
     Route::post('openai-summary', OpenAiReadmeSummaryController::class)->name('openai-summary.fetch');
 

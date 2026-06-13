@@ -30,10 +30,10 @@ class User extends Authenticatable
 
     protected $with = ['flags'];
 
-    public const AVAILABLE_SETTINGS = ['show_language_tags', 'autosave_notes', 'sidebar_tags_collapsed', 'sidebar_smart_filters_collapsed', 'sidebar_languages_collapsed', 'clone_https_url'];
+    public const AVAILABLE_SETTINGS = ['show_language_tags', 'autosave_notes', 'sidebar_tags_collapsed', 'sidebar_smart_filters_collapsed', 'sidebar_languages_collapsed', 'clone_https_url', 'appearance'];
 
     protected $attributes = [
-        'settings' => '{"show_language_tags": true, "autosave_notes": true, "sidebar_tags_collapsed": false, "sidebar_smart_filters_collapsed": false, "sidebar_languages_collapsed": false, "clone_https_url": false}',
+        'settings' => '{"show_language_tags": true, "autosave_notes": true, "sidebar_tags_collapsed": false, "sidebar_smart_filters_collapsed": false, "sidebar_languages_collapsed": false, "clone_https_url": false, "appearance": "system"}',
     ];
 
     protected static function booted()
@@ -91,7 +91,7 @@ class User extends Authenticatable
             ->delete("https://api.github.com/applications/{$clientId}/grant", ['access_token' => $this->access_token]);
 
         if ($response->getStatusCode() == 404) {
-            throw new InvalidAccessTokenException();
+            throw new InvalidAccessTokenException;
         }
 
         $this->update(['access_token' => null]);

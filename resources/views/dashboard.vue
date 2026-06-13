@@ -15,6 +15,7 @@ import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
+import { useAppearance } from '@/composables/useAppearance'
 import { useAuth } from '@/composables/use-auth'
 import { useFlashBag } from '@/composables/use-flash-bag'
 import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
@@ -47,6 +48,10 @@ const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showSettingsDialog } = useSettingsDialog()
 const { params: urlParams, clearParams } = useUrlParams()
 const { show: showToast } = useGlobalToast()
+
+// Seeds the appearance store from the user setting and keeps `system` in sync
+// with live OS changes; the initial paint is handled in root.blade.php.
+useAppearance()
 
 useSyncValuesToStores(
   [userStore, 'user', computed(() => user.value)],

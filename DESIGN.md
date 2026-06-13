@@ -134,8 +134,9 @@ it daily.
 - Signal Green is the only saturated color, used for state and primary action.
 - Tight radii (2-6px) and hairline borders; quiet, precise controls.
 - Keyboard-first: `/` focuses search, `n` toggles notes; the surface rewards speed.
-- Full light and dark parity, driven by the OS (`prefers-color-scheme`), with no
-  in-app toggle.
+- Full light and dark parity. The OS preference (`prefers-color-scheme`) is the
+  default, with a System / Light / Dark override in Settings, persisted per user
+  and applied via a `.dark` class on `<html>` before first paint (no flash).
 
 ## 2. Colors
 
@@ -377,6 +378,7 @@ resting cards.
   The only sanctioned edge accent is the selected-row state bar.
 - **Don't** put a display font (Orbitron) in buttons, labels, or data.
 - **Don't** drop shadows on resting cards to fake depth; that reads as a 2014 app.
-- **Don't** introduce a manual theme toggle expectation; theme follows the OS.
+- **Don't** hardcode the theme to the OS; the saved appearance setting (System /
+  Light / Dark) wins, driven by the `.dark` class and set before first paint.
 - **Don't** use light-gray body text on tinted near-white "for elegance"; bump
   toward `ink-body` until it clears 4.5:1.
