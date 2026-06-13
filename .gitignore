@@ -21,6 +21,7 @@ yarn-error.log
 /storage/debugbar
 
 .hybridly
+/resources/types/generated.d.ts
 _ide_helper*
 .phpstorm.meta.php
 **/.DS_Store
