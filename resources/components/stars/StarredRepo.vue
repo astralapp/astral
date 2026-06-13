@@ -27,6 +27,11 @@ const tags = computed(() => {
 
 const shouldShowLanguageTag = computed(() => user.value?.settings.show_language_tags ?? false)
 
+const showLanguageChip = computed(() => shouldShowLanguageTag.value && !!props.repo.node.primaryLanguage?.name)
+
+// Surface the "Edit Tags" affordance up front whenever the row would otherwise show no chips at all.
+const showEditTagsAffordance = computed(() => !tags.value.length && !showLanguageChip.value)
+
 const isEditingTags = ref(false)
 
 const isSelected = computed(() =>
@@ -127,6 +132,7 @@ const onDragEnd = () => {
     <p class="font-semibold text-brand-600 dark:text-brand-500">{{ repo.node.nameWithOwner }}</p>
 
     <p
+      v-if="repo.node.description"
       class="mt-2 line-clamp-5 text-sm text-gray-700 dark:text-gray-300"
       :title="repo.node.description"
     >
@@ -147,8 +153,8 @@ const onDragEnd = () => {
       class="mt-4 inline-flex flex-wrap items-start"
     >
       <li
-        v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
-        class="mb-1 mr-1 cursor-pointer rounded-xs bg-brand-100 dark:bg-brand-500/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 f dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
+        v-if="showLanguageChip"
+        class="mb-1 mr-1 cursor-pointer rounded-xs bg-brand-100 dark:bg-brand-500/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
         role="button"
         @click.stop="emit('languageSelected', repo.node.primaryLanguage?.name as string)"
       >
@@ -168,7 +174,7 @@ const onDragEnd = () => {
       <li
         class="cursor-pointer rounded-xs bg-gray-200 px-2 py-0.5 text-xs font-semibold tracking-wide text-gray-600 opacity-0 transition-opacity group-hover:opacity-100 dark:bg-gray-600 dark:text-gray-200"
         :class="{
-          'opacity-100': !tags.length && !repo.node.primaryLanguage?.name,
+          'opacity-100': showEditTagsAffordance,
         }"
         role="button"
         @click.stop="isEditingTags = true"
