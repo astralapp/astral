@@ -31,7 +31,7 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo } from '@/types'
-import { ArrowLeftCircleIcon, Bars3CenterLeftIcon as MenuIcon } from '@heroicons/vue/24/outline'
+import { Bars3CenterLeftIcon as MenuIcon } from '@heroicons/vue/24/outline'
 import localForage from 'localforage'
 import { computed, nextTick, ref, watch } from 'vue'
 
@@ -62,7 +62,10 @@ useSyncValuesToStores(
 
 const isStarsListFocused = ref(false)
 const isSidebarOpen = ref(false)
-const isReadmeOpen = ref(false)
+
+// On mobile the readme pane slides over the list; it's open exactly when a repo
+// is selected, so "back" is simply clearing the selection.
+const isReadmeOpen = computed(() => starsStore.isAnyRepoSelected)
 
 const { selectItem, selectedItems } = useListSelectionState(
   computed(() => starsStore.filteredRepos.map(repo => repo.node)),
@@ -120,7 +123,6 @@ const onLanguageSelected = (language: string) => {
 }
 
 const onRepoSelected = (repo: GitHubRepo) => {
-  isReadmeOpen.value = true
   selectItem(repo.node)
 }
 
@@ -265,13 +267,6 @@ const shouldShowWelcomeMessage = ref(false)
           'translate-x-0': isReadmeOpen,
         }"
       >
-        <button
-          class="absolute left-0 top-0 z-10 ml-5 mt-20 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 text-gray-700 sm:hidden"
-          @click="isReadmeOpen = false"
-        >
-          <ArrowLeftCircleIcon />
-        </button>
-
         <div class="relative flex h-full flex-col">
           <RepoToolbar v-if="starsStore.isAnyRepoSelected" />
 
