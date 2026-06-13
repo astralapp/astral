@@ -108,7 +108,7 @@ const getMenuItemClasses = (isActive: boolean) => {
           />
 
           <MenuButton
-            class="right-0 top-0 h-5 w-5 text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover:opacity-100"
+            class="right-0 top-0 h-5 w-5 rounded-sm text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200"
             :class="[open && 'opacity-100']"
             @click.stop
           >

@@ -22,7 +22,7 @@ const getMenuItemClasses = (isActive: boolean) => {
     class="relative"
   >
     <MenuButton
-      class="inline-flex items-center text-gray-400 transition-colors hover:text-gray-200"
+      class="inline-flex items-center rounded-sm text-gray-400 transition-colors hover:text-gray-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200"
       :class="{ 'text-gray-50': open }"
     >
       <span class="text-xs uppercase tracking-wider">Sort</span>

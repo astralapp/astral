@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
@@ -14,10 +15,12 @@ import { useTagsStore } from '@/store/useTagsStore'
 import { Ability, StarDragDataTransferData } from '@/types'
 import { router } from 'hybridly'
 import { Sortable } from 'sortablejs-vue3'
-import { computed, nextTick, reactive, ref } from 'vue'
+import { computed, nextTick, reactive, ref, watch } from 'vue'
 
 type CollapsibleSidebarSettingsKey = Extract<keyof App.Data.UserSettingsData, `sidebar_${string}`>
 type SidebarGroupCollapsedState = { [K in CollapsibleSidebarSettingsKey]: boolean }
+
+const LANGUAGES_VISIBLE_LIMIT = 10
 
 const emit = defineEmits<{
   (e: 'all-stars-selected'): void
@@ -37,7 +40,7 @@ const smartFiltersStore = useSmartFiltersStore()
 const { show: showSmartFilterDialog } = useSmartFilterDialog()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 
-const newTagForm = ref<HTMLElement>()
+const newTagForm = ref<null | typeof BaseTextInput>(null)
 const newTag = ref('')
 const isNewTagFormShowing = ref(false)
 
@@ -66,7 +69,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
 
 const showNewTagForm = () => {
   isNewTagFormShowing.value = true
-  newTagForm.value?.focus()
+  newTagForm.value?.$el?.focus()
 }
 
 const doAddTag = async (tagName: string) => {
@@ -75,10 +78,38 @@ const doAddTag = async (tagName: string) => {
   newTag.value = ''
 }
 
+const hideNewTagForm = () => {
+  isNewTagFormShowing.value = false
+  newTag.value = ''
+}
+
 const tagIsSelected = (tag: App.Data.TagData): boolean => tag.id === starsFilterStore.selectedTag?.id
 const smartFilterIsSelected = (smartFilter: App.Data.SmartFilterData): boolean =>
   smartFilter.id === starsFilterStore.selectedSmartFilter?.id
 const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
+
+const isLanguagesExpanded = ref(false)
+
+const visibleLanguages = computed(() =>
+  isLanguagesExpanded.value ? starsStore.languages : starsStore.languages.slice(0, LANGUAGES_VISIBLE_LIMIT)
+)
+
+const hiddenLanguageCount = computed(() => Math.max(starsStore.languages.length - LANGUAGES_VISIBLE_LIMIT, 0))
+
+// Reveal the rest of the list whenever the selected language lives past the cap — e.g. picking a
+// language chip on a repo that wouldn't otherwise be visible until "View more" is clicked. Re-runs as
+// languages populate after stars load, so a deep-linked language still expands once its row exists.
+watch(
+  [() => starsFilterStore.selectedLanguage, () => starsStore.languages],
+  ([language, languages]) => {
+    if (!language) return
+
+    if (languages.findIndex(({ name }) => name === language) >= LANGUAGES_VISIBLE_LIMIT) {
+      isLanguagesExpanded.value = true
+    }
+  },
+  { immediate: true }
+)
 
 const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
 
@@ -117,10 +148,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               aria-label="Reload stars"
               :aria-busy="starsStore.isFetchingStars"
               :disabled="starsStore.isFetchingStars"
-              class="rounded-sm p-1 text-gray-400 transition-colors"
-              :class="{
-                'hover:bg-gray-700 hover:text-white': !starsStore.isFetchingStars,
-              }"
+              class="rounded-sm p-1 text-gray-400 transition-colors enabled:hover:bg-gray-700 enabled:hover:text-white disabled:cursor-default focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200"
               @click="emit('reload-stars')"
             >
               <i-lucide-refresh-cw
@@ -180,8 +208,9 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         <template #default>
           <div class="relative mt-2 flex h-10 items-center">
             <button
-              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-hidden dark:text-gray-400 dark:hover:text-gray-300 dark:focus:text-gray-300"
-              :class="{ 'pointer-events-none': isNewTagFormShowing }"
+              class="inline-flex w-full items-center rounded-sm text-sm font-semibold text-gray-400 transition hover:text-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200 dark:text-gray-300 dark:hover:text-gray-200"
+              :class="{ 'pointer-events-none opacity-0': isNewTagFormShowing }"
+              :tabindex="isNewTagFormShowing ? -1 : undefined"
               type="button"
               @click="showNewTagForm"
             >
@@ -200,13 +229,14 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
               }"
               @submit.prevent="doAddTag(newTag)"
             >
-              <input
+              <BaseTextInput
                 ref="newTagForm"
                 v-model="newTag"
                 type="text"
                 placeholder="Enter a tag name..."
-                class="w-full rounded-xs border-0 bg-white focus:ring-2 focus:ring-transparent dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 sm:text-sm"
-                @blur="isNewTagFormShowing = false"
+                aria-label="Tag name"
+                class="w-full"
+                @blur="hideNewTagForm"
               />
             </form>
           </div>
@@ -248,7 +278,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
       >
         <template #right-action>
           <button
-            class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-hidden group-hover:opacity-100"
+            class="inline-flex items-center rounded-sm text-gray-400 opacity-0 transition hover:text-gray-200 focus-visible:opacity-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200 group-hover:opacity-100"
             type="button"
             aria-label="Add smart filter"
             @click="doShowSmartFilterDialog"
@@ -300,7 +330,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
           aria-label="Languages"
         >
           <SidebarItem
-            v-for="language in starsStore.languages"
+            v-for="language in visibleLanguages"
             :key="language.name"
             :title="language.name"
             :count="language.count"
@@ -308,6 +338,22 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
             @click="emit('language-selected', language.name)"
           />
         </ul>
+
+        <button
+          v-if="hiddenLanguageCount > 0"
+          type="button"
+          class="mt-3 inline-flex w-full items-center rounded-sm text-sm font-semibold text-gray-400 transition-colors hover:text-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200 dark:text-gray-300 dark:hover:text-gray-200"
+          :aria-expanded="isLanguagesExpanded"
+          @click="isLanguagesExpanded = !isLanguagesExpanded"
+        >
+          <i-lucide-chevron-down
+            class="h-4 w-4 shrink-0 transform transition-transform"
+            :class="{ 'rotate-180': isLanguagesExpanded }"
+            role="presentation"
+          />
+
+          <span class="ml-2">{{ isLanguagesExpanded ? 'View less' : `View more (${hiddenLanguageCount})` }}</span>
+        </button>
       </SidebarGroup>
     </div>
   </div>
