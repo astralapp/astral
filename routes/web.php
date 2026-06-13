@@ -17,6 +17,7 @@ use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +42,16 @@ Route::get('logout', [AuthController::class, 'logout'])
     ->name('auth.destroy');
 
 Route::redirect('/login', '/auth/github')->name('login.show');
+
+// Local-only auth bypass for development and previewing. Guarded by the local
+// environment, so it is never registered in staging or production.
+if (app()->environment('local')) {
+    Route::get('dev-login', function () {
+        auth()->login(User::firstOrFail());
+
+        return redirect()->route('dashboard.show');
+    })->name('dev.login');
+}
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show');
