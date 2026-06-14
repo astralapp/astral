@@ -24,6 +24,8 @@ yarn-error.log
 
 .hybridly
 /resources/types/generated.d.ts
+/resources/types/auto-imports.d.ts
+/resources/types/components.d.ts
 _ide_helper*
 .phpstorm.meta.php
 **/.DS_Store

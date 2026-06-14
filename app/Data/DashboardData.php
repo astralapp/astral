@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Data;
 
 use App\Models\User;
-use Hybridly\Support\Deferred;
+use Hybridly\Deferred;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;

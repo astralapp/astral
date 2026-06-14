@@ -61,5 +61,5 @@ export const randomIntFromRange = (min: number, max: number) => {
 }
 
 export const getNavigationResponseErrors = (response: NavigationResponse): Record<string, string> => {
-  return response.response?.data.view.properties.errors
+  return response.response?.data.validation?.default ?? {}
 }

@@ -7,24 +7,27 @@ namespace App\Http\Middleware;
 use App\Data\SecurityData;
 use App\Data\SharedData;
 use App\Data\UserData;
-use Hybridly\Http\Middleware;
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class HandleHybridRequests extends Middleware
+class HandleHybridRequests
 {
-    protected array $persistent = [
-        'security.user',
-    ];
-
     /**
-     * Defines the properties that are shared to all requests.
+     * Shares global data to every response and marks the authenticated user
+     * as persistent so it survives partial reloads.
      */
-    public function share(): SharedData
+    public function handle(Request $request, Closure $next): Response
     {
-        return SharedData::from([
-            'security' => SecurityData::from([
-                'user' => UserData::optional(auth()->user()),
-            ]),
-            'sponsorUrl' => 'https://github.com/sponsors/' . config('app.github_sponsoree_login'),
-        ]);
+        hybridly()
+            ->share(SharedData::from([
+                'security' => SecurityData::from([
+                    'user' => UserData::optional(auth()->user()),
+                ]),
+                'sponsorUrl' => 'https://github.com/sponsors/' . config('app.github_sponsoree_login'),
+            ]))
+            ->persist('security.user');
+
+        return $next($request);
     }
 }
