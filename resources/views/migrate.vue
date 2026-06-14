@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AuthStarfield from '@/components/auth/AuthStarfield.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 import StarFetchProgress from '@/components/stars/StarFetchProgress.vue'
 import { useAuth } from '@/composables/use-auth'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
@@ -22,6 +24,29 @@ const userStore = useUserStore()
 
 const hasMigrationStarted = ref(false)
 const haveStarsBeenFetched = ref(false)
+
+type Phase = 'ready' | 'fetching' | 'finalizing'
+const phase = computed<Phase>(() => {
+  if (!hasMigrationStarted.value) return 'ready'
+  return haveStarsBeenFetched.value ? 'finalizing' : 'fetching'
+})
+
+type StepStatus = 'upcoming' | 'active' | 'done'
+const steps = computed(() => [
+  { key: 'fetch', label: 'Fetch stars', status: (phase.value === 'finalizing' ? 'done' : 'active') as StepStatus },
+  {
+    key: 'catalog',
+    label: 'Build catalog',
+    status: (phase.value === 'finalizing' ? 'active' : 'upcoming') as StepStatus,
+  },
+])
+
+const dotClass = (status: StepStatus) =>
+  ({
+    done: 'bg-brand-500 text-gray-950',
+    active: 'text-brand-400 ring-2 ring-brand-500',
+    upcoming: 'text-gray-600 ring-1 ring-gray-700',
+  }[status])
 
 useSyncValuesToStores(
   [userStore, 'user', computed(() => user.value)],
@@ -68,54 +93,234 @@ const updateStarMetadata = () => {
 </script>
 
 <template>
-  <div
-    class="fixed inset-0 flex items-center bg-gray-900 bg-size-[1000px_1000px] bg-repeat"
-    :style="{ backgroundImage: 'url(/img/migrate-bg.svg)' }"
-  >
-    <div class="mx-auto flex w-full max-w-(--breakpoint-lg) justify-between">
-      <img
-        class="h-auto w-full max-w-xs motion-safe:animate-float"
-        alt="a waving astronaut"
-        src="/img/migrate-waving-astronaut.svg"
+  <div class="relative grid min-h-dvh w-full place-items-center overflow-hidden bg-gray-950 px-6 py-12">
+    <!-- Cosmic field: a faint aurora glow and a starfield. Decorative; static under reduced motion. -->
+    <div
+      class="aurora pointer-events-none absolute inset-0"
+      aria-hidden="true"
+    ></div>
+
+    <AuthStarfield class="absolute inset-0" />
+
+    <div class="migrate-content relative z-10 flex w-full max-w-md flex-col items-center text-center">
+      <LogoSvg
+        role="img"
+        aria-label="Astral"
+        class="h-8 w-auto fill-current text-white"
       />
 
-      <div class="space-y-8 pl-24">
-        <h2 class="bg-gray-900 text-6xl font-bold leading-tight text-white shadow-[0_0_10px_10px_#111827]">
-          Welcome to the<br />
-          new
-          <LogoSvg class="px relative -top-1 inline-flex h-6 fill-current text-brand-500 sm:h-12" />
-        </h2>
+      <Transition
+        name="swap"
+        mode="out-in"
+      >
+        <!-- Ready: explain the one-time migration and invite the user to start. -->
+        <div
+          v-if="phase === 'ready'"
+          key="ready"
+          class="mt-8 flex w-full flex-col items-center"
+        >
+          <h1 class="text-2xl font-semibold tracking-tight text-balance text-white sm:text-3xl">
+            Let's bring your stars over
+          </h1>
 
-        <p class="bg-gray-900 leading-loose text-white shadow-[0_0_10px_10px_#111827]">
-          Before you get started we need to migrate some of your data to the new version. Depending on the number of
-          stars you have, this could take from a few seconds to a few minutes. Please do not close this tab until the
-          migration is complete.
-        </p>
+          <p class="mt-4 text-base leading-relaxed text-pretty text-gray-300">
+            Welcome back. We're moving your library to the rebuilt Astral. Depending on how many stars you've collected,
+            this takes anywhere from a few seconds to a couple of minutes. Keep this tab open until it finishes.
+          </p>
 
-        <div>
-          <button
-            v-show="!hasMigrationStarted"
-            type="button"
-            class="relative rounded-full bg-brand-600 px-6 py-4 text-2xl font-bold text-white shadow-lg shadow-brand-900 transition-all hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-800 active:top-px"
+          <BaseButton
+            kind="primary"
+            size="xl"
+            class="group mt-8 gap-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
             @click="beginMigration"
           >
-            Begin Migration 🚀
-          </button>
+            <span>Begin migration</span>
+
+            <i-ph-arrow-right
+              class="h-5 w-5 transition-transform duration-200 motion-safe:group-hover:translate-x-0.5"
+              role="presentation"
+            />
+          </BaseButton>
+
+          <p class="mt-4 text-xs text-gray-400">
+            One-time step. Astral only reads your stars from GitHub; nothing on your account is changed.
+          </p>
         </div>
 
-        <div v-if="hasMigrationStarted && !haveStarsBeenFetched">
-          <StarFetchProgress
-            variant="onDark"
-            label="Fetching stars…"
-            :fetched-count="starsStore.fetchedCount"
-            :total-repos="starsStore.totalRepos"
-          />
-        </div>
+        <!-- Working: a two-step sequence with live progress, announced to assistive tech. -->
+        <div
+          v-else
+          key="working"
+          class="mt-8 flex w-full flex-col items-center"
+          aria-live="polite"
+        >
+          <ol class="flex items-center justify-center gap-2 text-xs font-medium sm:gap-3">
+            <template
+              v-for="(step, index) in steps"
+              :key="step.key"
+            >
+              <li
+                v-if="index > 0"
+                aria-hidden="true"
+                class="h-px w-6 transition-colors duration-300 sm:w-10"
+                :class="steps[0].status === 'done' ? 'bg-brand-500/60' : 'bg-gray-700'"
+              ></li>
 
-        <div v-if="hasMigrationStarted && haveStarsBeenFetched">
-          <p class="animate-pulse text-lg font-bold text-white">Updating star metadata...</p>
+              <li class="flex items-center gap-2">
+                <span
+                  class="inline-flex h-6 w-6 items-center justify-center rounded-full transition-colors duration-300"
+                  :class="dotClass(step.status)"
+                >
+                  <i-ph-check
+                    v-if="step.status === 'done'"
+                    class="h-3.5 w-3.5"
+                  />
+
+                  <span
+                    v-else
+                    class="h-1.5 w-1.5 rounded-full"
+                    :class="step.status === 'active' ? 'bg-brand-400 motion-safe:animate-pulse' : 'bg-gray-600'"
+                  ></span>
+                </span>
+
+                <span :class="step.status === 'upcoming' ? 'text-gray-500' : 'text-gray-200'">
+                  {{ step.label }}
+                </span>
+              </li>
+            </template>
+          </ol>
+
+          <div class="mt-8 w-full">
+            <StarFetchProgress
+              v-if="phase === 'fetching'"
+              variant="onDark"
+              label="Fetching your stars"
+              :fetched-count="starsStore.fetchedCount"
+              :total-repos="starsStore.totalRepos"
+            />
+
+            <div v-else>
+              <p class="text-lg font-bold text-white motion-safe:animate-pulse">Cataloging your library</p>
+
+              <div class="mt-4 h-8 w-full overflow-hidden rounded-full bg-gray-900 ring-2 ring-inset ring-white">
+                <div class="relative h-full w-full bg-white">
+                  <div class="finalize-sweep absolute inset-0"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-6 text-sm text-balance text-gray-400">
+            {{
+              phase === 'fetching'
+                ? 'Pulling every starred repo from your GitHub account.'
+                : 'Saving names, descriptions, and links so search is ready the moment you land.'
+            }}
+          </p>
+
+          <p class="mt-6 flex items-center gap-2 text-xs text-gray-400">
+            <span class="relative flex h-1.5 w-1.5">
+              <span
+                class="absolute inline-flex h-full w-full rounded-full bg-brand-500/70 motion-safe:animate-ping"
+              ></span>
+
+              <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-500"></span>
+            </span>
+            Keep this tab open until it finishes.
+          </p>
         </div>
-      </div>
+      </Transition>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* A faint green aurora behind the wordmark, plus a low horizon glow. Matches the auth page. */
+.aurora {
+  background: radial-gradient(55% 45% at 50% 34%, rgba(16, 185, 129, 0.16), transparent 70%),
+    radial-gradient(45% 32% at 50% 102%, rgba(5, 150, 105, 0.1), transparent 70%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aurora {
+    animation: aurora-breathe 12s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes aurora-breathe {
+  from {
+    opacity: 0.75;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* One restrained entrance for the page. */
+.migrate-content {
+  animation: migrate-rise 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes migrate-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Crossfade between the ready and working states. */
+.swap-enter-active,
+.swap-leave-active {
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.swap-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.swap-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* The finalize phase is indeterminate: a green sweep over a full bar reads as "data's in, now processing". */
+.finalize-sweep {
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.65), transparent);
+  transform: translateX(-100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .finalize-sweep {
+    animation: finalize-sweep 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes finalize-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .migrate-content {
+    animation: none;
+  }
+
+  .swap-enter-active,
+  .swap-leave-active {
+    transition: opacity 120ms ease;
+  }
+
+  .swap-enter-from,
+  .swap-leave-to {
+    transform: none;
+  }
+}
+</style>
