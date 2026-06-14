@@ -1,0 +1,72 @@
+name: ci
+
+on:
+  push:
+    branches: [main, next]
+  pull_request:
+    branches: [main, next]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    name: PHP — tests & style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run tests (Pest)
+        run: php artisan test
+
+      - name: Check code style (Pint)
+        if: ${{ !cancelled() }}
+        run: ./vendor/bin/pint --test
+
+  frontend:
+    name: Frontend — tests, lint & format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests (Vitest)
+        run: pnpm test
+
+      - name: Lint (ESLint)
+        if: ${{ !cancelled() }}
+        run: pnpm lint:check
+
+      - name: Check formatting (Prettier)
+        if: ${{ !cancelled() }}
+        run: pnpm format:check

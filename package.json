@@ -6,7 +6,9 @@
     "dev": "vite",
     "build": "vite build",
     "format": "prettier  \"resources/**/*.{ts,vue}\" -w -u",
+    "format:check": "prettier \"resources/**/*.{ts,vue}\" -c -u",
     "lint": "eslint \"resources/**/*.{ts,vue}\" --fix",
+    "lint:check": "eslint \"resources/**/*.{ts,vue}\"",
     "test": "vitest run"
   },
   "dependencies": {

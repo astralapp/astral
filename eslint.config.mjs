@@ -9,6 +9,8 @@ import vueParser from 'vue-eslint-parser'
 
 export default [
   {
+    // Global ignores must live in a config object with no other keys, otherwise
+    // ESLint stops treating them as global and lints these files anyway.
     ignores: [
       'node_modules/**',
       'vendor/**',
@@ -17,6 +19,8 @@ export default [
       '**/*.d.ts',
       'resources/**/*.d.ts',
     ],
+  },
+  {
     linterOptions: {
       reportUnusedDisableDirectives: 'off',
     },

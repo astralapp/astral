@@ -53,6 +53,8 @@ it('requires a unique name per user', function () {
 });
 
 it('flashes an error if the user is not a sponsor and is at their tag limit', function () {
+    config(['app.check_for_sponsorship' => true]);
+
     $this->login();
 
     Tag::factory()->count(5)->create(['user_id' => auth()->id()]);
