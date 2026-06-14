@@ -17,6 +17,5 @@ class SmartFilterData extends Data
         public string $body,
         public int $user_id,
         public int $sort_order,
-    ) {
-    }
+    ) {}
 }

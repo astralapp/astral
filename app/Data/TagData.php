@@ -17,6 +17,5 @@ class TagData extends Data
         public int $user_id,
         public int $sort_order,
         public ?int $stars_count,
-    ) {
-    }
+    ) {}
 }

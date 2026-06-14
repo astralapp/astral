@@ -14,6 +14,5 @@ class UpdateUserSettingsRequest extends Data
         #[In(User::AVAILABLE_SETTINGS)]
         public readonly string $key,
         public readonly bool $enabled, // TODO: Consider changing to value
-    ) {
-    }
+    ) {}
 }

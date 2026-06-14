@@ -11,6 +11,5 @@ class UserFlagData extends Data
     public function __construct(
         public readonly string $key,
         public readonly bool $value,
-    ) {
-    }
+    ) {}
 }

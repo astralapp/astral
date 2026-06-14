@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Star extends Model
 {
-    use HasFactory, Cachable;
+    use Cachable, HasFactory;
 
     protected $casts = [
         'meta' => 'array',

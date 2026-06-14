@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Tag extends Model
 {
-    use HasFactory, Cachable;
+    use Cachable, HasFactory;
 
     protected $hidden = ['pivot'];
 

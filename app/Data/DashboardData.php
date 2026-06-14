@@ -25,8 +25,7 @@ class DashboardData extends Data
         public Deferred $stars,
         /** @var Collection<int, SmartFilterData> */
         public Collection $smart_filters,
-    ) {
-    }
+    ) {}
 
     public static function fromModel(User $user): self
     {

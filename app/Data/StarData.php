@@ -20,6 +20,5 @@ class StarData extends Data
         public ?array $meta,
         /** @var Collection<int, TagData> */
         public readonly Collection $tags,
-    ) {
-    }
+    ) {}
 }

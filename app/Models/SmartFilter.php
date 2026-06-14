@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SmartFilter extends Model
 {
-    use HasFactory, Cachable;
+    use Cachable, HasFactory;
 
     protected $casts = [
         'body' => 'array',
