@@ -1,5 +1,9 @@
 <h1 align="center">Astral</h1>
 
+<p align="center">
+  <a href="https://github.com/astralapp/astral/actions/workflows/ci.yml"><img src="https://github.com/astralapp/astral/actions/workflows/ci.yml/badge.svg?branch=next" alt="CI status"></a>
+</p>
+
 ## 🐳 Quick Start (Local, Docker)
 
 **Prerequisites:** Docker (Desktop, or Engine + Compose v2) and `make`.
