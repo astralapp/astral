@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Data\Enums\Ability;
-use App\Models\Tag;
+use App\Exceptions\TagLimitExceededException;
+use App\Lib\SyncStarTags;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StarTagsController extends Controller
@@ -55,7 +54,7 @@ class StarTagsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, SyncStarTags $syncStarTags)
     {
         $request->validate([
             'databaseId' => ['required', 'integer'],
@@ -66,44 +65,16 @@ class StarTagsController extends Controller
             'tags.*.name' => ['required_with:tags', 'string'],
         ]);
 
-        DB::beginTransaction();
-
-        $repoId = $request->input('databaseId');
-        $tags = $request->input('tags');
-        $meta = $request->only(['nameWithOwner', 'url', 'description']);
-
-        $star = auth()
-            ->user()
-            ->stars()
-            ->firstOrCreate(
-                ['repo_id' => $repoId],
-                ['meta' => $meta]
+        try {
+            $syncStarTags->handle(
+                auth()->user(),
+                (int) $request->input('databaseId'),
+                $request->only(['nameWithOwner', 'url', 'description']),
+                $request->input('tags', []),
             );
-
-        $star->meta = $meta;
-        $star->save();
-
-        $ids = [];
-
-        if (empty($tags)) {
-            $star->removeAllTags();
-        } else {
-            foreach ($tags as $tag) {
-                $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
-                $ids[] = $tag->id;
-            }
-            $star->tags()->sync($ids);
+        } catch (TagLimitExceededException $e) {
+            return $this->sponsorshipRequired($e->ability);
         }
-
-        // Authorized after the writes: syncing can firstOrCreate new tags, so the
-        // sponsorship cap is only knowable against the resulting tag count.
-        if (auth()->user()->cannot('sync', Tag::class)) {
-            DB::rollBack();
-
-            return $this->sponsorshipRequired(Ability::CREATE_TAG);
-        }
-
-        DB::commit();
 
         return redirect()->route('dashboard.show');
     }

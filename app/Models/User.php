@@ -9,13 +9,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Http;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @mixin IdeHelperUser
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
+
+    public const BROWSER_EXTENSION_TOKEN = 'browser-extension';
 
     protected $hidden = [
         'remember_token',
@@ -43,6 +46,7 @@ class User extends Authenticatable
             $user->tags()->delete();
             $user->stars()->delete();
             $user->flags()->delete();
+            $user->tokens()->delete();
         });
     }
 

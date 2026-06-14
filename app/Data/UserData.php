@@ -26,6 +26,7 @@ class UserData extends Data
         public readonly ?string $scope,
         public readonly ?string $avatar,
         public readonly ?bool $is_sponsor,
+        public readonly bool $has_browser_extension_token,
         public readonly UserSettingsData $settings,
         /** @var Collection<int, UserFlagData> */
         public readonly Collection $flags,
@@ -33,8 +34,7 @@ class UserData extends Data
         public readonly array $limits,
         #[RecordTypeScriptType(Ability::class, 'bool')]
         public readonly array $abilities,
-    ) {
-    }
+    ) {}
 
     public static function fromModel(User $user): self
     {
@@ -48,6 +48,7 @@ class UserData extends Data
             $user->scope,
             $user->avatar,
             $user->is_sponsor,
+            $user->tokens()->where('name', User::BROWSER_EXTENSION_TOKEN)->exists(),
             UserSettingsData::from($user->settings),
             UserFlagData::collect($user->flags),
             $user->limits(),
