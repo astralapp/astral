@@ -89,9 +89,17 @@ make setup-sqlite
 ```
 
 In SQLite mode the MySQL service is disabled and the app uses
-`storage/database.sqlite` (persisted in the `app-storage` volume). Redis, the
-queue worker, and the scheduler still run. Use the `-sqlite` variants of the
-make targets (e.g. `make migrate-sqlite`, `make logs-sqlite`, `make shell-sqlite`).
+`storage/database.sqlite`. Redis, the queue worker, and the scheduler still run.
+Use the `-sqlite` variants of the make targets (e.g. `make migrate-sqlite`,
+`make logs-sqlite`, `make shell-sqlite`).
+
+In dev, `storage/` is bind-mounted from the host, so the database file lives at
+`storage/database.sqlite` on your machine (gitignored). Point any SQLite GUI
+client — [TablePlus](https://tableplus.com),
+[DB Browser for SQLite](https://sqlitebrowser.org), or
+[DBeaver](https://dbeaver.io) — at that file; edits sync straight to the running
+app. (In production SQLite mode there's no host mount, so the file is persisted
+in the `app-storage` volume instead.)
 
 ## 🏠 Self-Hosting
 
@@ -134,9 +142,3 @@ make prod-migrate-sqlite
   `app-storage` volume — include that volume in your backup strategy.
 - SQLite is great for small-to-medium installs; move to MySQL when you need
   heavier concurrent writes.
-
-### 📨 Mail
-
-Local development uses the `log` mailer, so outgoing mail is written to
-`storage/logs` instead of being sent. For production, configure the `MAIL_*`
-variables in `.env`.

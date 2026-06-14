@@ -3,6 +3,14 @@ COMPOSE_DEV_SQLITE = docker compose -f compose.yml -f compose.dev.yml -f compose
 COMPOSE_PROD = docker compose -f compose.yml
 COMPOSE_PROD_SQLITE = docker compose -f compose.yml -f compose.sqlite.yml
 
+# Point DB_CONNECTION in .env at the mode being launched. The compose overlay is
+# authoritative for the container, but an out-of-sync .env misleads anyone
+# reading the file or running host-side tooling (and GUI clients). Replaces the
+# existing line if present, appends otherwise — idempotent and portable awk.
+define sync_db_connection
+@awk '/^DB_CONNECTION=/{$$0="DB_CONNECTION=$(1)";seen=1}{print}END{if(!seen)print "DB_CONNECTION=$(1)"}' .env > .env.tmp && mv .env.tmp .env
+endef
+
 .PHONY: help setup setup-sqlite up down restart build logs ps shell shell-vite pnpm key migrate seed test pint artisan \
 	shell-vite-sqlite pnpm-sqlite \
 	up-sqlite down-sqlite restart-sqlite build-sqlite logs-sqlite ps-sqlite shell-sqlite \
@@ -57,6 +65,7 @@ help:
 
 setup:
 	@[ -f .env ] || (cp .env.example .env && echo "Created .env from .env.example")
+	$(call sync_db_connection,mysql)
 	$(COMPOSE_DEV) up --build -d
 	@echo ""
 	@echo "Astral is starting. The app key and migrations run automatically on first boot."
@@ -66,6 +75,7 @@ setup:
 
 setup-sqlite:
 	@[ -f .env ] || (cp .env.example .env && echo "Created .env from .env.example")
+	$(call sync_db_connection,sqlite)
 	$(COMPOSE_DEV_SQLITE) up --build -d
 	@echo ""
 	@echo "Astral (SQLite) is starting. The app key and migrations run automatically on first boot."

@@ -9,6 +9,11 @@ services:
     volumes:
       - ./:/var/www/html
       - vendor-data:/var/www/html/vendor
+      # Bind-mount storage over the app-storage volume so logs and (in SQLite
+      # mode) storage/database.sqlite live on the host — readable by a GUI
+      # client and editable in place. Prod keeps the named volume (no dev
+      # overlay there). Generated cache/views/sessions are already gitignored.
+      - ./storage:/var/www/html/storage
 
   queue:
     environment:
@@ -17,6 +22,7 @@ services:
     volumes:
       - ./:/var/www/html
       - vendor-data:/var/www/html/vendor
+      - ./storage:/var/www/html/storage
 
   scheduler:
     environment:
@@ -25,6 +31,7 @@ services:
     volumes:
       - ./:/var/www/html
       - vendor-data:/var/www/html/vendor
+      - ./storage:/var/www/html/storage
 
   # In dev, serve the live ./public from the host so asset/route changes show up
   # without rebuilding the image.
