@@ -11,7 +11,7 @@ define sync_db_connection
 @awk '/^DB_CONNECTION=/{$$0="DB_CONNECTION=$(1)";seen=1}{print}END{if(!seen)print "DB_CONNECTION=$(1)"}' .env > .env.tmp && mv .env.tmp .env
 endef
 
-.PHONY: help setup setup-sqlite up down restart build logs ps shell shell-vite pnpm key migrate seed test pint artisan \
+.PHONY: help setup setup-sqlite up down restart build logs ps shell shell-vite pnpm key migrate seed test pint boost artisan \
 	shell-vite-sqlite pnpm-sqlite \
 	up-sqlite down-sqlite restart-sqlite build-sqlite logs-sqlite ps-sqlite shell-sqlite \
 	key-sqlite migrate-sqlite seed-sqlite test-sqlite artisan-sqlite \
@@ -45,6 +45,7 @@ help:
 	@echo "  make test           Run test suite"
 	@echo "  make test-sqlite    Run test suite (SQLite mode)"
 	@echo "  make pint           Run Laravel Pint"
+	@echo "  make boost          Regenerate AI guidelines & skills (Claude + Codex)"
 	@echo "  make artisan cmd=\"about\""
 	@echo "  make artisan-sqlite cmd=\"about\""
 	@echo "  make shell-vite     Open shell in vite (Node/pnpm) container"
@@ -153,6 +154,13 @@ test-sqlite:
 
 pint:
 	$(COMPOSE_DEV) exec app vendor/bin/pint --format agent
+
+# Regenerate the Boost AI guidelines (CLAUDE.md, AGENTS.md) and skills from the
+# committed boost.json. These outputs are gitignored — run this after cloning
+# and after dependency changes. MCP config is committed separately and not
+# touched here (boost.json has "mcp": false).
+boost:
+	$(COMPOSE_DEV) exec app php artisan boost:update
 
 artisan:
 	$(COMPOSE_DEV) exec app php artisan $(cmd)

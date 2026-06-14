@@ -1,15 +1,17 @@
 {
     "agents": [
+        "claude_code",
         "codex"
     ],
     "cloud": false,
     "guidelines": true,
     "herd_mcp": false,
-    "mcp": true,
+    "mcp": false,
     "nightwatch_mcp": false,
     "sail": false,
     "skills": [
         "laravel-best-practices",
+        "socialite-development",
         "pest-testing",
         "tailwindcss-development",
         "laravel-specialist"

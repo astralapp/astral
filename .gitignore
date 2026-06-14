@@ -31,8 +31,15 @@ _ide_helper*
 **/.DS_Store
 *.tasks
 
-# Local agent / skill tooling
+# Boost-generated agent guidelines (regenerate with `make boost`)
+/CLAUDE.md
+/AGENTS.md
+
+# Local / generated agent + skill tooling
 /.agents
-/.claude
 /.github/skills
 /.impeccable
+
+# Claude Code: ignore everything except the shared, committed settings
+/.claude/*
+!/.claude/settings.json

@@ -1,4 +1,3 @@
 [mcp_servers.laravel-boost]
-command = "php"
-args = ["artisan", "boost:mcp"]
-cwd = "/Users/syropian/Code/astral"
+command = "docker"
+args = ["compose", "-f", "compose.yml", "-f", "compose.dev.yml", "exec", "-T", "app", "php", "artisan", "boost:mcp"]

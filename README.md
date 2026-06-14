@@ -105,6 +105,38 @@ client — [TablePlus](https://tableplus.com),
 app. (In production SQLite mode there's no host mount, so the file is persisted
 in the `app-storage` volume instead.)
 
+## 🤖 AI tooling (Claude Code & Codex)
+
+This repo is set up for [Laravel Boost](https://github.com/laravel/boost)-powered
+AI assistance with **Claude Code** and **Codex** out of the box.
+
+**Committed vs. generated.** To keep the repo clean, Boost's generated files
+(`CLAUDE.md`, `AGENTS.md`, and the per-agent skill copies) are gitignored and
+regenerated locally. Only the _sources_ are committed: agent/skill selection in
+`boost.json`, custom guidelines in `.ai/guidelines/`, custom skills in
+`.ai/skills/`, and the MCP config (`.mcp.json`, `.codex/config.toml`).
+
+**First-time setup.** With the dev stack running, generate the guidelines and
+skills for your agents:
+
+```bash
+make boost
+```
+
+This runs `php artisan boost:update` in the app container and writes `CLAUDE.md`,
+`AGENTS.md`, and the skill files locally. Re-run it after pulling dependency
+changes (e.g. a framework bump) so the guidelines stay in sync. Don't commit the
+generated files.
+
+**MCP server.** The Laravel Boost MCP server is pre-wired for both agents via the
+committed `.mcp.json` (Claude Code) and `.codex/config.toml` (Codex). It runs
+inside the app container, so **the dev stack must be up** for the MCP tools to
+connect.
+
+**Personal tooling.** Editor settings and personal agent skills (the `impeccable`
+design skill, `.claude/launch.json`, etc.) are intentionally gitignored and not
+part of the repo — only the shared `.claude/settings.json` is committed.
+
 ## 🏠 Self-Hosting
 
 The production stack lives in `compose.yml` and builds two images: the PHP-FPM
