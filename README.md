@@ -178,3 +178,10 @@ make prod-migrate-sqlite
   `app-storage` volume — include that volume in your backup strategy.
 - SQLite is great for small-to-medium installs; move to MySQL when you need
   heavier concurrent writes.
+
+## 📜 License
+
+Astral is open source under the [GNU Affero General Public License v3.0](LICENSE)
+(AGPL-3.0-or-later). You're free to self-host, modify, and redistribute it. If
+you run a modified version as a network service, AGPL §13 requires you to offer
+your users the corresponding source of your modifications.
