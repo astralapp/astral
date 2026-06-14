@@ -6,8 +6,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrowserExtensionTokenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MigrationController;
-use App\Http\Controllers\OpenAiReadmeSummaryController;
-use App\Http\Controllers\OpenAiTokenController;
 use App\Http\Controllers\SmartFiltersController;
 use App\Http\Controllers\SmartFiltersSortOrderController;
 use App\Http\Controllers\SponsorshipController;
@@ -79,8 +77,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
     Route::put('settings/appearance', [UserSettingsController::class, 'updateAppearance'])->name('settings.appearance.update');
-    Route::put('openai-token', OpenAiTokenController::class)->name('openai-token.update');
-    Route::post('openai-summary', OpenAiReadmeSummaryController::class)->name('openai-summary.fetch');
 
     Route::post('browser-extension-token', [BrowserExtensionTokenController::class, 'store'])->name('browser-extension-token.store');
     Route::delete('browser-extension-token', [BrowserExtensionTokenController::class, 'destroy'])->name('browser-extension-token.destroy');

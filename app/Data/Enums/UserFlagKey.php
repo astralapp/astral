@@ -10,5 +10,5 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 enum UserFlagKey: string
 {
     // Persisted in the user_flags.key column; changing the value orphans existing rows.
-    case MIGRATION = '2025-migration';
+    case MIGRATION = 'legacy-migration';
 }

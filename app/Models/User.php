@@ -29,7 +29,6 @@ class User extends Authenticatable
         'settings' => 'array',
         'is_sponsor' => 'boolean',
         'access_token' => 'encrypted',
-        'openai_token' => 'encrypted',
     ];
 
     protected $with = ['flags'];
