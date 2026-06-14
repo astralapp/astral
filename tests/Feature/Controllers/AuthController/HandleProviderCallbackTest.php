@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite;
 
 it('creates a new user if the user doesn\'t exist and logs them in', function () {
@@ -75,7 +76,7 @@ function mockSocialiteFacade()
         ->andReturn('https://en.gravatar.com/userimage');
     $abstractUser->token = 'abcde12345';
 
-    $provider = Mockery::mock(Laravel\Socialite\Contracts\Provider::class);
+    $provider = Mockery::mock(Provider::class);
     $provider->shouldReceive('user')->andReturn($abstractUser);
 
     Socialite::shouldReceive('driver')->with('github')->andReturn($provider);

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\TagLimitExceededException;
 use App\Lib\SyncStarTags;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class StarTagsController extends Controller
@@ -14,7 +15,7 @@ class StarTagsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -52,7 +53,7 @@ class StarTagsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, SyncStarTags $syncStarTags)
     {

@@ -7,13 +7,14 @@ namespace App\Http\Controllers;
 use App\Data\Enums\Ability;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TagsController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -38,7 +39,7 @@ class TagsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Tag $tag)
     {
@@ -58,7 +59,7 @@ class TagsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Tag $tag)
     {

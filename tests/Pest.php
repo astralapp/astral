@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 */
 
 uses(
-    Tests\TestCase::class,
+    TestCase::class,
     LazilyRefreshDatabase::class
 )->in('Feature');
 
