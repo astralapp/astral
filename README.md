@@ -179,6 +179,23 @@ make prod-migrate-sqlite
 - SQLite is great for small-to-medium installs; move to MySQL when you need
   heavier concurrent writes.
 
+## 🧩 Browser Extension
+
+[**Astral for GitHub**](https://github.com/astralapp/astral-browser-extension) is
+a companion browser extension that lets you view and manage a repository's Astral
+tags **inline on GitHub.com**. It adds a **Tags** button to the repo header (next
+to Star / Watch / Fork); clicking it opens a popover to view the repo's tags, add
+or remove existing ones with autocomplete, and create new tags on the fly. Built
+with [WXT](https://wxt.dev) + Vue 3 + Tailwind CSS v4 — Chromium-first (Chrome,
+Edge, Brave, Arc), with Firefox as a follow-up.
+
+It talks to Astral's token-authed JSON API (`/api/v1/...`) using a Sanctum
+personal access token you generate in Astral's settings, so your self-hosted
+instance already has everything the extension needs.
+
+- **Install:** _coming soon to the Chrome Web Store_ — [placeholder](https://chromewebstore.google.com/)
+- **Source & dev setup:** [astralapp/astral-browser-extension](https://github.com/astralapp/astral-browser-extension)
+
 ## 📜 License
 
 Astral is open source under the [GNU Affero General Public License v3.0](LICENSE)
