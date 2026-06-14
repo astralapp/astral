@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Lib\LegacyMigration;
 use App\Lib\Sponsorship;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class AuthController extends Controller
             ->redirect();
     }
 
-    public function handleProviderCallback(Request $request, Sponsorship $sponsorship)
+    public function handleProviderCallback(Request $request, Sponsorship $sponsorship, LegacyMigration $migration)
     {
         $scope = $request->session()->pull('auth_scope', 'read:user');
 
@@ -49,6 +50,16 @@ class AuthController extends Controller
         $user->updateFromGitHubProfile($githubUser);
 
         $user->save();
+
+        if ($user->wasRecentlyCreated) {
+            try {
+                $migration->markAsMigratedUnlessLegacy($user);
+            } catch (Throwable $e) {
+                // A legacy lookup failure must never block sign-in; the user stays
+                // gated to /migrate, which is harmless when they have no data.
+                Log::warning('Legacy migration check failed during login', ['user_id' => $user->id, 'exception' => $e]);
+            }
+        }
 
         if (config('app.check_for_sponsorship')) {
             try {

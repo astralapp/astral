@@ -138,6 +138,10 @@ return [
 
     'check_for_sponsorship' => env('CHECK_FOR_SPONSORSHIP', false),
 
+    // Only the shared hosted instance has a legacy database to migrate from;
+    // local runners and self-hosters leave this off.
+    'check_for_migration' => env('CHECK_FOR_MIGRATION', false),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
