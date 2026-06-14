@@ -60,6 +60,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # The root tsconfig.json extends .hybridly/tsconfig.json, which is generated
+      # by `php artisan` during a build. This job runs PHP-free, so provide a
+      # minimal stand-in the TypeScript transform can resolve.
+      - name: Stub Hybridly tsconfig
+        run: |
+          mkdir -p .hybridly
+          echo '{"compilerOptions":{"target":"esnext","module":"esnext","moduleResolution":"bundler","strict":true,"esModuleInterop":true,"skipLibCheck":true,"baseUrl":"..","paths":{"@/*":["./resources/*"]}}}' > .hybridly/tsconfig.json
+
       - name: Run tests (Vitest)
         run: pnpm test
 
