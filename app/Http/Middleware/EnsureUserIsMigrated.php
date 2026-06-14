@@ -17,7 +17,7 @@ class EnsureUserIsMigrated
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! $request->user()->getFlag('2023-migration')) {
+        if (! $request->user()->hasMigrated()) {
             return redirect(route('migrate.index'));
         }
 

@@ -55,7 +55,7 @@ if (app()->environment('local')) {
 }
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/', [DashboardController::class, 'show'])->name('dashboard.show');
+    Route::get('/', [DashboardController::class, 'show'])->middleware('migrated')->name('dashboard.show');
 
     Route::get('migrate', [MigrationController::class, 'index'])->name('migrate.index');
     Route::put('migrate', [MigrationController::class, 'update'])->name('migrate.update');

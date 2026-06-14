@@ -12,6 +12,10 @@ class MigrationController extends Controller
 {
     public function index()
     {
+        if (auth()->user()->hasMigrated()) {
+            return redirect(route('dashboard.show'));
+        }
+
         return hybridly('migrate', [
             'stars' => auth()->user()->stars()->get(),
         ]);
@@ -19,7 +23,7 @@ class MigrationController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'stars' => ['required', 'array'],
             'stars.*.starId' => ['required', 'integer'],
             'stars.*.databaseId' => ['required', 'integer'],
@@ -28,12 +32,8 @@ class MigrationController extends Controller
             'stars.*.description' => ['nullable', 'string'],
         ]);
 
-        $stars = $request->input('stars');
-
-        DB::beginTransaction();
-
-        try {
-            foreach ($stars as $star) {
+        DB::transaction(function () use ($validated) {
+            foreach ($validated['stars'] as $star) {
                 $userStar = auth()->user()->stars()->find($star['starId']);
 
                 if (! $userStar) {
@@ -49,19 +49,15 @@ class MigrationController extends Controller
                     ],
                 ]);
 
-                if (! is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true))) {
+                if (! is_null($userStar->notes) && is_null(json_decode($userStar->notes, true))) {
                     $userStar->update([
-                        'notes' => Str::markdown($userStar['notes']),
+                        'notes' => Str::markdown($userStar->notes),
                     ]);
                 }
             }
-        } catch (\Exception $e) {
-            DB::rollBack();
-        }
 
-        auth()->user()->setFlag('2025-migration', true);
-
-        DB::commit();
+            auth()->user()->markAsMigrated();
+        });
 
         return redirect(route('dashboard.show'));
     }

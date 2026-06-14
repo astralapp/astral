@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Data\Enums\UserFlagKey;
 use App\Exceptions\InvalidAccessTokenException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -148,13 +149,27 @@ class User extends Authenticatable
         return $this->hasMany(UserFlag::class);
     }
 
-    public function getFlag($key): bool
+    public function getFlag(UserFlagKey|string $key): bool
     {
+        $key = $key instanceof UserFlagKey ? $key->value : $key;
+
         return (bool) optional($this->flags()->where('key', $key)->first())->value ?? false;
     }
 
-    public function setFlag($key, bool $value)
+    public function setFlag(UserFlagKey|string $key, bool $value): UserFlag
     {
+        $key = $key instanceof UserFlagKey ? $key->value : $key;
+
         return $this->flags()->updateOrCreate(['key' => $key], ['value' => $value]);
+    }
+
+    public function hasMigrated(): bool
+    {
+        return $this->getFlag(UserFlagKey::MIGRATION);
+    }
+
+    public function markAsMigrated(): UserFlag
+    {
+        return $this->setFlag(UserFlagKey::MIGRATION, true);
     }
 }
