@@ -10,6 +10,6 @@ class DashboardController extends Controller
 {
     public function show()
     {
-        return hybridly('dashboard', DashboardData::fromModel(auth()->user()));
+        return hybridly()->view('views.dashboard', DashboardData::fromModel(auth()->user())->all());
     }
 }

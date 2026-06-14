@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use Hybridly\Support\Configuration\Architecture;
+use Hybridly\Architecture\ResourcesComponentLoader;
+use Hybridly\Configuration\Architecture;
 
 return [
     /*
@@ -18,6 +19,7 @@ return [
     | `exclude` array. Filters in the `exclude` array support wildcards (*).
     */
     'router' => [
+        'generate_absolute_urls' => false,
         'allowed_vendors' => [
             'laravel/fortify',
         ],
@@ -31,20 +33,17 @@ return [
     | Architecture
     |--------------------------------------------------------------------------
     | Hybridly has a flexible architecture implementation. By default,
-    | views, layouts and components in the `resources` directory
-    | will be used, but you may change this behavior below.
+    | views and layouts in the `resources` directory will be used,
+    | but you may change this behavior below.
     |
     | See: https://hybridly.dev/guide/architecture.html
     */
     'architecture' => [
-        'load_default_module' => true,
-        'eager_load_views' => true,
         'root_directory' => 'resources',
-        'application_directory' => 'application',
-        'application_main' => Architecture::APPLICATION_MAIN,
+        'component_loader' => ResourcesComponentLoader::class,
+        'eager_load_views' => true,
+        'entrypoint' => 'application/main.ts',
         'root_view' => Architecture::ROOT_VIEW,
-        'extensions' => ['vue'],
-        'excluded_views_directories' => [],
     ],
 
     /*
@@ -76,7 +75,7 @@ return [
         'enable_actions' => true,
         'actions_endpoint' => 'invoke',
         'actions_endpoint_name' => 'hybridly.action.invoke',
-        'actions_endpoint_middleware' => [],
+        'actions_endpoint_middleware' => ['web'],
     ],
 
     /*
@@ -87,6 +86,7 @@ return [
     | actually exist on the disk when hybrid testing utilities are used.
     */
     'testing' => [
+        'disable_versioning' => true,
         'ensure_views_exist' => true,
     ],
 ];

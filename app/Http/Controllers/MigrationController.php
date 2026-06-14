@@ -16,7 +16,7 @@ class MigrationController extends Controller
             return redirect(route('dashboard.show'));
         }
 
-        return hybridly('migrate', [
+        return hybridly()->view('views.migrate', [
             'stars' => auth()->user()->stars()->get(),
         ]);
     }

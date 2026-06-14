@@ -17,7 +17,7 @@ class AuthController extends Controller
 {
     public function show()
     {
-        return hybridly('auth');
+        return hybridly()->view('views.auth');
     }
 
     public function redirectToProvider(Request $request)
