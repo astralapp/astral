@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 use Carbon\CarbonImmutable;
-use Hybridly\Support\TypeScriptTransformer\DataResourceTypeScriptCollector;
 use Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptCollector;
 use Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptTransformer;
 use Spatie\TypeScriptTransformer\Collectors\EnumCollector;
@@ -27,7 +26,6 @@ return [
      */
 
     'collectors' => [
-        DataResourceTypeScriptCollector::class,
         DataTypeScriptCollector::class,
         EnumCollector::class,
     ],

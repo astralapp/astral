@@ -34,7 +34,7 @@
     "pestphp/pest-plugin-laravel": "^4.0",
     "predis/predis": "^2.2",
     "spatie/laravel-ignition": "^2.0",
-    "spatie/laravel-typescript-transformer": "^3.2"
+    "spatie/laravel-typescript-transformer": "^2.6"
   },
   "autoload": {
     "psr-4": {

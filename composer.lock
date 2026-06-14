@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75ad076915022ab173b569e25cdb5bf5",
+    "content-hash": "0d3d770041f8f298e05683ae9e028440",
     "packages": [
         {
             "name": "brick/math",
@@ -3377,16 +3377,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.11.4",
+            "version": "3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "e890471a3494740f7d9326d72ce6a8c559ffee60"
+                "reference": "25963f9ecbba8ea636b73de74a4e0d9b375bce4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/e890471a3494740f7d9326d72ce6a8c559ffee60",
-                "reference": "e890471a3494740f7d9326d72ce6a8c559ffee60",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/25963f9ecbba8ea636b73de74a4e0d9b375bce4e",
+                "reference": "25963f9ecbba8ea636b73de74a4e0d9b375bce4e",
                 "shasum": ""
             },
             "require": {
@@ -3478,7 +3478,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-07T09:57:54+00:00"
+            "time": "2026-06-14T14:20:55+00:00"
         },
         {
             "name": "nette/schema",
@@ -4392,16 +4392,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "6.0.3",
+            "version": "5.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "7bae67520aa9f5ecc506d646810bd40d9da54582"
+                "reference": "31a105931bc8ffa3a123383829772e832fd8d903"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/7bae67520aa9f5ecc506d646810bd40d9da54582",
-                "reference": "7bae67520aa9f5ecc506d646810bd40d9da54582",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/31a105931bc8ffa3a123383829772e832fd8d903",
+                "reference": "31a105931bc8ffa3a123383829772e832fd8d903",
                 "shasum": ""
             },
             "require": {
@@ -4409,8 +4409,8 @@
                 "ext-filter": "*",
                 "php": "^7.4 || ^8.0",
                 "phpdocumentor/reflection-common": "^2.2",
-                "phpdocumentor/type-resolver": "^2.0",
-                "phpstan/phpdoc-parser": "^2.0",
+                "phpdocumentor/type-resolver": "^1.7",
+                "phpstan/phpdoc-parser": "^1.7|^2.0",
                 "webmozart/assert": "^1.9.1 || ^2"
             },
             "require-dev": {
@@ -4420,8 +4420,7 @@
                 "phpstan/phpstan-mockery": "^1.1",
                 "phpstan/phpstan-webmozart-assert": "^1.2",
                 "phpunit/phpunit": "^9.5",
-                "psalm/phar": "^5.26",
-                "shipmonk/dead-code-detector": "^0.5.1"
+                "psalm/phar": "^5.26"
             },
             "type": "library",
             "extra": {
@@ -4451,44 +4450,44 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/6.0.3"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.7"
             },
-            "time": "2026-03-18T20:49:53+00:00"
+            "time": "2026-03-18T20:47:46+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "2.0.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "327a05bbee54120d4786a0dc67aad30226ad4cf9"
+                "reference": "92a98ada2b93d9b201a613cb5a33584dde25f195"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/327a05bbee54120d4786a0dc67aad30226ad4cf9",
-                "reference": "327a05bbee54120d4786a0dc67aad30226ad4cf9",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/92a98ada2b93d9b201a613cb5a33584dde25f195",
+                "reference": "92a98ada2b93d9b201a613cb5a33584dde25f195",
                 "shasum": ""
             },
             "require": {
                 "doctrine/deprecations": "^1.0",
-                "php": "^7.4 || ^8.0",
+                "php": "^7.3 || ^8.0",
                 "phpdocumentor/reflection-common": "^2.0",
-                "phpstan/phpdoc-parser": "^2.0"
+                "phpstan/phpdoc-parser": "^1.18|^2.0"
             },
             "require-dev": {
                 "ext-tokenizer": "*",
                 "phpbench/phpbench": "^1.2",
-                "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^2.1",
-                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.1",
                 "phpunit/phpunit": "^9.5",
-                "psalm/phar": "^4"
+                "rector/rector": "^0.13.9",
+                "vimeo/psalm": "^4.25"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev",
-                    "dev-2.x": "2.x-dev"
+                    "dev-1.x": "1.x-dev"
                 }
             },
             "autoload": {
@@ -4509,9 +4508,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/2.0.0"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.12.0"
             },
-            "time": "2026-01-06T21:53:42+00:00"
+            "time": "2025-11-21T15:09:14+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -7864,20 +7863,20 @@
         },
         {
             "name": "symfony/process",
-            "version": "v8.1.0",
+            "version": "v7.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "c4a9e58f235a6bf7f97ffbfedae2687353ac79e5"
+                "reference": "f5804be144caceb570f6747519999636b664f24c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/c4a9e58f235a6bf7f97ffbfedae2687353ac79e5",
-                "reference": "c4a9e58f235a6bf7f97ffbfedae2687353ac79e5",
+                "url": "https://api.github.com/repos/symfony/process/zipball/f5804be144caceb570f6747519999636b664f24c",
+                "reference": "f5804be144caceb570f6747519999636b664f24c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4.1"
+                "php": ">=8.2"
             },
             "type": "library",
             "autoload": {
@@ -7905,7 +7904,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v8.1.0"
+                "source": "https://github.com/symfony/process/tree/v7.4.13"
             },
             "funding": [
                 {
@@ -7925,7 +7924,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-29T05:06:50+00:00"
+            "time": "2026-05-23T16:05:06+00:00"
         },
         {
             "name": "symfony/routing",
@@ -9743,50 +9742,6 @@
                 "source": "https://github.com/Jean85/pretty-package-versions/tree/2.1.1"
             },
             "time": "2025-03-19T14:43:43+00:00"
-        },
-        {
-            "name": "jetbrains/phpstorm-stubs",
-            "version": "v2026.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JetBrains/phpstorm-stubs",
-                "reference": "2cdd054c4109dfb76667c9198bf9427606354243"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/2cdd054c4109dfb76667c9198bf9427606354243",
-                "reference": "2cdd054c4109dfb76667c9198bf9427606354243",
-                "shasum": ""
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^v3.86",
-                "nikic/php-parser": "^v5.6",
-                "phpdocumentor/reflection-docblock": "^5.6",
-                "phpunit/phpunit": "^12.3"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "PhpStormStubsMap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "PHP runtime & extensions header files for PhpStorm",
-            "homepage": "https://www.jetbrains.com/phpstorm",
-            "keywords": [
-                "autocomplete",
-                "code",
-                "inference",
-                "inspection",
-                "jetbrains",
-                "phpstorm",
-                "stubs",
-                "type"
-            ],
-            "time": "2026-02-19T20:12:01+00:00"
         },
         {
             "name": "laravel/boost",
@@ -11608,75 +11563,6 @@
             "time": "2025-11-12T18:00:11+00:00"
         },
         {
-            "name": "roave/better-reflection",
-            "version": "6.71.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Roave/BetterReflection.git",
-                "reference": "3ec176d4a161b4e8764edc625d69ff624ca390b1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/3ec176d4a161b4e8764edc625d69ff624ca390b1",
-                "reference": "3ec176d4a161b4e8764edc625d69ff624ca390b1",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "jetbrains/phpstorm-stubs": "2026.1",
-                "nikic/php-parser": "^5.7.0",
-                "php": "~8.4.1 || ~8.5.0"
-            },
-            "conflict": {
-                "thecodingmachine/safe": "<1.1.3"
-            },
-            "require-dev": {
-                "phpbench/phpbench": "^1.6.1",
-                "phpunit/phpunit": "^13.1.8"
-            },
-            "suggest": {
-                "composer/composer": "Required to use the ComposerSourceLocator"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Roave\\BetterReflection\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "James Titcumb",
-                    "email": "james@asgrim.com",
-                    "homepage": "https://github.com/asgrim"
-                },
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com",
-                    "homepage": "https://ocramius.github.io/"
-                },
-                {
-                    "name": "Gary Hockin",
-                    "email": "gary@roave.com",
-                    "homepage": "https://github.com/geeh"
-                },
-                {
-                    "name": "Jaroslav Hanslík",
-                    "email": "kukulich@kukulich.cz",
-                    "homepage": "https://github.com/kukulich"
-                }
-            ],
-            "description": "Better Reflection - an improved code reflection API",
-            "support": {
-                "issues": "https://github.com/Roave/BetterReflection/issues",
-                "source": "https://github.com/Roave/BetterReflection/tree/6.71.0"
-            },
-            "time": "2026-05-02T10:56:00+00:00"
-        },
-        {
             "name": "sebastian/cli-parser",
             "version": "4.2.1",
             "source": {
@@ -12724,64 +12610,6 @@
             "time": "2025-02-14T12:29:50+00:00"
         },
         {
-            "name": "spatie/file-system-watcher",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/file-system-watcher.git",
-                "reference": "2fe96de88af6660b3ab7658a8f1d41b10ad0aff6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/file-system-watcher/zipball/2fe96de88af6660b3ab7658a8f1d41b10ad0aff6",
-                "reference": "2fe96de88af6660b3ab7658a8f1d41b10ad0aff6",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.3",
-                "symfony/process": "^7.0|^8.0"
-            },
-            "require-dev": {
-                "pestphp/pest": "^4.0",
-                "spatie/ray": "^1.22",
-                "spatie/temporary-directory": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Watcher\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Watch changes in the file system using PHP",
-            "homepage": "https://github.com/spatie/file-system-watcher",
-            "keywords": [
-                "file-system-watcher",
-                "spatie"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/file-system-watcher/issues",
-                "source": "https://github.com/spatie/file-system-watcher/tree/1.2.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/spatie",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-11-26T10:41:42+00:00"
-        },
-        {
             "name": "spatie/flare-client-php",
             "version": "1.11.1",
             "source": {
@@ -13030,34 +12858,36 @@
         },
         {
             "name": "spatie/laravel-typescript-transformer",
-            "version": "3.2.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-typescript-transformer.git",
-                "reference": "53ce01151bda3727de95f59549d4151b87c34a52"
+                "reference": "d1954994a0965a8ba64ac2722a94326fca0419a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-typescript-transformer/zipball/53ce01151bda3727de95f59549d4151b87c34a52",
-                "reference": "53ce01151bda3727de95f59549d4151b87c34a52",
+                "url": "https://api.github.com/repos/spatie/laravel-typescript-transformer/zipball/d1954994a0965a8ba64ac2722a94326fca0419a0",
+                "reference": "d1954994a0965a8ba64ac2722a94326fca0419a0",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "^11.0|^12.0|^13.0",
-                "php": "^8.2",
-                "spatie/typescript-transformer": "^3.0"
+                "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.12",
+                "spatie/typescript-transformer": "^2.4"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
-                "orchestra/testbench": "^9.0|^10.0|^11.0",
-                "pestphp/pest": "^3.0|^4.2",
-                "pestphp/pest-plugin-arch": "^3.0|^4.0",
-                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^2.0",
-                "phpstan/phpstan-deprecation-rules": "^2.0",
-                "phpstan/phpstan-phpunit": "^2.0",
-                "spatie/laravel-data": "^4.0"
+                "mockery/mockery": "^1.4",
+                "nesbot/carbon": "^2.63|^3.0",
+                "orchestra/testbench": "^8.37.0|^9.16|^10.9|^11.0",
+                "pestphp/pest": "^2.36|^3.0",
+                "spatie/data-transfer-object": "^2.0",
+                "spatie/enum": "^3.0",
+                "spatie/laravel-model-states": "^2.0",
+                "spatie/pest-plugin-snapshots": "^2.0",
+                "spatie/phpunit-snapshot-assertions": "^5.0",
+                "spatie/temporary-directory": "^1.2"
             },
             "type": "library",
             "extra": {
@@ -13092,7 +12922,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-typescript-transformer/issues",
-                "source": "https://github.com/spatie/laravel-typescript-transformer/tree/3.2.0"
+                "source": "https://github.com/spatie/laravel-typescript-transformer/tree/2.6.0"
             },
             "funding": [
                 {
@@ -13104,45 +12934,44 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-08T12:48:32+00:00"
+            "time": "2026-02-25T16:20:54+00:00"
         },
         {
             "name": "spatie/typescript-transformer",
-            "version": "3.2.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/typescript-transformer.git",
-                "reference": "bf8ae5952268020ae229a572248b78c253d18554"
+                "reference": "dd7cbb90b6b8c34f2aee68701cf39c5432400c0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/typescript-transformer/zipball/bf8ae5952268020ae229a572248b78c253d18554",
-                "reference": "bf8ae5952268020ae229a572248b78c253d18554",
+                "url": "https://api.github.com/repos/spatie/typescript-transformer/zipball/dd7cbb90b6b8c34f2aee68701cf39c5432400c0d",
+                "reference": "dd7cbb90b6b8c34f2aee68701cf39c5432400c0d",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.2",
-                "phpstan/phpdoc-parser": "^2.3",
-                "roave/better-reflection": "^6.41",
-                "spatie/file-system-watcher": "^1.1",
-                "spatie/php-structure-discoverer": "^2.2",
-                "symfony/process": "^7.0|^8.0"
+                "nikic/php-parser": "^4.18|^5.0",
+                "php": "^8.1",
+                "phpdocumentor/type-resolver": "^1.6.2",
+                "symfony/process": "^5.2|^6.0|^7.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "pestphp/pest": "^3.0|^4.0",
-                "pestphp/pest-plugin-arch": "^3.0|^4.0",
+                "friendsofphp/php-cs-fixer": "^3.40",
+                "larapack/dd": "^1.1",
+                "myclabs/php-enum": "^1.7",
+                "pestphp/pest": "^1.22",
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^2.0",
-                "phpstan/phpstan-deprecation-rules": "^2.0",
-                "phpstan/phpstan-phpunit": "^2.0",
-                "spatie/ray": "^1.41",
-                "spatie/temporary-directory": "^2.1"
+                "phpunit/phpunit": "^9.0",
+                "spatie/data-transfer-object": "^2.0",
+                "spatie/enum": "^3.0",
+                "spatie/pest-plugin-snapshots": "^1.1",
+                "spatie/temporary-directory": "^1.2|^2.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Spatie\\TypeScriptTransformer\\": "src/"
+                    "Spatie\\TypeScriptTransformer\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -13153,10 +12982,11 @@
                 {
                     "name": "Ruben Van Assche",
                     "email": "ruben@spatie.be",
+                    "homepage": "https://spatie.be",
                     "role": "Developer"
                 }
             ],
-            "description": "This is my package typescript-transformer",
+            "description": "Transform your PHP structures to TypeScript types",
             "homepage": "https://github.com/spatie/typescript-transformer",
             "keywords": [
                 "spatie",
@@ -13164,15 +12994,19 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/typescript-transformer/issues",
-                "source": "https://github.com/spatie/typescript-transformer/tree/3.2.0"
+                "source": "https://github.com/spatie/typescript-transformer/tree/2.5.0"
             },
             "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
                 {
                     "url": "https://github.com/spatie",
                     "type": "github"
                 }
             ],
-            "time": "2026-05-08T11:43:20+00:00"
+            "time": "2025-04-25T13:53:57+00:00"
         },
         {
             "name": "staabm/side-effects-detector",
