@@ -33,10 +33,10 @@ class User extends Authenticatable
 
     protected $with = ['flags'];
 
-    public const AVAILABLE_SETTINGS = ['show_language_tags', 'autosave_notes', 'sidebar_tags_collapsed', 'sidebar_smart_filters_collapsed', 'sidebar_languages_collapsed', 'clone_https_url', 'appearance'];
+    public const AVAILABLE_SETTINGS = ['show_language_tags', 'show_topics', 'autosave_notes', 'sidebar_tags_collapsed', 'sidebar_smart_filters_collapsed', 'sidebar_languages_collapsed', 'clone_https_url', 'appearance'];
 
     protected $attributes = [
-        'settings' => '{"show_language_tags": true, "autosave_notes": true, "sidebar_tags_collapsed": false, "sidebar_smart_filters_collapsed": false, "sidebar_languages_collapsed": false, "clone_https_url": false, "appearance": "system"}',
+        'settings' => '{"show_language_tags": true, "show_topics": false, "autosave_notes": true, "sidebar_tags_collapsed": false, "sidebar_smart_filters_collapsed": false, "sidebar_languages_collapsed": false, "clone_https_url": false, "appearance": "system"}',
     ];
 
     protected static function booted()

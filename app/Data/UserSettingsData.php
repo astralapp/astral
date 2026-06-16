@@ -16,6 +16,7 @@ class UserSettingsData extends Data
         public readonly bool $sidebar_tags_collapsed,
         public readonly bool $sidebar_smart_filters_collapsed,
         public readonly bool $sidebar_languages_collapsed,
+        public readonly bool $show_topics = false,
         public readonly Appearance $appearance = Appearance::SYSTEM,
     ) {}
 }
