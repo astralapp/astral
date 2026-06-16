@@ -37,14 +37,13 @@ it('creates a new `Star` record for each repository passed to the request', func
         ->assertRedirect(route('dashboard.show'));
 
     foreach ($repoData as $repo) {
-        $this->assertDatabaseHas('stars', [
-            'repo_id' => $repo['databaseId'],
-            'meta' => collect($repo)->except(['databaseId'])->toJson(),
-        ]);
+        $star = auth()->user()->stars()->where('repo_id', $repo['databaseId'])->first();
+
+        expect($star->meta)->toEqual(collect($repo)->except(['databaseId'])->toArray());
 
         $this->assertDatabaseHas('star_tag', [
             'tag_id' => $tag->id,
-            'star_id' => auth()->user()->stars()->where('repo_id', $repo['databaseId'])->first()->id,
+            'star_id' => $star->id,
         ]);
     }
 });
