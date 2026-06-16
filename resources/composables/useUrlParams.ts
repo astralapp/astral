@@ -2,7 +2,6 @@ import { useEventListener } from '@vueuse/core'
 import { reactive, watch } from 'vue'
 
 interface UseUrlParamsReturnValue {
-  clearParams: () => void
   params: Record<string, null | string>
 }
 
@@ -21,27 +20,21 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
         urlParams.set(key, value)
       }
     })
-    if (!Object.keys(params).length) {
-      clearParams()
-    } else {
-      window.history.replaceState(window.history.state, '', `${window.location.pathname}?${urlParams.toString()}`)
-    }
-  })
 
-  const clearParams = () => {
-    Object.keys(params).forEach(key => {
-      urlParams.delete(key)
-      params[key] = null
-      window.history.pushState(null, document.title, window.location.pathname)
-    })
-  }
+    const query = urlParams.toString()
+
+    window.history.replaceState(
+      window.history.state,
+      '',
+      query ? `${window.location.pathname}?${query}` : window.location.pathname
+    )
+  })
 
   useEventListener(window, 'popstate', () => {
     urlParams.forEach((value, key) => (params[key] = value))
   })
 
   return {
-    clearParams,
     params,
   }
 }

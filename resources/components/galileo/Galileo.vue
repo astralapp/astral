@@ -46,6 +46,8 @@ const suggestionSource = computed((): SuggestionOption[] => {
       return starsStore.languages.map(language => ({ count: language.count, name: language.name }))
     case 'tag':
       return tagsStore.tags.map(tag => ({ count: tag.stars_count, name: tag.name }))
+    case 'topic':
+      return starsStore.topics.map(topic => ({ count: topic.count, name: topic.name }))
     case null:
       return []
     default: {

@@ -2,12 +2,15 @@ import { describe, expect, it } from 'vitest'
 
 import {
   RepoSearchContext,
+  SearchToken,
   SuggestionOption,
   filterSuggestions,
   freeTextWords,
   parsePendingInput,
+  parseSearchString,
   repoMatchesSearch,
   repoMatchesToken,
+  serializeSearch,
 } from '@/utils/search'
 
 const repo = (overrides: Partial<RepoSearchContext> = {}): RepoSearchContext => ({
@@ -15,6 +18,7 @@ const repo = (overrides: Partial<RepoSearchContext> = {}): RepoSearchContext => 
   isArchived: false,
   primaryLanguage: null,
   tagNames: [],
+  topics: [],
   ...overrides,
 })
 
@@ -47,6 +51,14 @@ describe('parsePendingInput', () => {
 
   it('parses is: as the is qualifier', () => {
     expect(parsePendingInput('is:arch')).toMatchObject({ partial: 'arch', qualifier: 'is' })
+  })
+
+  it('parses topic: as the topic qualifier', () => {
+    expect(parsePendingInput('topic:cli')).toMatchObject({ partial: 'cli', qualifier: 'topic' })
+  })
+
+  it('normalizes topics: to the topic qualifier', () => {
+    expect(parsePendingInput('topics:cli')).toMatchObject({ partial: 'cli', qualifier: 'topic' })
   })
 
   it('keeps text before the qualifier as free text', () => {
@@ -135,6 +147,14 @@ describe('repoMatchesToken', () => {
     expect(repoMatchesToken({ type: 'lang', value: 'typescript' }, repo())).toBe(false)
   })
 
+  it('matches topic tokens against the repo topics exactly', () => {
+    const context = repo({ topics: ['cli', 'terminal'] })
+
+    expect(repoMatchesToken({ type: 'topic', value: 'CLI' }, context)).toBe(true)
+    expect(repoMatchesToken({ type: 'topic', value: 'cl' }, context)).toBe(false)
+    expect(repoMatchesToken({ type: 'topic', value: 'cli' }, repo())).toBe(false)
+  })
+
   it('matches is:archived against the archived flag', () => {
     expect(repoMatchesToken({ type: 'is', value: 'archived' }, repo({ isArchived: true }))).toBe(true)
     expect(repoMatchesToken({ type: 'is', value: 'archived' }, repo())).toBe(false)
@@ -177,5 +197,38 @@ describe('repoMatchesSearch', () => {
         context
       )
     ).toBe(false)
+  })
+})
+
+describe('serializeSearch / parseSearchString', () => {
+  it('serializes free text then tokens into qualifier syntax', () => {
+    const tokens: SearchToken[] = [
+      { type: 'tag', value: 'rust' },
+      { type: 'topic', value: 'cli' },
+    ]
+
+    expect(serializeSearch(tokens, 'react')).toBe('react tag:rust topic:cli')
+  })
+
+  it('serializes to an empty string when there is nothing to filter', () => {
+    expect(serializeSearch([], '   ')).toBe('')
+  })
+
+  it('round-trips free text and tokens, including multi-word values', () => {
+    const tokens: SearchToken[] = [
+      { type: 'lang', value: 'Common Lisp' },
+      { type: 'tag', value: 'my cool tag' },
+      { type: 'topic', value: 'cli' },
+    ]
+
+    expect(parseSearchString(serializeSearch(tokens, 'data'))).toEqual({ freeText: 'data', tokens })
+  })
+
+  it('treats a string with no qualifiers as free text', () => {
+    expect(parseSearchString('just searching')).toEqual({ freeText: 'just searching', tokens: [] })
+  })
+
+  it('drops empty qualifier values', () => {
+    expect(parseSearchString('tag:')).toEqual({ freeText: '', tokens: [] })
   })
 })

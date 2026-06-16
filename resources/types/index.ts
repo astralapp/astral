@@ -33,6 +33,7 @@ export interface GitHubRepoNode {
     edges: Array<{ node: { tagName: string } }>
   }
   stargazerCount: number
+  topics?: string[]
   url: string
 }
 

@@ -22,6 +22,7 @@ export type PredicateOperatorCheck =
   | ((source: number, target: number) => boolean)
   | ((source: string, target: RepoLanguage[]) => boolean)
   | ((source: string, target: string) => boolean)
+  | ((source: string[], target: RepoLanguage[]) => boolean)
   | ((target: number | string) => boolean)
 
 export interface PredicateOperator {
@@ -30,7 +31,7 @@ export interface PredicateOperator {
   label: string
 }
 
-export type PredicateTargetType = 'Date' | 'Language' | 'Number' | 'State' | 'String' | 'Tags'
+export type PredicateTargetType = 'Date' | 'Language' | 'Number' | 'State' | 'String' | 'Tags' | 'Topics'
 
 type PredicateTargetDefault<T extends PredicateTargetType> = T extends 'Date'
   ? string
@@ -44,6 +45,8 @@ type PredicateTargetDefault<T extends PredicateTargetType> = T extends 'Date'
   ? string
   : T extends 'Tags'
   ? App.Data.TagData[]
+  : T extends 'Topics'
+  ? RepoLanguage[]
   : never
 
 export interface PredicateTarget<T extends PredicateTargetType> {
@@ -182,6 +185,48 @@ export const languageOperators: PredicateOperator[] = [
   },
 ]
 
+export const topicOperators: PredicateOperator[] = [
+  {
+    check: (source: string[], target: RepoLanguage[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      const topics = source.map(topic => topic.toLowerCase())
+
+      return target.map(t => t.name.toLowerCase()).some(val => topics.includes(val))
+    },
+    key: 'hasAnyTopics',
+    label: 'has any',
+  },
+  {
+    check: (source: string[], target: RepoLanguage[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      const topics = source.map(topic => topic.toLowerCase())
+
+      return target.map(t => t.name.toLowerCase()).every(val => topics.includes(val))
+    },
+    key: 'hasAllTopics',
+    label: 'has all',
+  },
+  {
+    check: (source: string[], target: RepoLanguage[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      const topics = source.map(topic => topic.toLowerCase())
+
+      return !target.map(t => t.name.toLowerCase()).some(val => topics.includes(val))
+    },
+    key: 'hasNoneTopics',
+    label: 'has none',
+  },
+]
+
 export const stateOperators: PredicateOperator[] = [
   { check: (target: number | string) => Boolean(target) === true, key: 'isState', label: 'is' },
   { check: (target: number | string) => Boolean(target) === false, key: 'isntState', label: "isn't" },
@@ -231,6 +276,13 @@ export const predicateTargets = [
     type: 'Language',
   } as PredicateTarget<'Language'>,
   {
+    defaultValue: [] as RepoLanguage[],
+    keyPath: 'node.topics',
+    label: 'Topics',
+    operators: topicOperators,
+    type: 'Topics',
+  } as PredicateTarget<'Topics'>,
+  {
     defaultValue: { key: 'node.isArchived', label: 'archived' },
     keyPath: 'astralRepoState',
     label: 'State',
@@ -254,6 +306,7 @@ export const predicateOperators: PredicateOperator[] = [
   ...tagOperators,
   ...dateOperators,
   ...languageOperators,
+  ...topicOperators,
   ...stateOperators,
 ]
 

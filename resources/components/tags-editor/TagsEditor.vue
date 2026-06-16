@@ -12,6 +12,7 @@ interface Props {
   canCreate?: boolean
   placeholder?: string
   tags?: TagEditorTag[]
+  topicOptions?: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   canCreate: true,
   placeholder: 'Add a tag',
   tags: () => [] as TagEditorTag[],
+  topicOptions: () => [] as string[],
 })
 
 const emit = defineEmits<{
@@ -40,8 +42,18 @@ let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'height' | 'left' |
 
 const autocompleteShowing = ref(false)
 
+// ponytail: repo topics are merged into the one suggestion list rather than a
+// separate labeled "GitHub topics" group — add the grouped section if the origin
+// of a suggestion ever needs to be spelled out in the UI.
+const mergedAutocompleteOptions = computed(() => {
+  const existing = new Set(props.autocompleteOptions.map(option => option.toLowerCase()))
+  const topics = props.topicOptions.filter(option => !existing.has(option.toLowerCase()))
+
+  return [...props.autocompleteOptions, ...topics]
+})
+
 const visibleAutocompleteOptions = computed(() => {
-  return props.autocompleteOptions.filter(option => {
+  return mergedAutocompleteOptions.value.filter(option => {
     return !mutableTags.value.map(tag => tag.name).includes(option)
   })
 })

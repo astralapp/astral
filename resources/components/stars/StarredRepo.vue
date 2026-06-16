@@ -4,33 +4,60 @@ import { computed, ref } from 'vue'
 
 import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
 import { useAuth } from '@/composables/use-auth'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
+import { SearchToken } from '@/utils/search'
+
+const TOPIC_CHIP_LIMIT = 4
 
 const props = defineProps<{
   repo: GitHubRepo
 }>()
 
 const emit = defineEmits<{
-  (e: 'languageSelected', value: string): void
   (e: 'selected', value: GitHubRepo): void
-  (e: 'tagSelected', value: App.Data.TagData): void
 }>()
 const { user } = useAuth()
 const starsStore = useStarsStore()
+const starsFilterStore = useStarsFilterStore()
 const tagsStore = useTagsStore()
 
 const tags = computed(() => {
   return starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
 })
 
+const repoTopics = computed(() => props.repo.node.topics ?? [])
+
 const shouldShowLanguageTag = computed(() => user.value?.settings.show_language_tags ?? false)
 
 const showLanguageChip = computed(() => shouldShowLanguageTag.value && !!props.repo.node.primaryLanguage?.name)
 
+const shouldShowTopics = computed(() => (user.value?.settings.show_topics ?? false) && repoTopics.value.length > 0)
+
+const visibleTopics = computed(() => (shouldShowTopics.value ? repoTopics.value.slice(0, TOPIC_CHIP_LIMIT) : []))
+
+const hiddenTopicCount = computed(() =>
+  shouldShowTopics.value ? Math.max(0, repoTopics.value.length - TOPIC_CHIP_LIMIT) : 0
+)
+
 // Surface the "Edit Tags" affordance up front whenever the row would otherwise show no chips at all.
-const showEditTagsAffordance = computed(() => !tags.value.length && !showLanguageChip.value)
+const showEditTagsAffordance = computed(
+  () => !tags.value.length && !showLanguageChip.value && !visibleTopics.value.length
+)
+
+// Repo-row chips and sidebar items both refine the Galileo search bar by adding a
+// token; the store dedupes, so re-clicking an already-active filter is a no-op.
+const addFilterToken = (type: SearchToken['type'], value: string) => {
+  if (value) {
+    starsFilterStore.addSearchToken({ type, value } as SearchToken)
+  }
+}
+
+const selectTag = (tag: App.Data.TagData) => addFilterToken('tag', tag.name)
+const selectLanguage = (language: string) => addFilterToken('lang', language)
+const selectTopic = (topic: string) => addFilterToken('topic', topic)
 
 const isEditingTags = ref(false)
 
@@ -143,6 +170,7 @@ const onDragEnd = () => {
       v-if="isEditingTags"
       :tags="tags"
       :autocomplete-options="autocompleteOptions"
+      :topic-options="repoTopics"
       class="mt-4"
       @change="syncTagsToStar(repo.node, $event)"
       @blur="isEditingTags = false"
@@ -156,7 +184,7 @@ const onDragEnd = () => {
         v-if="showLanguageChip"
         class="mb-1 mr-1 cursor-pointer rounded-xs bg-brand-100 dark:bg-brand-500/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 dark:text-brand-400 ring-1 ring-inset ring-transparent dark:ring-brand-400/30"
         role="button"
-        @click.stop="emit('languageSelected', repo.node.primaryLanguage?.name as string)"
+        @click.stop="selectLanguage(repo.node.primaryLanguage?.name as string)"
       >
         {{ repo.node.primaryLanguage.name }}
       </li>
@@ -166,9 +194,32 @@ const onDragEnd = () => {
         :key="tag.id"
         class="mb-1 mr-1 cursor-pointer rounded-xs bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-400 ring-1 ring-inset ring-transparent dark:ring-indigo-400/30"
         role="button"
-        @click.stop="emit('tagSelected', tag)"
+        @click.stop="selectTag(tag)"
       >
         {{ tag.name }}
+      </li>
+
+      <li
+        v-for="topic in visibleTopics"
+        :key="`topic-${topic}`"
+        class="mb-1 mr-1 inline-flex cursor-pointer items-center gap-0.5 rounded-xs bg-gray-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-gray-600 ring-1 ring-inset ring-transparent dark:bg-gray-700/40 dark:text-gray-300 dark:ring-gray-600/40"
+        role="button"
+        @click.stop="selectTopic(topic)"
+      >
+        <i-lucide-hash
+          class="h-3 w-3 opacity-60"
+          aria-hidden="true"
+        />
+
+        {{ topic }}
+      </li>
+
+      <li
+        v-if="hiddenTopicCount > 0"
+        class="mb-1 mr-1 rounded-xs px-1.5 py-0.5 text-xs font-semibold tracking-wide text-gray-400 dark:text-gray-500"
+        aria-hidden="true"
+      >
+        +{{ hiddenTopicCount }}
       </li>
 
       <li

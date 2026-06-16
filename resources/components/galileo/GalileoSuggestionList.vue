@@ -19,6 +19,7 @@ const QUALIFIER_NOUNS: Record<QualifierType, string> = {
   is: 'states',
   lang: 'languages',
   tag: 'tags',
+  topic: 'topics',
 }
 
 const noun = computed(() => QUALIFIER_NOUNS[props.qualifier])

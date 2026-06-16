@@ -31,6 +31,7 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo } from '@/types'
+import { parsePendingInput, parseSearchString, serializeSearch } from '@/utils/search'
 import { Bars3CenterLeftIcon as MenuIcon } from '@heroicons/vue/24/outline'
 import localForage from 'localforage'
 import { computed, nextTick, ref, watch } from 'vue'
@@ -46,7 +47,7 @@ const starsFilterStore = useStarsFilterStore()
 const smartFiltersStore = useSmartFiltersStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showSettingsDialog } = useSettingsDialog()
-const { params: urlParams, clearParams } = useUrlParams()
+const { params: urlParams } = useUrlParams()
 const { show: showToast } = useGlobalToast()
 
 // Seeds the appearance store from the user setting and keeps `system` in sync
@@ -92,34 +93,29 @@ registerHook('success', () => {
 const onAllStarsSelected = () => {
   isSidebarOpen.value = false
   starsFilterStore.setFilterByAll()
-  clearParams()
+  urlParams.smartFilter = null
 }
 
 const onUntaggedSelected = () => {
   isSidebarOpen.value = false
   starsFilterStore.setFilterByUntagged()
-  clearParams()
+  urlParams.smartFilter = null
 }
 
 const onTagSelected = (tag: App.Data.TagData) => {
   isSidebarOpen.value = false
-  starsFilterStore.setSelectedTag(tag)
-  urlParams.smartFilter = null
-  urlParams.tag = tag.name
+  starsFilterStore.addSearchToken({ type: 'tag', value: tag.name })
 }
 
 const onSmartFilterSelected = (smartFilter: App.Data.SmartFilterData) => {
   isSidebarOpen.value = false
   starsFilterStore.setSelectedSmartFilter(smartFilter)
-  clearParams()
   urlParams.smartFilter = smartFilter.name
 }
 
 const onLanguageSelected = (language: string) => {
   isSidebarOpen.value = false
-  starsFilterStore.setSelectedLanguage(language)
-  urlParams.smartFilter = null
-  urlParams.language = language
+  starsFilterStore.addSearchToken({ type: 'lang', value: language })
 }
 
 const onRepoSelected = (repo: GitHubRepo) => {
@@ -139,19 +135,27 @@ watch(selectedItems, repos => {
   starsStore.selectedRepos = repos
 })
 
+// The whole search bar (committed tokens + free text) round-trips through the
+// `?search=` param; the string guards on both directions keep the URL and the
+// store from ping-ponging updates.
+const serializedSearch = computed(() =>
+  serializeSearch(starsFilterStore.searchTokens, parsePendingInput(starsFilterStore.searchText).freeText)
+)
+
+watch(serializedSearch, serialized => {
+  if ((urlParams.search ?? '') !== serialized) {
+    urlParams.search = serialized || null
+  }
+})
+
 watch(
   urlParams,
   params => {
-    if (params.tag) {
-      const tag = tagsStore.tags.find(tag => tag.name === params.tag)
+    if (params.search != null && params.search !== serializedSearch.value) {
+      const { freeText, tokens } = parseSearchString(params.search)
 
-      if (tag) {
-        starsFilterStore.selectedTag = tag
-      }
-    }
-
-    if (params.language) {
-      starsFilterStore.selectedLanguage = params.language
+      starsFilterStore.searchTokens = tokens
+      starsFilterStore.searchText = freeText
     }
   },
   { immediate: true }
@@ -253,8 +257,6 @@ const shouldShowWelcomeMessage = ref(false)
           <StarredRepo
             :repo="repo"
             @selected="onRepoSelected"
-            @tag-selected="onTagSelected"
-            @language-selected="onLanguageSelected"
           />
         </StarredRepoList>
       </div>

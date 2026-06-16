@@ -33,6 +33,12 @@ defineEmits<{
       aria-hidden="true"
     />
 
+    <i-lucide-hash
+      v-else-if="token.type === 'topic'"
+      class="h-3 w-3"
+      aria-hidden="true"
+    />
+
     <i-lucide-archive
       v-else-if="token.value === 'archived'"
       class="h-3 w-3"

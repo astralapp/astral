@@ -94,6 +94,17 @@ const protocolOptions = [
     </SettingsRow>
 
     <SettingsRow
+      title="Show GitHub topics"
+      description="Show each repo's GitHub topics as chips you can filter by."
+    >
+      <BaseToggle
+        label="Show GitHub topics"
+        :enabled="user?.settings.show_topics"
+        @change="updateUserSetting('show_topics', !!$event)"
+      />
+    </SettingsRow>
+
+    <SettingsRow
       title="Auto-save notes"
       description="Save notes automatically every few seconds as you type."
     >

@@ -4,6 +4,7 @@ export type SearchToken =
   | { type: 'is'; value: string }
   | { type: 'lang'; value: string }
   | { type: 'tag'; value: string }
+  | { type: 'topic'; value: string }
 
 export type QualifierType = SearchToken['type']
 
@@ -21,29 +22,38 @@ export interface RepoSearchContext {
   isArchived: boolean
   primaryLanguage: Nullable<string>
   tagNames: string[]
+  topics: string[]
 }
 
 /**
- * Splits the raw input on the last `tag:` / `lang:` / `language:` / `is:` prefix
- * (at the start or after a space). Text before the prefix is live free text; text
+ * Splits the raw input on the last `tag:` / `lang:` / `language:` / `topic:` / `is:`
+ * prefix (at the start or after a space). Text before the prefix is live free text; text
  * after it is the partial qualifier value, spaces included (tag names may contain
- * spaces). `language` normalizes to `lang`. No prefix means the whole input is free text.
+ * spaces). `language` normalizes to `lang` and `topics` to `topic`. No prefix means the
+ * whole input is free text.
  */
+const matchQualifiers = (raw: string): RegExpMatchArray[] => [
+  ...raw.matchAll(/(?:^|\s)(tag|language|lang|topics|topic|is):/gi),
+]
+
+const qualifierFromKeyword = (keyword: string): QualifierType => {
+  const normalized = keyword.toLowerCase()
+
+  return normalized === 'tag' ? 'tag' : normalized === 'is' ? 'is' : normalized.startsWith('topic') ? 'topic' : 'lang'
+}
+
 export const parsePendingInput = (raw: string): ParsedPending => {
-  const match = [...raw.matchAll(/(?:^|\s)(tag|language|lang|is):/gi)].at(-1)
+  const match = matchQualifiers(raw).at(-1)
 
   if (!match || match.index === undefined) {
     return { freeText: raw, mode: 'text' }
   }
 
-  const keyword = match[1].toLowerCase()
-  const qualifier: QualifierType = keyword === 'tag' ? 'tag' : keyword === 'is' ? 'is' : 'lang'
-
   return {
     freeText: raw.slice(0, match.index),
     mode: 'qualifier',
     partial: raw.slice(match.index + match[0].length),
-    qualifier,
+    qualifier: qualifierFromKeyword(match[1]),
   }
 }
 
@@ -98,6 +108,8 @@ export const repoMatchesToken = (token: SearchToken, repo: RepoSearchContext): b
       return repo.primaryLanguage === value
     case 'tag':
       return repo.tagNames.includes(value)
+    case 'topic':
+      return repo.topics.includes(value)
     default: {
       const exhaustive: never = token
 
@@ -108,4 +120,63 @@ export const repoMatchesToken = (token: SearchToken, repo: RepoSearchContext): b
 
 export const repoMatchesSearch = (tokens: SearchToken[], words: string[], repo: RepoSearchContext): boolean => {
   return tokens.every(token => repoMatchesToken(token, repo)) && words.every(word => repo.haystack.includes(word))
+}
+
+const QUALIFIER_KEYWORDS: Record<QualifierType, string> = {
+  is: 'is',
+  lang: 'lang',
+  tag: 'tag',
+  topic: 'topic',
+}
+
+export interface ParsedSearch {
+  freeText: string
+  tokens: SearchToken[]
+}
+
+/**
+ * Serializes committed tokens and free text into the qualifier syntax used in the
+ * `?search=` URL param, e.g. `react tag:rust topic:cli`. Free text comes first so
+ * a token value can safely contain spaces (it runs up to the next qualifier).
+ */
+export const serializeSearch = (tokens: SearchToken[], freeText: string): string => {
+  const parts: string[] = []
+  const text = freeText.trim()
+
+  if (text) {
+    parts.push(text)
+  }
+
+  for (const token of tokens) {
+    parts.push(`${QUALIFIER_KEYWORDS[token.type]}:${token.value}`)
+  }
+
+  return parts.join(' ')
+}
+
+/**
+ * Inverse of `serializeSearch`: pulls out the leading free text and every
+ * `qualifier:value` token. A value extends to the next qualifier, so multi-word
+ * languages and tags survive the round trip.
+ */
+export const parseSearchString = (raw: string): ParsedSearch => {
+  const matches = matchQualifiers(raw)
+
+  if (!matches.length) {
+    return { freeText: raw.trim(), tokens: [] }
+  }
+
+  const tokens: SearchToken[] = []
+
+  matches.forEach((match, index) => {
+    const valueStart = (match.index ?? 0) + match[0].length
+    const valueEnd = index + 1 < matches.length ? matches[index + 1].index ?? raw.length : raw.length
+    const value = raw.slice(valueStart, valueEnd).trim()
+
+    if (value) {
+      tokens.push({ type: qualifierFromKeyword(match[1]), value } as SearchToken)
+    }
+  })
+
+  return { freeText: raw.slice(0, matches[0].index ?? 0).trim(), tokens }
 }

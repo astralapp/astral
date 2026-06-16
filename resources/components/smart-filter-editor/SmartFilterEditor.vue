@@ -5,6 +5,7 @@ import NumberFilter from '@/components/smart-filter-editor/filters/NumberFilter.
 import StateFilter from '@/components/smart-filter-editor/filters/StateFilter.vue'
 import StringFilter from '@/components/smart-filter-editor/filters/StringFilter.vue'
 import TagsFilter from '@/components/smart-filter-editor/filters/TagsFilter.vue'
+import TopicsFilter from '@/components/smart-filter-editor/filters/TopicsFilter.vue'
 import FilterSelect from '@/components/smart-filter-editor/FilterSelect.vue'
 import MatchTypeToggle from '@/components/smart-filter-editor/MatchTypeToggle.vue'
 import {
@@ -37,6 +38,7 @@ const predicateTargetFilters: Record<PredicateTargetType, ReturnType<typeof defi
   State: StateFilter,
   String: StringFilter,
   Tags: TagsFilter,
+  Topics: TopicsFilter,
 }
 
 const filterBody = reactive<SmartFilterBody>(createDefaultFilterBody())

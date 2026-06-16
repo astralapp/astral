@@ -28,6 +28,7 @@ interface GitHubStarItem {
     node_id: string
     pushed_at: string
     stargazers_count: number
+    topics?: string[]
   }
   starred_at: string
 }
@@ -44,6 +45,7 @@ const mapStarItemToRepo = (item: GitHubStarItem): GitHubRepo => ({
     primaryLanguage: item.repo.language ? { name: item.repo.language } : null,
     pushedAt: item.repo.pushed_at,
     stargazerCount: item.repo.stargazers_count,
+    topics: item.repo.topics ?? [],
     url: item.repo.html_url,
   },
 })
@@ -258,25 +260,10 @@ export const useStarsStore = defineStore({
     },
     filteredRepos(): GitHubRepo[] {
       const starsFilterStore = useStarsFilterStore()
-      const selectedTag = starsFilterStore.selectedTag
 
-      let filteredRepos = starsFilterStore.isFilteringByUntagged ? this.untaggedStars : this.allStars
-
-      if (starsFilterStore.isFilteringByTag || starsFilterStore.isFilteringByLanguage) {
-        if (starsFilterStore.isFilteringByTag) {
-          filteredRepos = filteredRepos.filter(repo => {
-            const userStar = this.userStarsByRepoId[repo.node.databaseId]
-
-            return !!userStar && !!selectedTag && userStar.tags.map(tag => tag.id).includes(selectedTag.id)
-          })
-        }
-
-        if (starsFilterStore.isFilteringByLanguage) {
-          filteredRepos = filteredRepos.filter(
-            (repo: GitHubRepo) => repo.node.primaryLanguage?.name === starsFilterStore.selectedLanguage
-          )
-        }
-      }
+      // Untagged is just an `is:untagged` search token now, so it filters through the
+      // search branch below rather than swapping the base set.
+      let filteredRepos = this.allStars
 
       if (starsFilterStore.isFilteringBySmartFilter && starsFilterStore.selectedSmartFilter) {
         const smartFilterBody = parseSmartFilterBody(starsFilterStore.selectedSmartFilter.body)
@@ -298,6 +285,7 @@ export const useStarsStore = defineStore({
             isArchived: repo.node.isArchived,
             primaryLanguage: repo.node.primaryLanguage?.name.toLowerCase() ?? null,
             tagNames: (userStar?.tags ?? []).map(tag => tag.name.toLowerCase()),
+            topics: (repo.node.topics ?? []).map(topic => topic.toLowerCase()),
           })
         })
       }
@@ -344,6 +332,24 @@ export const useStarsStore = defineStore({
     },
     selectedRepo(): GitHubRepoNode {
       return this.selectedRepos[0] || {}
+    },
+    topics(): RepoLanguage[] {
+      return Object.entries(
+        this.allStars
+          .flatMap(repo => repo.node.topics ?? [])
+          .reduce((totals: Record<string, number>, topic: string): Record<string, number> => {
+            return { ...totals, [topic]: (totals[topic] || 0) + 1 }
+          }, {})
+      )
+        .map((topic: [string, number]) => {
+          const [name, count] = topic
+
+          return {
+            count,
+            name,
+          }
+        })
+        .sort((a, b) => b.count - a.count)
     },
     untaggedStars(): GitHubRepo[] {
       return this.allStars.filter(repo => {

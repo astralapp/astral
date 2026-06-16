@@ -83,10 +83,12 @@ const hideNewTagForm = () => {
   newTag.value = ''
 }
 
-const tagIsSelected = (tag: App.Data.TagData): boolean => tag.id === starsFilterStore.selectedTag?.id
+const tagIsSelected = (tag: App.Data.TagData): boolean =>
+  starsFilterStore.searchTokens.some(token => token.type === 'tag' && token.value === tag.name)
 const smartFilterIsSelected = (smartFilter: App.Data.SmartFilterData): boolean =>
   smartFilter.id === starsFilterStore.selectedSmartFilter?.id
-const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
+const languageIsSelected = (language: string): boolean =>
+  starsFilterStore.searchTokens.some(token => token.type === 'lang' && token.value === language)
 
 const isLanguagesExpanded = ref(false)
 
@@ -96,15 +98,19 @@ const visibleLanguages = computed(() =>
 
 const hiddenLanguageCount = computed(() => Math.max(starsStore.languages.length - LANGUAGES_VISIBLE_LIMIT, 0))
 
-// Reveal the rest of the list whenever the selected language lives past the cap — e.g. picking a
+// Reveal the rest of the list whenever an active language filter lives past the cap — e.g. picking a
 // language chip on a repo that wouldn't otherwise be visible until "View more" is clicked. Re-runs as
 // languages populate after stars load, so a deep-linked language still expands once its row exists.
-watch(
-  [() => starsFilterStore.selectedLanguage, () => starsStore.languages],
-  ([language, languages]) => {
-    if (!language) return
+const activeLanguages = computed(() =>
+  starsFilterStore.searchTokens.filter(token => token.type === 'lang').map(token => token.value)
+)
 
-    if (languages.findIndex(({ name }) => name === language) >= LANGUAGES_VISIBLE_LIMIT) {
+watch(
+  [activeLanguages, () => starsStore.languages],
+  ([languages, allLanguages]) => {
+    if (
+      languages.some(language => allLanguages.findIndex(({ name }) => name === language) >= LANGUAGES_VISIBLE_LIMIT)
+    ) {
       isLanguagesExpanded.value = true
     }
   },
