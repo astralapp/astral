@@ -57,6 +57,22 @@ it('updates the user\'s info and logins them in if they already exist', function
     expect(User::count())->toBe(1);
 });
 
+it('refreshes a returning user\'s access token even when the scope is unchanged', function () {
+    mockSocialiteFacade();
+
+    $user = User::factory()->create([
+        'github_id' => 1234567890,
+        'scope' => 'read:user',
+        'access_token' => 'stale-revoked-token',
+    ]);
+
+    session()->put('auth_scope', 'read:user');
+
+    $this->get('/auth/github/callback')->assertRedirect(RouteServiceProvider::HOME);
+
+    expect($user->fresh()->access_token)->toBe('abcde12345');
+});
+
 it('redirects authenticated users back to the dashboard')
     ->login()
     ->get('/auth/github/callback')

@@ -42,10 +42,10 @@ class AuthController extends Controller
 
         $user = User::firstOrNew(['github_id' => $githubUser->getId()]);
 
-        if (is_null($user->access_token) || $user->scope !== $scope) {
-            $user->access_token = $githubUser->token;
-            $user->scope = $scope;
-        }
+        // Always store the freshly-minted token: a returning user re-signing in heals a
+        // token GitHub has invalidated server-side (secret rotation, revoked grant).
+        $user->access_token = $githubUser->token;
+        $user->scope = $scope;
 
         $user->updateFromGitHubProfile($githubUser);
 
