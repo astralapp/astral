@@ -61,6 +61,10 @@ const syncStateRestored = useSyncToLocalStorage(starsStore, 'isFullySynced')
 const beginMigration = async () => {
   hasMigrationStarted.value = true
 
+  // Pull the user's legacy tags, smart filters, and stars+notes into the new DB first,
+  // so the catalog step has rows to attach GitHub metadata to.
+  await starsStore.importLegacyData()
+
   // Wait for any cached partial to be restored so fetchAllStars resumes from it.
   await Promise.all([reposRestored, syncStateRestored])
 

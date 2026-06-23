@@ -4,27 +4,50 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Lib\ImportLegacyData;
+use App\Lib\LegacyMigration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class MigrationController extends Controller
 {
-    public function index()
+    public function index(LegacyMigration $migration)
     {
-        if (auth()->user()->hasMigrated()) {
+        $user = auth()->user();
+
+        if ($user->hasMigrated()) {
+            return redirect(route('dashboard.show'));
+        }
+
+        // Nothing to migrate: mark them done and skip the migrate step entirely.
+        if (! ($migration->isEnabled() && $migration->hasLegacyData($user))) {
+            $user->markAsMigrated();
+
             return redirect(route('dashboard.show'));
         }
 
         return hybridly()->view('views.migrate', [
-            'stars' => auth()->user()->stars()->get(),
+            'stars' => $user->stars()->get(),
+        ]);
+    }
+
+    public function import(LegacyMigration $migration, ImportLegacyData $importer)
+    {
+        $user = auth()->user();
+
+        if ($migration->isEnabled() && $migration->hasLegacyData($user)) {
+            $importer->handle($user);
+        }
+
+        return hybridly()->view('views.migrate', [
+            'stars' => $user->stars()->get(),
         ]);
     }
 
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'stars' => ['required', 'array'],
+            'stars' => ['present', 'array'],
             'stars.*.starId' => ['required', 'integer'],
             'stars.*.databaseId' => ['required', 'integer'],
             'stars.*.nameWithOwner' => ['required', 'string'],
@@ -48,12 +71,6 @@ class MigrationController extends Controller
                         'description' => $star['description'],
                     ],
                 ]);
-
-                if (! is_null($userStar->notes) && is_null(json_decode($userStar->notes, true))) {
-                    $userStar->update([
-                        'notes' => Str::markdown($userStar->notes),
-                    ]);
-                }
             }
 
             auth()->user()->markAsMigrated();

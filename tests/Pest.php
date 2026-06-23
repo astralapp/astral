@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 /*
@@ -47,7 +50,63 @@ uses(
 |
 */
 
-function something()
+/**
+ * Spin up a fresh in-memory `legacy` connection with the classic Astral schema
+ * (only the columns the migration reads) and enable the migration check. Call at
+ * the start of any test that exercises the legacy import.
+ */
+function bootLegacyDatabase(): void
 {
-    // ..
+    config()->set('app.check_for_migration', true);
+    config()->set('database.connections.legacy', [
+        'driver' => 'sqlite',
+        'database' => ':memory:',
+        'prefix' => '',
+        'foreign_key_constraints' => false,
+    ]);
+
+    DB::purge('legacy');
+
+    $schema = Schema::connection('legacy');
+
+    $schema->create('users', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('github_id');
+    });
+
+    $schema->create('tags', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id');
+        $table->string('name');
+        $table->integer('sort_order')->default(0);
+    });
+
+    $schema->create('predicates', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id');
+        $table->string('name');
+        $table->text('body');
+        $table->integer('sort_order')->default(0);
+    });
+
+    $schema->create('stars', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id');
+        $table->integer('repo_id');
+        $table->text('notes')->nullable();
+    });
+
+    $schema->create('star_tag', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('star_id');
+        $table->integer('tag_id');
+    });
+}
+
+/**
+ * Seed a legacy user and return its legacy id.
+ */
+function seedLegacyUser(int $githubId): int
+{
+    return DB::connection('legacy')->table('users')->insertGetId(['github_id' => $githubId]);
 }

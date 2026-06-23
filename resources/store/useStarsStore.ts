@@ -88,6 +88,12 @@ export const useStarsStore = defineStore({
         only: ['stars', 'tags'],
       })
     },
+    importLegacyData() {
+      return router.post(route('migrate.import'), {
+        only: ['stars'],
+        preserveState: true,
+      })
+    },
     backfillStarMetadata(starInput: (StarMetaInput & { starId: number })[]) {
       router.put(route('migrate.update'), {
         data: {

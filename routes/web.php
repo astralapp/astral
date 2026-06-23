@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'show'])->middleware('migrated')->name('dashboard.show');
 
     Route::get('migrate', [MigrationController::class, 'index'])->name('migrate.index');
+    Route::post('migrate', [MigrationController::class, 'import'])->name('migrate.import');
     Route::put('migrate', [MigrationController::class, 'update'])->name('migrate.update');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
