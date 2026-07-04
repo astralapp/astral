@@ -35,8 +35,8 @@ export const useStarsFilterStore = defineStore({
       this.clearSearch()
     },
     setFilterByTag(name: string) {
-      this.clearSelectSmartFilter()
-      this.clearSearch()
+      // Replace the active tag but leave language, smart filter, and free text intact.
+      this.searchTokens = this.searchTokens.filter(token => token.type !== 'tag')
       this.addSearchToken({ type: 'tag', value: name })
     },
     setFilterByUntagged() {

@@ -25,4 +25,18 @@ describe('useStarsFilterStore', () => {
 
     expect(store.searchTokens).toEqual([{ type: 'tag', value: 'vue' }])
   })
+
+  it('keeps the active language and smart filter when selecting a tag', () => {
+    const store = useStarsFilterStore()
+
+    store.setSelectedSmartFilter({ name: 'Recently Starred' } as never)
+    store.addSearchToken({ type: 'lang', value: 'typescript' })
+    store.setFilterByTag('vue')
+
+    expect(store.searchTokens).toEqual([
+      { type: 'lang', value: 'typescript' },
+      { type: 'tag', value: 'vue' },
+    ])
+    expect(store.selectedSmartFilter).toEqual({ name: 'Recently Starred' })
+  })
 })
