@@ -104,7 +104,8 @@ const onUntaggedSelected = () => {
 
 const onTagSelected = (tag: App.Data.TagData) => {
   isSidebarOpen.value = false
-  starsFilterStore.addSearchToken({ type: 'tag', value: tag.name })
+  starsFilterStore.setFilterByTag(tag.name)
+  urlParams.smartFilter = null
 }
 
 const onSmartFilterSelected = (smartFilter: App.Data.SmartFilterData) => {

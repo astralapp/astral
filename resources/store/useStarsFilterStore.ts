@@ -34,6 +34,11 @@ export const useStarsFilterStore = defineStore({
       this.clearSelectSmartFilter()
       this.clearSearch()
     },
+    setFilterByTag(name: string) {
+      this.clearSelectSmartFilter()
+      this.clearSearch()
+      this.addSearchToken({ type: 'tag', value: name })
+    },
     setFilterByUntagged() {
       this.clearSelectSmartFilter()
       this.clearSearch()
