@@ -11,6 +11,73 @@ import { computed, nextTick, ref } from 'vue'
 const { user } = useAuth()
 const userStore = useUserStore()
 
+const EXPORT_VERSION = 1
+
+type ImportCounts = { smartFilters: number; stars: number; tags: number }
+
+const importInput = ref<HTMLInputElement | null>(null)
+const pendingImport = ref<{ counts: ImportCounts; file: File } | null>(null)
+const importError = ref<string | null>(null)
+const isImporting = ref(false)
+
+const exportData = () => {
+  window.location.href = route('data.export')
+}
+
+const chooseImportFile = () => {
+  importError.value = null
+  importInput.value?.click()
+}
+
+const onImportFileSelected = async (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+
+  if (!file) {
+    return
+  }
+
+  try {
+    const parsed = JSON.parse(await file.text())
+
+    if (typeof parsed !== 'object' || parsed === null || parsed.version !== EXPORT_VERSION) {
+      throw new Error('unsupported')
+    }
+
+    pendingImport.value = {
+      counts: {
+        smartFilters: Array.isArray(parsed.smart_filters) ? parsed.smart_filters.length : 0,
+        stars: Array.isArray(parsed.stars) ? parsed.stars.length : 0,
+        tags: Array.isArray(parsed.tags) ? parsed.tags.length : 0,
+      },
+      file,
+    }
+    importError.value = null
+  } catch {
+    pendingImport.value = null
+    importError.value = "That doesn't look like a valid Astral export file."
+  }
+}
+
+const confirmImport = () => {
+  if (!pendingImport.value) {
+    return
+  }
+
+  isImporting.value = true
+
+  router.post(route('data.import'), { data: { file: pendingImport.value.file } }).finally(() => {
+    isImporting.value = false
+    pendingImport.value = null
+  })
+}
+
+const cancelImport = () => {
+  pendingImport.value = null
+  importError.value = null
+}
+
 const isRequestingDeleteConfirmation = ref(false)
 const usernameConfirmation = ref('')
 const confirmInput = ref<InstanceType<typeof BaseTextInput> | null>(null)
@@ -82,6 +149,81 @@ const deleteUser = async () => {
 
 <template>
   <div class="space-y-6">
+    <div class="space-y-3">
+      <SettingsRow
+        title="Export data"
+        description="Download your tags, notes, and smart filters as a JSON file — for backups, analysis, or moving to another Astral instance."
+      >
+        <BaseButton
+          kind="base"
+          size="sm"
+          @click="exportData"
+          >Export</BaseButton
+        >
+      </SettingsRow>
+
+      <SettingsRow
+        title="Import data"
+        description="Upload an Astral export file. Tags, stars, and smart filters that already exist will be overwritten."
+      >
+        <BaseButton
+          kind="base"
+          size="sm"
+          :disabled="isImporting"
+          @click="chooseImportFile"
+          >Choose file…</BaseButton
+        >
+
+        <input
+          ref="importInput"
+          type="file"
+          accept="application/json,.json"
+          class="hidden"
+          @change="onImportFileSelected"
+        />
+      </SettingsRow>
+
+      <div
+        v-if="pendingImport"
+        class="rounded-lg bg-gray-50 p-4 ring-1 ring-gray-200 dark:bg-gray-950/40 dark:ring-gray-800"
+      >
+        <p class="text-sm text-gray-700 dark:text-gray-300">
+          This will import
+          <strong class="font-semibold">{{ pendingImport.counts.stars }}</strong>
+          stars,
+          <strong class="font-semibold">{{ pendingImport.counts.tags }}</strong>
+          tags, and
+          <strong class="font-semibold">{{ pendingImport.counts.smartFilters }}</strong> smart filters. Existing matches
+          will be overwritten.
+        </p>
+
+        <div class="mt-3 flex items-center gap-2">
+          <BaseButton
+            kind="base"
+            size="sm"
+            :disabled="isImporting"
+            @click="confirmImport"
+            >{{ isImporting ? 'Importing…' : 'Confirm import' }}</BaseButton
+          >
+
+          <BaseButton
+            kind="danger-borderless"
+            size="sm"
+            :disabled="isImporting"
+            @click="cancelImport"
+            >Cancel</BaseButton
+          >
+        </div>
+      </div>
+
+      <p
+        v-if="importError"
+        class="text-xs font-medium text-red-600 dark:text-red-500"
+      >
+        {{ importError }}
+      </p>
+    </div>
+
     <div class="space-y-3">
       <SettingsRow
         title="Browser extension"

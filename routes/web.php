@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrowserExtensionTokenController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataExportController;
+use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\MigrationController;
 use App\Http\Controllers\SmartFiltersController;
 use App\Http\Controllers\SmartFiltersSortOrderController;
@@ -81,6 +83,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('browser-extension-token', [BrowserExtensionTokenController::class, 'store'])->name('browser-extension-token.store');
     Route::delete('browser-extension-token', [BrowserExtensionTokenController::class, 'destroy'])->name('browser-extension-token.destroy');
+
+    Route::get('data/export', DataExportController::class)->name('data.export');
+    Route::post('data/import', DataImportController::class)->name('data.import');
 
     Route::post('revoke-grant', [AuthController::class, 'revokeGrant'])->name('revoke-grant');
     Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
