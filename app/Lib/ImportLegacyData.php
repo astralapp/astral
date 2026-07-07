@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace App\Lib;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ImportLegacyData
 {
+    /**
+     * Legacy stars imported per chunk. Small enough to keep each request well under
+     * PHP's execution-time/memory limits; the frontend drives the cursor loop.
+     */
+    private const CHUNK_SIZE = 300;
+
     public function __construct(private LegacyMigration $legacy) {}
 
     /**
@@ -20,21 +27,75 @@ class ImportLegacyData
      */
     public function handle(User $user): void
     {
+        $cursor = null;
+
+        do {
+            $result = $this->importChunk($user, $cursor);
+            $cursor = $result['cursor'];
+        } while (! $result['done']);
+    }
+
+    /**
+     * Import a single cursor-bounded batch of legacy stars, so a large account can be
+     * migrated across many short requests instead of one that times out. Tags and smart
+     * filters are small and bounded, so they are imported once on the first chunk
+     * (`$cursor === null`). Each chunk commits on its own; the import is idempotent, so a
+     * dropped connection safely resumes from the cursor.
+     *
+     * @return array{cursor: int|null, done: bool, total: int, processed: int}
+     */
+    public function importChunk(User $user, ?int $cursor, int $limit = self::CHUNK_SIZE): array
+    {
         $legacyId = $this->legacy->legacyUserId($user);
 
         if ($legacyId === null) {
-            return;
+            return ['cursor' => null, 'done' => true, 'total' => 0, 'processed' => 0];
         }
 
-        // ponytail: per-row firstOrCreate, bounded to one user's data; batch-insert if a
-        // power user's import ever gets slow.
-        DB::transaction(function () use ($user, $legacyId) {
-            $tagMap = $this->importTags($user, $legacyId);
+        return DB::transaction(function () use ($user, $legacyId, $cursor, $limit) {
+            if ($cursor === null) {
+                $this->importTags($user, $legacyId);
+                $this->importSmartFilters($user, $legacyId);
+            }
 
-            $this->importSmartFilters($user, $legacyId);
+            $legacyStars = DB::connection('legacy')
+                ->table('stars')
+                ->where('user_id', $legacyId)
+                ->when($cursor !== null, fn ($query) => $query->where('id', '>', $cursor))
+                ->orderBy('id')
+                ->limit($limit)
+                ->get();
 
-            $this->importStars($user, $legacyId, $tagMap);
+            $this->importStars($user, $this->buildTagMap($user, $legacyId), $legacyStars);
+
+            $processed = $legacyStars->count();
+
+            return [
+                'cursor' => $legacyStars->last()?->id ?? $cursor,
+                'done' => $processed < $limit,
+                'total' => DB::connection('legacy')->table('stars')->where('user_id', $legacyId)->count(),
+                'processed' => $processed,
+            ];
         });
+    }
+
+    /**
+     * Rebuild the legacy-tag-id => new-tag-id map from already-imported tags (matched by
+     * name), so each star chunk can resolve its tag links without re-importing tags.
+     *
+     * @return array<int, int>
+     */
+    private function buildTagMap(User $user, int $legacyId): array
+    {
+        $newTagIdsByName = $user->tags()->pluck('id', 'name');
+
+        return DB::connection('legacy')
+            ->table('tags')
+            ->where('user_id', $legacyId)
+            ->get()
+            ->mapWithKeys(fn ($legacyTag) => [$legacyTag->id => $newTagIdsByName[$legacyTag->name] ?? null])
+            ->filter()
+            ->all();
     }
 
     /**
@@ -88,13 +149,13 @@ class ImportLegacyData
 
     /**
      * @param  array<int, int>  $tagMap  legacy tag id => new tag id
+     * @param  Collection<int, object>  $legacyStars  the batch to import
      */
-    private function importStars(User $user, int $legacyId, array $tagMap): void
+    private function importStars(User $user, array $tagMap, Collection $legacyStars): void
     {
-        $legacyStars = DB::connection('legacy')
-            ->table('stars')
-            ->where('user_id', $legacyId)
-            ->get();
+        if ($legacyStars->isEmpty()) {
+            return;
+        }
 
         $tagIdsByStar = DB::connection('legacy')
             ->table('star_tag')

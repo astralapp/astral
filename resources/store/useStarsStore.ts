@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { router } from 'hybridly'
 import { Dictionary } from 'lodash'
 import keyBy from 'lodash/keyBy'
@@ -14,6 +15,7 @@ import { freeTextWords, parsePendingInput, repoMatchesSearch } from '@/utils/sea
 
 const STARS_PER_PAGE = 100
 const STARS_FETCH_CONCURRENCY = 6
+const STARS_BACKFILL_BATCH = 300
 
 interface GitHubStarItem {
   repo: {
@@ -88,19 +90,50 @@ export const useStarsStore = defineStore({
         only: ['stars', 'tags'],
       })
     },
-    importLegacyData() {
-      return router.post(route('migrate.import'), {
-        only: ['stars'],
-        preserveState: true,
-      })
+    async importLegacyData() {
+      this.importScanned = 0
+      this.importTotal = 0
+
+      let cursor: Nullable<number> = null
+      let done = false
+
+      // Pull the legacy account in cursor-bounded chunks so a large library can't blow
+      // the request's time/memory limits. The import is idempotent, so it safely resumes.
+      while (!done) {
+        const { data } = await axios.post<{
+          cursor: Nullable<number>
+          done: boolean
+          total: number
+          processed: number
+        }>(route('migrate.import'), { cursor })
+
+        this.importTotal = data.total
+        this.importScanned += data.processed
+        cursor = data.cursor
+        done = data.done
+      }
+
+      // Refresh userStars so the freshly imported rows are available for metadata backfill.
+      await router.reload({ only: ['stars'] })
     },
-    backfillStarMetadata(starInput: (StarMetaInput & { starId: number })[]) {
-      router.put(route('migrate.update'), {
-        data: {
-          stars: starInput,
-        },
-        only: ['stars'],
-      })
+    async backfillStarMetadata(starInput: (StarMetaInput & { starId: number })[]) {
+      const batches: (StarMetaInput & { starId: number })[][] = []
+      for (let i = 0; i < starInput.length; i += STARS_BACKFILL_BATCH) {
+        batches.push(starInput.slice(i, i + STARS_BACKFILL_BATCH))
+      }
+
+      // Always send a final request, even with nothing to backfill, so `finalize` marks
+      // the user migrated.
+      if (batches.length === 0) {
+        batches.push([])
+      }
+
+      for (let i = 0; i < batches.length; i++) {
+        await axios.put(route('migrate.update'), {
+          stars: batches[i],
+          finalize: i === batches.length - 1,
+        })
+      }
     },
     clearStarredRepos() {
       this.starredRepos = []
@@ -374,6 +407,8 @@ export const useStarsStore = defineStore({
       draggingRepos: [] as GitHubRepoNode[],
       fetchedCount: 0,
       hasFetchedFromStorage: false,
+      importScanned: 0,
+      importTotal: 0,
       isDraggingRepo: false,
       isFetchingStars: false,
       isFullySynced: false,

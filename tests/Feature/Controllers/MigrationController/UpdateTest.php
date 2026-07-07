@@ -8,19 +8,31 @@ it('redirects guests to the login page')
     ->put('/migrate', ['stars' => []])
     ->assertRedirect('/login');
 
-it('completes the migration when the user has no stars to backfill', function () {
+it('marks the user migrated on the finalizing slice even with nothing to backfill', function () {
     $user = User::factory()->create();
 
     expect($user->hasMigrated())->toBeFalse();
 
     $this->actingAs($user)
-        ->put(route('migrate.update'), ['stars' => []])
-        ->assertRedirect(route('dashboard.show'));
+        ->put(route('migrate.update'), ['stars' => [], 'finalize' => true])
+        ->assertStatus(200)
+        ->assertJson(['done' => true]);
 
     expect($user->fresh()->hasMigrated())->toBeTrue();
 });
 
-it('backfills metadata onto existing stars and marks the user migrated', function () {
+it('does not mark the user migrated on a non-final slice', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->put(route('migrate.update'), ['stars' => []])
+        ->assertStatus(200)
+        ->assertJson(['done' => false]);
+
+    expect($user->fresh()->hasMigrated())->toBeFalse();
+});
+
+it('backfills metadata onto existing stars and marks the user migrated on finalize', function () {
     $user = User::factory()->create();
     $star = $user->stars()->create(['repo_id' => 0]);
 
@@ -33,8 +45,10 @@ it('backfills metadata onto existing stars and marks the user migrated', functio
                 'url' => 'https://github.com/astralapp/astral',
                 'description' => 'Organize your GitHub stars',
             ]],
+            'finalize' => true,
         ])
-        ->assertRedirect(route('dashboard.show'));
+        ->assertStatus(200)
+        ->assertJson(['done' => true]);
 
     $star->refresh();
 
@@ -56,8 +70,9 @@ it('leaves imported notes untouched (no HTML conversion)', function () {
                 'url' => 'https://github.com/astralapp/astral',
                 'description' => null,
             ]],
+            'finalize' => true,
         ])
-        ->assertRedirect(route('dashboard.show'));
+        ->assertStatus(200);
 
     expect($star->refresh()->notes)->toBe('# Heading');
 });

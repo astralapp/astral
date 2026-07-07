@@ -16,6 +16,31 @@ function importLegacyFor(User $user): void
     app(ImportLegacyData::class)->handle($user);
 }
 
+it('imports stars across multiple cursor-bounded chunks', function () {
+    $user = User::factory()->create(['github_id' => 321]);
+    $legacyId = seedLegacyUser(321);
+
+    $tag = DB::connection('legacy')->table('tags')->insertGetId(['user_id' => $legacyId, 'name' => 'Keep', 'sort_order' => 1]);
+
+    foreach ([11, 22, 33] as $repoId) {
+        $star = DB::connection('legacy')->table('stars')->insertGetId(['user_id' => $legacyId, 'repo_id' => $repoId, 'notes' => "note {$repoId}"]);
+        DB::connection('legacy')->table('star_tag')->insert(['star_id' => $star, 'tag_id' => $tag]);
+    }
+
+    $importer = app(ImportLegacyData::class);
+
+    $first = $importer->importChunk($user, null, 2);
+    expect($first)->toMatchArray(['done' => false, 'processed' => 2, 'total' => 3]);
+    expect($user->stars()->count())->toBe(2);
+
+    $second = $importer->importChunk($user, $first['cursor'], 2);
+    expect($second)->toMatchArray(['done' => true, 'processed' => 1]);
+
+    expect($user->stars()->pluck('repo_id')->all())->toEqualCanonicalizing([11, 22, 33]);
+    // The tag map is rebuilt each chunk, so links resolve even on later chunks.
+    expect($user->stars()->where('repo_id', 33)->first()->tags()->pluck('name')->all())->toBe(['Keep']);
+});
+
 it('imports tags, smart filters, stars, notes, and rebuilds the tag links', function () {
     $user = User::factory()->create(['github_id' => 555]);
     $legacyId = seedLegacyUser(555);

@@ -9,7 +9,7 @@ it('redirects guests to the login page')
     ->post('/migrate')
     ->assertRedirect('/login');
 
-it('imports legacy data and returns the migrate view without marking migrated', function () {
+it('imports a legacy chunk and reports progress without marking migrated', function () {
     bootLegacyDatabase();
 
     $user = User::factory()->create(['github_id' => 2468]);
@@ -22,7 +22,7 @@ it('imports legacy data and returns the migrate view without marking migrated', 
     $this->actingAs($user)
         ->post(route('migrate.import'))
         ->assertStatus(200)
-        ->assertHybridView('views.migrate');
+        ->assertJson(['done' => true, 'total' => 1, 'processed' => 1]);
 
     expect($user->tags()->count())->toBe(1);
     expect($user->stars()->count())->toBe(1);

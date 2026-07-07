@@ -9,6 +9,7 @@ import LogoSvg from '@/img/logo.svg?component'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { StarMetaInput } from '@/types'
+import { router } from 'hybridly'
 import { pick } from 'lodash'
 import { computed, nextTick, ref } from 'vue'
 
@@ -23,23 +24,39 @@ const starsStore = useStarsStore()
 const userStore = useUserStore()
 
 const hasMigrationStarted = ref(false)
+const isImportComplete = ref(false)
 const haveStarsBeenFetched = ref(false)
 
-type Phase = 'ready' | 'fetching' | 'finalizing'
+type Phase = 'ready' | 'importing' | 'fetching' | 'finalizing'
+const PHASE_ORDER: Record<Phase, number> = { ready: 0, importing: 1, fetching: 2, finalizing: 3 }
+
 const phase = computed<Phase>(() => {
   if (!hasMigrationStarted.value) return 'ready'
+  if (!isImportComplete.value) return 'importing'
   return haveStarsBeenFetched.value ? 'finalizing' : 'fetching'
 })
 
 type StepStatus = 'upcoming' | 'active' | 'done'
+const statusFor = (stepPhase: Phase): StepStatus => {
+  if (PHASE_ORDER[phase.value] > PHASE_ORDER[stepPhase]) return 'done'
+  return PHASE_ORDER[phase.value] === PHASE_ORDER[stepPhase] ? 'active' : 'upcoming'
+}
+
 const steps = computed(() => [
-  { key: 'fetch', label: 'Fetch stars', status: (phase.value === 'finalizing' ? 'done' : 'active') as StepStatus },
-  {
-    key: 'catalog',
-    label: 'Build catalog',
-    status: (phase.value === 'finalizing' ? 'active' : 'upcoming') as StepStatus,
-  },
+  { key: 'import', label: 'Restore library', status: statusFor('importing') },
+  { key: 'fetch', label: 'Fetch stars', status: statusFor('fetching') },
+  { key: 'catalog', label: 'Build catalog', status: statusFor('finalizing') },
 ])
+
+const phaseCopy = computed<string>(
+  () =>
+    ({
+      ready: '',
+      importing: 'Bringing your tags, filters, and notes over from the old Astral.',
+      fetching: 'Pulling every starred repo from your GitHub account.',
+      finalizing: 'Saving names, descriptions, and links so search is ready the moment you land.',
+    }[phase.value])
+)
 
 const dotClass = (status: StepStatus) =>
   ({
@@ -64,6 +81,7 @@ const beginMigration = async () => {
   // Pull the user's legacy tags, smart filters, and stars+notes into the new DB first,
   // so the catalog step has rows to attach GitHub metadata to.
   await starsStore.importLegacyData()
+  isImportComplete.value = true
 
   // Wait for any cached partial to be restored so fetchAllStars resumes from it.
   await Promise.all([reposRestored, syncStateRestored])
@@ -74,10 +92,10 @@ const beginMigration = async () => {
 
   haveStarsBeenFetched.value = true
 
-  updateStarMetadata()
+  await updateStarMetadata()
 }
 
-const updateStarMetadata = () => {
+const updateStarMetadata = async () => {
   const starData: (StarMetaInput & { starId: number })[] = []
   starsStore.userStars.forEach(star => {
     const repoNode = starsStore.starredRepos.find(repo => repo.node.databaseId === star.repo_id)?.node
@@ -92,7 +110,11 @@ const updateStarMetadata = () => {
     })
   })
 
-  starsStore.backfillStarMetadata(starData)
+  await starsStore.backfillStarMetadata(starData)
+
+  // The backfill endpoint no longer redirects (it returns JSON per slice), so land the
+  // user on the dashboard once the final slice has marked them migrated.
+  router.get(route('dashboard.show'))
 }
 </script>
 
@@ -167,7 +189,7 @@ const updateStarMetadata = () => {
                 v-if="index > 0"
                 aria-hidden="true"
                 class="h-px w-6 transition-colors duration-300 sm:w-10"
-                :class="steps[0].status === 'done' ? 'bg-brand-500/60' : 'bg-gray-700'"
+                :class="steps[index - 1].status === 'done' ? 'bg-brand-500/60' : 'bg-gray-700'"
               ></li>
 
               <li class="flex items-center gap-2">
@@ -196,7 +218,15 @@ const updateStarMetadata = () => {
 
           <div class="mt-8 w-full">
             <StarFetchProgress
-              v-if="phase === 'fetching'"
+              v-if="phase === 'importing'"
+              variant="onDark"
+              label="Restoring your library"
+              :fetched-count="starsStore.importScanned"
+              :total-repos="starsStore.importTotal"
+            />
+
+            <StarFetchProgress
+              v-else-if="phase === 'fetching'"
               variant="onDark"
               label="Fetching your stars"
               :fetched-count="starsStore.fetchedCount"
@@ -215,11 +245,7 @@ const updateStarMetadata = () => {
           </div>
 
           <p class="mt-6 text-sm text-balance text-gray-400">
-            {{
-              phase === 'fetching'
-                ? 'Pulling every starred repo from your GitHub account.'
-                : 'Saving names, descriptions, and links so search is ready the moment you land.'
-            }}
+            {{ phaseCopy }}
           </p>
 
           <p class="mt-6 flex items-center gap-2 text-xs text-gray-400">
