@@ -300,6 +300,14 @@ export const predicateTargets = [
 
 const predicateTargetsByKeyPath = new Map(predicateTargets.map(target => [target.keyPath, target]))
 
+// Legacy Astral stored some targets as the raw GitHub GraphQL paths this app later
+// flattened, so migrated smart filters carry the old keyPath. Alias them to the current
+// target instead of silently falling back to "Name". Normalizing on save rewrites the
+// stored keyPath, so an alias only matters until a migrated filter is next saved.
+const legacyTargetAliases: Record<string, string> = {
+  'node.stargazers.totalCount': 'node.stargazerCount',
+}
+
 export const predicateOperators: PredicateOperator[] = [
   ...stringOperators,
   ...numberOperators,
@@ -330,7 +338,9 @@ export const createDefaultFilterBody = (): SmartFilterBody => {
 }
 
 export const getPredicateTarget = (selectedTarget: string): PredicateTarget<PredicateTargetType> => {
-  return (predicateTargetsByKeyPath.get(selectedTarget) as PredicateTarget<PredicateTargetType>) ?? predicateTargets[0]
+  const keyPath = legacyTargetAliases[selectedTarget] ?? selectedTarget
+
+  return (predicateTargetsByKeyPath.get(keyPath) as PredicateTarget<PredicateTargetType>) ?? predicateTargets[0]
 }
 
 export const getOperatorsForPredicate = (predicate: Predicate): PredicateOperator[] => {
