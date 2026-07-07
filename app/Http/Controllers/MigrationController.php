@@ -82,7 +82,9 @@ class MigrationController extends Controller
                     'meta' => [
                         'nameWithOwner' => $star['nameWithOwner'],
                         'url' => $star['url'],
-                        'description' => $star['description'],
+                        // Repos with no GitHub description omit the key entirely (lodash
+                        // `pick` drops undefined values), so default it rather than assume.
+                        'description' => $star['description'] ?? null,
                     ],
                 ]);
             }

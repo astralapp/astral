@@ -57,6 +57,26 @@ it('backfills metadata onto existing stars and marks the user migrated on finali
     expect($user->fresh()->hasMigrated())->toBeTrue();
 });
 
+it('backfills a star whose payload omits the description key', function () {
+    $user = User::factory()->create();
+    $star = $user->stars()->create(['repo_id' => 0]);
+
+    // A repo with no GitHub description arrives without a `description` key at all.
+    $this->actingAs($user)
+        ->putJson(route('migrate.update'), [
+            'stars' => [[
+                'starId' => $star->id,
+                'databaseId' => 1234,
+                'nameWithOwner' => 'astralapp/astral',
+                'url' => 'https://github.com/astralapp/astral',
+            ]],
+            'finalize' => true,
+        ])
+        ->assertStatus(200);
+
+    expect($star->refresh()->meta['description'])->toBeNull();
+});
+
 it('leaves imported notes untouched (no HTML conversion)', function () {
     $user = User::factory()->create();
     $star = $user->stars()->create(['repo_id' => 1234, 'notes' => '# Heading']);
