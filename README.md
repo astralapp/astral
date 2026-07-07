@@ -35,6 +35,17 @@ you need a GitHub OAuth app to get past the login screen:
 
 (If you change `APP_PORT`, update these URLs to match.)
 
+### 💚 Sponsor-gating (off by default)
+
+Astral can gate power-user features (unlimited tags, notes, and smart filters)
+behind a GitHub sponsorship — a holdover from the hosted service. It ships
+**off** (`CHECK_FOR_SPONSORSHIP=false`), so on a personal instance every account
+gets everything with no sponsorship check at login.
+
+Only turn it on if you run a public, multi-user instance and want those features
+gated behind sponsoring you: set `CHECK_FOR_SPONSORSHIP=true` and point
+`GITHUB_SPONSOREE_LOGIN` at your own GitHub login.
+
 ### 🌐 Services
 
 - App: http://localhost:8080
