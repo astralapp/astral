@@ -342,17 +342,17 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         <button
           v-if="hiddenLanguageCount > 0"
           type="button"
-          class="mt-3 inline-flex w-full items-center rounded-sm text-sm font-semibold text-gray-400 transition-colors hover:text-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200 dark:text-gray-300 dark:hover:text-gray-200"
+          class="mt-3 flex w-full items-center justify-center gap-1.5 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-200 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800/50 dark:hover:text-gray-200"
           :aria-expanded="isLanguagesExpanded"
           @click="isLanguagesExpanded = !isLanguagesExpanded"
         >
+          <span>{{ isLanguagesExpanded ? 'View less' : `View more (${hiddenLanguageCount})` }}</span>
+
           <i-lucide-chevron-down
-            class="h-4 w-4 shrink-0 transform transition-transform"
+            class="h-3.5 w-3.5 shrink-0 transform transition-transform"
             :class="{ 'rotate-180': isLanguagesExpanded }"
             role="presentation"
           />
-
-          <span class="ml-2">{{ isLanguagesExpanded ? 'View less' : `View more (${hiddenLanguageCount})` }}</span>
         </button>
       </SidebarGroup>
     </div>
