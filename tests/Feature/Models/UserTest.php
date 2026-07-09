@@ -19,9 +19,11 @@ it('sets sponsorship status through the dedicated setter', function () {
 
     $user = User::factory()->create();
     expect($user->isSponsor())->toBeFalse();
+    expect($user->sponsorship_checked_at)->toBeNull();
 
     $user->setSponsorshipStatus(true);
     expect($user->fresh()->isSponsor())->toBeTrue();
+    expect($user->fresh()->sponsorship_checked_at)->not->toBeNull();
 
     $user->setSponsorshipStatus(false);
     expect($user->fresh()->isSponsor())->toBeFalse();

@@ -28,6 +28,7 @@ class User extends Authenticatable
     protected $casts = [
         'settings' => 'array',
         'is_sponsor' => 'boolean',
+        'sponsorship_checked_at' => 'datetime',
         'access_token' => 'encrypted',
     ];
 
@@ -131,6 +132,7 @@ class User extends Authenticatable
     {
         // Direct assignment: is_sponsor is not mass-assignable (see isFillable()).
         $this->is_sponsor = $isSponsor ? now() : null;
+        $this->sponsorship_checked_at = now();
         $this->save();
 
         return $this;
