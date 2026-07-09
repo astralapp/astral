@@ -59,6 +59,13 @@ class AuthController extends Controller
                 // gated to /migrate, which is harmless when they have no data.
                 Log::warning('Legacy migration check failed during login', ['user_id' => $user->id, 'exception' => $e]);
             }
+
+            // A fresh, non-legacy account (marked migrated above) is gated to /welcome, where
+            // it fetches its stars before landing on a populated dashboard. Legacy accounts
+            // stay unmigrated and keep the /migrate path instead.
+            if ($user->hasMigrated()) {
+                $user->markPendingWelcome();
+            }
         }
 
         if (config('app.check_for_sponsorship')) {

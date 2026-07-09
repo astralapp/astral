@@ -6,6 +6,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnsureUserHasSeenWelcome;
 use App\Http\Middleware\EnsureUserIsMigrated;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
@@ -88,6 +89,7 @@ class Kernel extends HttpKernel
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,
         'migrated' => EnsureUserIsMigrated::class,
+        'welcomed' => EnsureUserHasSeenWelcome::class,
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,

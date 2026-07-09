@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -77,6 +78,37 @@ it('redirects authenticated users back to the dashboard')
     ->login()
     ->get('/auth/github/callback')
     ->assertRedirect(RouteServiceProvider::HOME);
+
+it('gates a brand-new non-legacy user behind the welcome screen', function () {
+    mockSocialiteFacade();
+
+    session()->put('auth_scope', 'read:user');
+
+    $this->get('/auth/github/callback');
+
+    $user = User::firstWhere('github_id', 1234567890);
+
+    expect($user->hasMigrated())->toBeTrue();
+    expect($user->hasPendingWelcome())->toBeTrue();
+});
+
+it('does not gate a legacy user behind the welcome screen', function () {
+    bootLegacyDatabase();
+
+    $legacyId = seedLegacyUser(1234567890);
+    DB::connection('legacy')->table('stars')->insert(['user_id' => $legacyId, 'repo_id' => 1, 'notes' => 'note']);
+
+    mockSocialiteFacade();
+
+    session()->put('auth_scope', 'read:user');
+
+    $this->get('/auth/github/callback');
+
+    $user = User::firstWhere('github_id', 1234567890);
+
+    expect($user->hasMigrated())->toBeFalse();
+    expect($user->hasPendingWelcome())->toBeFalse();
+});
 
 // Helpers
 function mockSocialiteFacade()

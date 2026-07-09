@@ -10,7 +10,6 @@ import SettingsDialog from '@/components/shared/dialogs/SettingsDialog/SettingsD
 import SmartFiltersDialog from '@/components/shared/dialogs/SmartFilterDialog.vue'
 import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
 import UpgradeOAuthScopeDialog from '@/components/shared/dialogs/UpgradeAuthScopeDialog.vue'
-import WelcomeDialog from '@/components/shared/dialogs/WelcomeDialog.vue'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
@@ -164,12 +163,6 @@ watch(
   },
   { immediate: true }
 )
-
-// Show welcome dialog the first time a user logs in
-const shouldShowWelcomeMessage = ref(false)
-// tryOnMounted(() => {
-//   shouldShowWelcomeMessage.value = !user.value?.flags.find(flag => flag.key === 'has-seen-welcome-message')?.value
-// })
 </script>
 
 <template>
@@ -295,11 +288,6 @@ const shouldShowWelcomeMessage = ref(false)
     <UpgradeOAuthScopeDialog />
 
     <SmartFiltersDialog />
-
-    <!-- <WelcomeDialog
-      :is-open="shouldShowWelcomeMessage"
-      :hide="() => (shouldShowWelcomeMessage = false)"
-    /> -->
 
     <GlobalToast />
 

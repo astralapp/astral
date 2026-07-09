@@ -189,4 +189,19 @@ class User extends Authenticatable
     {
         return $this->setFlag(UserFlagKey::MIGRATION, true);
     }
+
+    public function hasPendingWelcome(): bool
+    {
+        return $this->getFlag(UserFlagKey::WELCOME);
+    }
+
+    public function markPendingWelcome(): UserFlag
+    {
+        return $this->setFlag(UserFlagKey::WELCOME, true);
+    }
+
+    public function markWelcomeComplete(): UserFlag
+    {
+        return $this->setFlag(UserFlagKey::WELCOME, false);
+    }
 }

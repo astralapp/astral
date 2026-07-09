@@ -18,6 +18,7 @@ use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\WelcomeController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -55,11 +56,14 @@ if (app()->environment('local')) {
 }
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/', [DashboardController::class, 'show'])->middleware('migrated')->name('dashboard.show');
+    Route::get('/', [DashboardController::class, 'show'])->middleware(['migrated', 'welcomed'])->name('dashboard.show');
 
     Route::get('migrate', [MigrationController::class, 'index'])->name('migrate.index');
     Route::post('migrate', [MigrationController::class, 'import'])->name('migrate.import');
     Route::put('migrate', [MigrationController::class, 'update'])->name('migrate.update');
+
+    Route::get('welcome', [WelcomeController::class, 'index'])->name('welcome.index');
+    Route::post('welcome/complete', [WelcomeController::class, 'complete'])->name('welcome.complete');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
