@@ -7,7 +7,7 @@ use App\Models\User;
 
 it('redirects guests to the login page')
     ->post('/browser-extension-token')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('generates a token and returns the plaintext value once', function () {
     $this->login();

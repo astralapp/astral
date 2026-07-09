@@ -7,7 +7,7 @@ use App\Models\Tag;
 
 it('redirects guests to the login page')
     ->post('/stars/tag')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('creates a new `Star` record for each repository passed to the request', function () {
     $repoData = [

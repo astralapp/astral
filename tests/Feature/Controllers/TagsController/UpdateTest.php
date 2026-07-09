@@ -7,7 +7,7 @@ use App\Providers\RouteServiceProvider;
 
 it('redirects guests to the login page')
     ->put('/tags/1', ['name' => 'TypeScript'])
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('updates a tag', function () {
     $this->login();

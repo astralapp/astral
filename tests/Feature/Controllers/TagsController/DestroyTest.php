@@ -6,7 +6,7 @@ use App\Models\Tag;
 
 it('redirects guests to the login page')
     ->delete('/tags/1')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('deletes a tag', function () {
     $this->login();

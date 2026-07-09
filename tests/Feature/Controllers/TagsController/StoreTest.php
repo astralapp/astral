@@ -7,7 +7,7 @@ use App\Providers\RouteServiceProvider;
 
 it('redirects guests to the login page')
     ->post('/tags')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('creates a new tag', function () {
     $this->login();

@@ -33,4 +33,4 @@ it('throws an InvalidAccessTokenException if the api request comes back with a 4
 
 it('redirects guest users back to the login page')
     ->post('/revoke-grant')
-    ->assertRedirectToRoute('login.show');
+    ->assertRedirectToRoute('auth.show');

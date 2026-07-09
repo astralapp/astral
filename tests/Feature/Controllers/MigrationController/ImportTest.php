@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 it('redirects guests to the login page')
     ->post('/migrate')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('imports a legacy chunk and reports progress without marking migrated', function () {
     bootLegacyDatabase();

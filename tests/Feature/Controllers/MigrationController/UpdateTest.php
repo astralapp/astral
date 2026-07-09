@@ -6,7 +6,7 @@ use App\Models\User;
 
 it('redirects guests to the login page')
     ->put('/migrate', ['stars' => []])
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('marks the user migrated on the finalizing slice even with nothing to backfill', function () {
     $user = User::factory()->create();

@@ -6,7 +6,7 @@ use App\Models\User;
 
 it('redirects guests to the login page')
     ->post('/welcome/complete')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('clears the pending welcome flag and reports done', function () {
     $user = User::factory()->create();

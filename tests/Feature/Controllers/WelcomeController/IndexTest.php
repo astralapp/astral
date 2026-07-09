@@ -6,7 +6,7 @@ use App\Models\User;
 
 it('redirects guests to the login page')
     ->get('/welcome')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('redirects a user with no pending welcome to the dashboard', function () {
     $user = User::factory()->create();

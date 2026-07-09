@@ -14,6 +14,9 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login.show');
+        // Send guests to the sign-in page, not the /login OAuth shortcut. The latter
+        // auto-initiates GitHub OAuth, which silently re-authenticates a just-logged-out
+        // user whose GitHub grant is still active, defeating logout.
+        return $request->expectsJson() ? null : route('auth.show');
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 it('redirects guests to the login page')
     ->get('/migrate')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('marks a user with no legacy data as migrated and skips the migrate step', function () {
     // Migration check is disabled by default in tests, so there is nothing to migrate.

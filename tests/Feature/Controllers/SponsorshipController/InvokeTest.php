@@ -12,7 +12,7 @@ beforeEach(fn () => Cache::flush());
 
 it('redirects guests to the login page')
     ->post('/sponsorship/recheck')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('degrades a failed recheck to an error flash instead of a 500', function () {
     config(['app.check_for_sponsorship' => true]);

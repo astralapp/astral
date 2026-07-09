@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 it('redirects guests to the login page')
     ->delete('/browser-extension-token')
-    ->assertRedirect('/login');
+    ->assertRedirect('/auth');
 
 it('revokes the browser-extension token', function () {
     $this->login();

@@ -12,4 +12,4 @@ it('logs out an authenticated user', function () {
 
 it('redirects guest users back to the login page')
     ->get('/logout')
-    ->assertRedirectToRoute('login.show');
+    ->assertRedirectToRoute('auth.show');
