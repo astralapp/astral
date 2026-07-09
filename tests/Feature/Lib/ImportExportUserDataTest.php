@@ -35,7 +35,9 @@ it('exports the expected envelope and star shape', function () {
     expect($export['version'])->toBe(1);
     expect($export)->toHaveKeys(['version', 'exported_at', 'tags', 'stars', 'smart_filters']);
     expect($export['tags'])->toBe([['name' => 'cli', 'sort_order' => 1]]);
-    expect($export['stars'][0])->toBe([
+    // toEqual, not toBe: meta is a JSON blob whose key order the storage layer
+    // doesn't preserve, and consumers read it by key.
+    expect($export['stars'][0])->toEqual([
         'repo_id' => 111,
         'notes' => 'a note',
         'meta' => ['nameWithOwner' => 'a/b', 'url' => 'https://github.com/a/b', 'description' => 'd'],
@@ -92,7 +94,8 @@ it('round-trips a full export into an identical account on another instance', fu
 
     $imported = $target->stars()->where('repo_id', 111)->first();
     expect($imported->notes)->toBe('great tool');
-    expect($imported->meta)->toBe(['nameWithOwner' => 'owner/repo', 'url' => 'https://github.com/owner/repo', 'description' => 'x']);
+    // toEqual: meta key order is not preserved by storage (see export test).
+    expect($imported->meta)->toEqual(['nameWithOwner' => 'owner/repo', 'url' => 'https://github.com/owner/repo', 'description' => 'x']);
     expect($imported->tags()->pluck('name')->all())->toEqualCanonicalizing(['rust', 'cli']);
 
     $filter = $target->smartFilters()->where('name', 'Rust repos')->first();
