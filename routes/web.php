@@ -76,7 +76,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.update');
     Route::delete('smart-filters/{smart_filter}', [SmartFiltersController::class, 'destroy'])->name('smart-filters.destroy');
 
-    Route::post('sponsorship/recheck', SponsorshipController::class)->name('sponsor.check');
+    Route::post('sponsorship/recheck', SponsorshipController::class)
+        ->middleware('throttle:6,1')
+        ->name('sponsor.check');
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
     Route::put('settings/appearance', [UserSettingsController::class, 'updateAppearance'])->name('settings.appearance.update');
