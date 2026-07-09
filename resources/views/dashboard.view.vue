@@ -88,6 +88,10 @@ registerHook('success', () => {
   if (flashBag.success.value) {
     showToast(flashBag.success.value, ToastType.Success)
   }
+
+  if (flashBag.error.value) {
+    showToast(flashBag.error.value, ToastType.Error)
+  }
 })
 
 const onAllStarsSelected = () => {
