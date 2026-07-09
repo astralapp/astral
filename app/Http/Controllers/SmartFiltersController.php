@@ -12,9 +12,7 @@ class SmartFiltersController extends Controller
 {
     public function store(Request $request)
     {
-        if (auth()->user()->cannot('create', SmartFilter::class)) {
-            return $this->sponsorshipRequired(Ability::CREATE_SMART_FILTER);
-        }
+        $this->ensureCan($request->user(), Ability::CREATE_SMART_FILTER);
 
         $request->validate([
             'name' => 'bail|required|unique:smart_filters,name,NULL,id,user_id,' . auth()->id(),

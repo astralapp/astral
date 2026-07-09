@@ -18,9 +18,7 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
-        if (auth()->user()->cannot('create', Tag::class)) {
-            return $this->sponsorshipRequired(Ability::CREATE_TAG);
-        }
+        $this->ensureCan($request->user(), Ability::CREATE_TAG);
 
         $request->validate([
             'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,' . auth()->id(),

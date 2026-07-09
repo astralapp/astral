@@ -6,6 +6,7 @@ namespace App\Data;
 
 use App\Data\Enums\Ability;
 use App\Data\Enums\Limit;
+use App\Lib\FeatureAccess;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\MapOutputName;
@@ -50,11 +51,7 @@ class UserData extends Data
             UserSettingsData::from($user->settings),
             UserFlagData::collect($user->flags),
             $user->limits(),
-            [
-                'create_tag' => $user->can('create', Tag::class),
-                'create_smart_filter' => $user->can('create', SmartFilter::class),
-                'add_notes' => $user->can('addNotes', Star::class),
-            ]
+            app(FeatureAccess::class)->map($user),
         );
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Data\TagData;
-use App\Exceptions\TagLimitExceededException;
 use App\Http\Controllers\Controller;
 use App\Lib\SyncStarTags;
 use Illuminate\Http\JsonResponse;
@@ -53,19 +52,12 @@ class ExtensionController extends Controller
             'tags.*.name' => ['required_with:tags', 'string'],
         ]);
 
-        try {
-            $star = $syncStarTags->handle(
-                $request->user(),
-                (int) $request->input('databaseId'),
-                $request->only(['nameWithOwner', 'url', 'description']),
-                $request->input('tags', []),
-            );
-        } catch (TagLimitExceededException $e) {
-            return response()->json([
-                'message' => 'Tag limit reached. An active sponsorship is required to add more tags.',
-                'sponsorshipRequired' => $e->ability->value,
-            ], 403);
-        }
+        $star = $syncStarTags->handle(
+            $request->user(),
+            (int) $request->input('databaseId'),
+            $request->only(['nameWithOwner', 'url', 'description']),
+            $request->input('tags', []),
+        );
 
         return response()->json([
             'databaseId' => $star->repo_id,

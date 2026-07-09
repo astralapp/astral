@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Enums\Ability;
+use App\Exceptions\SponsorshipRequiredException;
+use App\Lib\FeatureAccess;
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -15,11 +17,13 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
     /**
-     * Signal that an action is gated behind an active sponsorship. The client's
-     * error hook reads `sponsorship_required` and opens the sponsorship dialog.
+     * Abort with a self-rendering sponsorship prompt unless the user may perform
+     * the gated action. Keeps the check and its response shape in one place.
      */
-    protected function sponsorshipRequired(Ability $ability): RedirectResponse
+    protected function ensureCan(User $user, Ability $ability): void
     {
-        return back()->withErrors(['sponsorship_required' => $ability->value]);
+        if (! app(FeatureAccess::class)->allows($user, $ability)) {
+            throw new SponsorshipRequiredException($ability);
+        }
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\TagLimitExceededException;
 use App\Lib\SyncStarTags;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -66,16 +65,12 @@ class StarTagsController extends Controller
             'tags.*.name' => ['required_with:tags', 'string'],
         ]);
 
-        try {
-            $syncStarTags->handle(
-                auth()->user(),
-                (int) $request->input('databaseId'),
-                $request->only(['nameWithOwner', 'url', 'description']),
-                $request->input('tags', []),
-            );
-        } catch (TagLimitExceededException $e) {
-            return $this->sponsorshipRequired($e->ability);
-        }
+        $syncStarTags->handle(
+            auth()->user(),
+            (int) $request->input('databaseId'),
+            $request->only(['nameWithOwner', 'url', 'description']),
+            $request->input('tags', []),
+        );
 
         return redirect()->route('dashboard.show');
     }

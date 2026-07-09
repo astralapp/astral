@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Lib;
 
 use App\Data\Enums\Ability;
-use App\Exceptions\TagLimitExceededException;
+use App\Exceptions\SponsorshipRequiredException;
 use App\Models\Star;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +20,7 @@ class SyncStarTags
      * @param  array<string, mixed>  $meta  nameWithOwner, url, description
      * @param  array<int, array{name: string}>  $tags
      *
-     * @throws TagLimitExceededException when a non-sponsor exceeds the tag cap
+     * @throws SponsorshipRequiredException when a non-sponsor exceeds the tag cap
      */
     public function handle(User $user, int $repoId, array $meta, array $tags): Star
     {
@@ -47,10 +46,10 @@ class SyncStarTags
 
         // Authorized after the writes: syncing can firstOrCreate new tags, so the
         // sponsorship cap is only knowable against the resulting tag count.
-        if ($user->cannot('sync', Tag::class)) {
+        if (! app(FeatureAccess::class)->canSyncTags($user)) {
             DB::rollBack();
 
-            throw new TagLimitExceededException(Ability::CREATE_TAG);
+            throw new SponsorshipRequiredException(Ability::CREATE_TAG, 'Tag limit reached. An active sponsorship is required to add more tags.');
         }
 
         DB::commit();

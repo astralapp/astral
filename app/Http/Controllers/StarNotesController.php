@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Enums\Ability;
-use App\Models\Star;
 use Illuminate\Http\Request;
 
 class StarNotesController extends Controller
 {
     public function __invoke(Request $request)
     {
-        if (auth()->user()->cannot('addNotes', Star::class)) {
-            return $this->sponsorshipRequired(Ability::ADD_NOTES);
-        }
+        $this->ensureCan($request->user(), Ability::ADD_NOTES);
 
         $request->validate([
             'repoId' => 'required|numeric',
