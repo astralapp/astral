@@ -89,7 +89,7 @@ it('skips bare legacy stars with no notes and no tags', function () {
 it('bypasses the tag cap for non-sponsors', function () {
     config()->set('app.check_for_sponsorship', true);
 
-    $user = User::factory()->create(['github_id' => 9, 'is_sponsor' => null]);
+    $user = User::factory()->create(['github_id' => 9]);
     $legacyId = seedLegacyUser(9);
 
     expect($user->isSponsor())->toBeFalse();

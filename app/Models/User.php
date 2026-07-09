@@ -50,6 +50,20 @@ class User extends Authenticatable
         });
     }
 
+    /**
+     * is_sponsor is a monetization flag written only via setSponsorshipStatus().
+     * Keep it out of mass assignment even though Model::unguard() is global, so a
+     * stray User::update($request->all()) can never let a user self-promote.
+     */
+    public function isFillable($key): bool
+    {
+        if ($key === 'is_sponsor') {
+            return false;
+        }
+
+        return parent::isFillable($key);
+    }
+
     public function readSetting(string $name, $default = null)
     {
         if (array_key_exists($name, $this->settings)) {
@@ -115,7 +129,9 @@ class User extends Authenticatable
 
     public function setSponsorshipStatus(bool $isSponsor): self
     {
-        $this->update(['is_sponsor' => $isSponsor ? now() : null]);
+        // Direct assignment: is_sponsor is not mass-assignable (see isFillable()).
+        $this->is_sponsor = $isSponsor ? now() : null;
+        $this->save();
 
         return $this;
     }
