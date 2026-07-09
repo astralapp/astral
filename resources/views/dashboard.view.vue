@@ -30,10 +30,15 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { GitHubRepo } from '@/types'
+import { useTour } from '@/composables/useTour'
 import { parsePendingInput, parseSearchString, serializeSearch } from '@/utils/search'
 import { Bars3CenterLeftIcon as MenuIcon } from '@heroicons/vue/24/outline'
+import { useMediaQuery } from '@vueuse/core'
+import axios from 'axios'
+import { driver, type DriveStep } from 'driver.js'
 import localForage from 'localforage'
-import { computed, nextTick, ref, watch } from 'vue'
+import ConfettiExplosion from 'vue-confetti-explosion'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 const props = defineProps<App.Data.DashboardData>()
 const { user } = useAuth()
@@ -163,6 +168,201 @@ watch(
   },
   { immediate: true }
 )
+
+// --- App tour --------------------------------------------------------------
+// A first-run driver.js walkthrough of the app's key regions. Auto-starts once
+// (until the `app-tour-completed` flag is set) and is replayable from Settings.
+// Defined here because the steps drive local state the tour can't reach on its
+// own: opening the mobile sidebar and selecting a repo to reveal its detail pane.
+
+const { startSignal } = useTour()
+const checkForSponsorship = useProperty<boolean>('checkForSponsorship')
+const sponsorUrl = useProperty<string>('sponsorUrl')
+const isMobile = useMediaQuery('(max-width: 639px)')
+const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+const showConfetti = ref(false)
+
+let driverObj: ReturnType<typeof driver> | undefined
+
+const hasCompletedTour = computed(() => !!user.value?.flags?.find(flag => flag.key === 'app-tour-completed')?.value)
+
+// The sidebar is a slide-over only below `sm`; on wider screens it's always
+// visible, so driving `isSidebarOpen` there would wrongly shift the layout.
+const openSidebarIfMobile = () => {
+  if (!isMobile.value) {
+    return
+  }
+
+  isSidebarOpen.value = true
+  window.setTimeout(() => driverObj?.refresh(), 340)
+}
+
+const closeSidebarIfMobile = () => {
+  if (isMobile.value) {
+    isSidebarOpen.value = false
+  }
+}
+
+const selectFirstRepo = () => {
+  closeSidebarIfMobile()
+
+  const first = starsStore.filteredRepos[0]
+  if (!first) {
+    return
+  }
+
+  selectItem(first.node)
+  window.setTimeout(() => driverObj?.refresh(), isMobile.value ? 340 : 60)
+}
+
+const fireConfetti = () => {
+  closeSidebarIfMobile()
+
+  if (reducedMotion.value) {
+    return
+  }
+
+  showConfetti.value = false
+  nextTick(() => {
+    showConfetti.value = true
+  })
+}
+
+const buildTourSteps = (): DriveStep[] => {
+  const steps: DriveStep[] = [
+    {
+      popover: {
+        title: 'Welcome to Astral 🔭',
+        description:
+          'A 30-second tour of where everything lives. You can skip anytime — and replay it later from Settings.',
+      },
+      onHighlightStarted: closeSidebarIfMobile,
+    },
+    {
+      element: '[role="combobox"]',
+      popover: {
+        title: 'Search everything',
+        description:
+          'Find any repo by name, or narrow things down with <code>lang:</code>, <code>tag:</code>, and <code>topic:</code> filters. Press <code>/</code> anywhere to jump straight here.',
+        side: 'bottom',
+        align: 'start',
+      },
+      onHighlightStarted: closeSidebarIfMobile,
+    },
+    {
+      element: '[aria-label="Stars"]',
+      popover: {
+        title: 'Your stars, organized',
+        description:
+          'Browse all your stars or just the untagged ones — and re-sync from GitHub anytime with the refresh button.',
+        side: 'right',
+        align: 'start',
+      },
+      onHighlightStarted: openSidebarIfMobile,
+    },
+    {
+      element: '[aria-label="Tags"]',
+      popover: {
+        title: 'Tag to organize',
+        description: 'Create tags, then drag any repo onto one to file it. Drag tags themselves to reorder.',
+        side: 'right',
+        align: 'start',
+      },
+      onHighlightStarted: openSidebarIfMobile,
+    },
+    {
+      element: '[aria-label="Smart Filters"]',
+      popover: {
+        title: 'Smart Filters',
+        description: 'Save a search as a reusable filter that keeps itself up to date as you star more repos.',
+        side: 'right',
+        align: 'start',
+      },
+      onHighlightStarted: openSidebarIfMobile,
+    },
+  ]
+
+  if (starsStore.filteredRepos.length > 0) {
+    steps.push({
+      element: '[data-tour="repo-detail"]',
+      popover: {
+        title: 'Everything about a repo',
+        description: 'Select a repo to read its README, jot down notes, copy a clone command, or open it on GitHub.',
+        side: 'left',
+        align: 'start',
+      },
+      onHighlightStarted: selectFirstRepo,
+    })
+  }
+
+  if (checkForSponsorship.value) {
+    const isSponsor = user.value?.isSponsor
+
+    steps.push({
+      popover: {
+        title: isSponsor ? 'Thanks for sponsoring 💚' : 'Powered by sponsors',
+        description: isSponsor
+          ? 'Notes and Smart Filters are unlocked for you as a sponsor — thank you for supporting Astral.'
+          : `Notes and Smart Filters are a thank-you to people who sponsor Astral. <a href="${sponsorUrl.value}" target="_blank" rel="noopener noreferrer">Become a sponsor →</a>`,
+      },
+      onHighlightStarted: closeSidebarIfMobile,
+    })
+  }
+
+  steps.push({
+    popover: {
+      title: "You're all set",
+      description: 'Replay this tour anytime from <strong>Settings → General</strong>. Now go tame those stars.',
+    },
+    onHighlightStarted: fireConfetti,
+  })
+
+  return steps
+}
+
+const runTour = () => {
+  if (driverObj?.isActive()) {
+    return
+  }
+
+  const steps = buildTourSteps().filter(step => !step.element || !!document.querySelector(step.element as string))
+
+  driverObj = driver({
+    showProgress: true,
+    animate: !reducedMotion.value,
+    allowClose: true,
+    disableActiveInteraction: true,
+    popoverClass: 'astral-tour',
+    overlayColor: '#111827',
+    overlayOpacity: 0.6,
+    nextBtnText: 'Next',
+    prevBtnText: 'Back',
+    doneBtnText: 'Done',
+    steps,
+    onDestroyed: () => {
+      showConfetti.value = false
+      closeSidebarIfMobile()
+
+      // Skipping counts as seen too. Idempotent, so a replay re-posting is fine.
+      if (!hasCompletedTour.value) {
+        axios.post(route('tour.complete')).catch(() => {})
+      }
+    },
+  })
+
+  driverObj.drive()
+}
+
+watch(startSignal, () => runTour())
+
+onMounted(() => {
+  if (hasCompletedTour.value) {
+    return
+  }
+
+  // Give the star list a beat to render so its anchors exist before we filter steps.
+  window.setTimeout(runTour, 150)
+})
 </script>
 
 <template>
@@ -260,6 +460,7 @@ watch(
 
       <!-- Selected Star Info -->
       <div
+        data-tour="repo-detail"
         class="pointer-events-auto absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transform-gpu bg-white transition-transform duration-300 ease-in-out dark:bg-gray-900 sm:relative sm:translate-x-0"
         :class="{
           'pointer-events-none translate-x-full': !isReadmeOpen,
@@ -292,6 +493,18 @@ watch(
     <GlobalToast />
 
     <ConfirmDialog />
+
+    <div
+      v-if="showConfetti"
+      class="pointer-events-none fixed inset-x-0 top-1/3 z-[1000000001] flex justify-center"
+      aria-hidden="true"
+    >
+      <ConfettiExplosion
+        :colors="['#10b981', '#059669', '#34d399', '#6ee7b7']"
+        :particle-count="120"
+        :duration="2600"
+      />
+    </div>
   </div>
 </template>
 

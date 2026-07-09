@@ -204,4 +204,14 @@ class User extends Authenticatable
     {
         return $this->setFlag(UserFlagKey::WELCOME, false);
     }
+
+    public function hasCompletedTour(): bool
+    {
+        return $this->getFlag(UserFlagKey::TOUR);
+    }
+
+    public function markTourCompleted(): UserFlag
+    {
+        return $this->setFlag(UserFlagKey::TOUR, true);
+    }
 }

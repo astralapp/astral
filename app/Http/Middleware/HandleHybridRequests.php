@@ -25,6 +25,7 @@ class HandleHybridRequests
                     'user' => UserData::optional(auth()->user()),
                 ]),
                 'sponsorUrl' => 'https://github.com/sponsors/' . config('app.github_sponsoree_login'),
+                'checkForSponsorship' => (bool) config('app.check_for_sponsorship'),
             ]))
             ->persist('security.user');
 

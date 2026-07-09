@@ -27,6 +27,7 @@
     "@vueuse/head": "^1.1.26",
     "axios": "^1.7.2",
     "date-fns": "^2.28.0",
+    "driver.js": "^1.6.0",
     "fuzzysearch": "^1.0.3",
     "hybridly": "^0.10.0-beta",
     "js-cookie": "^3.0.5",

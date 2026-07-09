@@ -72,3 +72,139 @@
     opacity: 0.5;
   }
 }
+
+/* App tour (driver.js) — restyled to match our popover/dialog vocabulary
+   rather than driver's default look. Signal Green is reserved for the primary
+   action and nothing decorative. */
+.driver-popover.astral-tour {
+  --tour-bg: #fff;
+  max-width: 320px;
+  padding: 1rem 1.125rem;
+  background-color: var(--tour-bg);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 0.5rem;
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.driver-popover.astral-tour * {
+  font-family: var(--font-sans);
+}
+
+.driver-popover.astral-tour .driver-popover-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  color: var(--color-gray-950);
+}
+
+.driver-popover.astral-tour .driver-popover-description {
+  margin-top: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-gray-700);
+}
+
+.driver-popover.astral-tour .driver-popover-description a {
+  font-weight: 600;
+  color: var(--color-brand-700);
+  text-decoration: underline;
+}
+
+.driver-popover.astral-tour .driver-popover-close-btn {
+  color: var(--color-gray-400);
+}
+
+.driver-popover.astral-tour .driver-popover-close-btn:hover,
+.driver-popover.astral-tour .driver-popover-close-btn:focus {
+  color: var(--color-gray-600);
+}
+
+.driver-popover.astral-tour .driver-popover-progress-text {
+  font-size: var(--text-xxs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.driver-popover.astral-tour .driver-popover-footer-btn {
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.driver-popover.astral-tour .driver-popover-prev-btn {
+  color: var(--color-gray-600);
+  background-color: transparent;
+}
+
+.driver-popover.astral-tour .driver-popover-prev-btn:hover {
+  background-color: var(--color-gray-100);
+}
+
+.driver-popover.astral-tour .driver-popover-next-btn {
+  color: #fff;
+  background-color: var(--color-brand-700);
+}
+
+.driver-popover.astral-tour .driver-popover-next-btn:hover {
+  background-color: var(--color-brand-800);
+}
+
+/* The arrow inherits only its visible border from the base rule; recolor that
+   one side per direction so the transparent sides stay transparent. */
+.driver-popover.astral-tour .driver-popover-arrow-side-left {
+  border-left-color: var(--tour-bg);
+}
+.driver-popover.astral-tour .driver-popover-arrow-side-right {
+  border-right-color: var(--tour-bg);
+}
+.driver-popover.astral-tour .driver-popover-arrow-side-top {
+  border-top-color: var(--tour-bg);
+}
+.driver-popover.astral-tour .driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--tour-bg);
+}
+
+.dark .driver-popover.astral-tour {
+  --tour-bg: var(--color-gray-900);
+  border-color: var(--color-gray-700);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-title {
+  color: var(--color-gray-50);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-description {
+  color: var(--color-gray-300);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-description a {
+  color: var(--color-brand-400);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-close-btn {
+  color: var(--color-gray-500);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-close-btn:hover,
+.dark .driver-popover.astral-tour .driver-popover-close-btn:focus {
+  color: var(--color-gray-300);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-prev-btn {
+  color: var(--color-gray-300);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-prev-btn:hover {
+  background-color: var(--color-gray-800);
+}

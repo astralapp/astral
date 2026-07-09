@@ -1,15 +1,26 @@
 <script setup lang="ts">
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 import BaseToggle from '@/components/shared/core/BaseToggle.vue'
 import SettingsRow from '@/components/shared/dialogs/SettingsDialog/SettingsRow.vue'
 import { Appearance, useAppearance } from '@/composables/useAppearance'
 import { useAuth } from '@/composables/use-auth'
 import { CloneProtocol, useCloneProtocol } from '@/composables/useCloneProtocol'
+import { useSettingsDialog } from '@/composables/useSettingsDialog'
+import { useTour } from '@/composables/useTour'
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue'
 import { router } from 'hybridly'
 
 const { user } = useAuth()
 const { cloneProtocol } = useCloneProtocol()
 const { appearance } = useAppearance()
+const { start: startTour } = useTour()
+const { hide: hideSettings } = useSettingsDialog()
+
+// Close the settings dialog first so the tour overlay isn't stacked behind it.
+const replayTour = () => {
+  hideSettings()
+  window.setTimeout(startTour, 250)
+}
 
 const updateUserSetting = (key: keyof App.Data.UserSettingsData, enabled: boolean) => {
   router.put(route('settings.update'), {
@@ -145,6 +156,19 @@ const protocolOptions = [
           </div>
         </RadioGroupOption>
       </RadioGroup>
+    </SettingsRow>
+
+    <SettingsRow
+      title="Product tour"
+      description="Replay the guided tour of Astral's main features."
+    >
+      <BaseButton
+        kind="base"
+        size="sm"
+        @click="replayTour"
+      >
+        Replay tour
+      </BaseButton>
     </SettingsRow>
   </div>
 </template>

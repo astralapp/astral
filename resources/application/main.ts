@@ -2,6 +2,7 @@ import { createHead } from '@vueuse/head'
 import { createPinia } from 'pinia'
 import { initializeHybridly } from 'virtual:hybridly/config'
 
+import 'driver.js/dist/driver.css'
 import './tailwind.css'
 
 initializeHybridly({

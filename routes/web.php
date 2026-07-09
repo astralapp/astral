@@ -16,6 +16,7 @@ use App\Http\Controllers\StarsController;
 use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
+use App\Http\Controllers\TourController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\WelcomeController;
@@ -64,6 +65,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('welcome', [WelcomeController::class, 'index'])->name('welcome.index');
     Route::post('welcome/complete', [WelcomeController::class, 'complete'])->name('welcome.complete');
+
+    Route::post('tour/complete', [TourController::class, 'complete'])->name('tour.complete');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
