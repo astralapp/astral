@@ -62,9 +62,10 @@ class AuthController extends Controller
 
             // A fresh, non-legacy account (marked migrated above) is gated to /welcome, where
             // it fetches its stars before landing on a populated dashboard. Legacy accounts
-            // stay unmigrated and keep the /migrate path instead.
-            if ($user->hasMigrated()) {
-                $user->markPendingWelcome();
+            // stay unmigrated and onboard through /migrate instead, so mark their welcome
+            // complete up front to keep them off the welcome screen once they land.
+            if (! $user->hasMigrated()) {
+                $user->markWelcomeCompleted();
             }
         }
 

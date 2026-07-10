@@ -19,7 +19,7 @@ class EnsureUserHasSeenWelcome
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->hasPendingWelcome()) {
+        if (! $request->user()->hasCompletedWelcome()) {
             return redirect(route('welcome.index'));
         }
 

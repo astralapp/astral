@@ -10,7 +10,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        if (! auth()->user()->hasPendingWelcome()) {
+        if (auth()->user()->hasCompletedWelcome()) {
             return redirect(route('dashboard.show'));
         }
 
@@ -18,12 +18,12 @@ class WelcomeController extends Controller
     }
 
     /**
-     * Clear the welcome gate once the frontend has fetched the user's stars, so the next
+     * Mark the welcome complete once the frontend has fetched the user's stars, so the next
      * dashboard visit is populated. Idempotent: safe to call from the lockout-escape path too.
      */
     public function complete(): JsonResponse
     {
-        auth()->user()->markWelcomeComplete();
+        auth()->user()->markWelcomeCompleted();
 
         return response()->json(['done' => true]);
     }

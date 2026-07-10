@@ -8,16 +8,15 @@ it('redirects guests to the login page')
     ->post('/welcome/complete')
     ->assertRedirect('/auth');
 
-it('clears the pending welcome flag and reports done', function () {
+it('marks the welcome complete and reports done', function () {
     $user = User::factory()->create();
-    $user->markPendingWelcome();
 
-    expect($user->hasPendingWelcome())->toBeTrue();
+    expect($user->hasCompletedWelcome())->toBeFalse();
 
     $this->actingAs($user)
         ->post(route('welcome.complete'))
         ->assertOk()
         ->assertJson(['done' => true]);
 
-    expect($user->fresh()->hasPendingWelcome())->toBeFalse();
+    expect($user->fresh()->hasCompletedWelcome())->toBeTrue();
 });

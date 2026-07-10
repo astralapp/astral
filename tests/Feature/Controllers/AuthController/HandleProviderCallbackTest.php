@@ -89,7 +89,7 @@ it('gates a brand-new non-legacy user behind the welcome screen', function () {
     $user = User::firstWhere('github_id', 1234567890);
 
     expect($user->hasMigrated())->toBeTrue();
-    expect($user->hasPendingWelcome())->toBeTrue();
+    expect($user->hasCompletedWelcome())->toBeFalse();
 });
 
 it('does not gate a legacy user behind the welcome screen', function () {
@@ -107,7 +107,7 @@ it('does not gate a legacy user behind the welcome screen', function () {
     $user = User::firstWhere('github_id', 1234567890);
 
     expect($user->hasMigrated())->toBeFalse();
-    expect($user->hasPendingWelcome())->toBeFalse();
+    expect($user->hasCompletedWelcome())->toBeTrue();
 });
 
 // Helpers
