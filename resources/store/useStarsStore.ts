@@ -191,7 +191,9 @@ export const useStarsStore = defineStore({
 
         const lastPage = getLastPage(firstPage.headers.link) ?? 1
         pages[1] = (firstPage.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
-        this.totalRepos = Math.max(lastPage * STARS_PER_PAGE, prefix.length)
+        // REST pagination gives no exact count, only a last-page number: start with an upper-bound
+        // estimate (pages × page size) and correct it once the last page's real item count arrives.
+        this.totalRepos = lastPage === 1 ? pages[1].length : Math.max(lastPage * STARS_PER_PAGE, prefix.length)
         commit()
 
         const remainingPages = Array.from({ length: lastPage - 1 }, (_, index) => index + 2)
@@ -204,6 +206,9 @@ export const useStarsStore = defineStore({
           })
 
           pages[page] = (response.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
+          if (page === lastPage) {
+            this.totalRepos = (lastPage - 1) * STARS_PER_PAGE + pages[page].length
+          }
           commit()
         })
 
