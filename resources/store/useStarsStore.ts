@@ -183,22 +183,22 @@ export const useStarsStore = defineStore({
           this.fetchedCount = this.starredRepos.length
         }
 
-        const firstPage = await octokit.request('GET /user/starred', {
+        // Learn the exact star count up front so the progress total is accurate from the first
+        // tick. REST pagination exposes no count, but at one item per page the last-page number
+        // *is* the total (https://stackoverflow.com/a/30638428).
+        const countResponse = await octokit.request('GET /user/starred', {
           headers: { accept: 'application/vnd.github.star+json' },
           page: 1,
-          per_page: STARS_PER_PAGE,
+          per_page: 1,
         })
 
-        const lastPage = getLastPage(firstPage.headers.link) ?? 1
-        pages[1] = (firstPage.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
-        // REST pagination gives no exact count, only a last-page number: start with an upper-bound
-        // estimate (pages × page size) and correct it once the last page's real item count arrives.
-        this.totalRepos = lastPage === 1 ? pages[1].length : Math.max(lastPage * STARS_PER_PAGE, prefix.length)
-        commit()
+        const totalStars = getLastPage(countResponse.headers.link) ?? (countResponse.data as unknown[]).length
+        this.totalRepos = Math.max(totalStars, prefix.length)
 
-        const remainingPages = Array.from({ length: lastPage - 1 }, (_, index) => index + 2)
+        const lastPage = Math.max(Math.ceil(totalStars / STARS_PER_PAGE), 1)
+        const allPages = Array.from({ length: lastPage }, (_, index) => index + 1)
 
-        await runWithConcurrency(remainingPages, STARS_FETCH_CONCURRENCY, async page => {
+        await runWithConcurrency(allPages, STARS_FETCH_CONCURRENCY, async page => {
           const response = await octokit.request('GET /user/starred', {
             headers: { accept: 'application/vnd.github.star+json' },
             page,
@@ -206,9 +206,6 @@ export const useStarsStore = defineStore({
           })
 
           pages[page] = (response.data as unknown as GitHubStarItem[]).map(mapStarItemToRepo)
-          if (page === lastPage) {
-            this.totalRepos = (lastPage - 1) * STARS_PER_PAGE + pages[page].length
-          }
           commit()
         })
 
