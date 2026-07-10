@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('migrate', [MigrationController::class, 'index'])->name('migrate.index');
     Route::post('migrate', [MigrationController::class, 'import'])->name('migrate.import');
+    Route::post('migrate/skip', [MigrationController::class, 'skip'])->name('migrate.skip');
     Route::put('migrate', [MigrationController::class, 'update'])->name('migrate.update');
 
     Route::get('welcome', [WelcomeController::class, 'index'])->name('welcome.index');

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Data\Enums\UserFlagKey;
 use App\Lib\ImportLegacyData;
 use App\Lib\LegacyMigration;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,6 +32,25 @@ class MigrationController extends Controller
         return hybridly()->view('views.migrate', [
             'stars' => $user->stars()->get(),
         ]);
+    }
+
+    /**
+     * Skip the one-time migration and start fresh. Marking the user migrated retires the
+     * offer for good, and clearing their welcome flag routes them through the welcome flow
+     * a brand-new account gets rather than dropping them on an empty dashboard.
+     */
+    public function skip(): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if ($user->hasMigrated()) {
+            return redirect(route('dashboard.show'));
+        }
+
+        $user->markAsMigrated();
+        $user->setFlag(UserFlagKey::WELCOME, false);
+
+        return redirect(route('welcome.index'));
     }
 
     /**

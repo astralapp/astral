@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import BaseButton from '@/components/shared/core/BaseButton.vue'
+import ConfirmDialog from '@/components/shared/dialogs/ConfirmDialog.vue'
 import OnboardingScaffold from '@/components/shared/OnboardingScaffold.vue'
 import StarFetchProgress from '@/components/stars/StarFetchProgress.vue'
 import { useAuth } from '@/composables/use-auth'
+import { useConfirm } from '@/composables/useConfirm'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
 import { useSyncValuesToStores } from '@/composables/useSyncValuesToStores'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -18,6 +20,7 @@ const props = defineProps<{
 }>()
 
 const { user } = useAuth()
+const { isConfirmed } = useConfirm()
 
 const starsStore = useStarsStore()
 const userStore = useUserStore()
@@ -115,6 +118,18 @@ const updateStarMetadata = async () => {
   // user on the dashboard once the final slice has marked them migrated.
   router.get(route('dashboard.show'))
 }
+
+// Skipping is one-way: the migrate offer never returns, so make sure the user means it.
+const skipMigration = async () => {
+  const confirmed = await isConfirmed(
+    "Start fresh and skip the migration? Your old tags, notes, and filters won't be importable later — this is the only time we'll offer to bring them over.",
+    { confirmLabel: 'Skip and start fresh', cancelLabel: 'Keep my data' }
+  )
+
+  if (!confirmed) return
+
+  router.post(route('migrate.skip'))
+}
 </script>
 
 <template>
@@ -155,6 +170,14 @@ const updateStarMetadata = async () => {
         <p class="mt-4 text-xs text-gray-400">
           One-time step. Astral only reads your stars from GitHub; nothing on your account is changed.
         </p>
+
+        <button
+          type="button"
+          class="mt-6 cursor-pointer rounded-sm text-sm text-gray-400 underline decoration-gray-600 underline-offset-4 transition hover:text-gray-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-500"
+          @click="skipMigration"
+        >
+          Skip and start fresh instead
+        </button>
       </div>
 
       <!-- Working: a two-step sequence with live progress, announced to assistive tech. -->
@@ -244,6 +267,8 @@ const updateStarMetadata = async () => {
         </p>
       </div>
     </Transition>
+
+    <ConfirmDialog />
   </OnboardingScaffold>
 </template>
 
