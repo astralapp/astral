@@ -28,3 +28,13 @@ it('sets sponsorship status through the dedicated setter', function () {
     $user->setSponsorshipStatus(false);
     expect($user->fresh()->isSponsor())->toBeFalse();
 });
+
+it('treats the sponsoree account as a sponsor', function () {
+    config(['app.check_for_sponsorship' => true, 'app.github_sponsoree_login' => 'octocat']);
+
+    $owner = User::factory()->create(['username' => 'octocat']);
+    $other = User::factory()->create(['username' => 'someone-else']);
+
+    expect($owner->isSponsor())->toBeTrue();
+    expect($other->isSponsor())->toBeFalse();
+});

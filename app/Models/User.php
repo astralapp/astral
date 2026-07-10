@@ -120,7 +120,9 @@ class User extends Authenticatable
 
     public function isSponsor(): bool
     {
-        return (bool) $this->is_sponsor || ! (bool) config('app.check_for_sponsorship');
+        return (bool) $this->is_sponsor
+            || $this->username === config('app.github_sponsoree_login')
+            || ! (bool) config('app.check_for_sponsorship');
     }
 
     public function isNotSponsor(): bool
