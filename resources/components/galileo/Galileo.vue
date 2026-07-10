@@ -172,6 +172,7 @@ onKeyStroke('/', e => {
     class="flex h-16 shrink-0 items-center border-b border-gray-300 bg-white px-4 dark:border-gray-950 dark:bg-gray-900"
   >
     <div
+      data-tour="search"
       class="relative flex w-full items-center rounded-md border border-gray-900/20 bg-white px-3 shadow-md shadow-gray-800/5 focus-within:border-gray-400 focus-within:ring-4 focus-within:ring-gray-500/10 dark:border-gray-700 dark:bg-gray-700/15 dark:text-gray-200 dark:focus-within:border-gray-500 dark:focus-within:ring-gray-400/10"
     >
       <i-lucide-search

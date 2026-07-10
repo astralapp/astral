@@ -37,7 +37,6 @@ import { useMediaQuery } from '@vueuse/core'
 import axios from 'axios'
 import { driver, type DriveStep } from 'driver.js'
 import localForage from 'localforage'
-import ConfettiExplosion from 'vue-confetti-explosion'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 const props = defineProps<App.Data.DashboardData>()
@@ -180,7 +179,6 @@ const checkForSponsorship = useProperty<boolean>('checkForSponsorship')
 const sponsorUrl = useProperty<string>('sponsorUrl')
 const isMobile = useMediaQuery('(max-width: 639px)')
 const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-const showConfetti = ref(false)
 
 let driverObj: ReturnType<typeof driver> | undefined
 
@@ -215,19 +213,6 @@ const selectFirstRepo = () => {
   window.setTimeout(() => driverObj?.refresh(), isMobile.value ? 340 : 60)
 }
 
-const fireConfetti = () => {
-  closeSidebarIfMobile()
-
-  if (reducedMotion.value) {
-    return
-  }
-
-  showConfetti.value = false
-  nextTick(() => {
-    showConfetti.value = true
-  })
-}
-
 const buildTourSteps = (): DriveStep[] => {
   const steps: DriveStep[] = [
     {
@@ -239,11 +224,11 @@ const buildTourSteps = (): DriveStep[] => {
       onHighlightStarted: closeSidebarIfMobile,
     },
     {
-      element: '[role="combobox"]',
+      element: '[data-tour="search"]',
       popover: {
         title: 'Search everything',
         description:
-          'Find any repo by name, or narrow things down with <code>lang:</code>, <code>tag:</code>, and <code>topic:</code> filters. Press <code>/</code> anywhere to jump straight here.',
+          'Find any repo by name, or narrow things down with <code>lang:</code>, <code>tag:</code>, and <code>topic:</code> filters. Press <kbd>/</kbd> anywhere to jump straight here.',
         side: 'bottom',
         align: 'start',
       },
@@ -261,7 +246,7 @@ const buildTourSteps = (): DriveStep[] => {
       onHighlightStarted: openSidebarIfMobile,
     },
     {
-      element: '[aria-label="Tags"]',
+      element: '[data-tour="tags"]',
       popover: {
         title: 'Tag to organize',
         description: 'Create tags, then drag any repo onto one to file it. Drag tags themselves to reorder.',
@@ -271,7 +256,7 @@ const buildTourSteps = (): DriveStep[] => {
       onHighlightStarted: openSidebarIfMobile,
     },
     {
-      element: '[aria-label="Smart Filters"]',
+      element: '[data-tour="smart-filters"]',
       popover: {
         title: 'Smart Filters',
         description: 'Save a search as a reusable filter that keeps itself up to date as you star more repos.',
@@ -314,7 +299,7 @@ const buildTourSteps = (): DriveStep[] => {
       title: "You're all set",
       description: 'Replay this tour anytime from <strong>Settings → General</strong>. Now go tame those stars.',
     },
-    onHighlightStarted: fireConfetti,
+    onHighlightStarted: closeSidebarIfMobile,
   })
 
   return steps
@@ -340,7 +325,6 @@ const runTour = () => {
     doneBtnText: 'Done',
     steps,
     onDestroyed: () => {
-      showConfetti.value = false
       closeSidebarIfMobile()
 
       // Skipping counts as seen too. Idempotent, so a replay re-posting is fine.
@@ -493,18 +477,6 @@ onMounted(() => {
     <GlobalToast />
 
     <ConfirmDialog />
-
-    <div
-      v-if="showConfetti"
-      class="pointer-events-none fixed inset-x-0 top-1/3 z-[1000000001] flex justify-center"
-      aria-hidden="true"
-    >
-      <ConfettiExplosion
-        :colors="['#10b981', '#059669', '#34d399', '#6ee7b7']"
-        :particle-count="120"
-        :duration="2600"
-      />
-    </div>
   </div>
 </template>
 

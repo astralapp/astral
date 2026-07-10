@@ -113,6 +113,30 @@
   text-decoration: underline;
 }
 
+/* Search qualifiers rendered as the same indigo chips the input uses for
+   committed filters, so the callout reads as "this is what you'll type". */
+.driver-popover.astral-tour .driver-popover-description code {
+  padding: 0.0625rem 0.375rem;
+  border-radius: 0.125rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125em;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  color: var(--color-indigo-800);
+  background-color: var(--color-indigo-100);
+}
+
+.driver-popover.astral-tour .driver-popover-description kbd {
+  padding: 0.0625rem 0.375rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--color-gray-500);
+  background-color: var(--color-gray-50);
+}
+
 .driver-popover.astral-tour .driver-popover-close-btn {
   color: var(--color-gray-400);
 }
@@ -160,19 +184,9 @@
   background-color: var(--color-brand-800);
 }
 
-/* The arrow inherits only its visible border from the base rule; recolor that
-   one side per direction so the transparent sides stay transparent. */
-.driver-popover.astral-tour .driver-popover-arrow-side-left {
-  border-left-color: var(--tour-bg);
-}
-.driver-popover.astral-tour .driver-popover-arrow-side-right {
-  border-right-color: var(--tour-bg);
-}
-.driver-popover.astral-tour .driver-popover-arrow-side-top {
-  border-top-color: var(--tour-bg);
-}
-.driver-popover.astral-tour .driver-popover-arrow-side-bottom {
-  border-bottom-color: var(--tour-bg);
+/* No pointer arrow — it reads as a stray triangle against our bordered popover. */
+.driver-popover.astral-tour .driver-popover-arrow {
+  display: none;
 }
 
 .dark .driver-popover.astral-tour {
@@ -192,6 +206,17 @@
   color: var(--color-brand-400);
 }
 
+.dark .driver-popover.astral-tour .driver-popover-description code {
+  color: var(--color-indigo-400);
+  background-color: color-mix(in srgb, var(--color-indigo-400) 12%, transparent);
+}
+
+.dark .driver-popover.astral-tour .driver-popover-description kbd {
+  border-color: var(--color-gray-600);
+  color: var(--color-gray-300);
+  background-color: var(--color-gray-950);
+}
+
 .dark .driver-popover.astral-tour .driver-popover-close-btn {
   color: var(--color-gray-500);
 }
@@ -207,4 +232,28 @@
 
 .dark .driver-popover.astral-tour .driver-popover-prev-btn:hover {
   background-color: var(--color-gray-800);
+}
+
+/* Roomier popover with larger type on wider screens, where the default mobile
+   sizing reads as cramped. */
+@media screen and (min-width: 1024px) {
+  .driver-popover.astral-tour {
+    max-width: 384px;
+    padding: 1.25rem 1.375rem;
+  }
+
+  .driver-popover.astral-tour .driver-popover-title {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .driver-popover.astral-tour .driver-popover-description {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .driver-popover.astral-tour .driver-popover-footer-btn {
+    font-size: 0.875rem;
+  }
 }

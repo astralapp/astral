@@ -194,6 +194,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         title="Tags"
         collapsible
         class="relative"
+        data-tour="tags"
         :is-open="!sidebarGroupCollapsedState.sidebar_tags_collapsed"
         :close="() => toggleSidebarGroupCollapsedState('sidebar_tags_collapsed')"
       >
@@ -273,6 +274,7 @@ const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsK
         title="Smart Filters"
         collapsible
         class="relative"
+        data-tour="smart-filters"
         :is-open="!sidebarGroupCollapsedState.sidebar_smart_filters_collapsed"
         :close="() => toggleSidebarGroupCollapsedState('sidebar_smart_filters_collapsed')"
       >
