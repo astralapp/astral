@@ -5,6 +5,7 @@ import keyBy from 'lodash/keyBy'
 import { Octokit } from 'octokit'
 import { defineStore } from 'pinia'
 
+import { ToastType, useGlobalToast } from '@/composables/useGlobalToast'
 import { removeStarQuery } from '@/queries'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useUserStore } from '@/store/useUserStore'
@@ -253,28 +254,102 @@ export const useStarsStore = defineStore({
       }
     },
     async removeStar(id: string) {
+      await this.removeStars([id])
+    },
+    async removeStars(ids: string[]) {
       const userStore = useUserStore()
-      const repo: Maybe<GitHubRepo> = this.starredRepos.find(repo => repo.node.id === id)
+      const { show: showToast } = useGlobalToast()
 
-      await fetch('https://api.github.com/graphql', {
-        body: JSON.stringify({
-          query: removeStarQuery(id),
-        }),
-        headers: {
-          Authorization: `bearer ${userStore.user?.accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      })
+      const repos = ids
+        .map(id => this.starredRepos.find(repo => repo.node.id === id))
+        .filter((repo): repo is GitHubRepo => repo !== undefined)
 
-      if (repo) {
-        const userStar: Maybe<App.Data.StarData> = this.userStars.find(star => star.repo_id === repo.node.databaseId)
-        this.selectedRepos = this.selectedRepos.filter(selectedRepo => selectedRepo.id !== id)
+      if (!repos.length) {
+        return
+      }
+
+      // GitHub GraphQL answers a failed mutation with HTTP 200 + an `errors` array, so a
+      // successful HTTP response isn't enough. Classify each result so failed repos are left
+      // untouched and the OAuth App access restriction is singled out — that's an org-level
+      // block (on by default for orgs) that retrying can never clear, so it needs its own guidance.
+      const unstarOnGitHub = async (repo: GitHubRepo): Promise<'ok' | 'restricted' | 'error'> => {
+        try {
+          const response = await fetch('https://api.github.com/graphql', {
+            body: JSON.stringify({ query: removeStarQuery(repo.node.id) }),
+            headers: {
+              Authorization: `bearer ${userStore.user?.accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+          })
+
+          const body = await response.json().catch(() => null)
+
+          if (response.ok && !body?.errors) {
+            return 'ok'
+          }
+
+          const isRestricted =
+            Array.isArray(body?.errors) &&
+            body.errors.some((error: { message?: string }) => error?.message?.includes('OAuth App access restrictions'))
+
+          return isRestricted ? 'restricted' : 'error'
+        } catch {
+          return 'error'
+        }
+      }
+
+      const outcomes = await runWithConcurrency(repos, STARS_FETCH_CONCURRENCY, async repo => ({
+        repo,
+        status: await unstarOnGitHub(repo),
+      }))
+
+      const succeeded = outcomes.filter(outcome => outcome.status === 'ok').map(outcome => outcome.repo)
+      const failed = outcomes.filter(outcome => outcome.status !== 'ok').map(outcome => outcome.repo)
+      const restricted = outcomes.filter(outcome => outcome.status === 'restricted').map(outcome => outcome.repo)
+
+      const localStarIds: number[] = []
+      for (const repo of succeeded) {
+        this.selectedRepos = this.selectedRepos.filter(selectedRepo => selectedRepo.id !== repo.node.id)
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
+        const userStar: Maybe<App.Data.StarData> = this.userStars.find(star => star.repo_id === repo.node.databaseId)
         if (userStar) {
-          router.delete(`/star/${userStar.id}`, { only: ['stars', 'tags'] })
+          localStarIds.push(userStar.id)
         }
+      }
+
+      if (localStarIds.length) {
+        router.delete(route('stars.destroy'), { data: { ids: localStarIds }, only: ['stars', 'tags'] })
+      }
+
+      if (!failed.length) {
+        showToast(
+          succeeded.length === 1
+            ? `Unstarred ${succeeded[0]?.node.nameWithOwner}`
+            : `Unstarred ${succeeded.length} repositories`,
+          ToastType.Success
+        )
+      } else if (restricted.length) {
+        const orgs = [
+          ...new Set(restricted.map(repo => repo.node.nameWithOwner.split('/')[0] ?? repo.node.nameWithOwner)),
+        ]
+        const orgList = orgs.slice(0, 3).join(', ') + (orgs.length > 3 ? ` +${orgs.length - 3} more` : '')
+        const prefix = succeeded.length ? `Unstarred ${succeeded.length} of ${repos.length}. ` : ''
+
+        showToast(
+          `${prefix}GitHub blocks unstarring repos in orgs that restrict third-party apps (${orgList}). Approve Astral for them or unstar on GitHub.`,
+          ToastType.Error
+        )
+      } else if (!succeeded.length) {
+        showToast(
+          failed.length === 1
+            ? `Couldn't unstar ${failed[0]?.node.nameWithOwner}`
+            : `Couldn't unstar ${failed.length} repositories`,
+          ToastType.Error
+        )
+      } else {
+        showToast(`Unstarred ${succeeded.length} of ${repos.length} — ${failed.length} failed`, ToastType.Error)
       }
     },
     resetPageInfo() {

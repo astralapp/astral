@@ -34,11 +34,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'guest'], function () {
-    Route::get('auth', [AuthController::class, 'show'])->name('auth.show');
-    Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
-    Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
-});
+Route::get('auth', [AuthController::class, 'show'])->middleware('guest')->name('auth.show');
+
+// Intentionally not guest-only: an already-authenticated user must be able to re-run the OAuth
+// flow to elevate their granted scopes (e.g. read:user -> public_repo so they can unstar).
+Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
+Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
 
 Route::get('logout', [AuthController::class, 'logout'])
     ->middleware('auth')
@@ -77,7 +78,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
     Route::put('star/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
     Route::put('star/notes', StarNotesController::class)->name('star.notes.update');
-    Route::delete('star/{star}', [StarsController::class, 'destroy'])->name('star.destroy');
+    Route::delete('stars', [StarsController::class, 'destroyMany'])->name('stars.destroy');
 
     Route::post('smart-filters', [SmartFiltersController::class, 'store'])->name('smart-filters.store');
     Route::put('smart-filters/reorder', SmartFiltersSortOrderController::class)->name('smart-filters.reorder');

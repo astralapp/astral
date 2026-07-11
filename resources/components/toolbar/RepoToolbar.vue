@@ -48,6 +48,21 @@ const removeSelectedStar = async () => {
   }
 }
 
+const removeSelectedStars = async () => {
+  if (user.value?.scope !== AuthScope.PUBLIC_REPO) {
+    showUpgradeAuthScopeDialog()
+  } else {
+    if (
+      await isConfirmed(`Are you sure you want to unstar ${selectedCount.value} repositories?`, {
+        cancelLabel: 'Nevermind',
+        confirmLabel: "Yes, I'm sure",
+      })
+    ) {
+      starsStore.removeStars(starsStore.selectedRepos.map(selectedRepo => selectedRepo.id))
+    }
+  }
+}
+
 onKeyStroke('n', e => {
   if (!isFocusedElementEditable()) {
     e.preventDefault()
@@ -196,6 +211,68 @@ onKeyStroke('n', e => {
                 />
 
                 <span>Unstar repository</span>
+              </button>
+            </MenuItem>
+          </MenuItems>
+        </transition>
+      </Menu>
+    </div>
+
+    <div
+      v-if="isMultiSelect"
+      class="flex items-center gap-1"
+    >
+      <div class="hidden items-center gap-1 sm:flex">
+        <ToolbarButton
+          tone="danger"
+          :label="`Unstar ${selectedCount} repositories`"
+          @click="removeSelectedStars"
+        >
+          <i-lucide-star-off class="h-4 w-4" />
+        </ToolbarButton>
+      </div>
+
+      <Menu
+        v-slot="{ open }"
+        as="div"
+        class="relative sm:hidden"
+      >
+        <MenuButton
+          :as="ToolbarButton"
+          :active="open"
+          label="More actions"
+        >
+          <i-lucide-ellipsis class="h-4 w-4" />
+        </MenuButton>
+
+        <transition
+          enter-active-class="transition duration-100 ease-out motion-reduce:transition-none"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-in motion-reduce:transition-none"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <MenuItems
+            class="absolute right-0 top-full z-40 mt-2 w-52 origin-top-right overflow-hidden rounded-md border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:border-gray-700 dark:bg-gray-800"
+          >
+            <MenuItem v-slot="{ active }">
+              <button
+                type="button"
+                class="flex w-full items-center gap-3 px-4 py-2.5 text-sm"
+                :class="
+                  active
+                    ? 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-500'
+                    : 'text-red-600 dark:text-red-500'
+                "
+                @click="removeSelectedStars"
+              >
+                <i-lucide-star-off
+                  class="h-4 w-4 shrink-0"
+                  role="presentation"
+                />
+
+                <span>Unstar {{ selectedCount }} repositories</span>
               </button>
             </MenuItem>
           </MenuItems>

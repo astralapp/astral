@@ -43,10 +43,6 @@ class RouteServiceProvider extends ServiceProvider
             return auth()->user()->tags()->findOrFail($value);
         });
 
-        Route::bind('star', function ($value) {
-            return auth()->user()->stars()->findOrFail($value);
-        });
-
         Route::bind('smart_filter', function ($value) {
             return auth()->user()->smartFilters()->findOrFail($value);
         });

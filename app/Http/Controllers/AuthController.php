@@ -27,7 +27,6 @@ class AuthController extends Controller
         ]);
 
         $scope = $request->input('scope', 'read:user');
-        $request->session()->put(['auth_scope' => $scope]);
 
         return Socialite::driver('github')
             ->setScopes([$scope])
@@ -36,8 +35,6 @@ class AuthController extends Controller
 
     public function handleProviderCallback(Request $request, Sponsorship $sponsorship, LegacyMigration $migration)
     {
-        $scope = $request->session()->pull('auth_scope', 'read:user');
-
         $githubUser = Socialite::driver('github')->user();
 
         $user = User::firstOrNew(['github_id' => $githubUser->getId()]);
@@ -45,7 +42,10 @@ class AuthController extends Controller
         // Always store the freshly-minted token: a returning user re-signing in heals a
         // token GitHub has invalidated server-side (secret rotation, revoked grant).
         $user->access_token = $githubUser->token;
-        $user->scope = $scope;
+        // Trust the scopes GitHub actually granted (cumulative across authorizations) rather
+        // than the scope we requested. A dropped request scope must never silently downgrade a
+        // user who already granted public_repo and re-trigger the unstar upgrade prompt forever.
+        $user->scope = in_array('public_repo', $githubUser->approvedScopes ?? [], true) ? 'public_repo' : 'read:user';
 
         $user->updateFromGitHubProfile($githubUser);
 

@@ -15,8 +15,6 @@ it('creates a new user if the user doesn\'t exist and logs them in', function ()
         'github_id' => 1234567890,
     ]);
 
-    session()->put('auth_scope', 'read:user');
-
     $this->get('/auth/github/callback')->assertRedirect(RouteServiceProvider::HOME);
 
     $this->assertAuthenticated();
@@ -30,6 +28,44 @@ it('creates a new user if the user doesn\'t exist and logs them in', function ()
     ]);
 });
 
+it('stores the `public_repo` scope when GitHub grants it', function () {
+    mockSocialiteFacade(['read:user', 'public_repo']);
+
+    $this->get('/auth/github/callback')->assertRedirect(RouteServiceProvider::HOME);
+
+    $this->assertDatabaseHas(User::class, [
+        'github_id' => 1234567890,
+        'scope' => 'public_repo',
+    ]);
+});
+
+it('stores the scope GitHub granted even when no requested scope is in the session', function () {
+    // Regression: the callback used to trust the session's requested scope, which silently
+    // defaulted to `read:user` when missing and re-triggered the upgrade prompt forever.
+    mockSocialiteFacade(['read:user', 'public_repo']);
+
+    $this->get('/auth/github/callback');
+
+    $this->assertDatabaseHas(User::class, [
+        'github_id' => 1234567890,
+        'scope' => 'public_repo',
+    ]);
+});
+
+it('does not downgrade an elevated user re-signing in with the default scope', function () {
+    User::factory()->create(['github_id' => 1234567890, 'scope' => 'public_repo']);
+
+    // GitHub grants are cumulative, so a plain sign-in still returns the previously granted scope.
+    mockSocialiteFacade(['read:user', 'public_repo']);
+
+    $this->get('/auth/github/callback');
+
+    $this->assertDatabaseHas(User::class, [
+        'github_id' => 1234567890,
+        'scope' => 'public_repo',
+    ]);
+});
+
 it('updates the user\'s info and logins them in if they already exist', function () {
     mockSocialiteFacade();
 
@@ -40,8 +76,6 @@ it('updates the user\'s info and logins them in if they already exist', function
         'avatar' => 'https://old.gravatar.com/userimage',
         'scope' => 'read:user',
     ]);
-
-    session()->put('auth_scope', 'read:user');
 
     $this->get('/auth/github/callback')->assertRedirect(RouteServiceProvider::HOME);
 
@@ -67,22 +101,24 @@ it('refreshes a returning user\'s access token even when the scope is unchanged'
         'access_token' => 'stale-revoked-token',
     ]);
 
-    session()->put('auth_scope', 'read:user');
-
     $this->get('/auth/github/callback')->assertRedirect(RouteServiceProvider::HOME);
 
     expect($user->fresh()->access_token)->toBe('abcde12345');
 });
 
-it('redirects authenticated users back to the dashboard')
-    ->login()
-    ->get('/auth/github/callback')
-    ->assertRedirect(RouteServiceProvider::HOME);
+it('lets an already-authenticated user elevate their scope on re-authorization', function () {
+    $user = User::factory()->create(['github_id' => 1234567890, 'scope' => 'read:user']);
+    $this->actingAs($user);
+
+    mockSocialiteFacade(['read:user', 'public_repo']);
+
+    $this->get('/auth/github/callback')->assertRedirect(RouteServiceProvider::HOME);
+
+    expect($user->fresh()->scope)->toBe('public_repo');
+});
 
 it('gates a brand-new non-legacy user behind the welcome screen', function () {
     mockSocialiteFacade();
-
-    session()->put('auth_scope', 'read:user');
 
     $this->get('/auth/github/callback');
 
@@ -100,8 +136,6 @@ it('does not gate a legacy user behind the welcome screen', function () {
 
     mockSocialiteFacade();
 
-    session()->put('auth_scope', 'read:user');
-
     $this->get('/auth/github/callback');
 
     $user = User::firstWhere('github_id', 1234567890);
@@ -111,7 +145,7 @@ it('does not gate a legacy user behind the welcome screen', function () {
 });
 
 // Helpers
-function mockSocialiteFacade()
+function mockSocialiteFacade(array $approvedScopes = ['read:user'])
 {
     $abstractUser = Mockery::mock(Laravel\Socialite\Two\User::class);
     $abstractUser->shouldReceive('getId')
@@ -123,6 +157,7 @@ function mockSocialiteFacade()
         ->shouldReceive('getAvatar')
         ->andReturn('https://en.gravatar.com/userimage');
     $abstractUser->token = 'abcde12345';
+    $abstractUser->approvedScopes = $approvedScopes;
 
     $provider = Mockery::mock(Provider::class);
     $provider->shouldReceive('user')->andReturn($abstractUser);
