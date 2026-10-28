@@ -93,9 +93,9 @@ GQL;
     public function unstarStar($nodeId)
     {
         $token = auth()->user()->access_token;
-        $query = <<<GQL
-    mutation UnstarStar {
-        removeStar(input:{starrableId:"{$nodeId}"}) {
+        $query = <<<'GQL'
+    mutation UnstarStar($starrableId: ID!) {
+        removeStar(input:{starrableId:$starrableId}) {
             starrable {
                 id
             }
@@ -104,7 +104,7 @@ GQL;
 GQL;
         $response = Http::withToken($token)->post($this->endpoint, [
             'query'     => $query,
-            'variables' => '',
+            'variables' => ['starrableId' => $nodeId],
         ]);
 
         if ($response->getStatusCode() == 401) {
@@ -113,7 +113,13 @@ GQL;
             throw new InvalidAccessTokenException();
         }
 
-        return $response->json()['data'];
+        $response->throw();
+        $json = $response->json();
+        if (!empty($json['errors']) || !isset($json['data']['removeStar'])) {
+            throw new \RuntimeException('GitHub rejected the star removal request.');
+        }
+
+        return $json['data'];
     }
 
     public function fetchReadme($repo)
