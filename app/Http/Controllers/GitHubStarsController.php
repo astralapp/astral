@@ -69,23 +69,24 @@ class GitHubStarsController extends Controller
 
     public function unstar(Request $request)
     {
+        $user = auth()->user();
         $databaseId = (int) $request->input('databaseId');
         $nodeId = $request->input('nodeId');
 
-        // Unstar through the GitHub API
-        // $this->client->unstarStar($nodeId);
+        // Keep local state unchanged if GitHub rejects the unstar request.
+        $this->client->unstarStar($nodeId);
 
         // Remove it from DB if it exists
-        $userStar = auth()->user()->stars()->where('repo_id', $databaseId)->first();
+        $userStar = $user->stars()->where('repo_id', $databaseId)->first();
         if ($userStar) {
             $userStar->delete();
         }
 
-        // Clear the cache
-        // Cache::forget(auth()->user()->starsCacheKey());
+        // The cached GraphQL page still contains the repository until refreshed.
+        Cache::forget($user->starsCacheKey());
 
-        $tags = auth()->user()->tags()->withStarCount()->get();
-        $stars = auth()->user()->stars()->with('tags')->get();
+        $tags = $user->tags()->withStarCount()->get();
+        $stars = $user->stars()->with('tags')->get();
 
         return response()->json(compact('stars', 'tags'));
     }
